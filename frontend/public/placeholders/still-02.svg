@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <rect width="800" height="1000" fill="#2C294F"/>
+  <rect x="36" y="36" width="728" height="928" rx="18" fill="#232145" stroke="#565282" stroke-width="4"/>
+  <ellipse cx="400" cy="560" rx="260" ry="120" fill="#B26A8F" opacity="0.6"/>
+  <circle cx="300" cy="430" r="70" fill="#F0AF81" opacity="0.7"/>
+  <circle cx="490" cy="420" r="80" fill="#F0AF81" opacity="0.62"/>
+  <text x="400" y="900" fill="#F3F0FF" font-size="34" text-anchor="middle" font-family="Arial, sans-serif">still life placeholder</text>
+</svg>
