@@ -14,20 +14,22 @@ export function AboutPreviewSection() {
         </Button>
       }
     >
-      <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <div className="card-frame relative aspect-square overflow-hidden p-2">
+      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div className="inner-card relative aspect-square overflow-hidden p-1.5">
           <Image
-            src="/placeholders/portrait-02.svg"
+            src="https://picsum.photos/id/1005/900/900"
             alt="placeholder self portrait detail"
             fill
             sizes="(max-width: 1024px) 100vw, 32vw"
-            className="rounded-md border border-border-soft object-cover"
+            className="rounded-[0.3rem] border border-[#6e668f] object-cover"
           />
         </div>
-        <p className="section-copy">
-          lorem ipsum dolor sit amet, consectetur adipiscing elit. dolor sit amet, akira revisits old sketches and
-          transforms them into digital portraits that feel calm, dreamy, and intimate.
-        </p>
+        <div className="inner-card p-3">
+          <p className="section-copy text-sm">
+            lorem ipsum dolor sit amet, consectetur adipiscing elit. dolor sit amet, akira revisits old sketches and
+            transforms them into digital portraits that feel calm, dreamy, and intimate.
+          </p>
+        </div>
       </div>
     </SectionShell>
   );

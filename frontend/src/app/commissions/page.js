@@ -1,4 +1,5 @@
 import { ContactForm } from "@/components/forms/contact-form";
+import { PageNav } from "@/components/layout/page-nav";
 import { SiteFrame } from "@/components/layout/site-frame";
 import { SectionShell } from "@/components/ui/section-shell";
 import { commissionOfferings } from "@/lib/content/commissions";
@@ -12,15 +13,17 @@ export const metadata = {
 export default function CommissionsPage() {
   return (
     <SiteFrame>
-      <main className="w-full space-y-5 p-4 sm:p-6 lg:p-8">
+      <main className="w-full space-y-4 p-3 sm:p-4">
+        <PageNav />
+        <div className="content-column space-y-4">
         <SectionShell id="commissions-page" eyebrow="commissions" title="work with me">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2">
             {commissionOfferings.map((item) => (
-              <article key={item.id} className="card-frame space-y-2 p-4">
-                <h3 className="text-base font-medium">{item.title}</h3>
-                <p className="text-sm text-text-muted">{item.description}</p>
-                <p className="text-xs text-text-dim">pricing: {item.pricePlaceholder}</p>
-                <ul className="list-disc space-y-1 pl-4 text-xs text-text-muted">
+              <article key={item.id} className="inner-card space-y-2 p-3">
+                <h3 className="text-sm font-medium">{item.title}</h3>
+                <p className="text-xs text-text-muted">{item.description}</p>
+                <p className="text-[0.7rem] text-text-dim">pricing: {item.pricePlaceholder}</p>
+                <ul className="list-disc space-y-1 pl-4 text-[0.7rem] text-text-muted">
                   {item.deliverables.map((entry) => (
                     <li key={entry}>{entry}</li>
                   ))}
@@ -35,10 +38,10 @@ export default function CommissionsPage() {
             {termsItems.map((item) => (
               <article
                 key={item.id}
-                className={`card-frame p-4 ${item.highlighted ? "border-accent-peach/60 ring-1 ring-accent-peach/30" : ""}`}
+                className={`inner-card p-3 ${item.highlighted ? "border-[#f2c19b] ring-1 ring-[#f2c19b]/40" : ""}`}
               >
-                <h3 className="text-sm font-medium text-text-primary">{item.title}</h3>
-                <p className="mt-2 text-sm text-text-muted">{item.body}</p>
+                <h3 className="text-xs font-medium text-text-primary">{item.title}</h3>
+                <p className="mt-1 text-xs text-text-muted">{item.body}</p>
               </article>
             ))}
           </div>
@@ -47,6 +50,7 @@ export default function CommissionsPage() {
         <SectionShell id="order" eyebrow="order form" title="send your commission request">
           <ContactForm />
         </SectionShell>
+        </div>
       </main>
     </SiteFrame>
   );

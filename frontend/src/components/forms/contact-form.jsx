@@ -57,7 +57,7 @@ export function ContactForm() {
   };
 
   return (
-    <form className="card-frame space-y-4 p-5" onSubmit={onSubmit} aria-label="contact and commission request form">
+    <form className="inner-card space-y-4 p-4" onSubmit={onSubmit} aria-label="contact and commission request form">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="name" name="name" value={form.name} required onChange={onChange} />
         <Field label="email" name="email" value={form.email} required type="email" onChange={onChange} />
@@ -75,7 +75,7 @@ export function ContactForm() {
           onChange={onChange}
           required
           rows={5}
-          className="rounded-md border border-border-soft bg-bg-canvas/40 px-3 py-2 text-sm text-text-primary"
+          className="rounded-[0.3rem] border border-[#645d86] bg-bg-canvas/50 px-2.5 py-1.5 text-xs text-text-primary"
         />
       </label>
       <label className="flex items-center gap-2 text-xs text-text-muted">
@@ -92,7 +92,7 @@ export function ContactForm() {
 
       <button
         type="submit"
-        className="rounded-full bg-accent-peach px-5 py-2 text-sm font-medium text-[#1b1731]"
+        className="rounded-[0.3rem] border border-[#f2c19b] bg-accent-peach px-3 py-1.5 text-xs font-medium text-[#1b1731]"
         disabled={status === "submitting"}
       >
         {status === "submitting" ? "sending..." : "submit"}
@@ -103,7 +103,7 @@ export function ContactForm() {
 
 function Field({ label, name, value, onChange, required = false, type = "text" }) {
   return (
-    <label className="flex flex-col gap-2 text-xs text-text-muted">
+    <label className="flex flex-col gap-1.5 text-xs text-text-muted">
       {label}
       <input
         name={name}
@@ -111,7 +111,7 @@ function Field({ label, name, value, onChange, required = false, type = "text" }
         value={value}
         onChange={onChange}
         required={required}
-        className="rounded-md border border-border-soft bg-bg-canvas/40 px-3 py-2 text-sm text-text-primary"
+        className="rounded-[0.3rem] border border-[#645d86] bg-bg-canvas/50 px-2.5 py-1.5 text-xs text-text-primary"
       />
     </label>
   );

@@ -14,13 +14,13 @@ export function CommissionsPreviewSection() {
         </Button>
       }
     >
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2">
         {commissionOfferings.map((item) => (
-          <article key={item.id} className="card-frame space-y-2 p-4">
-            <h3 className="text-base font-medium">{item.title}</h3>
-            <p className="text-sm text-text-muted">{item.description}</p>
-            <p className="text-xs text-text-dim">pricing: {item.pricePlaceholder}</p>
-            <p className="text-xs text-text-dim">timeline: {item.timelinePlaceholder}</p>
+          <article key={item.id} className="inner-card space-y-2 p-3">
+            <h3 className="text-sm font-medium">{item.title}</h3>
+            <p className="text-xs leading-5 text-text-muted">{item.description}</p>
+            <p className="text-[0.7rem] text-text-dim">pricing: {item.pricePlaceholder}</p>
+            <p className="text-[0.7rem] text-text-dim">timeline: {item.timelinePlaceholder}</p>
           </article>
         ))}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const SECTION_IDS = ["hero", "about-preview", "portfolio-preview", "commissions-preview", "easter-egg", "contact"];
 
@@ -9,9 +9,11 @@ export function SidebarNav({ items }) {
   const [expanded, setExpanded] = useState(false);
   const [activeId, setActiveId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [pathname] = useState(() => (typeof window === "undefined" ? "" : window.location.pathname));
 
   const sectionItems = items.filter((item) => item.href.startsWith("/#"));
   const pageItems = items.filter((item) => !item.href.startsWith("/#"));
+  const allItems = useMemo(() => [...sectionItems, ...pageItems], [sectionItems, pageItems]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,7 +39,7 @@ export function SidebarNav({ items }) {
     <>
       <button
         type="button"
-        className="fixed bottom-4 right-4 z-50 rounded-full border border-border-strong bg-bg-surface px-4 py-2 text-xs lg:hidden"
+        className="fixed bottom-4 right-4 z-50 rounded-[0.3rem] border border-[#f2c19b] bg-accent-peach px-3 py-1.5 text-xs text-[#2a2340] lg:hidden"
         onClick={() => setMobileOpen((current) => !current)}
         aria-expanded={mobileOpen}
         aria-controls="mobile-navigation"
@@ -46,38 +48,48 @@ export function SidebarNav({ items }) {
       </button>
 
       <aside
-        className={`hidden border-r border-border-soft bg-bg-surface/80 p-3 transition-all duration-300 lg:flex ${
-          expanded ? "w-56" : "w-16"
+        className={`hidden border-r border-[#d9aa88] bg-gradient-to-b from-[#f0af81] to-[#dfa27b] p-2.5 transition-all duration-300 lg:flex ${
+          expanded ? "w-52" : "w-14"
         }`}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
+        onFocus={() => setExpanded(true)}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setExpanded(false);
+          }
+        }}
       >
-        <nav className="flex w-full flex-col gap-2" aria-label="section navigation">
+        <nav className="flex w-full flex-col gap-1.5" aria-label="section navigation">
           {sectionItems.map((item) => {
             const isActive = activeId && item.id === activeId;
             return (
               <Link
                 key={item.id}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-md border px-2 py-2 text-xs transition ${
+                className={`flex items-center gap-2 rounded-[0.3rem] border px-2 py-1.5 text-[0.68rem] transition ${
                   isActive
-                    ? "border-accent-rose bg-accent-rose/10 text-text-primary"
-                    : "border-transparent text-text-dim hover:border-border-strong hover:text-text-primary"
+                    ? "border-[#745273] bg-[#3c3458] text-[#f7e6f2]"
+                    : "border-transparent text-[#453657] hover:border-[#8f6789] hover:bg-[#4a3e62] hover:text-[#f7e6f2]"
                 }`}
               >
-                <span className="inline-block h-2 w-2 rounded-full bg-accent-peach" aria-hidden />
+                <span className="inline-block h-1.5 w-1.5 rounded-[2px] bg-[#2d2242]" aria-hidden />
                 <span className={expanded ? "opacity-100" : "sr-only"}>{item.label}</span>
               </Link>
             );
           })}
-          <div className="my-2 h-px bg-border-soft" />
+          <div className="my-2 h-px bg-[#bc8d77]" />
           {pageItems.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className="flex items-center gap-3 rounded-md border border-transparent px-2 py-2 text-xs text-text-dim transition hover:border-border-strong hover:text-text-primary"
+              className={`flex items-center gap-2 rounded-[0.3rem] border px-2 py-1.5 text-[0.68rem] transition ${
+                pathname === item.href
+                  ? "border-[#745273] bg-[#3c3458] text-[#f7e6f2]"
+                  : "border-transparent text-[#453657] hover:border-[#8f6789] hover:bg-[#4a3e62] hover:text-[#f7e6f2]"
+              }`}
             >
-              <span className="inline-block h-2 w-2 rounded-full bg-accent-rose" aria-hidden />
+              <span className="inline-block h-1.5 w-1.5 rounded-[2px] bg-[#2d2242]" aria-hidden />
               <span className={expanded ? "opacity-100" : "sr-only"}>{item.label}</span>
             </Link>
           ))}
@@ -86,19 +98,19 @@ export function SidebarNav({ items }) {
 
       <div
         id="mobile-navigation"
-        className={`fixed inset-x-3 top-3 z-40 rounded-xl border border-border-strong bg-bg-surface p-4 transition ${
+        className={`fixed inset-x-3 top-3 z-40 rounded-[0.45rem] border border-[#f2c19b] bg-[#2b2548] p-3 transition ${
           mobileOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
         } lg:hidden`}
       >
         <nav className="grid grid-cols-2 gap-2" aria-label="mobile page navigation">
-          {items.map((item) => (
+          {allItems.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className={`rounded-md border px-3 py-2 text-xs ${
+              className={`rounded-[0.3rem] border px-2.5 py-1.5 text-xs ${
                 sectionItems.find((entry) => entry.id === activeId)?.href === item.href
-                  ? "border-accent-rose text-text-primary"
-                  : "border-border-soft text-text-muted"
+                  ? "border-[#d59bbb] text-text-primary"
+                  : "border-[#726894] text-text-muted"
               }`}
               onClick={() => setMobileOpen(false)}
             >

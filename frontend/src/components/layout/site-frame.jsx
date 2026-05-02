@@ -1,7 +1,7 @@
 export function SiteFrame({ children }) {
   return (
-    <div className="min-h-screen p-3 sm:p-5 lg:p-6">
-      <div className="site-shell mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-7xl overflow-hidden lg:min-h-[calc(100vh-3rem)]">
+    <div className="min-h-screen bg-frame p-2.5 sm:p-3.5">
+      <div className="site-shell mx-auto flex min-h-[calc(100vh-1rem)] w-full max-w-5xl overflow-hidden">
         {children}
       </div>
     </div>

@@ -41,21 +41,21 @@ export function SpinWheel() {
   };
 
   return (
-    <div className="card-frame space-y-4 p-5">
-      <p className="text-sm text-text-muted">one spin per browser profile. reward is subject to commission terms.</p>
+    <div className="inner-card space-y-3 p-4">
+      <p className="text-xs text-text-muted">one spin per browser profile. reward is subject to commission terms.</p>
       {state === "idle" && (
         <button
           type="button"
           onClick={onSpin}
-          className="rounded-full bg-accent-rose px-5 py-2 text-sm font-medium text-[#1b1731]"
+          className="rounded-[0.3rem] border border-[#d59bbb] bg-[#b26a8f] px-3 py-1.5 text-xs font-medium text-[#1b1731]"
           aria-label="spin reward wheel one time"
         >
           spin the wheel
         </button>
       )}
-      {state === "spinning" && <p className="text-sm text-accent-peach">spinning... please wait</p>}
+      {state === "spinning" && <p className="text-xs text-accent-peach">spinning... please wait</p>}
       {state === "revealed" && reward && (
-        <div className="space-y-2 text-sm">
+        <div className="space-y-2 text-xs">
           <p className="text-accent-peach">you unlocked: {reward.label}</p>
           <p className="text-text-muted">{reward.description}</p>
           <Link href="/reward" className="underline underline-offset-2">
@@ -64,9 +64,9 @@ export function SpinWheel() {
         </div>
       )}
       {state === "claimed" && reward && (
-        <p className="text-sm text-text-muted">already spun. your result: {reward.label}. you can view claim details on reward page.</p>
+        <p className="text-xs text-text-muted">already spun. your result: {reward.label}. you can view claim details on reward page.</p>
       )}
-      {state === "error" && <p className="text-sm text-error">could not complete spin. please refresh and try once.</p>}
+      {state === "error" && <p className="text-xs text-error">could not complete spin. please refresh and try once.</p>}
     </div>
   );
 }

@@ -4,6 +4,8 @@
   --frame: #2c294f;
   --accent-rose: #b26a8f;
   --accent-peach: #f0af81;
+  --panel-rose: #9e5d7f;
+  --panel-rose-soft: #a86989;
   --bg-canvas: #141328;
   --bg-surface: #1c1a37;
   --bg-surface-soft: #232145;
@@ -84,14 +86,20 @@ a {
 }
 
 .site-shell {
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-xl);
-  background: linear-gradient(180deg, rgba(44, 41, 79, 0.95) 0%, rgba(28, 26, 55, 0.95) 100%);
+  border: 1px solid #4b4878;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, rgba(44, 41, 79, 0.98) 0%, rgba(25, 24, 47, 0.98) 100%);
   box-shadow: var(--shadow-soft);
 }
 
+.content-column {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
 .section-title {
-  font-size: clamp(1.4rem, 1.2rem + 1.2vw, 2rem);
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.65rem);
   line-height: 1.15;
   letter-spacing: 0.01em;
 }
@@ -103,9 +111,21 @@ a {
 }
 
 .card-frame {
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--bg-surface-soft) 0%, var(--bg-surface) 100%);
+  border: 1px solid #cc8cb0;
+  border-radius: 0.45rem;
+  background: linear-gradient(180deg, rgba(166, 107, 141, 0.95) 0%, rgba(138, 85, 117, 0.95) 100%);
+}
+
+.inner-card {
+  border: 1px solid #4f4a7d;
+  border-radius: 0.35rem;
+  background: linear-gradient(180deg, rgba(30, 27, 56, 0.92) 0%, rgba(23, 20, 42, 0.95) 100%);
+}
+
+.panel-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(240, 175, 129, 0.8) 50%, transparent 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {

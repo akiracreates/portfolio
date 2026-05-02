@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PageNav } from "@/components/layout/page-nav";
 import { SiteFrame } from "@/components/layout/site-frame";
 import { SectionShell } from "@/components/ui/section-shell";
 
@@ -19,9 +20,11 @@ export default function RewardPage() {
 
   return (
     <SiteFrame>
-      <main className="w-full p-4 sm:p-6 lg:p-8">
+      <main className="w-full p-3 sm:p-4">
+        <PageNav />
+        <div className="content-column">
         <SectionShell id="reward-page" eyebrow="reward claim" title="your one-time spin result">
-          <div className="card-frame space-y-3 p-5">
+          <div className="inner-card space-y-3 p-4">
             {!reward ? (
               <p className="text-sm text-text-muted">no reward found yet. visit home page and use the spin section once.</p>
             ) : (
@@ -33,6 +36,7 @@ export default function RewardPage() {
             )}
           </div>
         </SectionShell>
+        </div>
       </main>
     </SiteFrame>
   );

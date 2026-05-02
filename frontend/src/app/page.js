@@ -12,13 +12,15 @@ export default function HomePage() {
   return (
     <SiteFrame>
       <SidebarNav items={siteConfig.navItems} />
-      <main className="flex-1 space-y-5 p-4 sm:p-6 lg:space-y-7 lg:p-8">
+      <main className="flex-1 space-y-4 p-3 sm:p-4">
+        <div className="content-column space-y-4">
         <HeroSection />
         <AboutPreviewSection />
         <PortfolioPreviewSection />
         <CommissionsPreviewSection />
         <EasterEggPreviewSection />
         <ContactFooterSection />
+        </div>
       </main>
     </SiteFrame>
   );

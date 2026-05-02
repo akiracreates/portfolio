@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PageNav } from "@/components/layout/page-nav";
 import { SiteFrame } from "@/components/layout/site-frame";
 import { Button } from "@/components/ui/button";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -11,19 +12,21 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <SiteFrame>
-      <main className="w-full p-4 sm:p-6 lg:p-8">
+      <main className="w-full p-3 sm:p-4">
+        <PageNav />
+        <div className="content-column">
         <SectionShell id="about-page" eyebrow="about" title="a longer story about growth, portraits, and reinterpretation">
-          <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-            <div className="card-frame relative aspect-[4/5] overflow-hidden p-2">
+          <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
+            <div className="inner-card relative aspect-[4/5] overflow-hidden p-1.5">
               <Image
-                src="/placeholders/portrait-03.svg"
+                src="https://picsum.photos/id/823/900/1200"
                 alt="placeholder hero portrait for about page"
                 fill
-                className="rounded-md border border-border-soft object-cover"
+                className="rounded-[0.3rem] border border-[#665f89] object-cover"
                 sizes="(max-width: 1024px) 100vw, 35vw"
               />
             </div>
-            <div className="space-y-4">
+            <div className="inner-card space-y-4 p-3">
               <p className="section-copy">
                 lorem ipsum dolor sit amet, consectetur adipiscing elit. this section is a placeholder for akira&apos;s full
                 artist story, growth arc, and process notes over the years.
@@ -38,6 +41,7 @@ export default function AboutPage() {
             </div>
           </div>
         </SectionShell>
+        </div>
       </main>
     </SiteFrame>
   );
