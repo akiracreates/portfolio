@@ -10,7 +10,7 @@ export function PortfolioPreviewSection() {
       eyebrow="portfolio preview"
       title="portraits, animals, and still life"
       action={
-        <Button as="link" href="/portfolio" variant="secondary">
+        <Button as="link" href="/portfolio" variant="secondary" size="sm">
           full portfolio
         </Button>
       }
@@ -20,7 +20,9 @@ export function PortfolioPreviewSection() {
           <CategorySection
             key={category}
             category={category}
-            artworks={artworks.filter((artwork) => artwork.category === category).slice(0, 2)}
+            artworks={artworks
+              .filter((a) => a.category === category)
+              .slice(0, 2)}
           />
         ))}
       </div>

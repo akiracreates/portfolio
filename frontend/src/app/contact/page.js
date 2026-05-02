@@ -1,6 +1,4 @@
 import { ContactForm } from "@/components/forms/contact-form";
-import { PageNav } from "@/components/layout/page-nav";
-import { SiteFrame } from "@/components/layout/site-frame";
 import { SectionShell } from "@/components/ui/section-shell";
 import { socialLinks } from "@/lib/content/socials";
 
@@ -11,29 +9,39 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <SiteFrame>
-      <main className="w-full p-3 sm:p-4">
-        <PageNav />
-        <div className="content-column">
-        <SectionShell id="contact-page" eyebrow="contact" title="let's talk about your idea">
-          <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-            <aside className="inner-card p-3">
-              <p className="mb-4 text-sm text-text-muted">lorem ipsum placeholder contact notes and response expectations.</p>
-              <ul className="space-y-2 text-xs text-text-muted">
+    <div className="content-column space-y-8 py-10 sm:py-14">
+      <SectionShell
+        id="contact-page"
+        eyebrow="contact"
+        title="let's talk about your idea"
+        variant="accent"
+      >
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <aside className="card-inner space-y-5 p-5">
+            <p className="text-body text-sm">
+              lorem ipsum placeholder contact notes and response expectations.
+            </p>
+            <div className="divider-subtle" />
+            <div className="space-y-2">
+              <p className="label-sm">socials</p>
+              <ul className="space-y-2 text-sm text-text-secondary">
                 {socialLinks.map((item) => (
                   <li key={item.platform}>
-                    <a className="underline underline-offset-2" href={item.url}>
+                    <a
+                      className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+                      href={item.url}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary/60" aria-hidden />
                       {item.label}
                     </a>
                   </li>
                 ))}
               </ul>
-            </aside>
-            <ContactForm />
-          </div>
-        </SectionShell>
+            </div>
+          </aside>
+          <ContactForm />
         </div>
-      </main>
-    </SiteFrame>
+      </SectionShell>
+    </div>
   );
 }

@@ -1,124 +1,183 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const SECTION_IDS = ["hero", "about-preview", "portfolio-preview", "commissions-preview", "easter-egg", "contact"];
+const HOME_SECTIONS = ["hero", "about-preview", "portfolio-preview", "commissions-preview", "contact"];
 
 export function SidebarNav({ items }) {
+  const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
-  const [activeId, setActiveId] = useState("");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [pathname] = useState(() => (typeof window === "undefined" ? "" : window.location.pathname));
+  const [activeSection, setActiveSection] = useState("");
+  const sidebarRef = useRef(null);
 
-  const sectionItems = items.filter((item) => item.href.startsWith("/#"));
-  const pageItems = items.filter((item) => !item.href.startsWith("/#"));
-  const allItems = useMemo(() => [...sectionItems, ...pageItems], [sectionItems, pageItems]);
+  const isHome = pathname === "/";
+
+  const sectionItems = useMemo(
+    () => items.filter((item) => item.href.startsWith("/#")),
+    [items],
+  );
+
+  const pageItems = useMemo(
+    () => items.filter((item) => !item.href.startsWith("/#")),
+    [items],
+  );
+
+  const primaryNavItems = useMemo(() => {
+    if (isHome) return sectionItems;
+    return pageItems;
+  }, [isHome, sectionItems, pageItems]);
+
+  const secondaryNavItems = useMemo(() => {
+    if (isHome) return pageItems;
+    return sectionItems;
+  }, [isHome, sectionItems, pageItems]);
 
   useEffect(() => {
+    if (!isHome) {
+      setActiveSection("");
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          visible.sort((a, b) =>
+            Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top),
+          );
+          setActiveSection(visible[0].target.id);
+        }
       },
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0.1 },
+      { rootMargin: "-40% 0px -40% 0px", threshold: 0.05 },
     );
 
-    SECTION_IDS.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
+    HOME_SECTIONS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [isHome]);
+
+  const isActive = useCallback(
+    (item) => {
+      if (item.href.startsWith("/#")) {
+        return isHome && activeSection === item.id;
+      }
+      return pathname === item.href;
+    },
+    [isHome, activeSection, pathname],
+  );
 
   return (
     <>
-      <button
-        type="button"
-        className="fixed bottom-4 right-4 z-50 rounded-[0.3rem] border border-[#f2c19b] bg-accent-peach px-3 py-1.5 text-xs text-[#2a2340] lg:hidden"
-        onClick={() => setMobileOpen((current) => !current)}
-        aria-expanded={mobileOpen}
-        aria-controls="mobile-navigation"
-      >
-        menu
-      </button>
-
+      {/* ── desktop / tablet sidebar ── */}
       <aside
-        className={`hidden border-r border-[#d9aa88] bg-gradient-to-b from-[#f0af81] to-[#dfa27b] p-2.5 transition-all duration-300 lg:flex ${
-          expanded ? "w-52" : "w-14"
-        }`}
+        ref={sidebarRef}
+        className="hidden md:flex flex-col shrink-0 sticky top-0 h-screen border-r border-border-subtle bg-bg-elevated/80 backdrop-blur-sm transition-[width] duration-[250ms]"
+        style={{
+          width: expanded ? "var(--sidebar-expanded)" : "var(--sidebar-collapsed)",
+          transitionTimingFunction: "var(--ease-spring)",
+        }}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
         onFocus={() => setExpanded(true)}
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) {
-            setExpanded(false);
-          }
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) setExpanded(false);
         }}
       >
-        <nav className="flex w-full flex-col gap-1.5" aria-label="section navigation">
-          {sectionItems.map((item) => {
-            const isActive = activeId && item.id === activeId;
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={`flex items-center gap-2 rounded-[0.3rem] border px-2 py-1.5 text-[0.68rem] transition ${
-                  isActive
-                    ? "border-[#745273] bg-[#3c3458] text-[#f7e6f2]"
-                    : "border-transparent text-[#453657] hover:border-[#8f6789] hover:bg-[#4a3e62] hover:text-[#f7e6f2]"
-                }`}
-              >
-                <span className="inline-block h-1.5 w-1.5 rounded-[2px] bg-[#2d2242]" aria-hidden />
-                <span className={expanded ? "opacity-100" : "sr-only"}>{item.label}</span>
-              </Link>
-            );
-          })}
-          <div className="my-2 h-px bg-[#bc8d77]" />
-          {pageItems.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={`flex items-center gap-2 rounded-[0.3rem] border px-2 py-1.5 text-[0.68rem] transition ${
-                pathname === item.href
-                  ? "border-[#745273] bg-[#3c3458] text-[#f7e6f2]"
-                  : "border-transparent text-[#453657] hover:border-[#8f6789] hover:bg-[#4a3e62] hover:text-[#f7e6f2]"
-              }`}
+        <div className="flex items-center h-14 px-4 border-b border-border-subtle shrink-0">
+          <Link href="/" className="flex items-center gap-2 text-text-primary">
+            <span className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/20 text-primary text-xs font-semibold">
+              a
+            </span>
+            <span
+              className="text-sm font-medium overflow-hidden whitespace-nowrap transition-opacity duration-200"
+              style={{ opacity: expanded ? 1 : 0, width: expanded ? "auto" : 0 }}
             >
-              <span className="inline-block h-1.5 w-1.5 rounded-[2px] bg-[#2d2242]" aria-hidden />
-              <span className={expanded ? "opacity-100" : "sr-only"}>{item.label}</span>
-            </Link>
+              akira
+            </span>
+          </Link>
+        </div>
+
+        <nav className="flex-1 flex flex-col gap-0.5 px-2 py-3 overflow-y-auto overflow-x-hidden" aria-label="main navigation">
+          {primaryNavItems.map((item) => (
+            <NavLink key={item.id} item={item} active={isActive(item)} expanded={expanded} />
           ))}
+
+          {secondaryNavItems.length > 0 && (
+            <>
+              <div className="divider-subtle mx-2 my-2" />
+              {secondaryNavItems.map((item) => (
+                <NavLink key={item.id} item={item} active={isActive(item)} expanded={expanded} />
+              ))}
+            </>
+          )}
         </nav>
       </aside>
 
-      <div
-        id="mobile-navigation"
-        className={`fixed inset-x-3 top-3 z-40 rounded-[0.45rem] border border-[#f2c19b] bg-[#2b2548] p-3 transition ${
-          mobileOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"
-        } lg:hidden`}
+      {/* ── mobile bottom nav (fixed, outside flex flow) ── */}
+      <nav
+        className="fixed bottom-0 inset-x-0 z-50 md:hidden border-t border-border-subtle bg-bg-elevated/90 backdrop-blur-md"
+        aria-label="mobile navigation"
       >
-        <nav className="grid grid-cols-2 gap-2" aria-label="mobile page navigation">
-          {allItems.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={`rounded-[0.3rem] border px-2.5 py-1.5 text-xs ${
-                sectionItems.find((entry) => entry.id === activeId)?.href === item.href
-                  ? "border-[#d59bbb] text-text-primary"
-                  : "border-[#726894] text-text-muted"
-              }`}
-              onClick={() => setMobileOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+        <div className="flex items-center justify-around h-14 px-2 safe-area-bottom">
+          <MobileNavLink href="/" label="home" active={(pathname === "/" && !activeSection) || activeSection === "hero"} />
+          <MobileNavLink href={isHome ? "/#about-preview" : "/about"} label="about" active={isHome ? activeSection === "about-preview" : pathname === "/about"} />
+          <MobileNavLink href={isHome ? "/#portfolio-preview" : "/portfolio"} label="work" active={isHome ? activeSection === "portfolio-preview" : pathname === "/portfolio"} />
+          <MobileNavLink href={isHome ? "/#commissions-preview" : "/commissions"} label="order" active={isHome ? activeSection === "commissions-preview" : pathname === "/commissions"} />
+          <MobileNavLink href={isHome ? "/#contact" : "/contact"} label="contact" active={isHome ? activeSection === "contact" : pathname === "/contact"} />
+        </div>
+      </nav>
     </>
+  );
+}
+
+function NavLink({ item, active, expanded }) {
+  return (
+    <Link
+      href={item.href}
+      className={`
+        group flex items-center gap-3 rounded-md px-3 py-2 text-[0.8rem] transition-colors duration-150
+        ${active
+          ? "bg-primary-soft text-text-primary border-l-2 border-primary"
+          : "border-l-2 border-transparent text-text-tertiary hover:text-text-secondary hover:bg-bg-surface-hover"
+        }
+      `}
+    >
+      <span
+        className={`
+          flex items-center justify-center w-2 h-2 rounded-full shrink-0 transition-colors duration-150
+          ${active ? "bg-secondary" : "bg-border-default group-hover:bg-text-tertiary"}
+        `}
+        aria-hidden
+      />
+      <span
+        className="overflow-hidden whitespace-nowrap transition-opacity duration-200"
+        style={{ opacity: expanded ? 1 : 0 }}
+      >
+        {item.label}
+      </span>
+    </Link>
+  );
+}
+
+function MobileNavLink({ href, label, active }) {
+  return (
+    <Link
+      href={href}
+      className={`
+        flex flex-col items-center gap-1 px-2 py-1 text-[0.65rem] rounded-md transition-colors duration-150
+        ${active ? "text-secondary" : "text-text-tertiary"}
+      `}
+    >
+      <span
+        className={`w-1.5 h-1.5 rounded-full transition-colors duration-150 ${active ? "bg-secondary" : "bg-border-default"}`}
+        aria-hidden
+      />
+      {label}
+    </Link>
   );
 }

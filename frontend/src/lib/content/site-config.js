@@ -8,7 +8,7 @@ export const siteConfig = {
     { id: "about-preview", label: "about", href: "/#about-preview" },
     { id: "portfolio-preview", label: "portfolio", href: "/#portfolio-preview" },
     { id: "commissions-preview", label: "commissions", href: "/#commissions-preview" },
-    { id: "easter-egg", label: "easter egg", href: "/#easter-egg" },
+    { id: "easter-egg", label: "surprise", href: "/#easter-egg" },
     { id: "contact", label: "contact", href: "/#contact" },
     { id: "about-page", label: "full about", href: "/about" },
     { id: "portfolio-page", label: "full portfolio", href: "/portfolio" },

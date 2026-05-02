@@ -1,43 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import { PageNav } from "@/components/layout/page-nav";
-import { SiteFrame } from "@/components/layout/site-frame";
+import { useEffect, useState } from "react";
 import { SectionShell } from "@/components/ui/section-shell";
 
 const STORAGE_KEY = "akira.spin.v1";
 
 export default function RewardPage() {
-  const [reward] = useState(() => {
-    if (typeof window === "undefined") return null;
+  const [reward, setReward] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : null;
+      if (stored) setReward(JSON.parse(stored));
     } catch {
-      return null;
+      /* ignore */
     }
-  });
+    setLoaded(true);
+  }, []);
 
   return (
-    <SiteFrame>
-      <main className="w-full p-3 sm:p-4">
-        <PageNav />
-        <div className="content-column">
-        <SectionShell id="reward-page" eyebrow="reward claim" title="your one-time spin result">
-          <div className="inner-card space-y-3 p-4">
-            {!reward ? (
-              <p className="text-sm text-text-muted">no reward found yet. visit home page and use the spin section once.</p>
-            ) : (
-              <>
-                <p className="text-sm text-accent-peach">result: {reward.label}</p>
-                <p className="text-sm text-text-muted">{reward.description}</p>
-                <p className="text-xs text-text-dim">{reward.claimInstructions}</p>
-              </>
-            )}
-          </div>
-        </SectionShell>
+    <div className="content-column space-y-8 py-10 sm:py-14">
+      <SectionShell
+        id="reward-page"
+        eyebrow="reward claim"
+        title="your one-time spin result"
+        variant="accent"
+      >
+        <div className="card-inner space-y-4 p-5">
+          {!loaded ? (
+            <p className="text-xs text-text-tertiary">loading...</p>
+          ) : !reward ? (
+            <p className="text-sm text-text-secondary">
+              no reward found yet. visit the home page and look for the surprise
+              section to spin once.
+            </p>
+          ) : (
+            <div className="space-y-3 animate-fade-in">
+              <p className="text-sm font-medium text-secondary">
+                result: {reward.label}
+              </p>
+              <p className="text-sm text-text-secondary">
+                {reward.description}
+              </p>
+              <div className="divider-subtle" />
+              <p className="text-xs text-text-tertiary">
+                {reward.claimInstructions}
+              </p>
+            </div>
+          )}
         </div>
-      </main>
-    </SiteFrame>
+      </SectionShell>
+    </div>
   );
 }

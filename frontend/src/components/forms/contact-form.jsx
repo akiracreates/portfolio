@@ -22,7 +22,10 @@ export function ContactForm() {
 
   const onChange = (event) => {
     const { name, value, type, checked } = event.target;
-    setForm((current) => ({ ...current, [name]: type === "checkbox" ? checked : value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const onSubmit = async (event) => {
@@ -45,9 +48,7 @@ export function ContactForm() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!response.ok) {
-        throw new Error("request failed");
-      }
+      if (!response.ok) throw new Error("request failed");
       setStatus("success");
       setForm(initialForm);
     } catch {
@@ -57,7 +58,11 @@ export function ContactForm() {
   };
 
   return (
-    <form className="inner-card space-y-4 p-4" onSubmit={onSubmit} aria-label="contact and commission request form">
+    <form
+      className="card-inner space-y-5 p-5 sm:p-6"
+      onSubmit={onSubmit}
+      aria-label="contact and commission request form"
+    >
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="name" name="name" value={form.name} required onChange={onChange} />
         <Field label="email" name="email" value={form.email} required type="email" onChange={onChange} />
@@ -66,8 +71,10 @@ export function ContactForm() {
         <Field label="budget (optional)" name="budget" value={form.budget} onChange={onChange} />
         <Field label="deadline (optional)" name="deadline" value={form.deadline} type="date" onChange={onChange} />
       </div>
+
       <Field label="reference link (optional)" name="references" value={form.references} onChange={onChange} />
-      <label className="flex flex-col gap-2 text-xs text-text-muted">
+
+      <label className="flex flex-col gap-2 text-xs text-text-secondary">
         description *
         <textarea
           name="description"
@@ -75,25 +82,40 @@ export function ContactForm() {
           onChange={onChange}
           required
           rows={5}
-          className="rounded-[0.3rem] border border-[#645d86] bg-bg-canvas/50 px-2.5 py-1.5 text-xs text-text-primary"
+          className="rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3 py-2 text-sm text-text-primary transition-colors duration-[var(--duration-fast)] placeholder:text-text-tertiary focus:border-primary focus:outline-none"
         />
       </label>
-      <label className="flex items-center gap-2 text-xs text-text-muted">
-        <input type="checkbox" name="agreedTerms" checked={form.agreedTerms} onChange={onChange} />
-        i agree to commission terms and conditions *
-      </label>
-      <label className="flex items-center gap-2 text-xs text-text-muted">
-        <input type="checkbox" name="consent" checked={form.consent} onChange={onChange} />
-        i consent to being contacted about this request
-      </label>
 
-      {error ? <p className="text-sm text-error">{error}</p> : null}
-      {status === "success" ? <p className="text-sm text-success">request sent. thanks for reaching out.</p> : null}
+      <div className="space-y-3">
+        <Checkbox
+          label="i agree to commission terms and conditions *"
+          name="agreedTerms"
+          checked={form.agreedTerms}
+          onChange={onChange}
+        />
+        <Checkbox
+          label="i consent to being contacted about this request"
+          name="consent"
+          checked={form.consent}
+          onChange={onChange}
+        />
+      </div>
+
+      {error && (
+        <p className="text-sm text-error animate-fade-in" role="alert">
+          {error}
+        </p>
+      )}
+      {status === "success" && (
+        <p className="text-sm text-success animate-fade-in" role="status">
+          request sent. thanks for reaching out.
+        </p>
+      )}
 
       <button
         type="submit"
-        className="rounded-[0.3rem] border border-[#f2c19b] bg-accent-peach px-3 py-1.5 text-xs font-medium text-[#1b1731]"
         disabled={status === "submitting"}
+        className="inline-flex items-center justify-center rounded-[var(--radius-md)] border border-secondary bg-secondary px-5 py-2.5 text-sm font-medium text-bg-base transition-all duration-[var(--duration-base)] hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(240,175,129,0.3)] disabled:opacity-50 disabled:pointer-events-none"
       >
         {status === "submitting" ? "sending..." : "submit"}
       </button>
@@ -103,16 +125,33 @@ export function ContactForm() {
 
 function Field({ label, name, value, onChange, required = false, type = "text" }) {
   return (
-    <label className="flex flex-col gap-1.5 text-xs text-text-muted">
-      {label}
+    <label className="flex flex-col gap-2 text-xs text-text-secondary">
+      {label}{required && " *"}
       <input
         name={name}
         type={type}
         value={value}
         onChange={onChange}
         required={required}
-        className="rounded-[0.3rem] border border-[#645d86] bg-bg-canvas/50 px-2.5 py-1.5 text-xs text-text-primary"
+        className="rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3 py-2 text-sm text-text-primary transition-colors duration-[var(--duration-fast)] placeholder:text-text-tertiary focus:border-primary focus:outline-none"
       />
+    </label>
+  );
+}
+
+function Checkbox({ label, name, checked, onChange }) {
+  return (
+    <label className="flex items-center gap-3 text-xs text-text-secondary cursor-pointer group">
+      <input
+        className="h-4 w-4 rounded-sm border border-border-default bg-bg-inset accent-secondary transition-colors"
+        type="checkbox"
+        name={name}
+        checked={checked}
+        onChange={onChange}
+      />
+      <span className="group-hover:text-text-primary transition-colors duration-[var(--duration-fast)]">
+        {label}
+      </span>
     </label>
   );
 }

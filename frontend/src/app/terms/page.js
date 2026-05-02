@@ -1,31 +1,36 @@
-import { PageNav } from "@/components/layout/page-nav";
-import { SiteFrame } from "@/components/layout/site-frame";
 import { SectionShell } from "@/components/ui/section-shell";
 import { termsItems } from "@/lib/content/terms";
 
 export const metadata = {
   title: "terms | akira",
-  description: "commission and usage terms placeholder page for future production policy.",
+  description:
+    "commission and usage terms placeholder page for future production policy.",
 };
 
 export default function TermsPage() {
   return (
-    <SiteFrame>
-      <main className="w-full p-3 sm:p-4">
-        <PageNav />
-        <div className="content-column">
-        <SectionShell id="terms-page" eyebrow="terms" title="terms and conditions">
-          <div className="space-y-3">
-            {termsItems.map((item) => (
-              <article key={item.id} className="inner-card p-3">
-                <h2 className="text-xs font-medium">{item.title}</h2>
-                <p className="mt-2 text-xs text-text-muted">{item.body}</p>
-              </article>
-            ))}
-          </div>
-        </SectionShell>
+    <div className="content-column space-y-8 py-10 sm:py-14">
+      <SectionShell id="terms-page" eyebrow="terms" title="terms and conditions">
+        <div className="space-y-4">
+          {termsItems.map((item) => (
+            <article
+              key={item.id}
+              className={`card-inner p-5 ${
+                item.highlighted
+                  ? "border-secondary/60 shadow-[0_0_12px_rgba(240,175,129,0.12)]"
+                  : ""
+              }`}
+            >
+              <h2 className="text-sm font-medium text-text-primary">
+                {item.title}
+              </h2>
+              <p className="mt-2 text-xs leading-relaxed text-text-secondary">
+                {item.body}
+              </p>
+            </article>
+          ))}
         </div>
-      </main>
-    </SiteFrame>
+      </SectionShell>
+    </div>
   );
 }

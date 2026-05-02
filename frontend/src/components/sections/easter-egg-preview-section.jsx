@@ -3,7 +3,11 @@ import { SectionShell } from "@/components/ui/section-shell";
 
 export function EasterEggPreviewSection() {
   return (
-    <SectionShell id="easter-egg" eyebrow="easter egg" title="a one-time spin for a surprise offer">
+    <SectionShell
+      id="easter-egg"
+      eyebrow="secret corner"
+      title="you found something hidden"
+    >
       <SpinWheel />
     </SectionShell>
   );
