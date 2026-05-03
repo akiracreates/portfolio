@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
+import { useT } from "@/components/i18n/locale-provider";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -11,6 +12,7 @@ export function MobileDrawer({ open, onClose }) {
   const reduced = useReducedMotion();
   const panelRef = useRef(null);
   const lastFocusRef = useRef(null);
+  const t = useT();
 
   useEffect(() => {
     if (!open) return undefined;
@@ -104,7 +106,7 @@ export function MobileDrawer({ open, onClose }) {
               type="button"
               className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-bg-surface hover:text-text-primary"
               onClick={onClose}
-              aria-label="close navigation"
+              aria-label={t("common.closeNavigation", "close navigation")}
             >
               <svg
                 width="16"

@@ -1,27 +1,47 @@
-import { ArtworkCard } from "@/components/gallery/artwork-card";
+import { ArtworkRow } from "@/components/gallery/artwork-card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 
 function categoryAnchorId(category) {
   return `category-${category.toLowerCase().replace(/\s+/g, "-")}`;
 }
 
-export function CategorySection({ category, artworks, eyebrow = "collection" }) {
+/**
+ * Editorial category layout: image + content rows that alternate per index.
+ * Replaces the previous 3-col grid per the spec.
+ */
+export function CategorySection({
+  category,
+  artworks,
+  locale = "en",
+  eyebrow = "collection",
+  piecesLabel = "pieces",
+  pieceLabel = "piece",
+}) {
   const id = categoryAnchorId(category);
+  const count = artworks.length;
+  const label = count === 1 ? pieceLabel : piecesLabel;
 
   return (
-    <section id={id} className="scroll-mt-header space-y-6">
+    <section id={id} className="scroll-mt-header space-y-12 md:space-y-16">
       <header className="flex items-baseline justify-between gap-4">
         <div className="space-y-1.5">
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h3 className="heading-h2 text-[1.5rem] leading-tight">{category}</h3>
+          <h3 className="heading-h2 text-[1.75rem] leading-tight">
+            {category}
+          </h3>
         </div>
         <span className="caption">
-          {artworks.length} {artworks.length === 1 ? "piece" : "pieces"}
+          {count} {label}
         </span>
       </header>
-      <div className="grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {artworks.map((artwork) => (
-          <ArtworkCard key={artwork.id} artwork={artwork} />
+      <div className="space-y-16 md:space-y-24">
+        {artworks.map((artwork, index) => (
+          <ArtworkRow
+            key={artwork.id}
+            artwork={artwork}
+            index={index}
+            locale={locale}
+          />
         ))}
       </div>
     </section>

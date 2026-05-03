@@ -1,23 +1,37 @@
+"use client";
+
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
-import { navGroups, siteConfig } from "@/lib/content/site-config";
+import { siteConfig } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
 import { NavIcon } from "@/components/layout/nav-icons";
+import {
+  useDictionary,
+  useDictLocale,
+} from "@/components/i18n/locale-provider";
+
+const FOOTER_SOCIALS = ["telegram", "vk", "cara", "patreon", "email"];
 
 export function Footer() {
+  const dict = useDictionary();
+  const locale = useDictLocale() || "en";
   const year = new Date().getFullYear();
-  const main = navGroups.find((g) => g.id === "main")?.items ?? [];
-  const info = navGroups.find((g) => g.id === "info")?.items ?? [];
+  const t = dict?.footer ?? {};
+  const socialsT = dict?.socialsFooter ?? {};
+  const bio = dict?.meta?.bio ?? siteConfig.shortBio;
+
+  const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
 
   return (
     <footer className="mt-16 border-t border-border-subtle bg-bg-app">
       <Container className="py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
+        <div className="grid gap-10 lg:grid-cols-12">
+          {/* brand + bio */}
           <div className="lg:col-span-5">
             <Link
-              href="/"
-              className="inline-flex items-center gap-2.5"
+              href={`/${locale}`}
+              className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
               aria-label="akira — home"
             >
               <span
@@ -34,60 +48,57 @@ export function Footer() {
                 akira
               </span>
             </Link>
-            <p className="body-sm mt-4 max-w-sm">{siteConfig.shortBio}</p>
+            <p className="body-sm mt-4 max-w-sm">{bio}</p>
+            <p className="body-sm mt-4 max-w-sm text-text-tertiary">
+              {socialsT.contactNote}
+            </p>
           </div>
 
-          <div className="lg:col-span-3">
+          {/* socials */}
+          <div className="lg:col-span-7">
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
-              sitemap
+              {t.connect || "connect"}
             </p>
-            <ul className="mt-4 space-y-2.5">
-              {main.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={item.href}
-                    className="body-sm text-text-secondary transition-colors hover:text-text-primary"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-2">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
-              info
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {info.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={item.href}
-                    className="body-sm text-text-secondary transition-colors hover:text-text-primary"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-2">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
-              connect
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {socialLinks.map((s) => (
-                <li key={s.platform}>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {links.map((s) => (
+                <li key={s.id}>
                   <a
                     href={s.url}
-                    target={s.platform === "email" ? undefined : "_blank"}
-                    rel={s.platform === "email" ? undefined : "noreferrer noopener"}
-                    className="body-sm inline-flex items-center gap-2 text-text-secondary transition-colors hover:text-text-primary"
+                    target={s.id === "email" ? undefined : "_blank"}
+                    rel={
+                      s.id === "email" ? undefined : "noreferrer noopener"
+                    }
+                    className={`group flex items-center gap-3 rounded-[var(--radius-md)] border p-3 transition-colors focus-visible-ring ${
+                      s.primary
+                        ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
+                        : "border-border-subtle bg-bg-surface hover:border-border-default"
+                    }`}
                   >
-                    <NavIcon id={s.platform} className="h-4 w-4" />
-                    <span>{s.platform}</span>
+                    <span
+                      className={`flex h-8 w-8 items-center justify-center rounded-md ${
+                        s.primary
+                          ? "bg-accent text-text-on-accent"
+                          : "bg-bg-inset text-text-secondary"
+                      }`}
+                      aria-hidden
+                    >
+                      <NavIcon id={s.id} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline gap-2">
+                        <p className="body-sm font-medium text-text-primary">
+                          {s.label}
+                        </p>
+                        {s.primary && (
+                          <span className="caption text-highlight">
+                            {dict?.common?.preferred || "preferred"}
+                          </span>
+                        )}
+                      </div>
+                      {s.handle && (
+                        <p className="caption truncate">{s.handle}</p>
+                      )}
+                    </div>
                   </a>
                 </li>
               ))}
@@ -99,9 +110,17 @@ export function Footer() {
 
         <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="caption">
-            © {year} akira. all rights reserved.
+            © {year} akira. {t.rights || "all rights reserved."}
           </p>
-          <p className="caption">crafted with care.</p>
+          <div className="flex items-center gap-5">
+            <a
+              href="#hero"
+              className="caption text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring rounded-md"
+            >
+              ↑ {dict?.common?.backToTop || "back to top"}
+            </a>
+            <span className="caption">{t.crafted || "crafted with care."}</span>
+          </div>
         </div>
       </Container>
     </footer>

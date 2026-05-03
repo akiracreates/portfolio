@@ -3,16 +3,21 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { commissionTypes } from "@/lib/content/commissions";
+import { pickLocale } from "@/lib/i18n/config";
+import { useDictionary, useDictLocale } from "@/components/i18n/locale-provider";
 
 const initialForm = {
   name: "",
   email: "",
-  socialHandle: "",
+  preferredContact: "telegram",
+  handle: "",
   commissionType: "",
   budget: "",
-  description: "",
   deadline: "",
   references: "",
+  language: "",
+  description: "",
   agreedTerms: false,
   consent: false,
 };
@@ -21,7 +26,14 @@ const inputClass =
   "w-full rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-[var(--duration-fast)] focus:border-accent focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-secondary-soft)]";
 
 export function ContactForm() {
-  const [form, setForm] = useState(initialForm);
+  const dict = useDictionary();
+  const locale = useDictLocale() || "en";
+  const t = dict?.commissions ?? {};
+
+  const [form, setForm] = useState({
+    ...initialForm,
+    language: locale === "ru" ? "russian" : "english",
+  });
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
@@ -37,12 +49,17 @@ export function ContactForm() {
     event.preventDefault();
     setError("");
 
-    if (!form.name || !form.email || !form.commissionType || !form.description) {
-      setError("please fill all required fields.");
+    if (
+      !form.name ||
+      !form.email ||
+      !form.commissionType ||
+      !form.description
+    ) {
+      setError(t.formMissing || "please fill all required fields.");
       return;
     }
     if (!form.agreedTerms) {
-      setError("please agree to terms before submitting.");
+      setError(t.formNeedTerms || "please agree to terms before submitting.");
       return;
     }
 
@@ -55,10 +72,15 @@ export function ContactForm() {
       });
       if (!response.ok) throw new Error("request failed");
       setStatus("success");
-      setForm(initialForm);
+      setForm({
+        ...initialForm,
+        language: locale === "ru" ? "russian" : "english",
+      });
     } catch {
       setStatus("error");
-      setError("could not submit right now. please try again later.");
+      setError(
+        t.formError || "could not submit right now. please try again later.",
+      );
     }
   };
 
@@ -68,51 +90,80 @@ export function ContactForm() {
       onSubmit={onSubmit}
       aria-label="contact and commission request form"
     >
-      <Fieldset legend="about you">
+      <Fieldset legend={t.formGroupYou || "about you"}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            label="name"
+            label={t.formName || "name"}
             name="name"
             value={form.name}
             required
             onChange={onChange}
           />
           <Field
-            label="email"
+            label={t.formEmail || "email"}
             name="email"
             value={form.email}
             required
             type="email"
             onChange={onChange}
           />
-          <Field
-            label="social handle"
-            optional
-            name="socialHandle"
-            value={form.socialHandle}
-            onChange={onChange}
-          />
-          <Field
-            label="commission type"
+        </div>
+
+        <RadioGroup
+          legend={t.formPreferredContact || "preferred contact method"}
+          name="preferredContact"
+          value={form.preferredContact}
+          onChange={onChange}
+          options={[
+            { value: "telegram", label: t.formContactTelegram || "telegram" },
+            { value: "email", label: t.formContactEmail || "email" },
+            { value: "discord", label: t.formContactDiscord || "discord" },
+          ]}
+        />
+
+        <Field
+          label={t.formHandle || "telegram or discord handle"}
+          name="handle"
+          value={form.handle}
+          optional
+          onChange={onChange}
+        />
+      </Fieldset>
+
+      <Fieldset legend={t.formGroupProject || "project details"}>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <SelectField
+            label={t.formCommissionType || "commission type"}
             name="commissionType"
             value={form.commissionType}
             required
             onChange={onChange}
+            options={commissionTypes.map((c) => ({
+              value: c.id,
+              label: pickLocale(c.title, locale),
+            }))}
+          />
+          <SelectField
+            label={t.formLanguage || "preferred language"}
+            name="language"
+            value={form.language}
+            onChange={onChange}
+            options={[
+              { value: "english", label: "english" },
+              { value: "russian", label: "русский" },
+            ]}
           />
         </div>
-      </Fieldset>
-
-      <Fieldset legend="project details">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            label="budget"
+            label={t.formBudget || "budget"}
             optional
             name="budget"
             value={form.budget}
             onChange={onChange}
           />
           <Field
-            label="deadline"
+            label={t.formDeadline || "deadline"}
             optional
             name="deadline"
             value={form.deadline}
@@ -121,13 +172,13 @@ export function ContactForm() {
           />
         </div>
         <Field
-          label="reference link"
+          label={t.formReferences || "reference link"}
           optional
           name="references"
           value={form.references}
           onChange={onChange}
         />
-        <FieldShell label="description" required>
+        <FieldShell label={t.formDescription || "description"} required>
           <textarea
             name="description"
             value={form.description}
@@ -135,22 +186,28 @@ export function ContactForm() {
             required
             rows={5}
             className={inputClass}
-            placeholder="tell me about your idea, mood, references..."
+            placeholder={
+              t.formDescriptionPlaceholder ||
+              "tell me about your idea, mood, references..."
+            }
           />
         </FieldShell>
       </Fieldset>
 
-      <Fieldset legend="confirm">
+      <Fieldset legend={t.formGroupConfirm || "confirm"}>
         <div className="space-y-3">
           <Checkbox
-            label="i agree to commission terms and conditions"
+            label={t.formAgreeTerms || "i agree to commission terms above"}
             required
             name="agreedTerms"
             checked={form.agreedTerms}
             onChange={onChange}
           />
           <Checkbox
-            label="i consent to being contacted about this request"
+            label={
+              t.formConsent ||
+              "i consent to being contacted about this request"
+            }
             name="consent"
             checked={form.consent}
             onChange={onChange}
@@ -182,15 +239,19 @@ export function ContactForm() {
             transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
             className="rounded-[var(--radius-md)] border border-[color:var(--success)]/40 bg-[color:var(--success)]/10 px-3 py-2 text-sm text-success"
           >
-            request sent. thanks for reaching out.
+            {t.formSuccess || "request sent. thanks for reaching out."}
           </motion.p>
         ) : null}
       </AnimatePresence>
 
       <div className="flex items-center justify-between gap-4">
-        <p className="caption">required fields are marked with *.</p>
-        <Button type="submit" variant="primary" loading={status === "submitting"}>
-          send request
+        <p className="caption">{t.formFootnote || ""}</p>
+        <Button
+          type="submit"
+          variant="primary"
+          loading={status === "submitting"}
+        >
+          {dict?.common?.sendRequest || "send request"}
         </Button>
       </div>
     </form>
@@ -243,6 +304,71 @@ function Field({
         className={inputClass}
       />
     </FieldShell>
+  );
+}
+
+function SelectField({
+  label,
+  name,
+  value,
+  onChange,
+  options,
+  required = false,
+}) {
+  const id = useId();
+  return (
+    <FieldShell label={label} required={required}>
+      <select
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+        className={inputClass}
+      >
+        <option value="">—</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </FieldShell>
+  );
+}
+
+function RadioGroup({ legend, name, value, onChange, options }) {
+  return (
+    <fieldset>
+      <legend className="text-[0.8125rem] font-medium text-text-secondary">
+        {legend}
+      </legend>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {options.map((opt) => {
+          const active = value === opt.value;
+          return (
+            <label
+              key={opt.value}
+              className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-[0.8125rem] transition-colors ${
+                active
+                  ? "border-border-accent bg-accent-soft text-text-primary"
+                  : "border-border-default bg-bg-inset text-text-secondary hover:border-border-strong"
+              }`}
+            >
+              <input
+                type="radio"
+                name={name}
+                value={opt.value}
+                checked={active}
+                onChange={onChange}
+                className="sr-only"
+              />
+              <span>{opt.label}</span>
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
   );
 }
 

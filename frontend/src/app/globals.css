@@ -327,6 +327,29 @@ a {
   scroll-margin-top: calc(var(--topbar-h) + 16px);
 }
 
+/* focus ring helper for non-input interactive elements */
+.focus-visible-ring:focus {
+  outline: none;
+}
+
+.focus-visible-ring:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+
+/* hide on mobile-only (used for spin wheel desktop-only experience) */
+@media (max-width: 1023px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
 /* =========================================================================
    scrollbar
    ========================================================================= */

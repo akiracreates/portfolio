@@ -1,8 +1,8 @@
+import { cookies } from "next/headers";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/content/site-config";
-import { AppShell } from "@/components/layout/app-shell";
-import { PageTransition } from "@/components/motion/page-transition";
+import { defaultLocale, isLocale } from "@/lib/i18n/config";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,9 +28,13 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const lang = isLocale(cookieLocale) ? cookieLocale : defaultLocale;
+
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang={lang} className={`${inter.variable} ${fraunces.variable}`}>
       <body>
         <a
           href="#main-content"
@@ -38,9 +42,7 @@ export default function RootLayout({ children }) {
         >
           skip to content
         </a>
-        <AppShell>
-          <PageTransition>{children}</PageTransition>
-        </AppShell>
+        {children}
       </body>
     </html>
   );

@@ -1,0 +1,44 @@
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
+import { whatToExpect } from "@/lib/content/commissions";
+import { pickLocale } from "@/lib/i18n/config";
+
+export function WhatToExpectSection({ dict, locale = "en" }) {
+  const t = dict.whatToExpect;
+
+  return (
+    <Container>
+      <Section
+        id="what-to-expect"
+        eyebrow={t.eyebrow}
+        title={t.title}
+        description={t.description}
+        action={
+          <Button
+            as="link"
+            href={`/${locale}/commissions`}
+            variant="outline"
+            size="md"
+          >
+            {t.cta}
+          </Button>
+        }
+      >
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {whatToExpect.map((item) => (
+            <li
+              key={item.id}
+              className="flex flex-col gap-2 rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-5 transition-colors duration-[var(--duration-base)] hover:border-border-default hover:bg-bg-surface-raised"
+            >
+              <p className="heading-h3 text-[0.95rem] text-text-primary">
+                {pickLocale(item.short, locale)}
+              </p>
+              <p className="body-sm">{pickLocale(item.long, locale)}</p>
+            </li>
+          ))}
+        </ul>
+      </Section>
+    </Container>
+  );
+}

@@ -5,10 +5,11 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
 
-export function AboutPreviewSection() {
+export function AboutPreviewSection({ dict, locale = "en" }) {
+  const t = dict.aboutPreview;
   return (
     <section
-      id="about"
+      id="about-preview"
       className="scroll-mt-header border-t border-border-subtle bg-bg-base"
       aria-labelledby="about-heading"
     >
@@ -18,7 +19,7 @@ export function AboutPreviewSection() {
             <ImageFrame className="relative aspect-square w-full max-w-md">
               <Image
                 src="https://picsum.photos/id/1005/900/900"
-                alt="akira's studio detail"
+                alt={t.imageAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 420px"
                 className="object-cover"
@@ -26,26 +27,17 @@ export function AboutPreviewSection() {
             </ImageFrame>
           </div>
           <div className="space-y-6 lg:col-span-7 lg:pt-6">
-            <Eyebrow>about</Eyebrow>
+            <Eyebrow>{t.eyebrow}</Eyebrow>
             <Heading level="h1" id="about-heading">
-              years of self portraits, memory, and reinterpretation.
+              {t.title}
             </Heading>
-            <p className="body-lg">
-              i revisit old sketches and transform them into digital portraits
-              that feel calm, dreamy, and intimate — each piece capturing a
-              moment of quiet reflection layered with soft palettes and careful
-              brushwork.
-            </p>
-            <p className="body">
-              my work moves between portraits, animal studies, and small still
-              life scenes. i take a small number of commissions each season so i
-              can give every piece the attention it deserves.
-            </p>
+            <p className="body-lg">{t.body1}</p>
+            <p className="body">{t.body2}</p>
             <Link
-              href="/about"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-2 transition-colors hover:text-text-primary"
+              href={`/${locale}/about`}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-2 transition-colors hover:text-text-primary focus-visible-ring rounded-md"
             >
-              read the full story
+              {t.cta}
               <span aria-hidden>→</span>
             </Link>
           </div>

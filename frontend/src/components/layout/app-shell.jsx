@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
-import { TopBar } from "@/components/layout/top-bar";
+import { MobileFab } from "@/components/layout/mobile-fab";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 import { Footer } from "@/components/layout/footer";
 
@@ -12,8 +12,7 @@ const STORAGE_KEY = "akira.sidebar.collapsed.v1";
 // To avoid SSR/hydration mismatches, both the server snapshot AND the initial
 // client snapshot return `false` (expanded). After mount, an effect syncs
 // from localStorage and notifies subscribers, triggering a re-render only on
-// the client. Mutating module state inside an effect (without calling
-// setState directly) is lint-clean under React 19.
+// the client.
 const listeners = new Set();
 let cachedCollapsed = false;
 let hydratedFromStorage = false;
@@ -74,8 +73,6 @@ export function AppShell({ children }) {
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // After the first client render, sync from localStorage. Notifying listeners
-  // (instead of calling setState directly) keeps the React 19 lint rule happy.
   useEffect(() => {
     syncFromStorage();
   }, []);
@@ -108,12 +105,14 @@ export function AppShell({ children }) {
 
       {/* main column — left padding only at md+ to clear the fixed sidebar */}
       <div className="flex min-h-screen flex-col md:pl-[var(--sidebar-w)]">
-        <TopBar onOpenDrawer={() => setDrawerOpen(true)} />
         <main id="main-content" className="flex-1">
           {children}
         </main>
         <Footer />
       </div>
+
+      {/* mobile floating action button (opens drawer) */}
+      <MobileFab onOpenDrawer={() => setDrawerOpen(true)} />
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </div>

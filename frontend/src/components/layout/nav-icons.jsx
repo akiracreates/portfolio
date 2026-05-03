@@ -35,7 +35,14 @@ export function NavIcon({ id, className = "" }) {
           <path d="M3.5 17 9 12l5 4 3-2 3.5 3" />
         </svg>
       );
+    case "featured":
+      return (
+        <svg className={cn} {...stroke}>
+          <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.2 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" />
+        </svg>
+      );
     case "commissions":
+    case "work":
       return (
         <svg className={cn} {...stroke}>
           <path d="M4 6h12l4 4v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z" />
@@ -43,40 +50,32 @@ export function NavIcon({ id, className = "" }) {
           <path d="M7 14h10M7 17h7" />
         </svg>
       );
-    case "contact":
+    case "telegram":
       return (
         <svg className={cn} {...stroke}>
-          <rect x="3" y="5" width="18" height="14" rx="2" />
-          <path d="m4 7 8 6 8-6" />
+          <path d="M3 11.5 21 4l-3 16-5.5-4-3 3-1-5z" />
+          <path d="m9.5 14 7.5-6" />
         </svg>
       );
-    case "terms":
+    case "vk":
       return (
-        <svg className={cn} {...stroke}>
-          <path d="M7 3h8l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
-          <path d="M14 3v5h5" />
-          <path d="M9 13h7M9 16h7M9 10h3" />
+        <svg className={cn} viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <rect x="3.5" y="4.5" width="17" height="15" rx="3" />
+          <path d="M7 9.5c.5 3 2.3 5 5 5h.5V12s1.6.4 2.7 2.5h2c-.6-1.6-1.8-2.5-2.7-3 1.4-.4 2.4-1.4 2.7-3h-1.8c-.4 1-1.5 2.4-3 2.4V9.5h-1.6V12c-1.4-.4-2.3-1.6-2.6-2.5H7z" />
         </svg>
       );
-    case "privacy":
+    case "cara":
       return (
         <svg className={cn} {...stroke}>
-          <path d="M12 3 5 6v6c0 4.5 3 8 7 9 4-1 7-4.5 7-9V6l-7-3z" />
-          <path d="m9 12 2 2 4-4" />
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M15.5 9.5c-1-1.2-2.3-1.7-3.6-1.4-1.7.4-3 2-3 4 0 2.4 1.6 4 3.6 4 1.3 0 2.4-.6 3-1.6" />
         </svg>
       );
-    case "instagram":
+    case "patreon":
       return (
         <svg className={cn} {...stroke}>
-          <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
-          <circle cx="12" cy="12" r="3.75" />
-          <circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none" />
-        </svg>
-      );
-    case "x":
-      return (
-        <svg className={cn} {...stroke}>
-          <path d="M5 5l14 14M19 5 5 19" />
+          <circle cx="14.5" cy="9.5" r="5" />
+          <path d="M5.5 4v16" strokeWidth="2.5" />
         </svg>
       );
     case "email":

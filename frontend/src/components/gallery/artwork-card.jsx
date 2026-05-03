@@ -4,9 +4,18 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { ImageFrame } from "@/components/ui/image-frame";
+import { pickLocale } from "@/lib/i18n/config";
 
-export function ArtworkCard({ artwork }) {
+export function ArtworkCard({
+  artwork,
+  locale = "en",
+  showFeaturedBadge = true,
+  featuredLabel = "featured",
+}) {
   const reduced = useReducedMotion();
+  const title = pickLocale(artwork.title, locale);
+  const alt = pickLocale(artwork.alt, locale) || title;
+  const note = pickLocale(artwork.artistComment, locale);
 
   return (
     <motion.article
@@ -20,15 +29,15 @@ export function ArtworkCard({ artwork }) {
       >
         <Image
           src={artwork.imageSrc}
-          alt={artwork.alt}
+          alt={alt}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.04]"
         />
-        {artwork.featured && (
+        {showFeaturedBadge && artwork.featured && (
           <div className="absolute left-3 top-3">
             <Badge variant="highlight" size="sm">
-              featured
+              {featuredLabel}
             </Badge>
           </div>
         )}
@@ -37,13 +46,60 @@ export function ArtworkCard({ artwork }) {
       <div className="flex flex-1 flex-col gap-2 p-5">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="heading-h3 text-[1rem] leading-snug text-text-primary">
-            {artwork.title}
+            {title}
           </h3>
           <span className="caption shrink-0">{artwork.category}</span>
         </div>
-        <p className="body-sm line-clamp-2 text-text-secondary">
-          {artwork.artistComment}
-        </p>
+        {note && (
+          <p className="body-sm line-clamp-2 text-text-secondary">{note}</p>
+        )}
+      </div>
+    </motion.article>
+  );
+}
+
+/**
+ * Editorial row variant — image on one side, content on the other,
+ * alternates per `index` (even = image left, odd = image right).
+ */
+export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
+  const reduced = useReducedMotion();
+  const title = pickLocale(artwork.title, locale);
+  const alt = pickLocale(artwork.alt, locale) || title;
+  const note = pickLocale(artwork.artistComment, locale);
+  const reversed = index % 2 === 1;
+
+  return (
+    <motion.article
+      className={`grid items-center gap-8 md:grid-cols-12 md:gap-12 ${reversed ? "md:[&>:first-child]:order-2" : ""}`}
+      initial={reduced ? false : { opacity: 0, y: 16 }}
+      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+      viewport={
+        reduced
+          ? undefined
+          : { once: true, amount: 0.2, margin: "0px 0px -8% 0px" }
+      }
+      transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
+    >
+      <div className="md:col-span-7">
+        <ImageFrame className="relative aspect-[4/5] w-full overflow-hidden">
+          <Image
+            src={artwork.imageSrc}
+            alt={alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 60vw"
+            className="object-cover"
+          />
+        </ImageFrame>
+      </div>
+      <div className="space-y-3 md:col-span-5">
+        <div className="flex items-baseline justify-between gap-4">
+          <h3 className="heading-h2 text-[1.5rem] leading-tight text-text-primary">
+            {title}
+          </h3>
+          <span className="caption shrink-0">{artwork.category}</span>
+        </div>
+        {note && <p className="body max-w-prose">{note}</p>}
       </div>
     </motion.article>
   );

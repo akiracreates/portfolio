@@ -7,27 +7,27 @@ export const siteConfig = {
     "digital portrait artist working in soft, intimate palettes. taking commissions for portraits, pets, and still life.",
 };
 
-export const navGroups = [
-  {
-    id: "main",
-    label: "main",
-    items: [
-      { id: "home", label: "home", href: "/" },
-      { id: "about", label: "about", href: "/about" },
-      { id: "portfolio", label: "portfolio", href: "/portfolio" },
-      { id: "commissions", label: "commissions", href: "/commissions" },
-      { id: "contact", label: "contact", href: "/contact" },
-    ],
-  },
-  {
-    id: "info",
-    label: "info",
-    items: [
-      { id: "terms", label: "terms", href: "/terms" },
-      { id: "privacy", label: "privacy", href: "/privacy" },
-    ],
-  },
-];
+/**
+ * Two-group navigation per spec:
+ *  - homepageSections: smooth-scroll anchors on the home page (or navigate-then-scroll from sub-pages)
+ *  - pages: full route navigation
+ */
+export const navStructure = {
+  homepageSections: [
+    { id: "home",        icon: "home",        anchor: "hero",                labelKey: "nav.home" },
+    { id: "featured",    icon: "portfolio",   anchor: "featured",            labelKey: "nav.featured" },
+    { id: "commissions", icon: "commissions", anchor: "commissions-preview", labelKey: "nav.commissions" },
+  ],
+  pages: [
+    { id: "about",     icon: "about",       href: "/about",       labelKey: "nav.about" },
+    { id: "portfolio", icon: "portfolio",   href: "/portfolio",   labelKey: "nav.portfolio" },
+    { id: "work",      icon: "commissions", href: "/commissions", labelKey: "nav.work" },
+  ],
+};
 
-/** Flat list — useful for footer/sitemap. */
-export const allNavItems = navGroups.flatMap((g) => g.items);
+/** Flat list of full pages — useful for footer/sitemap. */
+export const allPages = navStructure.pages.map((p) => ({
+  id: p.id,
+  href: p.href,
+  labelKey: p.labelKey,
+}));
