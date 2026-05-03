@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <rect width="800" height="1000" fill="#2C294F"/>
+  <rect x="36" y="36" width="728" height="928" rx="18" fill="#1C1A37" stroke="#565282" stroke-width="4"/>
+  <circle cx="400" cy="460" r="170" fill="#F0AF81" opacity="0.6"/>
+  <polygon points="300,300 350,380 250,380" fill="#B26A8F"/>
+  <polygon points="550,300 500,380 600,380" fill="#B26A8F"/>
+  <text x="400" y="900" fill="#F3F0FF" font-size="34" text-anchor="middle" font-family="Arial, sans-serif">animal placeholder</text>
+</svg>

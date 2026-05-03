@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <rect width="800" height="1000" fill="#2C294F"/>
+  <rect x="36" y="36" width="728" height="928" rx="18" fill="#1C1A37" stroke="#565282" stroke-width="4"/>
+  <rect x="170" y="530" width="460" height="180" rx="12" fill="#F0AF81" opacity="0.58"/>
+  <circle cx="330" cy="470" r="90" fill="#B26A8F" opacity="0.75"/>
+  <rect x="440" y="360" width="120" height="190" rx="10" fill="#B26A8F" opacity="0.7"/>
+  <text x="400" y="900" fill="#F3F0FF" font-size="34" text-anchor="middle" font-family="Arial, sans-serif">still life placeholder</text>
+</svg>
