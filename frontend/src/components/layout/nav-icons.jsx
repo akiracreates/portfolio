@@ -1,63 +1,97 @@
+const stroke = {
+  width: 18,
+  height: 18,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.5,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": true,
+};
+
 export function NavIcon({ id, className = "" }) {
   const cn = `shrink-0 ${className}`.trim();
   switch (id) {
-    case "hero":
+    case "home":
       return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeLinecap="round" strokeLinejoin="round" />
-          <polyline points="9 22 9 12 15 12 15 22" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className={cn} {...stroke}>
+          <path d="M3 11.5 12 4l9 7.5" />
+          <path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9" />
         </svg>
       );
-    case "about-preview":
-    case "about-page":
+    case "about":
       return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" />
-          <circle cx="12" cy="7" r="4" />
+        <svg className={cn} {...stroke}>
+          <circle cx="12" cy="8" r="3.5" />
+          <path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" />
         </svg>
       );
-    case "portfolio-preview":
-    case "portfolio-page":
+    case "portfolio":
       return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-          <circle cx="8.5" cy="8.5" r="1.5" />
-          <polyline points="21 15 16 10 5 21" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className={cn} {...stroke}>
+          <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
+          <circle cx="9" cy="10" r="1.5" />
+          <path d="M3.5 17 9 12l5 4 3-2 3.5 3" />
         </svg>
       );
-    case "commissions-preview":
-    case "commissions-page":
+    case "commissions":
       return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" strokeLinecap="round" strokeLinejoin="round" />
-          <line x1="3" y1="6" x2="21" y2="6" strokeLinecap="round" />
-          <path d="M16 10a4 4 0 0 1-8 0" strokeLinecap="round" />
-        </svg>
-      );
-    case "easter-egg":
-      return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <path d="M12 3v3M6.5 8.5l2 2M17.5 8.5l-2 2M12 21a8 8 0 0 0 8-8c0-4.5-4-8-8-8s-8 3.5-8 8a8 8 0 0 0 8 8z" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className={cn} {...stroke}>
+          <path d="M4 6h12l4 4v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z" />
+          <path d="M16 6v4h4" />
+          <path d="M7 14h10M7 17h7" />
         </svg>
       );
     case "contact":
       return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeLinecap="round" strokeLinejoin="round" />
-          <polyline points="22,6 12,13 2,6" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className={cn} {...stroke}>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m4 7 8 6 8-6" />
         </svg>
       );
-    case "reward-page":
+    case "terms":
       return (
-        <svg className={cn} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-          <path d="M20 12v10H4V12" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M2 7h20v5H2V7z" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M12 22V7M12 7H8a3 3 0 0 1 0-6c3 0 4 6 4 6zM12 7h4a3 3 0 0 0 0-6c-3 0-4 6-4 6z" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className={cn} {...stroke}>
+          <path d="M7 3h8l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+          <path d="M14 3v5h5" />
+          <path d="M9 13h7M9 16h7M9 10h3" />
+        </svg>
+      );
+    case "privacy":
+      return (
+        <svg className={cn} {...stroke}>
+          <path d="M12 3 5 6v6c0 4.5 3 8 7 9 4-1 7-4.5 7-9V6l-7-3z" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      );
+    case "instagram":
+      return (
+        <svg className={cn} {...stroke}>
+          <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+          <circle cx="12" cy="12" r="3.75" />
+          <circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "x":
+      return (
+        <svg className={cn} {...stroke}>
+          <path d="M5 5l14 14M19 5 5 19" />
+        </svg>
+      );
+    case "email":
+      return (
+        <svg className={cn} {...stroke}>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m4 7 8 6 8-6" />
         </svg>
       );
     default:
       return (
-        <span className={`inline-block h-2 w-2 rounded-full bg-current opacity-70 ${className}`} aria-hidden />
+        <span
+          className={`inline-block h-1.5 w-1.5 rounded-full bg-current opacity-60 ${className}`}
+          aria-hidden
+        />
       );
   }
 }

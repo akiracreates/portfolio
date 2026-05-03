@@ -1,22 +1,27 @@
 import { ArtworkCard } from "@/components/gallery/artwork-card";
+import { Eyebrow } from "@/components/ui/eyebrow";
 
 function categoryAnchorId(category) {
   return `category-${category.toLowerCase().replace(/\s+/g, "-")}`;
 }
 
-export function CategorySection({ category, artworks }) {
+export function CategorySection({ category, artworks, eyebrow = "collection" }) {
   const id = categoryAnchorId(category);
 
   return (
-    <section id={id} className="scroll-mt-28 space-y-6">
-      <header className="space-y-2">
-        <p className="label-sm title-underline">collection</p>
-        <h3 className="heading-display heading-sm text-text-primary">{category}</h3>
-        <div className="max-w-sm border-b border-dashed border-primary/25 pb-1" />
+    <section id={id} className="scroll-mt-header space-y-6">
+      <header className="flex items-baseline justify-between gap-4">
+        <div className="space-y-1.5">
+          <Eyebrow>{eyebrow}</Eyebrow>
+          <h3 className="heading-h2 text-[1.5rem] leading-tight">{category}</h3>
+        </div>
+        <span className="caption">
+          {artworks.length} {artworks.length === 1 ? "piece" : "pieces"}
+        </span>
       </header>
-      <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {artworks.map((artwork, index) => (
-          <ArtworkCard key={artwork.id} artwork={artwork} featured={index === 0} />
+      <div className="grid auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {artworks.map((artwork) => (
+          <ArtworkCard key={artwork.id} artwork={artwork} />
         ))}
       </div>
     </section>

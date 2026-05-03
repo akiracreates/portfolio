@@ -1,20 +1,21 @@
-import { Mali, Nunito } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/content/site-config";
-import { SiteFrame } from "@/components/layout/site-frame";
-import { SidebarNav } from "@/components/layout/sidebar-nav";
+import { AppShell } from "@/components/layout/app-shell";
 import { PageTransition } from "@/components/motion/page-transition";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const mali = Mali({
-  variable: "--font-mali",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  axes: ["opsz"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -29,23 +30,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${nunito.variable} ${mali.variable}`}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
       <body>
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:border-2 focus:border-dashed focus:border-primary focus:bg-surface-card focus:px-4 focus:py-2 focus:text-sm focus:text-primary"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-text-on-accent focus:shadow-md"
         >
           skip to content
         </a>
-        <SiteFrame>
-          <SidebarNav items={siteConfig.navItems} />
-          <div
-            id="main-content"
-            className="content-area pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0"
-          >
-            <PageTransition>{children}</PageTransition>
-          </div>
-        </SiteFrame>
+        <AppShell>
+          <PageTransition>{children}</PageTransition>
+        </AppShell>
       </body>
     </html>
   );

@@ -1,21 +1,18 @@
 /**
- * Wraps images with either a soft solid frame or a dashed “sticker” frame.
- * When using Next/Image with fill, set `className` on ImageFrame to include sizing (e.g. aspect + min-h).
+ * Clean image container — subtle border, rounded, overflow-hidden.
+ * Use with next/image fill — pass aspect/sizing via className.
  */
-export function ImageFrame({ dashed = false, className = "", children }) {
-  if (dashed) {
-    return (
-      <div className={`frame-dashed-image relative p-1.5 ${className}`.trim()}>
-        <div className="relative h-full w-full min-h-0 overflow-hidden rounded-[calc(var(--radius-md)-6px)]">
-          {children}
-        </div>
-      </div>
-    );
-  }
+export function ImageFrame({ className = "", children, rounded = "lg" }) {
+  const radiusClass =
+    rounded === "md"
+      ? "rounded-[var(--radius-md)]"
+      : rounded === "xl"
+        ? "rounded-[var(--radius-xl)]"
+        : "rounded-[var(--radius-lg)]";
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-border-default bg-bg-inset/30 ${className}`.trim()}
+      className={`relative overflow-hidden border border-border-subtle bg-bg-inset ${radiusClass} ${className}`.trim()}
     >
       {children}
     </div>

@@ -1,45 +1,56 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
-import { SectionShell } from "@/components/ui/section-shell";
 
 export function AboutPreviewSection() {
   return (
-    <SectionShell
-      id="about-preview"
-      eyebrow="about the artist"
-      title="years of self portraits, memory, and reinterpretation"
-      template="editorial"
-      action={
-        <Button as="link" href="/about" variant="secondary" size="sm">
-          read more
-        </Button>
-      }
+    <section
+      id="about"
+      className="scroll-mt-header border-t border-border-subtle bg-bg-base"
+      aria-labelledby="about-heading"
     >
-      <div className="flex flex-col gap-6">
-        <ImageFrame dashed className="relative aspect-square w-full max-w-sm mx-auto sm:max-w-none">
-          <Image
-            src="https://picsum.photos/id/1005/900/900"
-            alt="placeholder self portrait detail"
-            fill
-            sizes="(max-width: 640px) 100vw, 32rem"
-            className="object-cover"
-          />
-        </ImageFrame>
-        <div className="card-inner space-y-4 p-5">
-          <p className="label-sm title-underline">artist note</p>
-          <div className="border-b border-dashed border-primary/25" />
-          <p className="text-body text-sm sm:text-[0.95rem]">
-            lorem ipsum dolor sit amet, consectetur adipiscing elit. dolor sit amet,
-            akira revisits old sketches and transforms them into digital portraits
-            that feel calm, dreamy, and intimate.
-          </p>
-          <p className="text-body text-sm sm:text-[0.95rem]">
-            each piece captures a moment of quiet reflection, layered with soft
-            palettes and careful brushwork.
-          </p>
+      <Container className="py-20 md:py-28">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <ImageFrame className="relative aspect-square w-full max-w-md">
+              <Image
+                src="https://picsum.photos/id/1005/900/900"
+                alt="akira's studio detail"
+                fill
+                sizes="(max-width: 1024px) 100vw, 420px"
+                className="object-cover"
+              />
+            </ImageFrame>
+          </div>
+          <div className="space-y-6 lg:col-span-7 lg:pt-6">
+            <Eyebrow>about</Eyebrow>
+            <Heading level="h1" id="about-heading">
+              years of self portraits, memory, and reinterpretation.
+            </Heading>
+            <p className="body-lg">
+              i revisit old sketches and transform them into digital portraits
+              that feel calm, dreamy, and intimate — each piece capturing a
+              moment of quiet reflection layered with soft palettes and careful
+              brushwork.
+            </p>
+            <p className="body">
+              my work moves between portraits, animal studies, and small still
+              life scenes. i take a small number of commissions each season so i
+              can give every piece the attention it deserves.
+            </p>
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-2 transition-colors hover:text-text-primary"
+            >
+              read the full story
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
         </div>
-      </div>
-    </SectionShell>
+      </Container>
+    </section>
   );
 }

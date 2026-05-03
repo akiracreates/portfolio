@@ -1,32 +1,29 @@
 import Link from "next/link";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full border-2 font-semibold tracking-wide transition-[transform,box-shadow,background-color,border-color,color] duration-[var(--duration-base)] ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none";
-
-const dashedPrimary =
-  `${base} border-dashed border-primary bg-primary/10 text-primary shadow-sm hover:-translate-y-0.5 hover:bg-primary/16 hover:shadow-[0_6px_22px_color-mix(in_srgb,var(--accent-pop)_32%,transparent)] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`;
+  "inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] font-medium transition-[transform,background-color,border-color,color,box-shadow] duration-[var(--duration-base)] ease-[cubic-bezier(0.2,0,0,1)] disabled:pointer-events-none disabled:opacity-45 select-none";
 
 const variants = {
-  /** dashed neon-outline pill — main CTAs */
-  primary: dashedPrimary,
-  /** explicit alias for the dashed pill */
-  dashedPill: dashedPrimary,
-  secondary: `${base} border-dashed border-secondary/75 bg-secondary/14 text-text-primary hover:-translate-y-0.5 hover:border-secondary hover:bg-secondary/22 hover:shadow-md active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary`,
-  ghost: `${base} border-transparent bg-transparent text-text-secondary hover:-translate-y-0.5 hover:border-dashed hover:border-primary/40 hover:bg-primary/8 hover:text-primary active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`,
-  /** solid accent — loud actions */
-  accent: `${base} border-solid border-primary bg-primary text-bg-base shadow-md hover:-translate-y-0.5 hover:brightness-105 hover:shadow-[0_8px_28px_color-mix(in_srgb,var(--accent-pop)_42%,transparent)] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`,
+  /** primary CTA — uses the highlight pink. Reserve for ONE per section. */
+  primary: `${base} bg-highlight text-text-on-highlight border border-transparent shadow-sm hover:bg-highlight-hover hover:-translate-y-[1px] active:translate-y-0`,
+  /** secondary CTA — purple accent. Default for most actions. */
+  secondary: `${base} bg-accent text-text-on-accent border border-transparent shadow-sm hover:bg-accent-hover hover:-translate-y-[1px] active:translate-y-0`,
+  /** outline — neutral on dark surfaces. */
+  outline: `${base} bg-transparent text-text-primary border border-border-strong hover:bg-bg-surface hover:border-border-strong active:translate-y-0`,
+  /** ghost — inline / tertiary actions. */
+  ghost: `${base} bg-transparent text-text-secondary border border-transparent hover:bg-bg-surface hover:text-text-primary`,
 };
 
 const sizes = {
-  sm: "px-3.5 py-1.5 text-xs min-h-[2.25rem]",
-  md: "px-5 py-2 text-sm min-h-[2.5rem]",
-  lg: "px-6 py-2.5 text-sm min-h-[2.75rem]",
+  sm: "h-9 px-3.5 text-[0.8125rem]",
+  md: "h-10 px-4 text-sm",
+  lg: "h-11 px-5 text-[0.9375rem]",
 };
 
 export function Button({
   as = "button",
   href,
-  variant = "primary",
+  variant = "secondary",
   size = "md",
   children,
   className = "",
@@ -36,7 +33,7 @@ export function Button({
 }) {
   const busy = loading || disabled;
   const classes =
-    `${variants[variant] ?? variants.primary} ${sizes[size] ?? sizes.md} ${className}`.trim();
+    `${variants[variant] ?? variants.secondary} ${sizes[size] ?? sizes.md} ${className}`.trim();
 
   const spinner = (
     <span
@@ -55,7 +52,12 @@ export function Button({
   }
 
   return (
-    <button className={classes} disabled={busy} aria-busy={loading || undefined} {...props}>
+    <button
+      className={classes}
+      disabled={busy}
+      aria-busy={loading || undefined}
+      {...props}
+    >
       {loading ? spinner : null}
       {children}
     </button>

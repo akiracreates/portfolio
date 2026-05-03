@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const initialForm = {
@@ -16,6 +16,9 @@ const initialForm = {
   agreedTerms: false,
   consent: false,
 };
+
+const inputClass =
+  "w-full rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-[var(--duration-fast)] focus:border-accent focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-secondary-soft)]";
 
 export function ContactForm() {
   const [form, setForm] = useState(initialForm);
@@ -61,47 +64,99 @@ export function ContactForm() {
 
   return (
     <form
-      className="card-inner space-y-5 p-5 sm:p-6"
+      className="space-y-8"
       onSubmit={onSubmit}
       aria-label="contact and commission request form"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="name" name="name" value={form.name} required onChange={onChange} />
-        <Field label="email" name="email" value={form.email} required type="email" onChange={onChange} />
-        <Field label="social handle (optional)" name="socialHandle" value={form.socialHandle} onChange={onChange} />
-        <Field label="commission type" name="commissionType" value={form.commissionType} required onChange={onChange} />
-        <Field label="budget (optional)" name="budget" value={form.budget} onChange={onChange} />
-        <Field label="deadline (optional)" name="deadline" value={form.deadline} type="date" onChange={onChange} />
-      </div>
+      <Fieldset legend="about you">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field
+            label="name"
+            name="name"
+            value={form.name}
+            required
+            onChange={onChange}
+          />
+          <Field
+            label="email"
+            name="email"
+            value={form.email}
+            required
+            type="email"
+            onChange={onChange}
+          />
+          <Field
+            label="social handle"
+            optional
+            name="socialHandle"
+            value={form.socialHandle}
+            onChange={onChange}
+          />
+          <Field
+            label="commission type"
+            name="commissionType"
+            value={form.commissionType}
+            required
+            onChange={onChange}
+          />
+        </div>
+      </Fieldset>
 
-      <Field label="reference link (optional)" name="references" value={form.references} onChange={onChange} />
+      <Fieldset legend="project details">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field
+            label="budget"
+            optional
+            name="budget"
+            value={form.budget}
+            onChange={onChange}
+          />
+          <Field
+            label="deadline"
+            optional
+            name="deadline"
+            value={form.deadline}
+            type="date"
+            onChange={onChange}
+          />
+        </div>
+        <Field
+          label="reference link"
+          optional
+          name="references"
+          value={form.references}
+          onChange={onChange}
+        />
+        <FieldShell label="description" required>
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={onChange}
+            required
+            rows={5}
+            className={inputClass}
+            placeholder="tell me about your idea, mood, references..."
+          />
+        </FieldShell>
+      </Fieldset>
 
-      <label className="flex flex-col gap-2 text-xs text-text-secondary">
-        description *
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={onChange}
-          required
-          rows={5}
-          className="input-cute px-3 py-2 text-sm transition-colors duration-[var(--duration-fast)]"
-        />
-      </label>
-
-      <div className="space-y-3">
-        <Checkbox
-          label="i agree to commission terms and conditions *"
-          name="agreedTerms"
-          checked={form.agreedTerms}
-          onChange={onChange}
-        />
-        <Checkbox
-          label="i consent to being contacted about this request"
-          name="consent"
-          checked={form.consent}
-          onChange={onChange}
-        />
-      </div>
+      <Fieldset legend="confirm">
+        <div className="space-y-3">
+          <Checkbox
+            label="i agree to commission terms and conditions"
+            required
+            name="agreedTerms"
+            checked={form.agreedTerms}
+            onChange={onChange}
+          />
+          <Checkbox
+            label="i consent to being contacted about this request"
+            name="consent"
+            checked={form.consent}
+            onChange={onChange}
+          />
+        </div>
+      </Fieldset>
 
       <AnimatePresence mode="wait">
         {error ? (
@@ -111,8 +166,8 @@ export function ContactForm() {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="text-sm text-error"
+            transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
+            className="rounded-[var(--radius-md)] border border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
           >
             {error}
           </motion.p>
@@ -124,49 +179,92 @@ export function ContactForm() {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="text-sm text-success"
+            transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
+            className="rounded-[var(--radius-md)] border border-[color:var(--success)]/40 bg-[color:var(--success)]/10 px-3 py-2 text-sm text-success"
           >
             request sent. thanks for reaching out.
           </motion.p>
         ) : null}
       </AnimatePresence>
 
-      <Button type="submit" variant="primary" loading={status === "submitting"}>
-        submit
-      </Button>
+      <div className="flex items-center justify-between gap-4">
+        <p className="caption">required fields are marked with *.</p>
+        <Button type="submit" variant="primary" loading={status === "submitting"}>
+          send request
+        </Button>
+      </div>
     </form>
   );
 }
 
-function Field({ label, name, value, onChange, required = false, type = "text" }) {
+function Fieldset({ legend, children }) {
   return (
-    <label className="flex flex-col gap-2 text-xs text-text-secondary">
-      {label}{required && " *"}
+    <fieldset className="space-y-4">
+      <legend className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+        {legend}
+      </legend>
+      {children}
+    </fieldset>
+  );
+}
+
+function FieldShell({ label, required, optional, children }) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="flex items-baseline gap-1.5 text-[0.8125rem] font-medium text-text-secondary">
+        <span>{label}</span>
+        {required && <span className="text-highlight">*</span>}
+        {optional && <span className="caption">optional</span>}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+function Field({
+  label,
+  name,
+  value,
+  onChange,
+  required = false,
+  optional = false,
+  type = "text",
+}) {
+  const id = useId();
+  return (
+    <FieldShell label={label} required={required} optional={optional}>
       <input
+        id={id}
         name={name}
         type={type}
         value={value}
         onChange={onChange}
         required={required}
-        className="input-cute px-3 py-2 text-sm transition-colors duration-[var(--duration-fast)]"
+        className={inputClass}
       />
-    </label>
+    </FieldShell>
   );
 }
 
-function Checkbox({ label, name, checked, onChange }) {
+function Checkbox({ label, name, checked, onChange, required = false }) {
+  const id = useId();
   return (
-    <label className="flex items-center gap-3 text-xs text-text-secondary cursor-pointer group">
+    <label
+      htmlFor={id}
+      className="group flex cursor-pointer items-start gap-3 text-[0.8125rem] text-text-secondary"
+    >
       <input
-        className="h-4 w-4 rounded-md border-2 border-dashed border-primary/40 bg-bg-inset accent-primary transition-colors"
+        id={id}
         type="checkbox"
         name={name}
         checked={checked}
         onChange={onChange}
+        required={required}
+        className="mt-0.5 h-4 w-4 shrink-0 rounded-[4px] border border-border-default bg-bg-inset accent-[color:var(--accent-primary)]"
       />
-      <span className="group-hover:text-text-primary transition-colors duration-[var(--duration-fast)]">
+      <span className="transition-colors group-hover:text-text-primary">
         {label}
+        {required && <span className="ml-1 text-highlight">*</span>}
       </span>
     </label>
   );

@@ -2,47 +2,48 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 import { ImageFrame } from "@/components/ui/image-frame";
 
-export function ArtworkCard({ artwork, featured = false }) {
-  const reduceMotion = useReducedMotion();
+export function ArtworkCard({ artwork }) {
+  const reduced = useReducedMotion();
 
   return (
     <motion.article
-      layout
-      className={`card-inner group overflow-hidden transition-shadow duration-[var(--duration-base)] hover:border-primary/45 hover:shadow-[var(--elev-glow)] ${
-        featured ? "md:col-span-2" : ""
-      }`}
-      whileHover={reduceMotion ? undefined : { y: -4 }}
-      transition={{ type: "spring", stiffness: 380, damping: 26 }}
+      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface transition-colors duration-[var(--duration-base)] hover:border-border-default hover:bg-bg-surface-raised"
+      whileHover={reduced ? undefined : { y: -3 }}
+      transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
     >
-      <div
-        className={`flex flex-col gap-3 sm:flex-row sm:items-stretch ${
-          featured ? "sm:gap-4" : ""
-        }`}
+      <ImageFrame
+        rounded="md"
+        className="relative aspect-[4/5] w-full border-0 rounded-none rounded-t-[var(--radius-lg)]"
       >
-        <ImageFrame
-          dashed
-          className={`relative w-full shrink-0 ${
-            featured
-              ? "aspect-[4/5] sm:aspect-[16/10] sm:h-56 sm:w-full md:aspect-auto md:h-64 md:w-60"
-              : "aspect-[4/5] sm:h-52 sm:w-44 md:aspect-auto md:h-56 md:w-52"
-          }`}
-        >
-          <Image
-            src={artwork.imageSrc}
-            alt={artwork.alt}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 45vw, 220px"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-          />
-        </ImageFrame>
-        <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 px-3 pb-3 pt-1 sm:px-4 sm:py-3">
-          <h3 className="text-sm font-semibold text-primary">{artwork.title}</h3>
-          <p className="text-xs leading-relaxed text-text-secondary md:max-w-[42ch]">
-            {artwork.artistComment}
-          </p>
+        <Image
+          src={artwork.imageSrc}
+          alt={artwork.alt}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.04]"
+        />
+        {artwork.featured && (
+          <div className="absolute left-3 top-3">
+            <Badge variant="highlight" size="sm">
+              featured
+            </Badge>
+          </div>
+        )}
+      </ImageFrame>
+
+      <div className="flex flex-1 flex-col gap-2 p-5">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="heading-h3 text-[1rem] leading-snug text-text-primary">
+            {artwork.title}
+          </h3>
+          <span className="caption shrink-0">{artwork.category}</span>
         </div>
+        <p className="body-sm line-clamp-2 text-text-secondary">
+          {artwork.artistComment}
+        </p>
       </div>
     </motion.article>
   );

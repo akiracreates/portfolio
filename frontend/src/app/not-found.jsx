@@ -1,20 +1,27 @@
 import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Heading } from "@/components/ui/heading";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-1 items-center justify-center p-8">
-      <div className="card-accent max-w-md space-y-4 p-8 text-center">
-        <p className="label-sm title-underline">404</p>
-        <h1 className="heading-display heading-md">page not found</h1>
-        <p className="text-sm text-text-secondary">
-          this page does not exist yet. you can return to the homepage.
-        </p>
-        <div className="flex justify-center pt-1">
-          <Button as="link" href="/" variant="accent" size="sm">
-            back home
-          </Button>
-        </div>
+    <Container className="flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
+      <Eyebrow>404</Eyebrow>
+      <Heading level="h1" className="mt-4">
+        this page wandered off.
+      </Heading>
+      <p className="body mt-4 max-w-md">
+        the link might be old, or the page may have been moved. nothing&apos;s
+        broken — just go back home.
+      </p>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button as="link" href="/" variant="secondary" size="md">
+          back home
+        </Button>
+        <Button as="link" href="/portfolio" variant="outline" size="md">
+          browse portfolio
+        </Button>
       </div>
-    </div>
+    </Container>
   );
 }

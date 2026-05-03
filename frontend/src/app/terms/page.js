@@ -1,4 +1,5 @@
-import { SectionShell } from "@/components/ui/section-shell";
+import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/layout/page-header";
 import { termsItems } from "@/lib/content/terms";
 
 export const metadata = {
@@ -9,28 +10,24 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="content-column space-y-8 py-10 sm:py-14">
-      <SectionShell id="terms-page" eyebrow="terms" title="terms and conditions">
-        <div className="space-y-4">
+    <>
+      <PageHeader
+        id="terms"
+        eyebrow="terms"
+        title="terms & conditions"
+        description="please read these before submitting a commission request. they exist to make every collaboration smooth and fair."
+      />
+
+      <Container className="py-16 md:py-24">
+        <article className="prose">
           {termsItems.map((item) => (
-            <article
-              key={item.id}
-              className={`card-inner p-5 ${
-                item.highlighted
-                  ? "border-2 border-dashed border-primary/55 shadow-[var(--elev-glow)]"
-                  : ""
-              }`}
-            >
-              <h2 className="text-sm font-medium text-text-primary">
-                {item.title}
-              </h2>
-              <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-                {item.body}
-              </p>
-            </article>
+            <section key={item.id}>
+              <h2>{item.title}</h2>
+              <p>{item.body}</p>
+            </section>
           ))}
-        </div>
-      </SectionShell>
-    </div>
+        </article>
+      </Container>
+    </>
   );
 }

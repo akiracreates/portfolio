@@ -1,4 +1,5 @@
-import { SectionShell } from "@/components/ui/section-shell";
+import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/layout/page-header";
 
 export const metadata = {
   title: "privacy | akira",
@@ -7,19 +8,38 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="content-column space-y-8 py-10 sm:py-14">
-      <SectionShell
-        id="privacy-page"
+    <>
+      <PageHeader
+        id="privacy"
         eyebrow="privacy"
-        title="privacy policy placeholder"
-      >
-        <div className="card-inner p-5">
-          <p className="text-body text-sm">
-            lorem ipsum privacy placeholder. replace with approved legal text
-            before launch.
+        title="privacy policy"
+        description="placeholder text. replace with approved legal text before launch."
+      />
+
+      <Container className="py-16 md:py-24">
+        <article className="prose">
+          <p>
+            lorem ipsum privacy placeholder. this section will outline what
+            information is collected when you use this site, how it is stored,
+            and how to request its removal.
           </p>
-        </div>
-      </SectionShell>
-    </div>
+          <h2>what we collect</h2>
+          <p>
+            lorem ipsum placeholder for the data collection summary, including
+            form submissions and any analytics that may be added later.
+          </p>
+          <h2>how it is used</h2>
+          <p>
+            lorem ipsum placeholder for usage information. data is used solely
+            to fulfil commission requests and improve the experience here.
+          </p>
+          <h2>contact</h2>
+          <p>
+            lorem ipsum placeholder for the contact channel relating to privacy
+            requests.
+          </p>
+        </article>
+      </Container>
+    </>
   );
 }

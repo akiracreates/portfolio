@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { categoryAnchorId } from "@/components/gallery/category-section";
 
 export function PortfolioCategoryTabs({ categories }) {
   const [active, setActive] = useState(categories[0] ?? "");
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const observers = [];
@@ -18,7 +19,7 @@ export function PortfolioCategoryTabs({ categories }) {
             if (entry.isIntersecting) setActive(cat);
           });
         },
-        { rootMargin: "-42% 0px -42% 0px", threshold: 0.08 },
+        { rootMargin: "-40% 0px -40% 0px", threshold: 0.05 },
       );
       obs.observe(el);
       observers.push(obs);
@@ -28,14 +29,18 @@ export function PortfolioCategoryTabs({ categories }) {
 
   const goTo = (cat) => {
     const el = document.getElementById(categoryAnchorId(cat));
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    el?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
   };
 
   if (categories.length === 0) return null;
 
   return (
-    <div className="sticky top-0 z-20 mb-10 rounded-b-2xl border-b-2 border-dashed border-primary/30 bg-[color-mix(in_srgb,var(--surface-card)_88%,transparent)] px-1 py-3 backdrop-blur-md sm:px-2">
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label="portfolio categories">
+    <div className="sticky top-[var(--topbar-h)] z-20 -mx-5 mb-12 border-y border-border-subtle bg-bg-app/85 px-5 py-3 backdrop-blur-md md:top-0 md:-mx-8 md:px-8">
+      <div
+        className="flex flex-wrap items-center gap-1"
+        role="tablist"
+        aria-label="portfolio categories"
+      >
         {categories.map((cat) => {
           const isActive = active === cat;
           return (
@@ -44,20 +49,20 @@ export function PortfolioCategoryTabs({ categories }) {
               type="button"
               role="tab"
               aria-selected={isActive}
-              className={`relative rounded-full border-2 px-3.5 py-1.5 text-xs font-semibold transition-colors duration-[var(--duration-base)] ${
+              className={`relative rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors duration-[var(--duration-fast)] ${
                 isActive
-                  ? "border-dashed border-primary text-primary"
-                  : "border-dashed border-primary/25 text-text-tertiary hover:border-primary/45 hover:text-text-secondary"
+                  ? "text-text-primary"
+                  : "text-text-tertiary hover:text-text-secondary"
               }`}
               onClick={() => goTo(cat)}
             >
-              {isActive ? (
+              {isActive && (
                 <motion.span
                   layoutId="portfolio-tab-pill"
-                  className="absolute inset-0 -z-10 rounded-full bg-primary/12"
+                  className="absolute inset-0 -z-10 rounded-md bg-accent-soft"
                   transition={{ type: "spring", stiffness: 500, damping: 38 }}
                 />
-              ) : null}
+              )}
               <span className="relative z-10">{cat}</span>
             </button>
           );

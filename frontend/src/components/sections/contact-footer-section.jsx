@@ -1,45 +1,64 @@
 import { ContactForm } from "@/components/forms/contact-form";
-import { SectionShell } from "@/components/ui/section-shell";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Heading } from "@/components/ui/heading";
 import { socialLinks } from "@/lib/content/socials";
+import { NavIcon } from "@/components/layout/nav-icons";
 
 export function ContactFooterSection() {
   return (
-    <>
-      <SectionShell id="contact" eyebrow="contact" title="let's work together">
-        <div className="flex flex-col gap-8">
-          <div className="card-inner space-y-5 p-5">
-            <p className="text-body text-sm">
-              lorem ipsum dolor sit amet, send your order details, timeline idea,
-              and references. all fields are mobile-friendly and accessible.
+    <section
+      id="contact"
+      className="scroll-mt-header border-t border-border-subtle bg-bg-base"
+      aria-labelledby="contact-heading"
+    >
+      <Container className="py-20 md:py-28">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="space-y-7 lg:col-span-5">
+            <Eyebrow>contact</Eyebrow>
+            <Heading level="h1" id="contact-heading">
+              let&apos;s start something quiet.
+            </Heading>
+            <p className="body">
+              send your idea, references, and timeline. i read every message
+              personally and reply within 48 hours.
             </p>
-            <div className="divider-subtle" />
-            <div className="space-y-2">
-              <p className="label-sm">find me</p>
-              <ul className="space-y-2 text-sm text-text-secondary">
-                {socialLinks.map((item) => (
-                  <li key={item.platform}>
+
+            <div className="mt-2 space-y-3">
+              <p className="caption">find me</p>
+              <ul className="space-y-2">
+                {socialLinks.map((s) => (
+                  <li key={s.platform}>
                     <a
-                      href={item.url}
-                      className="inline-flex items-center gap-2 transition-colors duration-[var(--duration-fast)] hover:text-primary"
+                      href={s.url}
+                      target={
+                        s.platform === "email" ? undefined : "_blank"
+                      }
+                      rel={
+                        s.platform === "email"
+                          ? undefined
+                          : "noreferrer noopener"
+                      }
+                      className="group inline-flex items-center gap-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary/60" aria-hidden />
-                      {item.label}
+                      <span className="flex h-9 w-9 items-center justify-center rounded-md border border-border-subtle bg-bg-surface text-text-tertiary transition-colors group-hover:border-border-default group-hover:text-text-primary">
+                        <NavIcon id={s.platform} />
+                      </span>
+                      <span>{s.label}</span>
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-          <ContactForm />
-        </div>
-      </SectionShell>
 
-      <footer className="py-8 text-center">
-        <div className="mx-auto mb-6 max-w-xs border-b border-dashed border-primary/30" />
-        <p className="text-xs text-text-tertiary">
-          &copy; {new Date().getFullYear()} akira. all rights reserved.
-        </p>
-      </footer>
-    </>
+          <div className="lg:col-span-7">
+            <div className="rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-6 md:p-8">
+              <ContactForm />
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
   );
 }

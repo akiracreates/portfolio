@@ -1,6 +1,10 @@
 import { ContactForm } from "@/components/forms/contact-form";
-import { SectionShell } from "@/components/ui/section-shell";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Heading } from "@/components/ui/heading";
+import { PageHeader } from "@/components/layout/page-header";
 import { socialLinks } from "@/lib/content/socials";
+import { NavIcon } from "@/components/layout/nav-icons";
 
 export const metadata = {
   title: "contact | akira",
@@ -9,39 +13,61 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="content-column space-y-8 py-10 sm:py-14">
-      <SectionShell
-        id="contact-page"
+    <>
+      <PageHeader
+        id="contact"
         eyebrow="contact"
-        title="let's talk about your idea"
-        variant="accent"
-      >
-        <div className="flex flex-col gap-8">
-          <aside className="card-inner space-y-5 p-5">
-            <p className="text-body text-sm">
-              lorem ipsum placeholder contact notes and response expectations.
-            </p>
-            <div className="divider-subtle" />
-            <div className="space-y-2">
-              <p className="label-sm">socials</p>
-              <ul className="space-y-2 text-sm text-text-secondary">
-                {socialLinks.map((item) => (
-                  <li key={item.platform}>
+        title="let's talk about your idea."
+        description="for commissions, collaborations, or quiet hellos."
+      />
+
+      <Container className="py-16 md:py-24">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <aside className="space-y-8 lg:col-span-4">
+            <div className="space-y-3">
+              <Eyebrow>response time</Eyebrow>
+              <Heading level="h3">within 48 hours, on most days.</Heading>
+              <p className="body-sm">
+                i read every message personally. for time-sensitive requests,
+                please mention your deadline.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <p className="caption">find me</p>
+              <ul className="space-y-2">
+                {socialLinks.map((s) => (
+                  <li key={s.platform}>
                     <a
-                      className="inline-flex items-center gap-2 transition-colors hover:text-primary"
-                      href={item.url}
+                      href={s.url}
+                      target={
+                        s.platform === "email" ? undefined : "_blank"
+                      }
+                      rel={
+                        s.platform === "email"
+                          ? undefined
+                          : "noreferrer noopener"
+                      }
+                      className="group inline-flex items-center gap-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary/60" aria-hidden />
-                      {item.label}
+                      <span className="flex h-9 w-9 items-center justify-center rounded-md border border-border-subtle bg-bg-surface text-text-tertiary transition-colors group-hover:border-border-default group-hover:text-text-primary">
+                        <NavIcon id={s.platform} />
+                      </span>
+                      <span>{s.label}</span>
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
           </aside>
-          <ContactForm />
+
+          <div className="lg:col-span-8">
+            <div className="rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-6 md:p-8">
+              <ContactForm />
+            </div>
+          </div>
         </div>
-      </SectionShell>
-    </div>
+      </Container>
+    </>
   );
 }
