@@ -16,7 +16,7 @@ export default function ContactPage() {
         title="let's talk about your idea"
         variant="accent"
       >
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="flex flex-col gap-8">
           <aside className="card-inner space-y-5 p-5">
             <p className="text-body text-sm">
               lorem ipsum placeholder contact notes and response expectations.

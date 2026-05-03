@@ -10,13 +10,15 @@ export default function RewardPage() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) setReward(JSON.parse(stored));
-    } catch {
-      /* ignore */
-    }
-    setLoaded(true);
+    queueMicrotask(() => {
+      try {
+        const stored = window.localStorage.getItem(STORAGE_KEY);
+        if (stored) setReward(JSON.parse(stored));
+      } catch {
+        /* ignore */
+      }
+      setLoaded(true);
+    });
   }, []);
 
   return (
@@ -37,7 +39,7 @@ export default function RewardPage() {
             </p>
           ) : (
             <div className="space-y-3 animate-fade-in">
-              <p className="text-sm font-medium text-secondary">
+              <p className="text-sm font-semibold text-primary">
                 result: {reward.label}
               </p>
               <p className="text-sm text-text-secondary">

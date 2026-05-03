@@ -17,10 +17,10 @@ export default function CommissionsPage() {
         title="work with me"
         variant="accent"
       >
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-4">
           {commissionOfferings.map((item) => (
             <article key={item.id} className="card-inner space-y-3 p-5">
-              <h3 className="text-sm font-medium text-text-primary">
+              <h3 className="text-sm font-semibold text-primary">
                 {item.title}
               </h3>
               <p className="text-xs leading-relaxed text-text-secondary">
@@ -47,7 +47,7 @@ export default function CommissionsPage() {
               key={item.id}
               className={`card-inner p-4 ${
                 item.highlighted
-                  ? "border-secondary/60 shadow-[0_0_12px_rgba(240,175,129,0.12)]"
+                  ? "border-2 border-dashed border-primary/55 shadow-[var(--elev-glow)]"
                   : ""
               }`}
             >

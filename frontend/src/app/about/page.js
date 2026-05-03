@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { ImageFrame } from "@/components/ui/image-frame";
 import { SectionShell } from "@/components/ui/section-shell";
 
 export const metadata = {
@@ -16,20 +17,20 @@ export default function AboutPage() {
         title="a longer story about growth, portraits, and reinterpretation"
         variant="accent"
       >
-        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="card-inner relative aspect-[4/5] overflow-hidden p-2">
+        <div className="flex flex-col gap-8">
+          <ImageFrame dashed className="relative aspect-[4/5] w-full max-w-sm mx-auto">
             <Image
               src="https://picsum.photos/id/823/900/1200"
               alt="placeholder hero portrait for about page"
               fill
-              className="rounded-[calc(var(--radius-md)-4px)] border border-border-subtle object-cover"
-              sizes="(max-width: 1024px) 100vw, 35vw"
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, 32rem"
             />
-          </div>
+          </ImageFrame>
           <div className="space-y-5">
             <div className="card-inner space-y-4 p-5">
-              <p className="label-sm">the story</p>
-              <div className="divider-subtle" />
+              <p className="label-sm title-underline">the story</p>
+              <div className="border-b border-dashed border-primary/25" />
               <p className="text-body">
                 lorem ipsum dolor sit amet, consectetur adipiscing elit. this section
                 is a placeholder for akira&apos;s full artist story, growth arc, and
@@ -52,21 +53,21 @@ export default function AboutPage() {
         eyebrow="self portraits"
         title="the same face, different chapters"
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {[
             { src: "https://picsum.photos/id/1027/600/800", alt: "self portrait phase 1" },
             { src: "https://picsum.photos/id/1005/600/800", alt: "self portrait phase 2" },
             { src: "https://picsum.photos/id/823/600/800", alt: "self portrait phase 3" },
           ].map((img) => (
-            <div key={img.src} className="card-inner relative aspect-[3/4] overflow-hidden p-1.5">
+            <ImageFrame key={img.src} dashed className="relative aspect-[3/4] w-full">
               <Image
                 src={img.src}
                 alt={img.alt}
                 fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="rounded-[calc(var(--radius-md)-4px)] border border-border-subtle object-cover"
+                sizes="(max-width: 640px) 100vw, 50vw"
+                className="object-cover"
               />
-            </div>
+            </ImageFrame>
           ))}
         </div>
       </SectionShell>

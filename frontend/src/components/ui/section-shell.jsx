@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { fadeSlideUp } from "@/lib/motion/variants";
 
 export function SectionShell({
   id,
@@ -9,44 +10,42 @@ export function SectionShell({
   children,
   action,
   variant = "default",
+  template = "default",
   className = "",
+  titleUnderline = true,
 }) {
-  const ref = useRef(null);
+  const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("visible");
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const frameClass = variant === "accent" ? "card-accent" : "card";
+  const frameClass =
+    variant === "accent"
+      ? "card-accent"
+      : template === "editorial"
+        ? "card-editorial"
+        : template === "gallery"
+          ? "card-gallery"
+          : "card";
 
   return (
-    <section
-      ref={ref}
+    <motion.section
       id={id}
-      className={`${frameClass} reveal px-5 py-6 sm:px-7 sm:py-8 ${className}`}
+      className={`${frameClass} px-5 py-6 sm:px-7 sm:py-8 ${className}`}
       aria-labelledby={id ? `${id}-heading` : undefined}
+      initial={reduced ? false : "hidden"}
+      whileInView={reduced ? undefined : "visible"}
+      viewport={
+        reduced ? undefined : { once: true, amount: 0.12, margin: "0px 0px -10% 0px" }
+      }
+      variants={reduced ? undefined : fadeSlideUp}
     >
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          {eyebrow && <p className="label-sm mb-2">{eyebrow}</p>}
+          {eyebrow && (
+            <p className={`label-sm mb-2 ${titleUnderline ? "title-underline" : ""}`}>{eyebrow}</p>
+          )}
           {title && (
             <h2
               id={id ? `${id}-heading` : undefined}
-              className="heading-display heading-md"
+              className={`heading-display ${template === "gallery" ? "heading-md" : "heading-md"}`}
             >
               {title}
             </h2>
@@ -54,8 +53,14 @@ export function SectionShell({
         </div>
         {action}
       </div>
-      <div className="divider-gradient mb-6" />
+      <div
+        className={
+          titleUnderline
+            ? "mb-6 border-b border-dashed border-primary/25 pb-1"
+            : "divider-gradient mb-6"
+        }
+      />
       {children}
-    </section>
+    </motion.section>
   );
 }

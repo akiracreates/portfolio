@@ -1,6 +1,8 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const initialForm = {
   name: "",
@@ -82,7 +84,7 @@ export function ContactForm() {
           onChange={onChange}
           required
           rows={5}
-          className="rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3 py-2 text-sm text-text-primary transition-colors duration-[var(--duration-fast)] placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+          className="input-cute px-3 py-2 text-sm transition-colors duration-[var(--duration-fast)]"
         />
       </label>
 
@@ -101,24 +103,38 @@ export function ContactForm() {
         />
       </div>
 
-      {error && (
-        <p className="text-sm text-error animate-fade-in" role="alert">
-          {error}
-        </p>
-      )}
-      {status === "success" && (
-        <p className="text-sm text-success animate-fade-in" role="status">
-          request sent. thanks for reaching out.
-        </p>
-      )}
+      <AnimatePresence mode="wait">
+        {error ? (
+          <motion.p
+            key="form-error"
+            role="alert"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="text-sm text-error"
+          >
+            {error}
+          </motion.p>
+        ) : null}
+        {status === "success" ? (
+          <motion.p
+            key="form-success"
+            role="status"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="text-sm text-success"
+          >
+            request sent. thanks for reaching out.
+          </motion.p>
+        ) : null}
+      </AnimatePresence>
 
-      <button
-        type="submit"
-        disabled={status === "submitting"}
-        className="inline-flex items-center justify-center rounded-[var(--radius-md)] border border-secondary bg-secondary px-5 py-2.5 text-sm font-medium text-bg-base transition-all duration-[var(--duration-base)] hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(240,175,129,0.3)] disabled:opacity-50 disabled:pointer-events-none"
-      >
-        {status === "submitting" ? "sending..." : "submit"}
-      </button>
+      <Button type="submit" variant="primary" loading={status === "submitting"}>
+        submit
+      </Button>
     </form>
   );
 }
@@ -133,7 +149,7 @@ function Field({ label, name, value, onChange, required = false, type = "text" }
         value={value}
         onChange={onChange}
         required={required}
-        className="rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3 py-2 text-sm text-text-primary transition-colors duration-[var(--duration-fast)] placeholder:text-text-tertiary focus:border-primary focus:outline-none"
+        className="input-cute px-3 py-2 text-sm transition-colors duration-[var(--duration-fast)]"
       />
     </label>
   );
@@ -143,7 +159,7 @@ function Checkbox({ label, name, checked, onChange }) {
   return (
     <label className="flex items-center gap-3 text-xs text-text-secondary cursor-pointer group">
       <input
-        className="h-4 w-4 rounded-sm border border-border-default bg-bg-inset accent-secondary transition-colors"
+        className="h-4 w-4 rounded-md border-2 border-dashed border-primary/40 bg-bg-inset accent-primary transition-colors"
         type="checkbox"
         name={name}
         checked={checked}

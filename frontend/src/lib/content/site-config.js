@@ -16,3 +16,8 @@ export const siteConfig = {
     { id: "reward-page", label: "reward", href: "/reward" },
   ],
 };
+
+/** Hash section ids on home — single source for scroll-spy (order = scroll order). */
+export const homeScrollSectionIds = siteConfig.navItems
+  .filter((item) => item.href.startsWith("/#"))
+  .map((item) => item.id);

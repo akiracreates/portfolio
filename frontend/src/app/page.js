@@ -7,9 +7,9 @@ import { PortfolioPreviewSection } from "@/components/sections/portfolio-preview
 
 export default function HomePage() {
   return (
-    <div className="space-y-10 pb-8">
+    <div className="stack-section pb-page">
       <HeroSection />
-      <div className="content-column space-y-10">
+      <div className="content-column stack-section">
         <AboutPreviewSection />
         <PortfolioPreviewSection />
         <CommissionsPreviewSection />

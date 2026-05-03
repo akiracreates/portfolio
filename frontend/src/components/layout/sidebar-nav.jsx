@@ -1,16 +1,43 @@
 "use client";
 
 import Link from "next/link";
+import { motion, useReducedMotion as useFramerReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { homeScrollSectionIds } from "@/lib/content/site-config";
+import { NavIcon } from "@/components/layout/nav-icons";
 
-const HOME_SECTIONS = ["hero", "about-preview", "portfolio-preview", "commissions-preview", "contact"];
+const W_COLLAPSED = 56;
+const W_EXPANDED = 200;
+
+function subscribeHoverMql(callback) {
+  if (typeof window === "undefined") return () => {};
+  const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+
+function getHoverSnapshot() {
+  if (typeof window === "undefined") return true;
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
 
 export function SidebarNav({ items }) {
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState(false);
+  const reduceMotion = useFramerReducedMotion();
+  const supportsHover = useSyncExternalStore(subscribeHoverMql, getHoverSnapshot, () => true);
+
+  const [hoverOpen, setHoverOpen] = useState(false);
+  const [touchOpen, setTouchOpen] = useState(false);
+  const [pinned, setPinned] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const sidebarRef = useRef(null);
 
   const isHome = pathname === "/";
 
@@ -18,7 +45,6 @@ export function SidebarNav({ items }) {
     () => items.filter((item) => item.href.startsWith("/#")),
     [items],
   );
-
   const pageItems = useMemo(
     () => items.filter((item) => !item.href.startsWith("/#")),
     [items],
@@ -34,9 +60,12 @@ export function SidebarNav({ items }) {
     return sectionItems;
   }, [isHome, sectionItems, pageItems]);
 
+  const expanded = pinned || (supportsHover ? hoverOpen : touchOpen);
+  const width = expanded ? W_EXPANDED : W_COLLAPSED;
+
   useEffect(() => {
     if (!isHome) {
-      setActiveSection("");
+      queueMicrotask(() => setActiveSection(""));
       return;
     }
 
@@ -44,16 +73,17 @@ export function SidebarNav({ items }) {
       (entries) => {
         const visible = entries.filter((e) => e.isIntersecting);
         if (visible.length > 0) {
-          visible.sort((a, b) =>
-            Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top),
+          visible.sort(
+            (a, b) =>
+              Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top),
           );
           setActiveSection(visible[0].target.id);
         }
       },
-      { rootMargin: "-40% 0px -40% 0px", threshold: 0.05 },
+      { rootMargin: "-38% 0px -38% 0px", threshold: 0.06 },
     );
 
-    HOME_SECTIONS.forEach((id) => {
+    homeScrollSectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -71,96 +101,199 @@ export function SidebarNav({ items }) {
     [isHome, activeSection, pathname],
   );
 
+  const handleAsidePointer = () => {
+    if (!supportsHover) setTouchOpen((o) => !o);
+  };
+
   return (
     <>
-      {/* ── desktop / tablet sidebar ── */}
-      <aside
-        ref={sidebarRef}
-        className="hidden md:flex flex-col shrink-0 sticky top-0 h-screen border-r border-border-subtle bg-bg-elevated/80 backdrop-blur-sm transition-[width] duration-[250ms]"
-        style={{
-          width: expanded ? "var(--sidebar-expanded)" : "var(--sidebar-collapsed)",
-          transitionTimingFunction: "var(--ease-spring)",
-        }}
-        onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => setExpanded(false)}
-        onFocus={() => setExpanded(true)}
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget)) setExpanded(false);
-        }}
+      <motion.aside
+        id="sidebar-nav"
+        className="hidden md:flex flex-col shrink-0 sticky top-3 z-30 my-0 ml-3 h-[calc(100dvh-1.5rem)] max-h-[calc(100dvh-1.5rem)] self-start rounded-3xl border-2 border-dashed border-primary/35 bg-bg-surface/95 py-2 shadow-lg backdrop-blur-sm"
+        initial={false}
+        animate={{ width }}
+        transition={
+          reduceMotion
+            ? { duration: 0.18 }
+            : { type: "spring", stiffness: 520, damping: 42 }
+        }
+        onMouseEnter={() => supportsHover && setHoverOpen(true)}
+        onMouseLeave={() => supportsHover && !pinned && setHoverOpen(false)}
       >
-        <div className="flex items-center h-14 px-4 border-b border-border-subtle shrink-0">
-          <Link href="/" className="flex items-center gap-2 text-text-primary">
-            <span className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/20 text-primary text-xs font-semibold">
+        <div className="flex shrink-0 items-center justify-between gap-1 border-b border-dashed border-primary/25 px-2.5 pb-2 pt-1">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-2 text-primary"
+            onClick={() => {
+              if (!supportsHover) setTouchOpen(false);
+            }}
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-primary/60 bg-primary/10 text-sm font-bold text-primary">
               a
             </span>
             <span
-              className="text-sm font-medium overflow-hidden whitespace-nowrap transition-opacity duration-200"
-              style={{ opacity: expanded ? 1 : 0, width: expanded ? "auto" : 0 }}
+              className="min-w-0 truncate text-sm font-medium"
+              style={{
+                opacity: expanded ? 1 : 0,
+                width: expanded ? "auto" : 0,
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                transition: "opacity 0.2s ease",
+              }}
             >
               akira
             </span>
           </Link>
+          <div className="flex items-center gap-0.5">
+            {!supportsHover && (
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-dashed border-primary/35 text-text-tertiary transition hover:border-primary hover:text-primary"
+                aria-expanded={expanded}
+                aria-controls="sidebar-nav-links"
+                onClick={handleAsidePointer}
+              >
+                <span className="sr-only">toggle navigation labels</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                  {expanded ? (
+                    <polyline points="15 18 9 12 15 6" strokeLinecap="round" strokeLinejoin="round" />
+                  ) : (
+                    <polyline points="9 18 15 12 9 6" strokeLinecap="round" strokeLinejoin="round" />
+                  )}
+                </svg>
+              </button>
+            )}
+            <button
+              type="button"
+              className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-dashed transition ${
+                pinned
+                  ? "border-secondary bg-secondary/15 text-secondary"
+                  : "border-primary/30 text-text-tertiary hover:border-primary/55"
+              }`}
+              aria-pressed={pinned}
+              onClick={() => setPinned((p) => !p)}
+              title={pinned ? "unpin sidebar" : "pin sidebar open"}
+            >
+              <span className="sr-only">{pinned ? "unpin sidebar" : "pin sidebar open"}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill={pinned ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" aria-hidden>
+                <path d="M12 17v5M9 14l-5 2 2-5-4-4 5-1 3-5 3 5 5 1-4 4 2 5-5-2z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <nav className="flex-1 flex flex-col gap-0.5 px-2 py-3 overflow-y-auto overflow-x-hidden" aria-label="main navigation">
+        <nav
+          id="sidebar-nav-links"
+          className="flex flex-1 flex-col gap-0.5 overflow-x-hidden overflow-y-auto px-2 py-3"
+          aria-label="main navigation"
+        >
           {primaryNavItems.map((item) => (
-            <NavLink key={item.id} item={item} active={isActive(item)} expanded={expanded} />
+            <NavRow key={item.id} item={item} active={isActive(item)} expanded={expanded} />
           ))}
 
           {secondaryNavItems.length > 0 && (
             <>
-              <div className="divider-subtle mx-2 my-2" />
+              <div className="divider-subtle mx-1 my-2" />
               {secondaryNavItems.map((item) => (
-                <NavLink key={item.id} item={item} active={isActive(item)} expanded={expanded} />
+                <NavRow key={item.id} item={item} active={isActive(item)} expanded={expanded} />
               ))}
             </>
           )}
         </nav>
-      </aside>
+      </motion.aside>
 
-      {/* ── mobile bottom nav (fixed, outside flex flow) ── */}
-      <nav
-        className="fixed bottom-0 inset-x-0 z-50 md:hidden border-t border-border-subtle bg-bg-elevated/90 backdrop-blur-md"
-        aria-label="mobile navigation"
-      >
-        <div className="flex items-center justify-around h-14 px-2 safe-area-bottom">
-          <MobileNavLink href="/" label="home" active={(pathname === "/" && !activeSection) || activeSection === "hero"} />
-          <MobileNavLink href={isHome ? "/#about-preview" : "/about"} label="about" active={isHome ? activeSection === "about-preview" : pathname === "/about"} />
-          <MobileNavLink href={isHome ? "/#portfolio-preview" : "/portfolio"} label="work" active={isHome ? activeSection === "portfolio-preview" : pathname === "/portfolio"} />
-          <MobileNavLink href={isHome ? "/#commissions-preview" : "/commissions"} label="order" active={isHome ? activeSection === "commissions-preview" : pathname === "/commissions"} />
-          <MobileNavLink href={isHome ? "/#contact" : "/contact"} label="contact" active={isHome ? activeSection === "contact" : pathname === "/contact"} />
-        </div>
-      </nav>
+      <MobileBottomNav
+        pathname={pathname}
+        isHome={isHome}
+        activeSection={activeSection}
+      />
     </>
   );
 }
 
-function NavLink({ item, active, expanded }) {
+function NavRow({ item, active, expanded }) {
   return (
     <Link
       href={item.href}
-      className={`
-        group flex items-center gap-3 rounded-md px-3 py-2 text-[0.8rem] transition-colors duration-150
-        ${active
-          ? "bg-primary-soft text-text-primary border-l-2 border-primary"
-          : "border-l-2 border-transparent text-text-tertiary hover:text-text-secondary hover:bg-bg-surface-hover"
-        }
-      `}
+          className={`group relative flex items-center gap-2.5 rounded-full border px-2.5 py-2 text-[0.78rem] font-semibold transition-all duration-[var(--duration-base)] ${
+        active
+          ? "border-dashed border-primary bg-primary/12 text-primary"
+          : "border-transparent text-text-tertiary hover:border-dashed hover:border-primary/35 hover:bg-bg-surface-hover hover:text-text-secondary"
+      }`}
     >
-      <span
-        className={`
-          flex items-center justify-center w-2 h-2 rounded-full shrink-0 transition-colors duration-150
-          ${active ? "bg-secondary" : "bg-border-default group-hover:bg-text-tertiary"}
-        `}
-        aria-hidden
+      <NavIcon
+        id={item.id}
+        className={
+          active ? "text-primary" : "text-text-tertiary group-hover:text-text-secondary"
+        }
       />
-      <span
-        className="overflow-hidden whitespace-nowrap transition-opacity duration-200"
-        style={{ opacity: expanded ? 1 : 0 }}
-      >
-        {item.label}
-      </span>
+      <span className={expanded ? "min-w-0 truncate" : "sr-only"}>{item.label}</span>
     </Link>
+  );
+}
+
+function MobileBottomNav({ pathname, isHome, activeSection }) {
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const reduceMotion = useFramerReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y > lastY.current + 12 && y > 96) setHidden(true);
+      else if (y < lastY.current - 12 || y < 48) setHidden(false);
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [reduceMotion]);
+
+  return (
+    <motion.nav
+      className={`fixed inset-x-0 bottom-0 z-50 md:hidden rounded-t-3xl border-t-2 border-dashed border-primary/40 bg-bg-surface/95 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] backdrop-blur-md ${
+        hidden && !reduceMotion ? "pointer-events-none" : ""
+      }`}
+      style={{
+        paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))",
+      }}
+      aria-label="mobile navigation"
+      initial={false}
+      animate={
+        reduceMotion
+          ? { y: 0, opacity: 1 }
+          : { y: hidden ? "100%" : 0, opacity: hidden ? 0 : 1 }
+      }
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="flex h-14 items-center justify-around px-1">
+        <MobileNavLink
+          href="/"
+          label="home"
+          active={(pathname === "/" && !activeSection) || activeSection === "hero"}
+        />
+        <MobileNavLink
+          href={isHome ? "/#about-preview" : "/about"}
+          label="about"
+          active={isHome ? activeSection === "about-preview" : pathname === "/about"}
+        />
+        <MobileNavLink
+          href={isHome ? "/#portfolio-preview" : "/portfolio"}
+          label="work"
+          active={isHome ? activeSection === "portfolio-preview" : pathname === "/portfolio"}
+        />
+        <MobileNavLink
+          href={isHome ? "/#commissions-preview" : "/commissions"}
+          label="order"
+          active={isHome ? activeSection === "commissions-preview" : pathname === "/commissions"}
+        />
+        <MobileNavLink
+          href={isHome ? "/#contact" : "/contact"}
+          label="contact"
+          active={isHome ? activeSection === "contact" : pathname === "/contact"}
+        />
+      </div>
+    </motion.nav>
   );
 }
 
@@ -168,16 +301,17 @@ function MobileNavLink({ href, label, active }) {
   return (
     <Link
       href={href}
-      className={`
-        flex flex-col items-center gap-1 px-2 py-1 text-[0.65rem] rounded-md transition-colors duration-150
-        ${active ? "text-secondary" : "text-text-tertiary"}
-      `}
+      className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl border border-transparent px-1 py-1.5 text-[0.65rem] font-semibold transition-all duration-150 ${
+        active ? "border-dashed border-primary text-primary" : "text-text-tertiary"
+      }`}
     >
       <span
-        className={`w-1.5 h-1.5 rounded-full transition-colors duration-150 ${active ? "bg-secondary" : "bg-border-default"}`}
+        className={`h-1.5 w-1.5 rounded-full transition-colors duration-150 ${
+          active ? "bg-primary" : "bg-border-default"
+        }`}
         aria-hidden
       />
-      {label}
+      <span className="truncate">{label}</span>
     </Link>
   );
 }

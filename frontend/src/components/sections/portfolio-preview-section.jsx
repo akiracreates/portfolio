@@ -9,6 +9,7 @@ export function PortfolioPreviewSection() {
       id="portfolio-preview"
       eyebrow="portfolio preview"
       title="portraits, animals, and still life"
+      template="gallery"
       action={
         <Button as="link" href="/portfolio" variant="secondary" size="sm">
           full portfolio

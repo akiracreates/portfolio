@@ -17,7 +17,7 @@ export default function TermsPage() {
               key={item.id}
               className={`card-inner p-5 ${
                 item.highlighted
-                  ? "border-secondary/60 shadow-[0_0_12px_rgba(240,175,129,0.12)]"
+                  ? "border-2 border-dashed border-primary/55 shadow-[var(--elev-glow)]"
                   : ""
               }`}
             >

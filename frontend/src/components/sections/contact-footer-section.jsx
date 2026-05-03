@@ -6,7 +6,7 @@ export function ContactFooterSection() {
   return (
     <>
       <SectionShell id="contact" eyebrow="contact" title="let's work together">
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="flex flex-col gap-8">
           <div className="card-inner space-y-5 p-5">
             <p className="text-body text-sm">
               lorem ipsum dolor sit amet, send your order details, timeline idea,
@@ -35,7 +35,7 @@ export function ContactFooterSection() {
       </SectionShell>
 
       <footer className="py-8 text-center">
-        <div className="divider-gradient mx-auto mb-6 max-w-xs" />
+        <div className="mx-auto mb-6 max-w-xs border-b border-dashed border-primary/30" />
         <p className="text-xs text-text-tertiary">
           &copy; {new Date().getFullYear()} akira. all rights reserved.
         </p>

@@ -11,17 +11,19 @@ export function SpinWheel() {
   const [state, setState] = useState("loading");
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setReward(JSON.parse(stored));
-        setState("claimed");
-      } else {
+    queueMicrotask(() => {
+      try {
+        const stored = window.localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          setReward(JSON.parse(stored));
+          setState("claimed");
+        } else {
+          setState("idle");
+        }
+      } catch {
         setState("idle");
       }
-    } catch {
-      setState("idle");
-    }
+    });
   }, []);
 
   const onSpin = () => {
@@ -70,7 +72,7 @@ export function SpinWheel() {
         <button
           type="button"
           onClick={onSpin}
-          className="group relative inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-primary bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-all duration-[var(--duration-base)] hover:bg-primary hover:text-bg-base hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(178,106,143,0.3)]"
+          className="group relative inline-flex min-h-[2.5rem] items-center gap-2 rounded-full border-2 border-dashed border-primary bg-primary/10 px-5 py-2 text-sm font-semibold text-primary transition-all duration-[var(--duration-base)] hover:-translate-y-0.5 hover:border-solid hover:bg-primary hover:text-bg-base hover:shadow-[0_6px_22px_color-mix(in_srgb,var(--accent-pop)_35%,transparent)]"
           aria-label="spin reward wheel one time"
         >
           <span
@@ -84,25 +86,25 @@ export function SpinWheel() {
       {state === "spinning" && (
         <div className="flex items-center gap-3 py-2">
           <span
-            className="inline-block w-5 h-5 rounded-full border-2 border-secondary border-t-transparent"
+            className="inline-block h-5 w-5 rounded-full border-2 border-primary border-t-transparent"
             style={{
               animation: "spin-wheel 2.2s cubic-bezier(0.2, 0.8, 0.3, 1) forwards",
             }}
             aria-hidden
           />
-          <p className="text-sm text-secondary animate-pulse">spinning...</p>
+          <p className="animate-pulse text-sm font-semibold text-primary">spinning...</p>
         </div>
       )}
 
       {state === "revealed" && reward && (
         <div className="space-y-3 animate-fade-in-up">
-          <p className="text-sm font-medium text-secondary">
+          <p className="text-sm font-semibold text-primary">
             you unlocked: {reward.label}
           </p>
           <p className="text-xs text-text-secondary">{reward.description}</p>
           <Link
             href="/reward"
-            className="inline-flex items-center text-xs text-primary underline underline-offset-2 transition-colors hover:text-secondary"
+            className="inline-flex items-center text-xs font-semibold text-primary underline decoration-dashed underline-offset-4 transition-colors hover:text-secondary"
           >
             view your reward
           </Link>
@@ -112,7 +114,7 @@ export function SpinWheel() {
       {state === "claimed" && reward && (
         <p className="text-xs text-text-tertiary">
           already spun — your result:{" "}
-          <span className="text-secondary">{reward.label}</span>.{" "}
+          <span className="font-semibold text-primary">{reward.label}</span>.{" "}
           <Link
             href="/reward"
             className="underline underline-offset-2 hover:text-text-primary transition-colors"
