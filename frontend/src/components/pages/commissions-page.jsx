@@ -1,19 +1,17 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
-import { Heading } from "@/components/ui/heading";
-import { ImageFrame } from "@/components/ui/image-frame";
 import { Section } from "@/components/ui/section";
 import { PageHeader } from "@/components/layout/page-header";
 import { ContactForm } from "@/components/forms/contact-form";
 import { CommissionProcess } from "@/components/commissions/commission-process";
+import { CommissionPreviewCarousel } from "@/components/commissions/commission-preview-carousel";
 import { PriceTable } from "@/components/commissions/price-table";
 import { TermsSection } from "@/components/commissions/terms-section";
 import { NavIcon } from "@/components/layout/nav-icons";
 import {
   commissionStatus,
   commissionTypes,
+  getCommissionPreviews,
   whatToExpect,
 } from "@/lib/content/commissions";
 import { socialLinks } from "@/lib/content/socials";
@@ -62,17 +60,10 @@ export function CommissionsPage({ dict, locale = "en" }) {
                 key={c.id}
                 className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface transition-colors hover:border-border-default"
               >
-                {c.exampleImage && (
-                  <ImageFrame className="relative aspect-[4/3] w-full border-0 rounded-none">
-                    <Image
-                      src={c.exampleImage}
-                      alt={pickLocale(c.title, locale)}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
-                    />
-                  </ImageFrame>
-                )}
+                <CommissionPreviewCarousel
+                  images={getCommissionPreviews(c.id)}
+                  locale={locale}
+                />
                 <div className="flex flex-1 flex-col gap-4 p-6">
                   <div className="flex items-baseline justify-between gap-3">
                     <h3 className="heading-h3 text-text-primary">

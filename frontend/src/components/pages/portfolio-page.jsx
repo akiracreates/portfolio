@@ -12,6 +12,16 @@ import {
 export function PortfolioPage({ dict, locale = "en" }) {
   const t = dict.portfolio;
 
+  // Pre-compute a running global index so the L/R editorial pattern stays
+  // continuous across category boundaries.
+  const sections = [];
+  let runningIndex = 0;
+  for (const category of artworkCategories) {
+    const items = getArtworksByCategory(category);
+    sections.push({ category, items, startIndex: runningIndex });
+    runningIndex += items.length;
+  }
+
   return (
     <>
       <PageHeader
@@ -22,7 +32,8 @@ export function PortfolioPage({ dict, locale = "en" }) {
       />
 
       <Container className="pt-8 pb-16 md:pb-24">
-        <div className="mb-12">
+        {/* sticky jump-to bar */}
+        <div className="sticky top-0 z-30 -mx-4 mb-12 border-b border-border-subtle bg-bg-app/85 px-4 py-3 backdrop-blur md:-mx-6 md:px-6">
           <PortfolioCategoryTabs
             categories={artworkCategories}
             jumpToLabel={t.jumpTo}
@@ -30,14 +41,15 @@ export function PortfolioPage({ dict, locale = "en" }) {
         </div>
 
         <div className="space-y-24 md:space-y-32">
-          {artworkCategories.map((category) => (
+          {sections.map(({ category, items, startIndex }) => (
             <CategorySection
               key={category}
               category={category}
-              artworks={getArtworksByCategory(category)}
+              artworks={items}
               locale={locale}
               piecesLabel={t.pieces}
               pieceLabel={t.piece}
+              startIndex={startIndex}
             />
           ))}
         </div>

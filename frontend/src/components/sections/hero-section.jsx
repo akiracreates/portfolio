@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { ImageFrame } from "@/components/ui/image-frame";
+import { SmartImage } from "@/components/ui/smart-image";
 import { imagekitUrl } from "@/lib/images/imagekit";
 
 export function HeroSection({ dict, locale = "en" }) {
@@ -62,13 +62,13 @@ export function HeroSection({ dict, locale = "en" }) {
           <div className="lg:col-span-5">
             <div className="relative">
               <ImageFrame className="relative aspect-[4/5] w-full shadow-lg">
-                <Image
+                <SmartImage
                   src={imagekitUrl("images/portraits/self")}
                   alt={t.imageAlt}
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 480px"
-                  className="object-cover"
+                  imgClassName="object-cover"
                 />
               </ImageFrame>
               <div className="absolute -bottom-4 -left-4 hidden rounded-[var(--radius-md)] border border-border-subtle bg-bg-surface px-4 py-3 shadow-md sm:block">

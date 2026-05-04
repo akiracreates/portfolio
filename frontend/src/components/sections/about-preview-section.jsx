@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
+import { SmartImage } from "@/components/ui/smart-image";
 
 export function AboutPreviewSection({ dict, locale = "en" }) {
   const t = dict.aboutPreview;
@@ -17,12 +17,12 @@ export function AboutPreviewSection({ dict, locale = "en" }) {
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <ImageFrame className="relative aspect-square w-full max-w-md">
-              <Image
+              <SmartImage
                 src="https://picsum.photos/id/1005/900/900"
                 alt={t.imageAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 420px"
-                className="object-cover"
+                imgClassName="object-cover"
               />
             </ImageFrame>
           </div>

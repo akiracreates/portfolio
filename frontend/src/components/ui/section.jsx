@@ -31,12 +31,7 @@ export function Section({
       className={`scroll-mt-header ${sizes[size] ?? sizes.lg} ${className}`.trim()}
       aria-labelledby={headingId}
       initial={reduced ? false : { opacity: 0, y: 16 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-      viewport={
-        reduced
-          ? undefined
-          : { once: true, amount: 0.12, margin: "0px 0px -8% 0px" }
-      }
+      animate={reduced ? false : { opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
     >
       {(eyebrow || title || action) && (

@@ -1,9 +1,9 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
+import { SmartImage } from "@/components/ui/smart-image";
 import { PageHeader } from "@/components/layout/page-header";
 
 const TIMELINE_IMAGES = [
@@ -35,13 +35,13 @@ export function AboutPage({ dict, locale = "en" }) {
         <Container className="py-16 md:py-24">
           <div className="mx-auto max-w-3xl">
             <ImageFrame className="relative aspect-[4/5] w-full shadow-lg">
-              <Image
+              <SmartImage
                 src="https://picsum.photos/id/1027/1200/1500"
                 alt={t.pageTitle}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
-                className="object-cover"
+                imgClassName="object-cover"
               />
             </ImageFrame>
           </div>
@@ -83,12 +83,12 @@ export function AboutPage({ dict, locale = "en" }) {
                 >
                   <div className="md:col-span-6">
                     <ImageFrame className="relative aspect-[4/5] w-full">
-                      <Image
+                      <SmartImage
                         src={img}
                         alt={chapter.imageAlt}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
+                        imgClassName="object-cover"
                       />
                     </ImageFrame>
                   </div>
@@ -115,12 +115,12 @@ export function AboutPage({ dict, locale = "en" }) {
             {t.phases.map((phase, i) => (
               <figure key={phase.caption} className="space-y-3">
                 <ImageFrame className="relative aspect-[3/4] w-full">
-                  <Image
+                  <SmartImage
                     src={PHASE_IMAGES[i % PHASE_IMAGES.length]}
                     alt={`${phase.caption} — ${phase.note}`}
                     fill
                     sizes="(max-width: 640px) 100vw, 33vw"
-                    className="object-cover"
+                    imgClassName="object-cover"
                   />
                 </ImageFrame>
                 <figcaption className="space-y-1">

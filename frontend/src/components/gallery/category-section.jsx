@@ -16,6 +16,7 @@ export function CategorySection({
   eyebrow = "collection",
   piecesLabel = "pieces",
   pieceLabel = "piece",
+  startIndex = 0,
 }) {
   const id = categoryAnchorId(category);
   const count = artworks.length;
@@ -39,7 +40,7 @@ export function CategorySection({
           <ArtworkRow
             key={artwork.id}
             artwork={artwork}
-            index={index}
+            index={startIndex + index}
             locale={locale}
           />
         ))}

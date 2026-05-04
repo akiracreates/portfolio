@@ -1,0 +1,86 @@
+{
+  "images/animals/doggo_comm": {
+    "width": 1647,
+    "height": 2048
+  },
+  "images/animals/fishies": {
+    "width": 2039,
+    "height": 2894
+  },
+  "images/animals/silly_birb": {
+    "width": 1654,
+    "height": 2048
+  },
+  "images/animals/silly_kitty": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/animals/tiger": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/landscapes/cityscape": {
+    "width": 683,
+    "height": 994
+  },
+  "images/landscapes/cloudscape": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/landscapes/cloudscape2": {
+    "width": 4000,
+    "height": 4352
+  },
+  "images/landscapes/mountscape": {
+    "width": 2930,
+    "height": 3914
+  },
+  "images/landscapes/oceanscape": {
+    "width": 3000,
+    "height": 5166
+  },
+  "images/portraits/accidental_success": {
+    "width": 2328,
+    "height": 2881
+  },
+  "images/portraits/flowers_hairstyle_lady": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/portraits/owner_pet1": {
+    "width": 2826,
+    "height": 3498
+  },
+  "images/portraits/self": {
+    "width": 2500,
+    "height": 3000
+  },
+  "images/portraits/some_dude": {
+    "width": 1888,
+    "height": 2114
+  },
+  "images/portraits/winter_portrait": {
+    "width": 2828,
+    "height": 3498
+  },
+  "images/still life/apple": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/still life/bananas": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/still life/color_plant": {
+    "width": 3575,
+    "height": 5511
+  },
+  "images/still life/ladybugs_awaken": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/still life/subsurface_scattering": {
+    "width": 2480,
+    "height": 3508
+  }
+}

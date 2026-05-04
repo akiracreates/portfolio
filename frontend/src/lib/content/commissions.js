@@ -1,3 +1,5 @@
+import { getArtworksByCategory } from "./artworks";
+
 /**
  * Commission data — three datasets:
  *  - commissionTypes: 2 offered types with prices in {usd, rub}
@@ -158,3 +160,18 @@ export const commissionStatus = {
   open: true,
   label: { en: "commissions are open", ru: "заказы открыты" },
 };
+
+/**
+ * Returns the carousel preview set for a given commission type. Reuses the
+ * first three artworks of the matching gallery category so we never have to
+ * duplicate image data — keeping the dataset single-sourced.
+ */
+export function getCommissionPreviews(typeId) {
+  if (typeId === "portrait") {
+    return getArtworksByCategory("portraits").slice(0, 3);
+  }
+  if (typeId === "animal") {
+    return getArtworksByCategory("animals").slice(0, 3);
+  }
+  return [];
+}

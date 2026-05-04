@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "predev": "node scripts/generate-image-metadata.mjs",
+    "prebuild": "node scripts/generate-image-metadata.mjs",
+    "image-meta": "node scripts/generate-image-metadata.mjs",
+    "image-meta:force": "node scripts/generate-image-metadata.mjs --force"
   },
   "dependencies": {
     "framer-motion": "^11.18.2",
@@ -19,6 +23,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "probe-image-size": "^7.3.0",
     "tailwindcss": "^4"
   }
 }

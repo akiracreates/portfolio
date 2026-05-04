@@ -1,85 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileFab } from "@/components/layout/mobile-fab";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 import { Footer } from "@/components/layout/footer";
 
-const STORAGE_KEY = "akira.sidebar.collapsed.v1";
-
-// External store for sidebar collapsed state, persisted to localStorage.
-// To avoid SSR/hydration mismatches, both the server snapshot AND the initial
-// client snapshot return `false` (expanded). After mount, an effect syncs
-// from localStorage and notifies subscribers, triggering a re-render only on
-// the client.
-const listeners = new Set();
-let cachedCollapsed = false;
-let hydratedFromStorage = false;
-
-function readFromStorage() {
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function getSnapshot() {
-  return cachedCollapsed;
-}
-
-function getServerSnapshot() {
-  return false;
-}
-
-function subscribe(callback) {
-  listeners.add(callback);
-  return () => {
-    listeners.delete(callback);
-  };
-}
-
-function notify() {
-  listeners.forEach((l) => l());
-}
-
-function syncFromStorage() {
-  if (hydratedFromStorage) return;
-  hydratedFromStorage = true;
-  const next = readFromStorage();
-  if (next !== cachedCollapsed) {
-    cachedCollapsed = next;
-    notify();
-  }
-}
-
-function setCollapsed(value) {
-  hydratedFromStorage = true;
-  cachedCollapsed = value;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, value ? "1" : "0");
-  } catch {
-    /* ignore */
-  }
-  notify();
-}
-
+/**
+ * Desktop sidebar opens on hover (or keyboard focus inside) and collapses
+ * back when the cursor leaves. Width is animated via CSS transition on the
+ * `--sidebar-w` style. Mobile keeps its FAB-driven drawer.
+ */
 export function AppShell({ children }) {
-  const collapsed = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot,
-  );
+  const [hoverOpen, setHoverOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    syncFromStorage();
-  }, []);
+  const collapsed = !hoverOpen;
 
-  const toggleCollapsed = useCallback(() => {
-    setCollapsed(!cachedCollapsed);
-  }, []);
+  const onEnter = useCallback(() => setHoverOpen(true), []);
+  const onLeave = useCallback(() => setHoverOpen(false), []);
 
   const sidebarWidth = collapsed
     ? "var(--sidebar-w-collapsed)"
@@ -93,18 +32,26 @@ export function AppShell({ children }) {
       {/* desktop fixed sidebar */}
       <aside
         className="fixed inset-y-0 left-0 z-40 hidden border-r border-border-strong md:block"
-        style={{ width: sidebarWidth }}
+        style={{
+          width: sidebarWidth,
+          transition: "width 220ms cubic-bezier(0.2, 0, 0, 1)",
+        }}
         aria-label="primary sidebar"
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onFocusCapture={onEnter}
+        onBlurCapture={(event) => {
+          // Only collapse if focus has left the sidebar entirely.
+          if (!event.currentTarget.contains(event.relatedTarget)) onLeave();
+        }}
       >
-        <Sidebar
-          collapsed={collapsed}
-          onToggleCollapsed={toggleCollapsed}
-          variant="fixed"
-        />
+        <Sidebar collapsed={collapsed} variant="fixed" />
       </aside>
 
-      {/* main column — left padding only at md+ to clear the fixed sidebar */}
-      <div className="flex min-h-screen flex-col md:pl-[var(--sidebar-w)]">
+      {/* main column — left padding equal to the COLLAPSED width at md+,
+          so the page never reflows when the sidebar expands on hover.
+          The expanded sidebar simply overlays whatever sits to its right. */}
+      <div className="flex min-h-screen flex-col md:pl-[var(--sidebar-w-collapsed)]">
         <main id="main-content" className="flex-1">
           {children}
         </main>

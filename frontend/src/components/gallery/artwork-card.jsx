@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { ImageFrame } from "@/components/ui/image-frame";
+import { SmartImage } from "@/components/ui/smart-image";
 import { pickLocale } from "@/lib/i18n/config";
 
 export function ArtworkCard({
@@ -27,15 +27,15 @@ export function ArtworkCard({
         rounded="md"
         className="relative aspect-[4/5] w-full border-0 rounded-none rounded-t-[var(--radius-lg)]"
       >
-        <Image
+        <SmartImage
           src={artwork.imageSrc}
           alt={alt}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.04]"
+          imgClassName="object-cover transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.04]"
         />
         {showFeaturedBadge && artwork.featured && (
-          <div className="absolute left-3 top-3">
+          <div className="absolute left-3 top-3 z-10">
             <Badge variant="highlight" size="sm">
               {featuredLabel}
             </Badge>
@@ -61,6 +61,11 @@ export function ArtworkCard({
 /**
  * Editorial row variant — image on one side, content on the other,
  * alternates per `index` (even = image left, odd = image right).
+ *
+ * Uses the artwork's natural aspect ratio (from `artwork.width`/`artwork.height`)
+ * so portfolio rows never crop.
+ *
+ * Animates on mount (no scroll-gating) — see plan note about whileInView race.
  */
 export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   const reduced = useReducedMotion();
@@ -69,26 +74,28 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   const note = pickLocale(artwork.artistComment, locale);
   const reversed = index % 2 === 1;
 
+  const width = artwork.width ?? 4;
+  const height = artwork.height ?? 5;
+  const aspectStyle = { aspectRatio: `${width} / ${height}` };
+
   return (
     <motion.article
       className={`grid items-center gap-8 md:grid-cols-12 md:gap-12 ${reversed ? "md:[&>:first-child]:order-2" : ""}`}
       initial={reduced ? false : { opacity: 0, y: 16 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-      viewport={
-        reduced
-          ? undefined
-          : { once: true, amount: 0.2, margin: "0px 0px -8% 0px" }
-      }
+      animate={reduced ? false : { opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
     >
       <div className="md:col-span-7">
-        <ImageFrame className="relative aspect-[4/5] w-full overflow-hidden">
-          <Image
+        <ImageFrame
+          className="relative w-full overflow-hidden"
+          style={aspectStyle}
+        >
+          <SmartImage
             src={artwork.imageSrc}
             alt={alt}
             fill
             sizes="(max-width: 768px) 100vw, 60vw"
-            className="object-cover"
+            imgClassName="object-contain"
           />
         </ImageFrame>
       </div>

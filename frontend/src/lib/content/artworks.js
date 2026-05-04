@@ -1,9 +1,13 @@
 import { imagekitUrl } from "@/lib/images/imagekit";
+import { getImageMeta } from "@/lib/images/get-image-meta";
 
 /**
  * Locale-aware text fields are `{ en, ru }`. `featured` selects which pieces
  * appear on the homepage. Exactly one piece carries `isSecret: true` — that
  * card is the hidden entry to the spin wheel.
+ *
+ * `imageSrc` is built from `imagekitUrl(path)`. We keep `path` on the artwork
+ * so we can look up natural dimensions from `image-meta.json`.
  */
 export const artworkCategories = [
   "portraits",
@@ -12,14 +16,13 @@ export const artworkCategories = [
   "still life",
 ];
 
-export const artworks = [
+const rawArtworks = [
   // ---------------- portraits (6) ----------------
   {
     id: "portrait-01",
     category: "portraits",
-    imageSrc: imagekitUrl("images/portraits/self"),
-    featured: true,
-    isSecret: true,
+    path: "images/portraits/self",
+    featured: false,
     title: { en: "self portrait no. 1", ru: "автопортрет №1" },
     alt: { en: "self portrait by akira", ru: "автопортрет akira" },
     artistComment: {
@@ -30,7 +33,7 @@ export const artworks = [
   {
     id: "portrait-02",
     category: "portraits",
-    imageSrc: imagekitUrl("images/portraits/accidental_success"),
+    path: "images/portraits/accidental_success",
     featured: true,
     title: { en: "quiet gaze", ru: "тихий взгляд" },
     alt: { en: "portrait with warm lighting", ru: "портрет в тёплом свете" },
@@ -42,8 +45,8 @@ export const artworks = [
   {
     id: "portrait-03",
     category: "portraits",
-    imageSrc: imagekitUrl("images/portraits/some_dude"),
-    featured: false,
+    path: "images/portraits/some_dude",
+    featured: true,
     title: { en: "evening light", ru: "вечерний свет" },
     alt: { en: "portrait at dusk", ru: "портрет в сумерках" },
     artistComment: {
@@ -54,7 +57,7 @@ export const artworks = [
   {
     id: "portrait-04",
     category: "portraits",
-    imageSrc: imagekitUrl("images/portraits/flowers_hairstyle_lady"),
+    path: "images/portraits/flowers_hairstyle_lady",
     featured: false,
     title: { en: "small thought", ru: "маленькая мысль" },
     alt: { en: "introspective portrait", ru: "интроспективный портрет" },
@@ -66,7 +69,7 @@ export const artworks = [
   {
     id: "portrait-05",
     category: "portraits",
-    imageSrc: imagekitUrl("images/portraits/winter_portrait"),
+    path: "images/portraits/winter_portrait",
     featured: false,
     title: { en: "winter portrait", ru: "зимний портрет" },
     alt: { en: "winter portrait study", ru: "зимний портретный этюд" },
@@ -78,7 +81,7 @@ export const artworks = [
   {
     id: "portrait-06",
     category: "portraits",
-    imageSrc: imagekitUrl("images/portraits/owner_pet1"),
+    path: "images/portraits/owner_pet1",
     featured: false,
     title: { en: "owner + pet", ru: "хозяйка и питомец" },
     alt: { en: "portrait of owner with pet", ru: "портрет хозяйки с питомцем" },
@@ -92,8 +95,9 @@ export const artworks = [
   {
     id: "animal-01",
     category: "animals",
-    imageSrc: imagekitUrl("images/animals/silly_kitty"),
+    path: "images/animals/silly_kitty",
     featured: true,
+    isSecret: true,
     title: { en: "small moon cat", ru: "маленький лунный кот" },
     alt: {
       en: "cat portrait in cool tones",
@@ -107,7 +111,7 @@ export const artworks = [
   {
     id: "animal-02",
     category: "animals",
-    imageSrc: imagekitUrl("images/animals/tiger"),
+    path: "images/animals/tiger",
     featured: false,
     title: { en: "forest companion", ru: "спутник леса" },
     alt: {
@@ -122,7 +126,7 @@ export const artworks = [
   {
     id: "animal-03",
     category: "animals",
-    imageSrc: imagekitUrl("images/animals/silly_birb"),
+    path: "images/animals/silly_birb",
     featured: false,
     title: { en: "old dog, soft afternoon", ru: "старый пёс, мягкий день" },
     alt: { en: "older dog napping", ru: "пожилой пёс отдыхает" },
@@ -134,7 +138,7 @@ export const artworks = [
   {
     id: "animal-04",
     category: "animals",
-    imageSrc: imagekitUrl("images/animals/fishies"),
+    path: "images/animals/fishies",
     featured: false,
     title: { en: "two birds talking", ru: "две птицы разговаривают" },
     alt: { en: "pair of small birds", ru: "пара маленьких птиц" },
@@ -146,7 +150,7 @@ export const artworks = [
   {
     id: "animal-05",
     category: "animals",
-    imageSrc: imagekitUrl("images/animals/doggo_comm"),
+    path: "images/animals/doggo_comm",
     featured: false,
     title: { en: "doggo commission", ru: "портрет пёсика" },
     alt: { en: "commissioned dog portrait", ru: "заказной портрет собаки" },
@@ -160,7 +164,7 @@ export const artworks = [
   {
     id: "landscape-01",
     category: "landscapes",
-    imageSrc: imagekitUrl("images/landscapes/cloudscape2"),
+    path: "images/landscapes/cloudscape2",
     featured: false,
     title: { en: "cloudscope ii", ru: "облака ii" },
     alt: { en: "cloud landscape study", ru: "этюд облачного пейзажа" },
@@ -172,7 +176,7 @@ export const artworks = [
   {
     id: "landscape-02",
     category: "landscapes",
-    imageSrc: imagekitUrl("images/landscapes/cityscape"),
+    path: "images/landscapes/cityscape",
     featured: false,
     title: { en: "cityscape", ru: "городской пейзаж" },
     alt: { en: "cityscape painting", ru: "живопись городского пейзажа" },
@@ -184,7 +188,7 @@ export const artworks = [
   {
     id: "landscape-03",
     category: "landscapes",
-    imageSrc: imagekitUrl("images/landscapes/oceanscape"),
+    path: "images/landscapes/oceanscape",
     featured: false,
     title: { en: "oceanscape", ru: "морской пейзаж" },
     alt: { en: "ocean landscape", ru: "морской пейзаж" },
@@ -196,7 +200,7 @@ export const artworks = [
   {
     id: "landscape-04",
     category: "landscapes",
-    imageSrc: imagekitUrl("images/landscapes/cloudscape"),
+    path: "images/landscapes/cloudscape",
     featured: false,
     title: { en: "cloudscape", ru: "облачный пейзаж" },
     alt: { en: "cloudscape panorama", ru: "панорама облаков" },
@@ -208,7 +212,7 @@ export const artworks = [
   {
     id: "landscape-05",
     category: "landscapes",
-    imageSrc: imagekitUrl("images/landscapes/mountscape"),
+    path: "images/landscapes/mountscape",
     featured: false,
     title: { en: "mountscape", ru: "горный пейзаж" },
     alt: { en: "mountain landscape", ru: "горный пейзаж" },
@@ -222,7 +226,7 @@ export const artworks = [
   {
     id: "still-01",
     category: "still life",
-    imageSrc: imagekitUrl("images/still life/ladybugs_awaken"),
+    path: "images/still life/ladybugs_awaken",
     featured: false,
     title: { en: "tea and late light", ru: "чай и поздний свет" },
     alt: { en: "still life with tea", ru: "натюрморт с чаем" },
@@ -234,7 +238,7 @@ export const artworks = [
   {
     id: "still-02",
     category: "still life",
-    imageSrc: imagekitUrl("images/still life/bananas"),
+    path: "images/still life/bananas",
     featured: false,
     title: { en: "letters and petals", ru: "письма и лепестки" },
     alt: { en: "still life with petals", ru: "натюрморт с лепестками" },
@@ -246,7 +250,7 @@ export const artworks = [
   {
     id: "still-03",
     category: "still life",
-    imageSrc: imagekitUrl("images/still life/subsurface_scattering"),
+    path: "images/still life/subsurface_scattering",
     featured: false,
     title: { en: "open book", ru: "открытая книга" },
     alt: { en: "open book on a desk", ru: "открытая книга на столе" },
@@ -258,7 +262,7 @@ export const artworks = [
   {
     id: "still-04",
     category: "still life",
-    imageSrc: imagekitUrl("images/still life/color_plant"),
+    path: "images/still life/color_plant",
     featured: false,
     title: { en: "cup, coin, candle", ru: "чашка, монета, свеча" },
     alt: { en: "small still life trio", ru: "маленький натюрморт-трио" },
@@ -270,7 +274,7 @@ export const artworks = [
   {
     id: "still-05",
     category: "still life",
-    imageSrc: imagekitUrl("images/still life/apple"),
+    path: "images/still life/apple",
     featured: false,
     title: { en: "apple study", ru: "этюд яблока" },
     alt: { en: "still life apple study", ru: "натюрморт с яблоком" },
@@ -280,6 +284,20 @@ export const artworks = [
     },
   },
 ];
+
+/**
+ * Final artwork list with `imageSrc` (CDN URL) and `width`/`height` (natural
+ * pixel dimensions, looked up from `image-meta.json`) derived from `path`.
+ */
+export const artworks = rawArtworks.map((a) => {
+  const meta = getImageMeta(a.path);
+  return {
+    ...a,
+    imageSrc: imagekitUrl(a.path),
+    width: meta.width,
+    height: meta.height,
+  };
+});
 
 export function getFeaturedArtworks() {
   return artworks.filter((a) => a.featured);
