@@ -1,3 +1,5 @@
+import { imagekitUrl } from "@/lib/images/imagekit";
+
 export const artworkCategories = ["portraits", "animals", "still life"];
 
 /**
@@ -10,7 +12,7 @@ export const artworks = [
   {
     id: "portrait-01",
     category: "portraits",
-    imageSrc: "https://picsum.photos/id/1027/900/1200",
+    imageSrc: imagekitUrl("images/portraits/self"),
     featured: true,
     isSecret: true,
     title:         { en: "self portrait no. 1", ru: "автопортрет №1" },
@@ -23,7 +25,7 @@ export const artworks = [
   {
     id: "portrait-02",
     category: "portraits",
-    imageSrc: "https://picsum.photos/id/1005/900/1200",
+    imageSrc: imagekitUrl("images/portraits/accidental_success"),
     featured: true,
     title:         { en: "quiet gaze",                  ru: "тихий взгляд" },
     alt:           { en: "portrait with warm lighting", ru: "портрет в тёплом свете" },
@@ -61,7 +63,7 @@ export const artworks = [
   {
     id: "animal-01",
     category: "animals",
-    imageSrc: "https://picsum.photos/id/237/900/1200",
+    imageSrc: imagekitUrl("images/animals/silly_birb"),
     featured: true,
     title:         { en: "small moon cat",                  ru: "маленький лунный кот" },
     alt:           { en: "cat portrait in cool tones",      ru: "портрет кота в холодных тонах" },
@@ -73,7 +75,7 @@ export const artworks = [
   {
     id: "animal-02",
     category: "animals",
-    imageSrc: "https://picsum.photos/id/433/900/1200",
+    imageSrc: imagekitUrl("images/animals/golden"),
     featured: false,
     title:         { en: "forest companion",                ru: "спутник леса" },
     alt:           { en: "animal portrait in cool tones",   ru: "портрет животного в холодных тонах" },
