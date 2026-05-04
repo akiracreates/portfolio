@@ -13,10 +13,10 @@ export function getImageKitEndpoint() {
 }
 
 /**
- * Builds an ImageKit delivery URL and applies default optimization transforms.
+ * Builds an ImageKit delivery URL with bandwidth-friendly defaults.
  * Example: imagekitUrl("images/portraits/self")
  */
-export function imagekitUrl(path, transforms = []) {
+export function imagekitUrl(path, transforms = ["f-auto", "q-auto"]) {
   const endpoint = getImageKitEndpoint();
   if (!endpoint) return "";
   const cleanPath = trimLeadingSlash(path);

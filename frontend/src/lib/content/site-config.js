@@ -2,9 +2,9 @@ export const siteConfig = {
   name: "akira",
   title: "akira | digital portrait artist",
   description:
-    "akira's digital art portfolio — portraits, animals, still life, and commission flow.",
+    "akira's digital art portfolio — portraits, animals, landscapes, still life, and commission flow.",
   shortBio:
-    "digital portrait artist working in soft, intimate palettes. taking commissions for portraits, pets, and still life.",
+    "digital portrait artist working in soft, intimate palettes. taking commissions for portraits, pets, landscapes, and still life.",
 };
 
 /**

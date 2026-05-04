@@ -1,20 +1,13 @@
 import { cookies } from "next/headers";
-import { Fraunces, Inter } from "next/font/google";
+import { Pangolin } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/content/site-config";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 
-const inter = Inter({
-  variable: "--font-inter",
+const pangolin = Pangolin({
+  variable: "--font-pangolin",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  axes: ["opsz"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -34,7 +27,7 @@ export default async function RootLayout({ children }) {
   const lang = isLocale(cookieLocale) ? cookieLocale : defaultLocale;
 
   return (
-    <html lang={lang} className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang={lang} className={pangolin.variable}>
       <body>
         <a
           href="#main-content"

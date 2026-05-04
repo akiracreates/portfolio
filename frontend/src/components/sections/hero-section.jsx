@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { ImageFrame } from "@/components/ui/image-frame";
+import { imagekitUrl } from "@/lib/images/imagekit";
 
 export function HeroSection({ dict, locale = "en" }) {
   const t = dict.hero;
@@ -62,7 +63,7 @@ export function HeroSection({ dict, locale = "en" }) {
             <div className="relative">
               <ImageFrame className="relative aspect-[4/5] w-full shadow-lg">
                 <Image
-                  src="https://picsum.photos/id/1027/900/1200"
+                  src={imagekitUrl("images/portraits/self")}
                   alt={t.imageAlt}
                   fill
                   priority

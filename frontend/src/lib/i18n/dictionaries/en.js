@@ -2,8 +2,8 @@ export const dictionary = {
   meta: {
     title: "akira | digital portrait artist",
     description:
-      "akira's digital art portfolio — portraits, animals, still life, and commission flow.",
-    bio: "digital portrait artist. portraits, animals, and still life. commissions are open.",
+      "akira's digital art portfolio — portraits, animals, landscapes, still life, and commission flow.",
+    bio: "digital portrait artist. portraits, animals, landscapes, and still life. commissions are open.",
   },
 
   common: {
