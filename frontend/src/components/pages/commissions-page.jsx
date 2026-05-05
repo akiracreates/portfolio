@@ -40,7 +40,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
 
       <Container>
         <div className="-mt-4 mb-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[color:var(--success)]/30 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">
             <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden />
             {pickLocale(commissionStatus.label, locale)}
           </span>
@@ -58,7 +58,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
             {commissionTypes.map((c) => (
               <article
                 key={c.id}
-                className="scrap-card soft-glow-hover flex flex-col overflow-hidden transition-colors hover:border-border-accent"
+                className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface transition-colors hover:border-border-default"
               >
                 <CommissionPreviewCarousel
                   images={getCommissionPreviews(c.id)}
@@ -74,7 +74,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
                     </span>
                   </div>
                   <p className="body-sm">{pickLocale(c.description, locale)}</p>
-                  <div className="space-y-3 border-t border-dashed border-border-subtle pt-4">
+                  <div className="space-y-3 border-t border-border-subtle pt-4">
                     <p className="caption">{t.includedLabel}</p>
                     <ul className="space-y-1.5">
                       {pickLocale(c.included, locale).map((d) => (
@@ -91,7 +91,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
                       ))}
                     </ul>
                   </div>
-                  <div className="mt-auto flex items-center justify-between gap-3 border-t border-dashed border-border-subtle pt-4 text-[0.75rem] text-text-tertiary">
+                  <div className="mt-auto flex items-center justify-between gap-3 border-t border-border-subtle pt-4 text-[0.75rem] text-text-tertiary">
                     <span>
                       {t.revisionsLabel}: {c.revisions}
                     </span>
@@ -139,7 +139,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
               return (
                 <li
                   key={item.id}
-                  className="scrap-note flex flex-col gap-2 p-5"
+                  className="flex flex-col gap-2 rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-5"
                 >
                   <p className="heading-h3 text-[0.95rem] text-text-primary">
                     {short}
@@ -177,7 +177,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
             />
             <Callout
               label={pickLocale({ en: "turnaround", ru: "срок" }, locale)}
-              value={pickLocale({ en: "~2 weeks", ru: "~2 недели" }, locale)}
+              value="~2 weeks"
               detail={pickLocale(whatToExpect.find((w) => w.id === "turnaround")?.long, locale)}
             />
             <Callout
@@ -203,7 +203,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
       {/* 8. contact form (#order) */}
       <section
         id="order"
-        className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle bg-bg-base"
+        className="scroll-mt-header border-t border-border-subtle bg-bg-base"
       >
         <Container>
           <Section
@@ -212,7 +212,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
             description={t.formIntro}
             size="md"
           >
-            <div className="rounded-[var(--radius-lg)]">
+            <div className="rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-6 md:p-8">
               <ContactForm />
             </div>
           </Section>
@@ -222,7 +222,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
       {/* 9. contact + socials */}
       <section
         id="contact-alt"
-        className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle"
+        className="scroll-mt-header border-t border-border-subtle"
       >
         <Container>
           <Section
@@ -242,7 +242,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
                       rel={
                         s.id === "email" ? undefined : "noreferrer noopener"
                       }
-                      className={`group flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors focus-visible-ring ${
+                      className={`group flex items-center gap-3 rounded-[var(--radius-lg)] border p-4 transition-colors focus-visible-ring ${
                         s.primary
                           ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
                           : "border-border-subtle bg-bg-surface hover:border-border-default"
@@ -251,8 +251,8 @@ export function CommissionsPage({ dict, locale = "en" }) {
                       <span
                         className={`flex h-10 w-10 items-center justify-center rounded-md ${
                           s.primary
-                            ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
-                            : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
+                            ? "bg-accent text-text-on-accent"
+                            : "bg-bg-inset text-text-secondary"
                         }`}
                         aria-hidden
                       >
@@ -286,7 +286,7 @@ export function CommissionsPage({ dict, locale = "en" }) {
 
 function Callout({ label, value, detail }) {
   return (
-    <div className="scrap-note p-5">
+    <div className="rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-5">
       <p className="caption">{label}</p>
       <p className="heading-h3 mt-1 text-text-primary">{value}</p>
       {detail && <p className="body-sm mt-2">{detail}</p>}

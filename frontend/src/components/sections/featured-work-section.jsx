@@ -3,26 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { ArtworkCard } from "@/components/gallery/artwork-card";
-import { getHomepageFeaturedArtworks } from "@/lib/content/artworks";
+import { getFeaturedArtworks } from "@/lib/content/artworks";
 
 function categoryAnchor(category) {
   return `category-${category.toLowerCase().replace(/\s+/g, "-")}`;
 }
 
 /**
- * Spec: 4 featured pieces. The card with `isSecret: true` links to /{locale}/spin
+ * Spec: 3 featured pieces. The card with `isSecret: true` links to /{locale}/spin
  * with prefetch={false}, but is visually indistinguishable from its siblings.
  * Default cards link to /{locale}/portfolio#category-{cat}.
  */
 export function FeaturedWorkSection({ dict, locale = "en" }) {
   const t = dict.featured;
-  const featured = getHomepageFeaturedArtworks();
-  const layouts = [
-    "md:translate-y-2 md:rotate-[-0.7deg]",
-    "md:-translate-y-2 md:rotate-[0.55deg]",
-    "md:translate-y-4 md:rotate-[0.35deg]",
-    "md:translate-y-1 md:rotate-[-0.45deg]",
-  ];
+  const featured = getFeaturedArtworks().slice(0, 3);
 
   return (
     <Container>
@@ -41,8 +35,8 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
           </Button>
         }
       >
-        <div className="featured-curation grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-          {featured.map((artwork, index) => {
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((artwork) => {
             const href = artwork.isSecret
               ? `/${locale}/spin`
               : `/${locale}/portfolio#${categoryAnchor(artwork.category)}`;
@@ -51,12 +45,12 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
                 key={artwork.id}
                 href={href}
                 prefetch={artwork.isSecret ? false : undefined}
-                className={`block rounded-[18px] focus-visible-ring transition-transform duration-[var(--duration-base)] ${layouts[index % layouts.length]}`}
+                className="block rounded-[var(--radius-lg)] focus-visible-ring"
                 aria-label={
                   artwork.isSecret ? undefined : `${artwork.category}`
                 }
               >
-                <ArtworkCard artwork={artwork} locale={locale} variant="featured" />
+                <ArtworkCard artwork={artwork} locale={locale} />
               </Link>
             );
           })}

@@ -29,7 +29,7 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
           {whatToExpect.map((item) => (
             <li
               key={item.id}
-              className="scrap-note soft-glow-hover flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] hover:border-border-accent"
+              className="flex flex-col gap-2 rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-5 transition-colors duration-[var(--duration-base)] hover:border-border-default hover:bg-bg-surface-raised"
             >
               <p className="heading-h3 text-[0.95rem] text-text-primary">
                 {pickLocale(item.short, locale)}
