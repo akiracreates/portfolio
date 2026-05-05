@@ -24,22 +24,18 @@ export function Footer() {
   const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
 
   return (
-    <footer className="mt-16 border-t border-border-subtle bg-bg-app">
-      <Container className="py-14">
+    <footer className="mt-12 border-t border-dashed border-border-subtle bg-bg-base">
+      <Container className="py-12">
         <div className="grid gap-10 lg:grid-cols-12">
           {/* brand + bio */}
-          <div className="lg:col-span-5">
+          <div className="scrap-note p-5 lg:col-span-5">
             <Link
               href={`/${locale}`}
               className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
               aria-label="akira — home"
             >
               <span
-                className="flex h-8 w-8 items-center justify-center rounded-md font-display text-base font-semibold text-text-on-accent"
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)",
-                }}
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-base font-semibold text-highlight"
                 aria-hidden
               >
                 a
@@ -56,7 +52,7 @@ export function Footer() {
 
           {/* socials */}
           <div className="lg:col-span-7">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+            <p className="text-[0.7rem] font-semibold text-text-tertiary">
               {t.connect || "connect"}
             </p>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -68,7 +64,7 @@ export function Footer() {
                     rel={
                       s.id === "email" ? undefined : "noreferrer noopener"
                     }
-                    className={`group flex items-center gap-3 rounded-[var(--radius-md)] border p-3 transition-colors focus-visible-ring ${
+                    className={`group flex items-center gap-3 rounded-[var(--radius-md)] border border-dashed p-3 transition-colors focus-visible-ring ${
                       s.primary
                         ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
                         : "border-border-subtle bg-bg-surface hover:border-border-default"
@@ -77,8 +73,8 @@ export function Footer() {
                     <span
                       className={`flex h-8 w-8 items-center justify-center rounded-md ${
                         s.primary
-                          ? "bg-accent text-text-on-accent"
-                          : "bg-bg-inset text-text-secondary"
+                          ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
+                          : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
                       }`}
                       aria-hidden
                     >

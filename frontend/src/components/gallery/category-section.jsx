@@ -23,19 +23,19 @@ export function CategorySection({
   const label = count === 1 ? pieceLabel : piecesLabel;
 
   return (
-    <section id={id} className="scroll-mt-header space-y-12 md:space-y-16">
-      <header className="flex items-baseline justify-between gap-4">
+    <section id={id} className="scroll-mt-header space-y-9 md:space-y-12">
+      <header className="corner-marks relative flex items-baseline justify-between gap-4 rounded-[var(--radius-lg)] border border-dashed border-border-subtle bg-bg-inset/45 p-5">
         <div className="space-y-1.5">
           <Eyebrow>{eyebrow}</Eyebrow>
           <h3 className="heading-h2 text-[1.75rem] leading-tight">
             {category}
           </h3>
         </div>
-        <span className="caption">
+        <span className="caption text-highlight">
           {count} {label}
         </span>
       </header>
-      <div className="space-y-16 md:space-y-24">
+      <div className="space-y-12 md:space-y-16">
         {artworks.map((artwork, index) => (
           <ArtworkRow
             key={artwork.id}

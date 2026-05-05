@@ -8,7 +8,7 @@ export function MobileFab({ onOpenDrawer }) {
     <button
       type="button"
       onClick={onOpenDrawer}
-      className="fixed bottom-5 right-5 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-border-strong bg-bg-surface text-text-primary shadow-lg transition-colors duration-[var(--duration-base)] hover:bg-bg-surface-raised focus-visible-ring md:hidden"
+      className="fixed bottom-5 right-5 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-dashed border-highlight bg-bg-surface text-highlight shadow-lg transition-colors duration-[var(--duration-base)] hover:bg-highlight-soft focus-visible-ring md:hidden"
       style={{
         bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.25rem)",
       }}

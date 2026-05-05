@@ -1,17 +1,17 @@
 import Link from "next/link";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] font-medium transition-[transform,background-color,border-color,color,box-shadow] duration-[var(--duration-base)] ease-[cubic-bezier(0.2,0,0,1)] disabled:pointer-events-none disabled:opacity-45 select-none";
+  "inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] border border-dashed font-medium shadow-sm transition-[transform,background-color,border-color,color,box-shadow] duration-[var(--duration-base)] ease-[cubic-bezier(0.2,0,0,1)] disabled:pointer-events-none disabled:opacity-45 select-none";
 
 const variants = {
   /** primary CTA — uses the highlight pink. Reserve for ONE per section. */
-  primary: `${base} bg-highlight text-text-on-highlight border border-transparent shadow-sm hover:bg-highlight-hover hover:-translate-y-[1px] active:translate-y-0`,
+  primary: `${base} border-highlight bg-highlight text-text-on-highlight hover:bg-highlight-hover hover:-translate-y-[2px] hover:shadow-[0_0_0_3px_rgba(233,102,160,0.12),0_12px_24px_rgba(10,8,14,0.28)] active:translate-y-0`,
   /** secondary CTA — purple accent. Default for most actions. */
-  secondary: `${base} bg-accent text-text-on-accent border border-transparent shadow-sm hover:bg-accent-hover hover:-translate-y-[1px] active:translate-y-0`,
+  secondary: `${base} border-accent-2 bg-accent text-text-on-accent hover:bg-accent-hover hover:-translate-y-[2px] hover:shadow-[0_0_0_3px_rgba(149,117,222,0.12),0_12px_24px_rgba(10,8,14,0.28)] active:translate-y-0`,
   /** outline — neutral on dark surfaces. */
-  outline: `${base} bg-transparent text-text-primary border border-border-strong hover:bg-bg-surface hover:border-border-strong active:translate-y-0`,
+  outline: `${base} border-border-strong bg-bg-inset/45 text-text-primary hover:border-highlight hover:bg-highlight-soft hover:-translate-y-[1px] hover:text-text-primary active:translate-y-0`,
   /** ghost — inline / tertiary actions. */
-  ghost: `${base} bg-transparent text-text-secondary border border-transparent hover:bg-bg-surface hover:text-text-primary`,
+  ghost: `${base} border-transparent bg-transparent text-text-secondary shadow-none hover:border-border-default hover:bg-bg-surface hover:text-text-primary`,
 };
 
 const sizes = {

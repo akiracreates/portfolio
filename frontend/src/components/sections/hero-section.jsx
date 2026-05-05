@@ -10,21 +10,12 @@ export function HeroSection({ dict, locale = "en" }) {
   return (
     <section
       id="hero"
-      className="scroll-mt-header relative overflow-hidden border-b border-border-subtle"
+      className="scroll-mt-header relative overflow-hidden border-b border-dashed border-border-subtle"
       aria-labelledby="hero-heading"
     >
-      {/* subtle ambient glow — secondary accent, low intensity */}
-      <div
-        className="pointer-events-none absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full opacity-[0.18] blur-[140px]"
-        style={{
-          background:
-            "radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%)",
-        }}
-        aria-hidden
-      />
-      <Container className="relative py-20 md:py-28 lg:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="space-y-7 lg:col-span-7">
+      <Container className="relative py-16 md:py-20 lg:py-24">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="scrap-note corner-marks space-y-7 p-5 md:p-7 lg:col-span-6">
             <Eyebrow>{t.eyebrow}</Eyebrow>
             <h1 id="hero-heading" className="heading-display max-w-2xl">
               {t.titleLeading}{" "}
@@ -50,7 +41,8 @@ export function HeroSection({ dict, locale = "en" }) {
                 {t.ctaSecondary}
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4">
+            <div className="broken-divider" aria-hidden />
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
               <Stat label={t.statCommissions} value={t.statCommissionsValue} />
               <Sep />
               <Stat label={t.statResponse} value={t.statResponseValue} />
@@ -59,19 +51,22 @@ export function HeroSection({ dict, locale = "en" }) {
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="relative">
-              <ImageFrame className="relative aspect-[4/5] w-full shadow-lg">
+          <div className="lg:col-span-6">
+            <div className="relative mx-auto max-w-[560px] lg:ml-auto">
+              <ImageFrame
+                className="relative w-full shadow-lg md:rotate-[0.45deg]"
+                style={{ aspectRatio: "2500 / 3000" }}
+              >
                 <SmartImage
                   src={imagekitUrl("images/portraits/self")}
                   alt={t.imageAlt}
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 480px"
-                  imgClassName="object-cover"
+                  imgClassName="object-contain p-3 md:p-5"
                 />
               </ImageFrame>
-              <div className="absolute -bottom-4 -left-4 hidden rounded-[var(--radius-md)] border border-border-subtle bg-bg-surface px-4 py-3 shadow-md sm:block">
+              <div className="scrap-note absolute -bottom-4 -left-3 hidden px-4 py-3 shadow-md sm:block">
                 <p className="caption">{t.badgeLabel}</p>
                 <p className="body-sm font-medium text-text-primary">
                   {t.badgeTitle}

@@ -86,7 +86,7 @@ export function MobileDrawer({ open, onClose }) {
           />
           <motion.div
             ref={panelRef}
-            className="absolute left-0 top-0 h-full w-[280px] max-w-[85vw] border-r border-border-strong bg-bg-sidebar shadow-lg"
+            className="absolute left-0 top-0 h-full w-[280px] max-w-[85vw] border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg"
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
@@ -104,7 +104,7 @@ export function MobileDrawer({ open, onClose }) {
             />
             <button
               type="button"
-              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-bg-surface hover:text-text-primary"
+              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-transparent text-text-tertiary transition-colors hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
               onClick={onClose}
               aria-label={t("common.closeNavigation", "close navigation")}
             >

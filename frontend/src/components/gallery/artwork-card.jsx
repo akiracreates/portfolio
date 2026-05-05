@@ -16,23 +16,27 @@ export function ArtworkCard({
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
   const note = pickLocale(artwork.artistComment, locale);
+  const width = artwork.width ?? 4;
+  const height = artwork.height ?? 5;
+  const aspectStyle = { aspectRatio: `${width} / ${height}` };
 
   return (
     <motion.article
-      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface transition-colors duration-[var(--duration-base)] hover:border-border-default hover:bg-bg-surface-raised"
+      className="scrap-card soft-glow-hover group flex h-full flex-col overflow-hidden transition-colors duration-[var(--duration-base)] hover:border-border-accent"
       whileHover={reduced ? undefined : { y: -3 }}
       transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
     >
       <ImageFrame
         rounded="md"
-        className="relative aspect-[4/5] w-full border-0 rounded-none rounded-t-[var(--radius-lg)]"
+        className="relative m-3 mb-0 w-[calc(100%-1.5rem)] rounded-[var(--radius-md)]"
+        style={aspectStyle}
       >
         <SmartImage
           src={artwork.imageSrc}
           alt={alt}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          imgClassName="object-cover transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.04]"
+          imgClassName="object-contain p-3 transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.015]"
         />
         {showFeaturedBadge && artwork.featured && (
           <div className="absolute left-3 top-3 z-10">
@@ -48,7 +52,7 @@ export function ArtworkCard({
           <h3 className="heading-h3 text-[1rem] leading-snug text-text-primary">
             {title}
           </h3>
-          <span className="caption shrink-0">{artwork.category}</span>
+          <span className="caption shrink-0 text-accent-2">{artwork.category}</span>
         </div>
         {note && (
           <p className="body-sm line-clamp-2 text-text-secondary">{note}</p>
@@ -72,22 +76,21 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
   const note = pickLocale(artwork.artistComment, locale);
-  const reversed = index % 2 === 1;
-
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
+  const pattern = ROW_PATTERNS[index % ROW_PATTERNS.length];
 
   return (
     <motion.article
-      className={`grid items-center gap-8 md:grid-cols-12 md:gap-12 ${reversed ? "md:[&>:first-child]:order-2" : ""}`}
+      className={`grid items-center gap-7 md:grid-cols-12 md:gap-10 ${pattern.row}`}
       initial={reduced ? false : { opacity: 0, y: 16 }}
       animate={reduced ? false : { opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
     >
-      <div className="md:col-span-7">
+      <div className={pattern.image}>
         <ImageFrame
-          className="relative w-full overflow-hidden"
+          className={`relative w-full overflow-hidden ${pattern.frame}`}
           style={aspectStyle}
         >
           <SmartImage
@@ -95,19 +98,46 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
             alt={alt}
             fill
             sizes="(max-width: 768px) 100vw, 60vw"
-            imgClassName="object-contain"
+            imgClassName="object-contain p-3 md:p-4"
           />
         </ImageFrame>
       </div>
-      <div className="space-y-3 md:col-span-5">
+      <div className={`scrap-note space-y-3 p-5 md:p-6 ${pattern.text}`}>
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="heading-h2 text-[1.5rem] leading-tight text-text-primary">
             {title}
           </h3>
-          <span className="caption shrink-0">{artwork.category}</span>
+          <span className="caption shrink-0 text-accent-2">{artwork.category}</span>
         </div>
         {note && <p className="body max-w-prose">{note}</p>}
       </div>
     </motion.article>
   );
 }
+
+const ROW_PATTERNS = [
+  {
+    row: "",
+    image: "md:col-span-7",
+    text: "md:col-span-5 md:translate-y-4",
+    frame: "md:rotate-[-0.35deg]",
+  },
+  {
+    row: "md:[&>:first-child]:order-2",
+    image: "md:col-span-6 md:col-start-7",
+    text: "md:col-span-5 md:col-start-1 md:row-start-1 md:-translate-y-5",
+    frame: "md:rotate-[0.45deg]",
+  },
+  {
+    row: "",
+    image: "md:col-span-8",
+    text: "md:col-span-4 md:-translate-x-4 md:translate-y-8",
+    frame: "md:rotate-[0.25deg]",
+  },
+  {
+    row: "md:[&>:first-child]:order-2",
+    image: "md:col-span-7 md:col-start-6",
+    text: "md:col-span-5 md:col-start-1 md:row-start-1 md:translate-y-2",
+    frame: "md:rotate-[-0.5deg]",
+  },
+];

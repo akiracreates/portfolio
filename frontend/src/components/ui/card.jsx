@@ -1,10 +1,10 @@
 const variants = {
   default:
-    "bg-bg-surface border border-border-subtle",
+    "scrap-card",
   raised:
-    "bg-bg-surface border border-transparent shadow-md",
+    "scrap-card shadow-lg",
   outline:
-    "bg-transparent border border-border-default",
+    "border border-dashed border-border-default bg-transparent",
 };
 
 export function Card({

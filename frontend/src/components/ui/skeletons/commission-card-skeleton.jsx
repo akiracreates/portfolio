@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function CommissionCardSkeleton() {
   return (
-    <div className="flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface">
+    <div className="scrap-card flex flex-col overflow-hidden">
       <Skeleton rounded="none" className="aspect-[4/3] w-full" />
       <div className="flex flex-1 flex-col gap-4 p-6">
         <div className="flex items-center justify-between gap-3">
@@ -11,7 +11,7 @@ export function CommissionCardSkeleton() {
         </div>
         <Skeleton rounded="sm" className="h-3 w-full" />
         <Skeleton rounded="sm" className="h-3 w-4/5" />
-        <div className="space-y-2 border-t border-border-subtle pt-4">
+        <div className="space-y-2 border-t border-dashed border-border-subtle pt-4">
           <Skeleton rounded="sm" className="h-3 w-3/5" />
           <Skeleton rounded="sm" className="h-3 w-2/3" />
           <Skeleton rounded="sm" className="h-3 w-1/2" />

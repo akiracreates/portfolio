@@ -89,8 +89,8 @@ export function SpinExperience({ dict, locale }) {
       {/* desktop experience */}
       <div className="desktop-only">
         <Container className="py-20 md:py-28">
-          <div className="mx-auto max-w-xl space-y-8 text-center">
-            <header className="space-y-3">
+          <div className="mx-auto max-w-2xl space-y-8 text-center">
+            <header className="scrap-note space-y-3 p-6 md:p-8">
               <Heading level="display">{t.pageTitle}</Heading>
               <p className="body-lg">{t.pageDescription}</p>
             </header>
@@ -117,7 +117,7 @@ export function SpinExperience({ dict, locale }) {
             )}
 
             {step === "result" && reward && (
-              <div className="space-y-4">
+              <div className="scrap-note mx-auto max-w-xl space-y-4 p-6">
                 <p className="caption">{t.youWon}</p>
                 <p className="heading-display text-highlight">
                   {pickLocale(reward.label, locale)}
@@ -126,7 +126,7 @@ export function SpinExperience({ dict, locale }) {
                 {submitError && (
                   <p
                     role="alert"
-                    className="rounded-[var(--radius-md)] border border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
+                    className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
                   >
                     {submitError}
                   </p>
@@ -158,7 +158,7 @@ export function SpinExperience({ dict, locale }) {
       {/* mobile fallback */}
       <div className="mobile-only">
         <Container className="py-20">
-          <div className="mx-auto max-w-md space-y-6 text-center">
+          <div className="scrap-note mx-auto max-w-md space-y-6 p-6 text-center">
             <Heading level="h1">{t.desktopOnlyTitle}</Heading>
             <p className="body">{t.desktopOnlyBody}</p>
             <Button
