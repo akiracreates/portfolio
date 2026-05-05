@@ -17,6 +17,12 @@ function categoryAnchor(category) {
 export function FeaturedWorkSection({ dict, locale = "en" }) {
   const t = dict.featured;
   const featured = getHomepageFeaturedArtworks();
+  const layouts = [
+    "md:translate-y-2 md:rotate-[-0.7deg]",
+    "md:-translate-y-2 md:rotate-[0.55deg]",
+    "md:translate-y-4 md:rotate-[0.35deg]",
+    "md:translate-y-1 md:rotate-[-0.45deg]",
+  ];
 
   return (
     <Container>
@@ -35,8 +41,8 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
           </Button>
         }
       >
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {featured.map((artwork) => {
+        <div className="featured-curation grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {featured.map((artwork, index) => {
             const href = artwork.isSecret
               ? `/${locale}/spin`
               : `/${locale}/portfolio#${categoryAnchor(artwork.category)}`;
@@ -45,12 +51,12 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
                 key={artwork.id}
                 href={href}
                 prefetch={artwork.isSecret ? false : undefined}
-                className="block rounded-[var(--radius-lg)] focus-visible-ring"
+                className={`block rounded-[18px] focus-visible-ring transition-transform duration-[var(--duration-base)] ${layouts[index % layouts.length]}`}
                 aria-label={
                   artwork.isSecret ? undefined : `${artwork.category}`
                 }
               >
-                <ArtworkCard artwork={artwork} locale={locale} />
+                <ArtworkCard artwork={artwork} locale={locale} variant="featured" />
               </Link>
             );
           })}

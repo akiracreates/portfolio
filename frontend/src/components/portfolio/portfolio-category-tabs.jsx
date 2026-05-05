@@ -86,10 +86,10 @@ export function PortfolioCategoryTabs({
 
   return (
     <nav
-      className="scrap-note sticky top-3 z-30 flex flex-wrap items-center gap-2 p-3 text-[0.8125rem] text-text-tertiary backdrop-blur"
+      className="portfolio-tabs text-[0.8125rem] text-text-tertiary"
       aria-label={jumpToLabel}
     >
-      <span className="caption mr-1">{jumpToLabel}</span>
+      <span className="caption mr-2 text-text-tertiary">{jumpToLabel}</span>
       {categories.map((cat) => {
         const isActive = active === cat;
         return (
@@ -101,19 +101,11 @@ export function PortfolioCategoryTabs({
               onSelect(cat);
             }}
             aria-current={isActive ? "true" : undefined}
-            className={`relative rounded-[var(--radius-md)] border border-dashed px-3 py-1.5 transition-[background-color,border-color,color,transform] duration-[var(--duration-base)] focus-visible-ring ${
-              isActive
-                ? "border-highlight bg-highlight-soft text-text-primary shadow-sm"
-                : "border-border-subtle bg-bg-inset/55 text-text-secondary hover:border-accent-2 hover:text-text-primary"
+            className={`portfolio-tab focus-visible-ring ${
+              isActive ? "is-active" : ""
             }`}
           >
             {cat}
-            {isActive && (
-              <span
-                aria-hidden
-                className="absolute -bottom-1 left-3 right-3 h-px bg-highlight"
-              />
-            )}
           </a>
         );
       })}

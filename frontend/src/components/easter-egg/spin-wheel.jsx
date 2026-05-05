@@ -74,7 +74,7 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
   return (
     <div className="flex flex-col items-center gap-6">
       <div
-        className="scrap-note relative p-4"
+        className="spin-wheel-shell relative rounded-[18px] p-4"
         style={{ width: SIZE + 32, height: SIZE + 32 }}
         aria-live="polite"
         aria-busy={phase === "spinning"}

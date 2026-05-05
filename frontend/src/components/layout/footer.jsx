@@ -24,38 +24,51 @@ export function Footer() {
   const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
 
   return (
-    <footer className="mt-12 border-t border-dashed border-border-subtle bg-bg-base">
-      <Container className="py-12">
-        <div className="grid gap-10 lg:grid-cols-12">
-          {/* brand + bio */}
-          <div className="scrap-note p-5 lg:col-span-5">
-            <Link
-              href={`/${locale}`}
-              className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
-              aria-label="akira — home"
-            >
-              <span
-                className="flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-base font-semibold text-highlight"
-                aria-hidden
+    <footer id="socials" className="site-ending mt-12">
+      <Container className="py-12 md:py-14">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
+            <div className="space-y-5">
+              <p className="eyebrow">{socialsT.eyebrow || t.connect || "connect"}</p>
+              <div className="space-y-3">
+                <Link
+                  href={`/${locale}`}
+                  className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
+                  aria-label="akira — home"
+                >
+                  <span
+                    className="flex h-9 w-9 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-base font-semibold text-highlight"
+                    aria-hidden
+                  >
+                    a
+                  </span>
+                  <span className="font-display text-[1.2rem] font-medium text-text-primary">
+                    akira
+                  </span>
+                </Link>
+                <h2 className="heading-h2 max-w-md">
+                  {socialsT.title || "let's stay in touch."}
+                </h2>
+                {socialsT.description && (
+                  <p className="body max-w-md">{socialsT.description}</p>
+                )}
+              </div>
+              <div className="scrap-caption max-w-md px-5 py-4">
+                <p className="body-sm text-text-primary">{socialsT.contactNote}</p>
+                <p className="caption mt-3 max-w-sm">{bio}</p>
+              </div>
+              <a
+                href="#hero"
+                className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
               >
-                a
-              </span>
-              <span className="font-display text-lg font-medium text-text-primary">
-                akira
-              </span>
-            </Link>
-            <p className="body-sm mt-4 max-w-sm">{bio}</p>
-            <p className="body-sm mt-4 max-w-sm text-text-tertiary">
-              {socialsT.contactNote}
-            </p>
+                <span aria-hidden>↑</span>
+                {dict?.common?.backToTop || "back to top"}
+              </a>
+            </div>
           </div>
 
-          {/* socials */}
           <div className="lg:col-span-7">
-            <p className="text-[0.7rem] font-semibold text-text-tertiary">
-              {t.connect || "connect"}
-            </p>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            <ul className="grid gap-3 sm:grid-cols-2">
               {links.map((s) => (
                 <li key={s.id}>
                   <a
@@ -64,10 +77,10 @@ export function Footer() {
                     rel={
                       s.id === "email" ? undefined : "noreferrer noopener"
                     }
-                    className={`group flex items-center gap-3 rounded-[var(--radius-md)] border border-dashed p-3 transition-colors focus-visible-ring ${
+                    className={`social-pill group flex items-center gap-3 p-4 transition-colors focus-visible-ring ${
                       s.primary
                         ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
-                        : "border-border-subtle bg-bg-surface hover:border-border-default"
+                        : "hover:border-border-default hover:bg-bg-surface-raised"
                     }`}
                   >
                     <span

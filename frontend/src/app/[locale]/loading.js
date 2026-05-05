@@ -8,20 +8,22 @@ export default function HomeLoading() {
       {/* hero */}
       <section className="border-b border-dashed border-border-subtle">
         <Container className="py-20 md:py-28 lg:py-32">
-          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="scrap-note space-y-6 p-5 md:p-7 lg:col-span-6">
-              <Skeleton rounded="sm" className="h-3 w-40" />
-              <Skeleton rounded="md" className="h-12 w-3/4" />
-              <Skeleton rounded="md" className="h-12 w-1/2" />
-              <Skeleton rounded="sm" className="h-4 w-full max-w-md" />
-              <Skeleton rounded="sm" className="h-4 w-2/3 max-w-md" />
-              <div className="flex gap-3 pt-2">
-                <Skeleton rounded="md" className="h-11 w-36" />
-                <Skeleton rounded="md" className="h-11 w-36" />
+          <div className="rounded-[18px] border border-dashed border-border-subtle bg-bg-surface/65 p-4 md:p-6">
+            <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(380px,0.92fr)] lg:gap-12">
+              <div className="space-y-6 p-2">
+                <Skeleton rounded="sm" className="h-3 w-40" />
+                <Skeleton rounded="md" className="h-12 w-3/4" />
+                <Skeleton rounded="md" className="h-12 w-1/2" />
+                <Skeleton rounded="sm" className="h-4 w-full max-w-md" />
+                <Skeleton rounded="sm" className="h-4 w-2/3 max-w-md" />
+                <div className="flex gap-3 pt-2">
+                  <Skeleton rounded="md" className="h-11 w-36" />
+                  <Skeleton rounded="md" className="h-11 w-36" />
+                </div>
               </div>
-            </div>
-            <div className="lg:col-span-6">
-              <Skeleton rounded="lg" className="aspect-[4/5] w-full" />
+              <div>
+                <Skeleton rounded="lg" className="aspect-[4/5] w-full" />
+              </div>
             </div>
           </div>
         </Container>
@@ -52,7 +54,7 @@ export default function HomeLoading() {
             <Skeleton rounded="sm" className="h-3 w-20" />
             <Skeleton rounded="md" className="h-7 w-2/3 max-w-md" />
           </div>
-          <ArtworkCardGridSkeleton count={3} />
+          <ArtworkCardGridSkeleton count={4} />
         </Container>
       </section>
     </>

@@ -30,7 +30,7 @@ export function SpinEmailForm({
   };
 
   return (
-    <form className="scrap-note mx-auto max-w-md space-y-4 p-5" onSubmit={handle}>
+    <form className="scrap-caption mx-auto max-w-md space-y-4 px-5 py-5" onSubmit={handle}>
       <label htmlFor={id} className="block text-[0.8125rem] font-medium text-text-secondary">
         {emailLabel}
       </label>

@@ -89,10 +89,10 @@ export function SpinExperience({ dict, locale }) {
       {/* desktop experience */}
       <div className="desktop-only">
         <Container className="py-20 md:py-28">
-          <div className="mx-auto max-w-2xl space-y-8 text-center">
-            <header className="scrap-note space-y-3 p-6 md:p-8">
+          <div className="spin-celebration mx-auto max-w-3xl space-y-8 px-5 py-6 text-center md:px-8 md:py-9">
+            <header className="space-y-3 px-2 pt-1">
               <Heading level="display">{t.pageTitle}</Heading>
-              <p className="body-lg">{t.pageDescription}</p>
+              <p className="body-lg mx-auto max-w-2xl">{t.pageDescription}</p>
             </header>
 
             {step === "email" && (
@@ -117,7 +117,7 @@ export function SpinExperience({ dict, locale }) {
             )}
 
             {step === "result" && reward && (
-              <div className="scrap-note mx-auto max-w-xl space-y-4 p-6">
+              <div className="scrap-caption mx-auto max-w-xl space-y-4 px-6 py-6">
                 <p className="caption">{t.youWon}</p>
                 <p className="heading-display text-highlight">
                   {pickLocale(reward.label, locale)}
@@ -158,7 +158,7 @@ export function SpinExperience({ dict, locale }) {
       {/* mobile fallback */}
       <div className="mobile-only">
         <Container className="py-20">
-          <div className="scrap-note mx-auto max-w-md space-y-6 p-6 text-center">
+          <div className="spin-celebration mx-auto max-w-md space-y-6 px-6 py-7 text-center">
             <Heading level="h1">{t.desktopOnlyTitle}</Heading>
             <p className="body">{t.desktopOnlyBody}</p>
             <Button

@@ -21,6 +21,10 @@ export function ImageFrame({
   const variantClass =
     variant === "plain"
       ? "border border-border-subtle bg-bg-inset"
+      : variant === "featured"
+        ? "art-object-frame art-object-featured border"
+        : variant === "hero"
+          ? "art-object-frame art-object-hero border"
       : "art-object-frame border";
 
   return (
