@@ -31,7 +31,7 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
   return (
     <section
       id="commissions-preview"
-      className="scroll-mt-header border-t border-border-subtle bg-bg-base"
+      className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle bg-bg-base"
       aria-labelledby="commissions-preview-heading"
     >
       <Container>
@@ -52,10 +52,10 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
             </Button>
           }
         >
-          <div className="flex flex-col gap-6 rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div className="scrap-card flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8">
             {/* status pill + types */}
             <div className="flex flex-col gap-3">
-              <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--success)]/30 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">
+              <span className="inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">
                 <span
                   className="h-1.5 w-1.5 rounded-full bg-success"
                   aria-hidden

@@ -74,8 +74,8 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
   return (
     <div className="flex flex-col items-center gap-6">
       <div
-        className="relative"
-        style={{ width: SIZE, height: SIZE }}
+        className="spin-wheel-shell relative rounded-[18px] p-4"
+        style={{ width: SIZE + 32, height: SIZE + 32 }}
         aria-live="polite"
         aria-busy={phase === "spinning"}
       >
@@ -99,6 +99,7 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
           width={SIZE}
           height={SIZE}
           viewBox={`0 0 ${SIZE} ${SIZE}`}
+          className="drop-shadow-[0_14px_24px_rgba(10,8,14,0.32)]"
           style={{
             transform: `rotate(${rotation}deg)`,
             transition: reduced

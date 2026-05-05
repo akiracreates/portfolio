@@ -1,92 +1,112 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
-import { categoryAnchorId } from "@/components/gallery/category-section";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { CategorySection, categoryAnchorId } from "@/components/gallery/category-section";
 
-/**
- * Scroll-spy: tracks which `category-{slug}` section is currently in view.
- * Mirrors the sidebar's strategy — derive the active id from intersection
- * observer state, never set initial state synchronously in the effect body.
- */
-function useActiveCategory(categories) {
+function categoryFromHash(categories) {
+  if (typeof window === "undefined") return categories[0] ?? "";
+  const hash = window.location.hash.replace(/^#/, "");
+  return categories.find((cat) => categoryAnchorId(cat) === hash) ?? categories[0] ?? "";
+}
+
+export function PortfolioCategoryShowcase({
+  sections,
+  categories,
+  jumpToLabel = "jump to",
+  locale = "en",
+  piecesLabel = "pieces",
+  pieceLabel = "piece",
+}) {
+  const reduced = useReducedMotion();
   const [active, setActive] = useState(categories[0] ?? "");
 
   useEffect(() => {
-    if (typeof window === "undefined") return undefined;
-    const observers = [];
-    categories.forEach((cat) => {
-      const el = document.getElementById(categoryAnchorId(cat));
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) setActive(cat);
-          });
-        },
-        { rootMargin: "-40% 0px -50% 0px", threshold: 0.01 },
-      );
-      obs.observe(el);
-      observers.push(obs);
+    const frame = requestAnimationFrame(() => {
+      setActive(categoryFromHash(categories));
     });
-    return () => observers.forEach((o) => o.disconnect());
+    return () => cancelAnimationFrame(frame);
   }, [categories]);
 
-  return active;
-}
+  const selectCategory = useCallback(
+    (cat) => {
+      setActive(cat);
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", `#${categoryAnchorId(cat)}`);
+      }
+    },
+    [],
+  );
 
-/**
- * Slim inline anchor list for jumping between categories. Designed to live
- * inside a sticky shell (handled by the parent page so the tabs follow the
- * scroll). Highlights the active category as the user scrolls.
- */
-export function PortfolioCategoryTabs({ categories, jumpToLabel = "jump to" }) {
-  const reduced = useReducedMotion();
-  const active = useActiveCategory(categories);
+  const activeSection = useMemo(
+    () => sections.find((section) => section.category === active) ?? sections[0],
+    [active, sections],
+  );
 
-  if (categories.length === 0) return null;
-
-  const goTo = (cat) => (event) => {
-    event.preventDefault();
-    const el = document.getElementById(categoryAnchorId(cat));
-    if (!el) return;
-    el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
-    if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", `#${categoryAnchorId(cat)}`);
-    }
-  };
+  if (!activeSection) return null;
 
   return (
-    <nav className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.8125rem] text-text-tertiary">
-      <span className="caption">{jumpToLabel}</span>
-      {categories.map((cat, idx) => {
+    <div className="space-y-8">
+      <PortfolioCategoryTabs
+        categories={categories}
+        jumpToLabel={jumpToLabel}
+        active={activeSection.category}
+        onSelect={selectCategory}
+      />
+
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeSection.category}
+          initial={reduced ? { opacity: 1 } : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduced ? { opacity: 1 } : { opacity: 0, y: -8 }}
+          transition={{ duration: reduced ? 0 : 0.22, ease: [0.2, 0, 0, 1] }}
+        >
+          <CategorySection
+            category={activeSection.category}
+            artworks={activeSection.items}
+            locale={locale}
+            piecesLabel={piecesLabel}
+            pieceLabel={pieceLabel}
+            startIndex={0}
+          />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+export function PortfolioCategoryTabs({
+  categories,
+  jumpToLabel = "jump to",
+  active,
+  onSelect,
+}) {
+  if (categories.length === 0) return null;
+
+  return (
+    <nav
+      className="portfolio-tabs text-[0.8125rem] text-text-tertiary"
+      aria-label={jumpToLabel}
+    >
+      <span className="caption mr-2 text-text-tertiary">{jumpToLabel}</span>
+      {categories.map((cat) => {
         const isActive = active === cat;
         return (
-          <span key={cat} className="flex items-center gap-x-4">
-            <a
-              href={`#${categoryAnchorId(cat)}`}
-              onClick={goTo(cat)}
-              aria-current={isActive ? "true" : undefined}
-              className={`relative rounded-md transition-colors focus-visible-ring ${
-                isActive
-                  ? "text-text-primary"
-                  : "text-text-secondary hover:text-text-primary"
-              }`}
-            >
-              {cat}
-              {isActive && (
-                <span
-                  aria-hidden
-                  className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-accent-2"
-                />
-              )}
-            </a>
-            {idx < categories.length - 1 && (
-              <span aria-hidden className="text-text-tertiary">
-                ·
-              </span>
-            )}
-          </span>
+          <a
+            key={cat}
+            href={`#${categoryAnchorId(cat)}`}
+            onClick={(event) => {
+              event.preventDefault();
+              onSelect(cat);
+            }}
+            aria-current={isActive ? "true" : undefined}
+            className={`portfolio-tab focus-visible-ring ${
+              isActive ? "is-active" : ""
+            }`}
+          >
+            {cat}
+          </a>
         );
       })}
     </nav>

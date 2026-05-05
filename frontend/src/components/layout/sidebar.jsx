@@ -83,25 +83,21 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
       </span>
 
       {/* brand row */}
-      <div className="flex h-[var(--topbar-h)] shrink-0 items-center gap-2.5 border-b border-border-subtle px-4">
+      <div className="flex h-[var(--topbar-h)] shrink-0 items-center gap-2.5 border-b border-dashed border-border-subtle px-4">
         <Link
           href={`/${locale}`}
           onClick={handleClick}
-          className="group flex min-w-0 items-center gap-2.5 rounded-md py-1 -mx-1 px-1 transition-colors hover:text-text-primary"
+          className="group -mx-1 flex min-w-0 items-center gap-2.5 rounded-md px-1 py-1 transition-colors hover:text-text-primary"
           aria-label="akira — home"
         >
           <span
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md font-display text-[0.95rem] font-semibold text-text-on-accent"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)",
-            }}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-[0.95rem] font-semibold text-highlight"
             aria-hidden
           >
             a
           </span>
           <Label collapsed={collapsed}>
-            <span className="font-display truncate text-[0.95rem] font-medium tracking-tight text-text-primary">
+            <span className="font-display truncate text-[0.95rem] font-medium text-text-primary">
               akira
             </span>
           </Label>
@@ -134,7 +130,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
           })}
         </NavGroup>
 
-        <div className="my-3 mx-3 h-px bg-border-subtle" aria-hidden />
+        <div className="broken-divider mx-3 my-3" aria-hidden />
 
         <NavGroup label={t("nav.more", "more")} collapsed={collapsed}>
           {pageItems.map((item) => {
@@ -157,7 +153,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
       </nav>
 
       {/* footer: language switcher + socials */}
-      <div className="shrink-0 border-t border-border-subtle px-4 py-3">
+      <div className="shrink-0 border-t border-dashed border-border-subtle px-4 py-3">
         <div
           className="flex items-center justify-between gap-3 transition-opacity duration-[var(--duration-base)]"
           style={{
@@ -174,7 +170,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                 href={s.url}
                 target={s.id === "email" ? undefined : "_blank"}
                 rel={s.id === "email" ? undefined : "noreferrer noopener"}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-bg-surface hover:text-text-primary focus-visible-ring"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-transparent text-text-tertiary transition-colors hover:border-border-default hover:bg-bg-surface hover:text-text-primary focus-visible-ring"
                 aria-label={s.label}
                 title={s.label}
                 tabIndex={collapsed ? -1 : 0}
@@ -213,7 +209,7 @@ function NavGroup({ label, collapsed, children }) {
   return (
     <div>
       <p
-        className="mb-2 px-3 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary transition-opacity duration-[var(--duration-base)]"
+        className="mb-2 px-3 text-[0.7rem] font-semibold text-text-tertiary transition-opacity duration-[var(--duration-base)]"
         style={{
           opacity: collapsed ? 0 : 1,
           visibility: collapsed ? "hidden" : "visible",
@@ -243,17 +239,17 @@ function NavItem({
       <Link
         href={href}
         onClick={onClick}
-        className={`group relative flex items-center gap-3 rounded-md px-3 py-2 text-[0.875rem] transition-colors duration-[var(--duration-fast)] focus-visible-ring ${
+        className={`group relative flex items-center gap-3 rounded-md border border-dashed px-3 py-2 text-[0.875rem] transition-colors duration-[var(--duration-fast)] focus-visible-ring ${
           active
-            ? "bg-accent-soft text-text-primary"
-            : "text-text-secondary hover:bg-bg-surface hover:text-text-primary"
+            ? "border-border-accent bg-highlight-soft text-text-primary"
+            : "border-transparent text-text-secondary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
         }`}
         aria-current={ariaCurrent}
         title={collapsed ? label : undefined}
       >
         {active && (
           <span
-            className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-accent-2"
+            className="absolute bottom-1.5 left-1 top-1.5 w-[3px] rounded-r-full bg-highlight"
             aria-hidden
           />
         )}

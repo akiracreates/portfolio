@@ -51,11 +51,15 @@ export function AppShell({ children }) {
       {/* main column — left padding equal to the COLLAPSED width at md+,
           so the page never reflows when the sidebar expands on hover.
           The expanded sidebar simply overlays whatever sits to its right. */}
-      <div className="flex min-h-screen flex-col md:pl-[var(--sidebar-w-collapsed)]">
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+      <div className="min-h-screen md:pl-[var(--sidebar-w-collapsed)]">
+        <div className="world-frame flex min-h-screen flex-col">
+          <div className="world-inner flex flex-1 flex-col">
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </div>
       </div>
 
       {/* mobile floating action button (opens drawer) */}

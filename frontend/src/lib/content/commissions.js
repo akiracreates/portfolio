@@ -25,7 +25,7 @@ export const commissionTypes = [
       en: ["high-resolution image", "web version", "3 revision rounds"],
       ru: ["изображение в высоком разрешении", "веб-версия", "3 раунда правок"],
     },
-    exampleImage: "https://picsum.photos/id/1027/600/800",
+    exampleImage: getArtworksByCategory("portraits")[1]?.imageSrc ?? "",
   },
   {
     id: "animal",
@@ -42,7 +42,7 @@ export const commissionTypes = [
       en: ["high-resolution image", "web version", "3 revision rounds"],
       ru: ["изображение в высоком разрешении", "веб-версия", "3 раунда правок"],
     },
-    exampleImage: "https://picsum.photos/id/237/600/800",
+    exampleImage: getArtworksByCategory("animals")[0]?.imageSrc ?? "",
   },
 ];
 
