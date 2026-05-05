@@ -31,7 +31,7 @@ export function CategorySection({
             {category}
           </h3>
         </div>
-        <span className="caption shrink-0 pt-2 text-highlight">
+        <span className="tilt-chip caption shrink-0 pt-2 text-highlight">
           {count} {label}
         </span>
       </header>

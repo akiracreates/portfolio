@@ -15,8 +15,8 @@ export function HeroSection({ dict, locale = "en" }) {
     >
       <Container className="relative py-16 md:py-20 lg:py-24">
         <div className="hero-cover overflow-hidden p-2 md:p-3">
-          <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(380px,0.92fr)] lg:gap-10">
-            <div className="hero-copy space-y-7">
+          <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
+            <div className="hero-copy space-y-8 md:space-y-9">
               <Eyebrow>{t.eyebrow}</Eyebrow>
               <h1 id="hero-heading" className="heading-display max-w-3xl">
                 {t.titleLeading}{" "}
@@ -42,7 +42,7 @@ export function HeroSection({ dict, locale = "en" }) {
                   {t.ctaSecondary}
                 </Button>
               </div>
-              <div className="broken-divider max-w-xl" aria-hidden />
+              <div className="broken-divider max-w-lg" aria-hidden />
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
                 <Stat label={t.statCommissions} value={t.statCommissionsValue} />
                 <Sep />

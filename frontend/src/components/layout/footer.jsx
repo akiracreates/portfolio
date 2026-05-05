@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { siteConfig } from "@/lib/content/site-config";
@@ -16,12 +17,37 @@ const FOOTER_SOCIALS = ["telegram", "vk", "cara", "patreon", "email"];
 export function Footer() {
   const dict = useDictionary();
   const locale = useDictLocale() || "en";
+  const pathname = usePathname() || "";
   const year = new Date().getFullYear();
   const t = dict?.footer ?? {};
   const socialsT = dict?.socialsFooter ?? {};
   const bio = dict?.meta?.bio ?? siteConfig.shortBio;
 
   const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
+  const useCompactFooter = pathname.endsWith("/commissions");
+
+  if (useCompactFooter) {
+    return (
+      <footer className="site-ending mt-12">
+        <Container className="py-8 md:py-9">
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="caption">
+              © {year} akira. {t.rights || "all rights reserved."}
+            </p>
+            <div className="flex items-center gap-5">
+              <a
+                href="#hero"
+                className="caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
+              >
+                ↑ {dict?.common?.backToTop || "back to top"}
+              </a>
+              <span className="caption">{t.crafted || "crafted with care."}</span>
+            </div>
+          </div>
+        </Container>
+      </footer>
+    );
+  }
 
   return (
     <footer id="socials" className="site-ending mt-12">
