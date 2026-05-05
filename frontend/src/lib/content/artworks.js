@@ -16,6 +16,13 @@ export const artworkCategories = [
   "still life",
 ];
 
+export const homepageFeaturedArtworkIds = [
+  "portrait-02",
+  "animal-01",
+  "landscape-01",
+  "still-01",
+];
+
 const rawArtworks = [
   // ---------------- portraits (6) ----------------
   {
@@ -301,6 +308,16 @@ export const artworks = rawArtworks.map((a) => {
 
 export function getFeaturedArtworks() {
   return artworks.filter((a) => a.featured);
+}
+
+export function getHomepageFeaturedArtworks() {
+  return homepageFeaturedArtworkIds
+    .map((id) => artworks.find((a) => a.id === id))
+    .filter(Boolean);
+}
+
+export function getArtworkById(id) {
+  return artworks.find((a) => a.id === id);
 }
 
 export function getSecretArtwork() {

@@ -2,8 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function ArtworkCardSkeleton() {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface">
-      <Skeleton rounded="none" className="aspect-[4/5] w-full" />
+    <div className="scrap-card flex h-full flex-col overflow-hidden">
+      <Skeleton rounded="md" className="m-3 mb-0 aspect-[4/5] w-[calc(100%-1.5rem)]" />
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-center justify-between gap-3">
           <Skeleton rounded="sm" className="h-4 w-1/2" />

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { Divider } from "@/components/ui/divider";
 import { siteConfig } from "@/lib/content/site-config";
@@ -16,50 +17,84 @@ const FOOTER_SOCIALS = ["telegram", "vk", "cara", "patreon", "email"];
 export function Footer() {
   const dict = useDictionary();
   const locale = useDictLocale() || "en";
+  const pathname = usePathname() || "";
   const year = new Date().getFullYear();
   const t = dict?.footer ?? {};
   const socialsT = dict?.socialsFooter ?? {};
   const bio = dict?.meta?.bio ?? siteConfig.shortBio;
 
   const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
+  const useCompactFooter = pathname.endsWith("/commissions");
+
+  if (useCompactFooter) {
+    return (
+      <footer className="site-ending mt-12">
+        <Container className="py-8 md:py-9">
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="caption">
+              © {year} akira. {t.rights || "all rights reserved."}
+            </p>
+            <div className="flex items-center gap-5">
+              <a
+                href="#hero"
+                className="caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
+              >
+                ↑ {dict?.common?.backToTop || "back to top"}
+              </a>
+              <span className="caption">{t.crafted || "crafted with care."}</span>
+            </div>
+          </div>
+        </Container>
+      </footer>
+    );
+  }
 
   return (
-    <footer className="mt-16 border-t border-border-subtle bg-bg-app">
-      <Container className="py-14">
-        <div className="grid gap-10 lg:grid-cols-12">
-          {/* brand + bio */}
+    <footer id="socials" className="site-ending mt-12">
+      <Container className="py-12 md:py-14">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
-            <Link
-              href={`/${locale}`}
-              className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
-              aria-label="akira — home"
-            >
-              <span
-                className="flex h-8 w-8 items-center justify-center rounded-md font-display text-base font-semibold text-text-on-accent"
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)",
-                }}
-                aria-hidden
+            <div className="space-y-5">
+              <p className="eyebrow">{socialsT.eyebrow || t.connect || "connect"}</p>
+              <div className="space-y-3">
+                <Link
+                  href={`/${locale}`}
+                  className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
+                  aria-label="akira — home"
+                >
+                  <span
+                    className="flex h-9 w-9 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-base font-semibold text-highlight"
+                    aria-hidden
+                  >
+                    a
+                  </span>
+                  <span className="font-display text-[1.2rem] font-medium text-text-primary">
+                    akira
+                  </span>
+                </Link>
+                <h2 className="heading-h2 max-w-md">
+                  {socialsT.title || "let's stay in touch."}
+                </h2>
+                {socialsT.description && (
+                  <p className="body max-w-md">{socialsT.description}</p>
+                )}
+              </div>
+              <div className="scrap-caption max-w-md px-5 py-4">
+                <p className="body-sm text-text-primary">{socialsT.contactNote}</p>
+                <p className="caption mt-3 max-w-sm">{bio}</p>
+              </div>
+              <a
+                href="#hero"
+                className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
               >
-                a
-              </span>
-              <span className="font-display text-lg font-medium text-text-primary">
-                akira
-              </span>
-            </Link>
-            <p className="body-sm mt-4 max-w-sm">{bio}</p>
-            <p className="body-sm mt-4 max-w-sm text-text-tertiary">
-              {socialsT.contactNote}
-            </p>
+                <span aria-hidden>↑</span>
+                {dict?.common?.backToTop || "back to top"}
+              </a>
+            </div>
           </div>
 
-          {/* socials */}
           <div className="lg:col-span-7">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
-              {t.connect || "connect"}
-            </p>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            <ul className="grid gap-3 sm:grid-cols-2">
               {links.map((s) => (
                 <li key={s.id}>
                   <a
@@ -68,17 +103,17 @@ export function Footer() {
                     rel={
                       s.id === "email" ? undefined : "noreferrer noopener"
                     }
-                    className={`group flex items-center gap-3 rounded-[var(--radius-md)] border p-3 transition-colors focus-visible-ring ${
+                    className={`social-pill group flex items-center gap-3 p-4 transition-colors focus-visible-ring ${
                       s.primary
                         ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
-                        : "border-border-subtle bg-bg-surface hover:border-border-default"
+                        : "hover:border-border-default hover:bg-bg-surface-raised"
                     }`}
                   >
                     <span
                       className={`flex h-8 w-8 items-center justify-center rounded-md ${
                         s.primary
-                          ? "bg-accent text-text-on-accent"
-                          : "bg-bg-inset text-text-secondary"
+                          ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
+                          : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
                       }`}
                       aria-hidden
                     >

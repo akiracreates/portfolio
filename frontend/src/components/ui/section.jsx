@@ -5,9 +5,9 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 
 const sizes = {
-  sm: "py-12 md:py-16",
-  md: "py-16 md:py-20",
-  lg: "py-20 md:py-28",
+  sm: "py-10 md:py-14",
+  md: "py-14 md:py-20",
+  lg: "py-16 md:py-24",
 };
 
 export function Section({
@@ -28,7 +28,7 @@ export function Section({
   return (
     <motion.section
       id={id}
-      className={`scroll-mt-header ${sizes[size] ?? sizes.lg} ${className}`.trim()}
+      className={`section-scrap scroll-mt-header ${sizes[size] ?? sizes.lg} ${className}`.trim()}
       aria-labelledby={headingId}
       initial={reduced ? false : { opacity: 0, y: 16 }}
       animate={reduced ? false : { opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ export function Section({
     >
       {(eyebrow || title || action) && (
         <header
-          className={`mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between ${
+          className={`mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between ${
             align === "center" ? "sm:items-center sm:text-center" : ""
           }`}
         >

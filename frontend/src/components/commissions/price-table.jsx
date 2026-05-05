@@ -9,17 +9,17 @@ export function PriceTable({
   note,
 }) {
   return (
-    <div className="overflow-hidden rounded-[var(--radius-lg)] border border-border-subtle bg-bg-surface">
+    <div className="scrap-card overflow-hidden">
       <table className="w-full text-left text-sm">
-        <thead className="border-b border-border-subtle bg-bg-inset/40">
+        <thead className="border-b border-dashed border-border-subtle bg-bg-inset/55">
           <tr>
-            <th className="px-5 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+            <th className="px-5 py-3 text-[0.7rem] font-semibold text-text-tertiary">
               {typeLabel}
             </th>
-            <th className="px-5 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+            <th className="px-5 py-3 text-[0.7rem] font-semibold text-text-tertiary">
               {startingLabel}
             </th>
-            <th className="hidden px-5 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary sm:table-cell">
+            <th className="hidden px-5 py-3 text-[0.7rem] font-semibold text-text-tertiary sm:table-cell">
               {includedLabel}
             </th>
           </tr>
@@ -28,7 +28,7 @@ export function PriceTable({
           {commissionTypes.map((c, i) => (
             <tr
               key={c.id}
-              className={i > 0 ? "border-t border-border-subtle" : ""}
+              className={i > 0 ? "border-t border-dashed border-border-subtle" : ""}
             >
               <td className="px-5 py-4 align-top">
                 <p className="body-sm font-medium text-text-primary">
@@ -62,7 +62,7 @@ export function PriceTable({
         </tbody>
       </table>
       {note && (
-        <div className="border-t border-border-subtle bg-bg-inset/30 px-5 py-3">
+        <div className="border-t border-dashed border-border-subtle bg-bg-inset/40 px-5 py-3">
           <p className="caption">{note}</p>
         </div>
       )}

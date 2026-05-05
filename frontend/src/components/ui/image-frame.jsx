@@ -1,5 +1,5 @@
 /**
- * Clean image container — subtle border, rounded, overflow-hidden.
+ * Artwork container with a controlled handmade frame treatment.
  * Use with next/image fill — pass aspect/sizing via className or style.
  */
 export function ImageFrame({
@@ -7,6 +7,7 @@ export function ImageFrame({
   children,
   rounded = "lg",
   style,
+  variant = "art",
 }) {
   const radiusClass =
     rounded === "md"
@@ -17,9 +18,18 @@ export function ImageFrame({
           ? ""
           : "rounded-[var(--radius-lg)]";
 
+  const variantClass =
+    variant === "plain"
+      ? "border border-border-subtle bg-bg-inset"
+      : variant === "featured"
+        ? "art-object-frame art-object-featured border"
+        : variant === "hero"
+          ? "art-object-frame art-object-hero border"
+      : "art-object-frame border";
+
   return (
     <div
-      className={`relative overflow-hidden border border-border-subtle bg-bg-inset ${radiusClass} ${className}`.trim()}
+      className={`relative overflow-hidden ${variantClass} ${radiusClass} ${className}`.trim()}
       style={style}
     >
       {children}
