@@ -327,7 +327,7 @@ function StoryArtwork({
   alt,
   sizes,
   className = "",
-  variant = "art",
+  variant = "plain",
   imgClassName = "object-contain p-3 md:p-4",
 }) {
   const art = artworkImage(imageId);
@@ -396,7 +396,7 @@ function OriginChapter({ chapter, locale }) {
   return (
     <article className="about-spread about-spread--origin">
       <div className="about-origin-layout">
-        <div className="about-copy-block">
+        <div className="about-copy-block about-origin-copy">
           <ChapterLabel>{chapter.eyebrow}</ChapterLabel>
           <Heading level="h2" className="max-w-xl">
             {chapter.title}
@@ -413,8 +413,9 @@ function OriginChapter({ chapter, locale }) {
             imageId={chapter.image.id}
             locale={locale}
             alt={chapter.image.caption}
-            sizes="(max-width: 768px) 74vw, 220px"
+            sizes="(max-width: 768px) 68vw, 220px"
             className="md:rotate-[-0.22deg]"
+            imgClassName="object-contain p-2 md:p-2.5"
           />
           <figcaption className="about-caption about-caption--attached">
             <p className="caption text-highlight">{chapter.image.label}</p>
@@ -495,47 +496,58 @@ function PortraitTimelineChapter({ chapter, locale }) {
       </div>
 
       <div className="about-portrait-artifact about-timeline-artifact">
-        <div className="about-timeline-track" aria-hidden>
-          {chapter.portraits.map((portrait) => (
-            <span key={portrait.year} className="about-timeline-node" />
-          ))}
-        </div>
-
-        <div className="about-timeline-grid">
-          {chapter.portraits.map((portrait, index) => (
-            <figure
-              key={portrait.year}
-              className={`about-timeline-item ${
-                index % 2 === 0
-                  ? "about-timeline-item--bottom"
-                  : "about-timeline-item--top"
-              }`}
-              style={{ gridColumn: index + 1 }}
-            >
-              <div className="about-portrait-year">
-                <StoryChip>{portrait.year}</StoryChip>
-                <span className="caption">{portrait.era}</span>
-              </div>
-              <StoryArtwork
-                imageId={portrait.id}
-                locale={locale}
-                alt={portrait.note}
-                sizes="(max-width: 768px) 100vw, 18vw"
-                className={
-                  index === 1
-                    ? "md:rotate-[0.15deg]"
-                    : index === 2
-                      ? "md:rotate-[-0.18deg]"
-                      : index === 3
-                        ? "md:rotate-[0.12deg]"
-                        : "md:rotate-[0.08deg]"
-                }
+        <div className="about-timeline-stage">
+          <div className="about-timeline-rail" aria-hidden>
+            {chapter.portraits.map((portrait, index) => (
+              <span
+                key={portrait.year}
+                className="about-timeline-node"
+                style={{ gridColumn: index + 1 }}
               />
-              <figcaption className="about-caption about-caption--timeline">
-                <p className="body-sm text-text-primary">{portrait.note}</p>
-              </figcaption>
-            </figure>
-          ))}
+            ))}
+          </div>
+
+          <div className="about-timeline-grid">
+            {chapter.portraits.map((portrait, index) => (
+              <figure
+                key={portrait.year}
+                className={`about-timeline-item ${
+                  index % 2 === 0
+                    ? "about-timeline-item--bottom"
+                    : "about-timeline-item--top"
+                }`}
+                style={{ gridColumn: index + 1 }}
+              >
+                <div className="about-timeline-media">
+                  <StoryArtwork
+                    imageId={portrait.id}
+                    locale={locale}
+                    alt={portrait.note}
+                    sizes="(max-width: 768px) 100vw, 18vw"
+                    className={
+                      index === 1
+                        ? "md:rotate-[0.15deg]"
+                        : index === 2
+                          ? "md:rotate-[-0.18deg]"
+                          : index === 3
+                            ? "md:rotate-[0.12deg]"
+                            : "md:rotate-[0.08deg]"
+                    }
+                  />
+                  <figcaption className="about-caption about-caption--timeline">
+                    <p className="body-sm text-text-primary">
+                      {portrait.note}
+                    </p>
+                  </figcaption>
+                </div>
+                <div className="about-timeline-connector" aria-hidden />
+                <div className="about-timeline-meta">
+                  <StoryChip>{portrait.year}</StoryChip>
+                  <span className="caption">{portrait.era}</span>
+                </div>
+              </figure>
+            ))}
+          </div>
         </div>
 
         <div className="about-compare-note">
@@ -618,7 +630,6 @@ function ArrivalChapter({ chapter, locale }) {
             locale={locale}
             alt={chapter.image.caption}
             sizes="(max-width: 1280px) 85vw, 320px"
-            variant="featured"
             className="md:rotate-[-0.2deg]"
             imgClassName="object-contain p-3 md:p-5"
           />
@@ -677,7 +688,7 @@ export function AboutPage({ dict, locale = "en" }) {
 
   return (
     <section id="about" className="section-scrap">
-      <Container className="py-12 md:py-14" style={{ maxWidth: "1240px" }}>
+      <Container className="py-12 md:py-14" style={{ maxWidth: "1280px" }}>
         <div className="about-story-spreads">
           <IntroLead t={t} intro={story.intro} />
 
