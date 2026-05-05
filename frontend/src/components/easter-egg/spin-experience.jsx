@@ -89,10 +89,10 @@ export function SpinExperience({ dict, locale }) {
       {/* desktop experience */}
       <div className="desktop-only">
         <Container className="py-20 md:py-28">
-          <div className="spin-celebration mx-auto max-w-3xl space-y-8 px-5 py-6 text-center md:px-8 md:py-9">
-            <header className="space-y-3 px-2 pt-1">
+          <div className="mx-auto max-w-xl space-y-8 text-center">
+            <header className="space-y-3">
               <Heading level="display">{t.pageTitle}</Heading>
-              <p className="body-lg mx-auto max-w-2xl">{t.pageDescription}</p>
+              <p className="body-lg">{t.pageDescription}</p>
             </header>
 
             {step === "email" && (
@@ -117,7 +117,7 @@ export function SpinExperience({ dict, locale }) {
             )}
 
             {step === "result" && reward && (
-              <div className="scrap-caption mx-auto max-w-xl space-y-4 px-6 py-6">
+              <div className="space-y-4">
                 <p className="caption">{t.youWon}</p>
                 <p className="heading-display text-highlight">
                   {pickLocale(reward.label, locale)}
@@ -126,7 +126,7 @@ export function SpinExperience({ dict, locale }) {
                 {submitError && (
                   <p
                     role="alert"
-                    className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
+                    className="rounded-[var(--radius-md)] border border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
                   >
                     {submitError}
                   </p>
@@ -158,7 +158,7 @@ export function SpinExperience({ dict, locale }) {
       {/* mobile fallback */}
       <div className="mobile-only">
         <Container className="py-20">
-          <div className="spin-celebration mx-auto max-w-md space-y-6 px-6 py-7 text-center">
+          <div className="mx-auto max-w-md space-y-6 text-center">
             <Heading level="h1">{t.desktopOnlyTitle}</Heading>
             <p className="body">{t.desktopOnlyBody}</p>
             <Button

@@ -10,70 +10,72 @@ export function HeroSection({ dict, locale = "en" }) {
   return (
     <section
       id="hero"
-      className="scroll-mt-header relative overflow-hidden border-b border-dashed border-border-subtle"
+      className="scroll-mt-header relative overflow-hidden border-b border-border-subtle"
       aria-labelledby="hero-heading"
     >
-      <Container className="relative py-16 md:py-20 lg:py-24">
-        <div className="hero-cover overflow-hidden p-2 md:p-3">
-          <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
-            <div className="hero-copy space-y-8 md:space-y-9">
-              <Eyebrow>{t.eyebrow}</Eyebrow>
-              <h1 id="hero-heading" className="heading-display max-w-3xl">
-                {t.titleLeading}{" "}
-                <span className="text-highlight">{t.titleHighlight}</span>
-                {t.titleTrailing}
-              </h1>
-              <p className="body-lg max-w-2xl">{t.lead}</p>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Button
-                  as="link"
-                  href={`/${locale}/portfolio`}
-                  variant="primary"
-                  size="lg"
-                >
-                  {t.ctaPrimary}
-                </Button>
-                <Button
-                  as="link"
-                  href={`/${locale}/commissions`}
-                  variant="outline"
-                  size="lg"
-                >
-                  {t.ctaSecondary}
-                </Button>
-              </div>
-              <div className="broken-divider max-w-lg" aria-hidden />
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
-                <Stat label={t.statCommissions} value={t.statCommissionsValue} />
-                <Sep />
-                <Stat label={t.statResponse} value={t.statResponseValue} />
-                <Sep />
-                <Stat label={t.statBased} value={t.statBasedValue} />
-              </div>
+      {/* subtle ambient glow — secondary accent, low intensity */}
+      <div
+        className="pointer-events-none absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full opacity-[0.18] blur-[140px]"
+        style={{
+          background:
+            "radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%)",
+        }}
+        aria-hidden
+      />
+      <Container className="relative py-20 md:py-28 lg:py-32">
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="space-y-7 lg:col-span-7">
+            <Eyebrow>{t.eyebrow}</Eyebrow>
+            <h1 id="hero-heading" className="heading-display max-w-2xl">
+              {t.titleLeading}{" "}
+              <span className="text-highlight">{t.titleHighlight}</span>
+              {t.titleTrailing}
+            </h1>
+            <p className="body-lg max-w-xl">{t.lead}</p>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Button
+                as="link"
+                href={`/${locale}/portfolio`}
+                variant="primary"
+                size="lg"
+              >
+                {t.ctaPrimary}
+              </Button>
+              <Button
+                as="link"
+                href={`/${locale}/commissions`}
+                variant="outline"
+                size="lg"
+              >
+                {t.ctaSecondary}
+              </Button>
             </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4">
+              <Stat label={t.statCommissions} value={t.statCommissionsValue} />
+              <Sep />
+              <Stat label={t.statResponse} value={t.statResponseValue} />
+              <Sep />
+              <Stat label={t.statBased} value={t.statBasedValue} />
+            </div>
+          </div>
 
-            <div className="hero-portrait-wrap">
-              <div className="relative mx-auto max-w-[620px] lg:ml-auto">
-                <ImageFrame
-                  variant="hero"
-                  className="relative w-full shadow-lg md:rotate-[0.4deg]"
-                  style={{ aspectRatio: "2500 / 3000" }}
-                >
-                  <SmartImage
-                    src={imagekitUrl("images/portraits/self")}
-                    alt={t.imageAlt}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 560px"
-                    imgClassName="object-contain p-4 md:p-6"
-                  />
-                </ImageFrame>
-                <div className="hero-badge scrap-caption absolute -bottom-4 left-2 hidden max-w-[240px] px-4 py-3 shadow-md sm:block">
-                  <p className="caption">{t.badgeLabel}</p>
-                  <p className="body-sm font-medium text-text-primary">
-                    {t.badgeTitle}
-                  </p>
-                </div>
+          <div className="lg:col-span-5">
+            <div className="relative">
+              <ImageFrame className="relative aspect-[4/5] w-full shadow-lg">
+                <SmartImage
+                  src={imagekitUrl("images/portraits/self")}
+                  alt={t.imageAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 480px"
+                  imgClassName="object-cover"
+                />
+              </ImageFrame>
+              <div className="absolute -bottom-4 -left-4 hidden rounded-[var(--radius-md)] border border-border-subtle bg-bg-surface px-4 py-3 shadow-md sm:block">
+                <p className="caption">{t.badgeLabel}</p>
+                <p className="body-sm font-medium text-text-primary">
+                  {t.badgeTitle}
+                </p>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ export function SocialsFooterSection({ dict }) {
   return (
     <section
       id="socials"
-      className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle bg-bg-base"
+      className="scroll-mt-header border-t border-border-subtle bg-bg-base"
       aria-labelledby="socials-heading"
     >
       <Container>
@@ -30,7 +30,7 @@ export function SocialsFooterSection({ dict }) {
                 href={s.url}
                 target={s.id === "email" ? undefined : "_blank"}
                 rel={s.id === "email" ? undefined : "noreferrer noopener"}
-                className={`group flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors duration-[var(--duration-base)] focus-visible-ring ${
+                className={`group flex items-center gap-3 rounded-[var(--radius-lg)] border p-4 transition-colors duration-[var(--duration-base)] focus-visible-ring ${
                   s.primary
                     ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
                     : "border-border-subtle bg-bg-surface hover:border-border-default hover:bg-bg-surface-raised"
@@ -40,8 +40,8 @@ export function SocialsFooterSection({ dict }) {
                 <span
                   className={`flex h-10 w-10 items-center justify-center rounded-md ${
                     s.primary
-                      ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
-                      : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
+                      ? "bg-accent text-text-on-accent"
+                      : "bg-bg-inset text-text-secondary"
                   }`}
                   aria-hidden
                 >
@@ -69,7 +69,7 @@ export function SocialsFooterSection({ dict }) {
           <div className="mt-6">
             <a
               href="#hero"
-              className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
+              className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring rounded-md"
             >
               <span aria-hidden>↑</span>
               {dict.common.backToTop}

@@ -1,10 +1,10 @@
 const variants = {
   neutral:
-    "border border-dashed border-border-default bg-bg-surface text-text-secondary",
+    "border border-border-default bg-bg-surface text-text-secondary",
   accent:
-    "border border-dashed border-border-purple bg-accent-soft text-accent-2",
+    "border border-transparent bg-accent-soft text-accent",
   highlight:
-    "border border-dashed border-border-accent bg-highlight-soft text-highlight",
+    "border border-transparent bg-highlight-soft text-highlight",
 };
 
 const sizes = {
@@ -21,7 +21,7 @@ export function Badge({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full font-medium ${
+      className={`inline-flex items-center gap-1.5 rounded-full font-medium tracking-wide ${
         variants[variant] ?? variants.neutral
       } ${sizes[size] ?? sizes.sm} ${className}`.trim()}
       {...props}

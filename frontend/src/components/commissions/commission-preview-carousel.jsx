@@ -108,7 +108,7 @@ export function CommissionPreviewCarousel({ images = [], locale = "en" }) {
               alt={pickLocale(current.alt, locale) || pickLocale(current.title, locale)}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              imgClassName="object-contain p-3"
+              imgClassName="object-cover"
             />
           </motion.div>
         </AnimatePresence>
@@ -159,7 +159,7 @@ function CarouselArrow({ side, active, prominent, onClick, ariaLabel }) {
       type="button"
       onClick={onClick}
       aria-label={ariaLabel}
-      className={`absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-dashed border-border-strong bg-bg-app/75 text-text-primary backdrop-blur transition-all duration-[var(--duration-base)] focus-visible-ring ${
+      className={`absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border-strong bg-bg-app/70 text-text-primary backdrop-blur transition-all duration-[var(--duration-base)] focus-visible-ring ${
         isLeft ? "left-3" : "right-3"
       }`}
       style={{

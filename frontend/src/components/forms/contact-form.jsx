@@ -23,7 +23,7 @@ const initialForm = {
 };
 
 const inputClass =
-  "w-full rounded-[var(--radius-md)] border border-dashed border-border-default bg-bg-inset px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary transition-[border-color,box-shadow,background-color] duration-[var(--duration-fast)] focus:border-highlight focus:bg-bg-surface focus:outline-none focus:ring-2 focus:ring-[color:var(--highlight-soft)]";
+  "w-full rounded-[var(--radius-md)] border border-border-default bg-bg-inset px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-[var(--duration-fast)] focus:border-accent focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-secondary-soft)]";
 
 export function ContactForm() {
   const dict = useDictionary();
@@ -224,7 +224,7 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
-            className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
+            className="rounded-[var(--radius-md)] border border-[color:var(--error)]/40 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error"
           >
             {error}
           </motion.p>
@@ -237,7 +237,7 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
-            className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--success)]/40 bg-[color:var(--success)]/10 px-3 py-2 text-sm text-success"
+            className="rounded-[var(--radius-md)] border border-[color:var(--success)]/40 bg-[color:var(--success)]/10 px-3 py-2 text-sm text-success"
           >
             {t.formSuccess || "request sent. thanks for reaching out."}
           </motion.p>
@@ -260,8 +260,8 @@ export function ContactForm() {
 
 function Fieldset({ legend, children }) {
   return (
-    <fieldset className="scrap-note space-y-4 p-4 md:p-5">
-      <legend className="px-1 text-[0.7rem] font-semibold text-accent-2">
+    <fieldset className="space-y-4">
+      <legend className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
         {legend}
       </legend>
       {children}
@@ -349,9 +349,9 @@ function RadioGroup({ legend, name, value, onChange, options }) {
           return (
             <label
               key={opt.value}
-              className={`flex cursor-pointer items-center gap-2 rounded-md border border-dashed px-3 py-1.5 text-[0.8125rem] transition-colors ${
+              className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-[0.8125rem] transition-colors ${
                 active
-                  ? "border-border-accent bg-highlight-soft text-text-primary"
+                  ? "border-border-accent bg-accent-soft text-text-primary"
                   : "border-border-default bg-bg-inset text-text-secondary hover:border-border-strong"
               }`}
             >
@@ -386,7 +386,7 @@ function Checkbox({ label, name, checked, onChange, required = false }) {
         checked={checked}
         onChange={onChange}
         required={required}
-        className="mt-0.5 h-4 w-4 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
+        className="mt-0.5 h-4 w-4 shrink-0 rounded-[4px] border border-border-default bg-bg-inset accent-[color:var(--accent-primary)]"
       />
       <span className="transition-colors group-hover:text-text-primary">
         {label}
