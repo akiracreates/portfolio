@@ -643,6 +643,10 @@ a {
     0 0 28px rgba(149, 117, 222, 0.14);
 }
 
+.commission-flat-card {
+  background: rgba(58, 44, 64, 0.94);
+}
+
 .hero-cover {
   position: relative;
   border: 1px dashed rgba(244, 241, 248, 0.14);

@@ -1,292 +1,210 @@
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { PageHeader } from "@/components/layout/page-header";
-import { ContactForm } from "@/components/forms/contact-form";
-import { CommissionProcess } from "@/components/commissions/commission-process";
-import { CommissionPreviewCarousel } from "@/components/commissions/commission-preview-carousel";
-import { PriceTable } from "@/components/commissions/price-table";
-import { TermsSection } from "@/components/commissions/terms-section";
+import { FaqAccordion } from "@/components/commissions/faq-accordion";
+import { CommissionOfferCards } from "@/components/commissions/commission-offer-cards";
+import { CommissionPricingTable } from "@/components/commissions/commission-pricing-table";
+import { ExpectationsSection } from "@/components/commissions/expectations-section";
+import { OrderCta } from "@/components/commissions/order-cta";
+import { ProcessTimeline } from "@/components/commissions/process-timeline";
+import { TermsPanels } from "@/components/commissions/terms-panels";
 import { NavIcon } from "@/components/layout/nav-icons";
 import {
+  commissionExpectations,
+  commissionFaq,
+  commissionIntro,
+  commissionPricingRows,
+  commissionProcess,
+  commissionTerms,
   commissionStatus,
   commissionTypes,
-  getCommissionPreviews,
-  whatToExpect,
 } from "@/lib/content/commissions";
 import { socialLinks } from "@/lib/content/socials";
-import { formatPrice, pickLocale } from "@/lib/i18n/config";
+import { pickLocale } from "@/lib/i18n/config";
 
-const CONTACT_SOCIALS = ["telegram", "vk", "email"];
+const CONTACT_SOCIALS = ["telegram-personal", "vk", "email"];
 
-export function CommissionsPage({ dict, locale = "en" }) {
-  const t = dict.commissions;
-  const we = dict.whatToExpect;
+export function CommissionsPage({ locale = "en" }) {
+  const requestPath = `/${locale}/commissions/request`;
 
   return (
     <>
-      {/* 1. intro / status */}
-      <PageHeader
-        id="commissions"
-        eyebrow={t.pageEyebrow}
-        title={t.pageTitle}
-        description={t.pageDescription}
-        action={
-          <Button as="link" href="#order" variant="primary" size="md">
-            {t.jumpToOrder}
-          </Button>
-        }
-      />
-
       <Container>
-        <div className="-mt-4 mb-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">
-            <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden />
-            {pickLocale(commissionStatus.label, locale)}
-          </span>
-        </div>
-
-        {/* 2. commission types */}
-        <Section
-          id="types"
-          eyebrow={t.typesEyebrow}
-          title={t.typesTitle}
-          description={t.typesDescription}
-          size="md"
-        >
-          <div className="grid gap-5 md:grid-cols-2">
-            {commissionTypes.map((c) => (
-              <article
-                key={c.id}
-                className="scrap-card soft-glow-hover flex flex-col overflow-hidden transition-colors hover:border-border-accent"
-              >
-                <CommissionPreviewCarousel
-                  images={getCommissionPreviews(c.id)}
-                  locale={locale}
-                />
-                <div className="flex flex-1 flex-col gap-4 p-6">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <h3 className="heading-h3 text-text-primary">
-                      {pickLocale(c.title, locale)}
-                    </h3>
-                    <span className="body-sm font-semibold text-highlight">
-                      {formatPrice(c.price, locale)}
-                    </span>
-                  </div>
-                  <p className="body-sm">{pickLocale(c.description, locale)}</p>
-                  <div className="space-y-3 border-t border-dashed border-border-subtle pt-4">
-                    <p className="caption">{t.includedLabel}</p>
-                    <ul className="space-y-1.5">
-                      {pickLocale(c.included, locale).map((d) => (
-                        <li
-                          key={d}
-                          className="flex items-center gap-2 text-[0.8125rem] text-text-secondary"
-                        >
-                          <span
-                            className="h-1 w-1 rounded-full bg-accent-2"
-                            aria-hidden
-                          />
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mt-auto flex items-center justify-between gap-3 border-t border-dashed border-border-subtle pt-4 text-[0.75rem] text-text-tertiary">
-                    <span>
-                      {t.revisionsLabel}: {c.revisions}
-                    </span>
-                    <span>
-                      {t.deliveryLabel}: {c.deliveryFormats.join(" / ")}
-                    </span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+        <Section id="commissions" size="md" className="pt-14 md:pt-16">
+          <article className="commission-flat-card scrap-card border-[color:var(--border-accent)]/40 p-6 md:p-8">
+            <span className="caption inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-success">
+              <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden />
+              {pickLocale(commissionStatus.label, locale)}
+            </span>
+            <h1 className="heading-h1 mt-4 text-text-primary">
+              {pickLocale(commissionIntro.title, locale)}
+            </h1>
+            <p className="body mt-3 max-w-3xl">
+              {pickLocale(commissionIntro.body, locale)}
+            </p>
+            <p className="body-sm mt-2">
+              {pickLocale(commissionIntro.bodyNote, locale)}
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Button as="link" href={requestPath} variant="primary" size="lg">
+                {pickLocale(commissionIntro.button, locale)}
+              </Button>
+              <p className="caption">{pickLocale(commissionIntro.smallNote, locale)}</p>
+            </div>
+          </article>
         </Section>
 
-        {/* 3. prices */}
+        <Section
+          id="offers"
+          eyebrow={pickLocale({ en: "commission offers", ru: "предложения по заказам" }, locale)}
+          title={pickLocale({ en: "choose your commission type", ru: "выберите тип заказа" }, locale)}
+          size="md"
+        >
+          <CommissionOfferCards locale={locale} cards={commissionTypes} />
+        </Section>
+
         <Section
           id="prices"
-          eyebrow={t.pricesEyebrow}
-          title={t.pricesTitle}
-          description={t.pricesDescription}
+          title={pickLocale({ en: "detailed pricing breakdown", ru: "детальная разбивка цен" }, locale)}
           size="md"
         >
-          <PriceTable
-            locale={locale}
-            typeLabel={t.priceTableType}
-            startingLabel={t.priceTableStarting}
-            includedLabel={t.priceTableIncluded}
-            note={t.priceNote}
-          />
+          <CommissionPricingTable locale={locale} rows={commissionPricingRows} />
         </Section>
 
-        {/* 4. what to expect */}
         <Section
           id="expect"
-          eyebrow={t.expectEyebrow}
-          title={t.expectTitle}
+          title={pickLocale({ en: "clear expectations from day one", ru: "четкие ожидания с первого дня" }, locale)}
           size="md"
         >
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {whatToExpect.map((item) => {
-              const fromDict = we?.items?.[item.id];
-              const short =
-                fromDict?.short ?? pickLocale(item.short, locale);
-              const long =
-                fromDict?.long ?? pickLocale(item.long, locale);
-              return (
-                <li
-                  key={item.id}
-                  className="scrap-note flex flex-col gap-2 p-5"
-                >
-                  <p className="heading-h3 text-[0.95rem] text-text-primary">
-                    {short}
-                  </p>
-                  <p className="body-sm">{long}</p>
-                </li>
-              );
-            })}
-          </ul>
+          <ExpectationsSection locale={locale} items={commissionExpectations} />
         </Section>
 
-        {/* 5. process */}
         <Section
           id="process"
-          eyebrow={t.processEyebrow}
-          title={t.processTitle}
-          description={t.processDescription}
+          title={pickLocale({ en: "how a commission flows", ru: "как проходит заказ" }, locale)}
           size="md"
         >
-          <CommissionProcess locale={locale} />
+          <ProcessTimeline locale={locale} steps={commissionProcess} />
         </Section>
 
-        {/* 6. revisions / turnaround / delivery callouts */}
         <Section
           id="delivery"
-          eyebrow={t.deliveryEyebrow}
-          title={t.deliveryTitle}
+          eyebrow={pickLocale({ en: "delivery", ru: "доставка" }, locale)}
+          title={pickLocale({ en: "delivery details", ru: "детали доставки" }, locale)}
           size="md"
         >
           <div className="grid gap-4 sm:grid-cols-3">
             <Callout
-              label={t.revisionsLabel}
-              value="3"
-              detail={pickLocale(whatToExpect.find((w) => w.id === "revisions")?.long, locale)}
+              label={pickLocale({ en: "revisions", ru: "правки" }, locale)}
+              value={pickLocale({ en: "3-4 rounds", ru: "3-4 раунда" }, locale)}
+              detail={pickLocale(
+                {
+                  en: "minor adjustments are included before final approval.",
+                  ru: "небольшие корректировки включены до финального утверждения.",
+                },
+                locale,
+              )}
             />
             <Callout
               label={pickLocale({ en: "turnaround", ru: "срок" }, locale)}
-              value={pickLocale({ en: "~2 weeks", ru: "~2 недели" }, locale)}
-              detail={pickLocale(whatToExpect.find((w) => w.id === "turnaround")?.long, locale)}
+              value={pickLocale({ en: "1-3 weeks", ru: "1-3 недели" }, locale)}
+              detail={pickLocale(
+                {
+                  en: "timing depends on complexity, queue, and revision rounds.",
+                  ru: "срок зависит от сложности, очереди и количества правок.",
+                },
+                locale,
+              )}
             />
             <Callout
-              label={t.deliveryLabel}
-              value="png · jpeg"
-              detail={pickLocale(whatToExpect.find((w) => w.id === "delivery")?.long, locale)}
+              label={pickLocale({ en: "delivery format", ru: "формат передачи" }, locale)}
+              value="png / jpeg"
+              detail={pickLocale(
+                {
+                  en: "other non-layered formats are available by request.",
+                  ru: "другие неслоистые форматы доступны по запросу.",
+                },
+                locale,
+              )}
             />
           </div>
         </Section>
 
-        {/* 7. terms */}
+        <Section id="terms" title={pickLocale(commissionTerms.title, locale)} size="md">
+          <TermsPanels locale={locale} data={commissionTerms} />
+        </Section>
+
+        <Section id="order" size="md">
+          <OrderCta
+            locale={locale}
+            route={requestPath}
+            text={{
+              kicker: { en: "ready to start?", ru: "готовы начать?" },
+              button: { en: "order now", ru: "заказать" },
+            }}
+          />
+        </Section>
+
+        <Section id="faq" title="faq" size="md">
+          <FaqAccordion locale={locale} items={commissionFaq} />
+        </Section>
+
         <Section
-          id="terms"
-          eyebrow={t.termsEyebrow}
-          title={t.termsTitle}
-          description={t.termsDescription}
+          id="contact-alt"
+          eyebrow={pickLocale({ en: "or just say hi", ru: "или просто напишите" }, locale)}
+          title={pickLocale({ en: "alternative contact", ru: "альтернативная связь" }, locale)}
+          description={pickLocale(
+            {
+              en: "telegram, email, and vk are always open.",
+              ru: "telegram, email и vk всегда открыты для связи.",
+            },
+            locale,
+          )}
           size="md"
+          className="pb-16 md:pb-20"
         >
-          <TermsSection locale={locale} calloutText={t.termsCallout} />
+          <ul className="grid gap-3 sm:grid-cols-3">
+            {socialLinks
+              .filter((s) => CONTACT_SOCIALS.includes(s.id))
+              .map((s) => (
+                <li key={s.id}>
+                  <a
+                    href={s.url}
+                    target={s.id === "email" ? undefined : "_blank"}
+                    rel={s.id === "email" ? undefined : "noreferrer noopener"}
+                    className={`group social-pill focus-visible-ring flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors ${
+                      s.primary
+                        ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
+                        : "border-border-subtle bg-bg-surface hover:border-border-default"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-md ${
+                        s.primary
+                          ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
+                          : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
+                      }`}
+                      aria-hidden
+                    >
+                      <NavIcon id={s.id} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="body-sm font-medium text-text-primary">{s.label}</p>
+                      {s.handle ? <p className="caption truncate">{s.handle}</p> : null}
+                    </div>
+                  </a>
+                </li>
+              ))}
+          </ul>
         </Section>
       </Container>
-
-      {/* 8. contact form (#order) */}
-      <section
-        id="order"
-        className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle bg-bg-base"
-      >
-        <Container>
-          <Section
-            eyebrow={t.formEyebrow}
-            title={t.formTitle}
-            description={t.formIntro}
-            size="md"
-          >
-            <div className="rounded-[var(--radius-lg)]">
-              <ContactForm />
-            </div>
-          </Section>
-        </Container>
-      </section>
-
-      {/* 9. contact + socials */}
-      <section
-        id="contact-alt"
-        className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle"
-      >
-        <Container>
-          <Section
-            eyebrow={t.contactEyebrow}
-            title={t.contactTitle}
-            description={t.contactNote}
-            size="md"
-          >
-            <ul className="grid gap-3 sm:grid-cols-3">
-              {socialLinks
-                .filter((s) => CONTACT_SOCIALS.includes(s.id))
-                .map((s) => (
-                  <li key={s.id}>
-                    <a
-                      href={s.url}
-                      target={s.id === "email" ? undefined : "_blank"}
-                      rel={
-                        s.id === "email" ? undefined : "noreferrer noopener"
-                      }
-                      className={`group flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors focus-visible-ring ${
-                        s.primary
-                          ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
-                          : "border-border-subtle bg-bg-surface hover:border-border-default"
-                      }`}
-                    >
-                      <span
-                        className={`flex h-10 w-10 items-center justify-center rounded-md ${
-                          s.primary
-                            ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
-                            : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
-                        }`}
-                        aria-hidden
-                      >
-                        <NavIcon id={s.id} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline gap-2">
-                          <p className="body-sm font-medium text-text-primary">
-                            {s.label}
-                          </p>
-                          {s.primary && (
-                            <span className="caption text-highlight">
-                              {dict.common.preferred}
-                            </span>
-                          )}
-                        </div>
-                        {s.handle && (
-                          <p className="caption truncate">{s.handle}</p>
-                        )}
-                      </div>
-                    </a>
-                  </li>
-                ))}
-            </ul>
-          </Section>
-        </Container>
-      </section>
     </>
   );
 }
 
 function Callout({ label, value, detail }) {
   return (
-    <div className="scrap-note p-5">
+    <div className="scrap-note border-[color:var(--border-accent)]/25 bg-[color:var(--bg-note)] p-5">
       <p className="caption">{label}</p>
       <p className="heading-h3 mt-1 text-text-primary">{value}</p>
       {detail && <p className="body-sm mt-2">{detail}</p>}
