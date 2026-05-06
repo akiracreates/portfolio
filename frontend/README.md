@@ -19,6 +19,36 @@ npm run dev
 
 open `http://localhost:3000`.
 
+## recommended startup workflow (repo root)
+
+from the repository root, use the startup script to sync branch state, verify merge status, clear stale next cache, and start a clean dev server:
+
+```bash
+./startup.sh
+```
+
+useful options:
+
+```bash
+./startup.sh --verify-only
+./startup.sh --no-pull
+./startup.sh --branch dev --expect "Fix/aboutme (#6)"
+```
+
+## post-merge troubleshooting (stale ui after pull)
+
+if merged code appears missing locally, run:
+
+```bash
+git checkout dev
+git pull origin dev
+./scripts/verify-merge-state.sh --branch dev
+rm -rf .next
+npm run dev
+```
+
+always open the exact local url/port printed by next (3000/3001/etc).
+
 ## routes
 
 - `/` long-scroll homepage (hero, featured, about, portfolio, commissions, terms, contact)
