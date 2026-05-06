@@ -701,18 +701,17 @@ a {
   gap: 1.25rem;
 }
 
-.featured-piece {
-  position: relative;
+.featured-image-frame {
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
 }
 
-.featured-piece::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 16px;
-  width: 30px;
-  height: 1px;
-  background: rgba(149, 117, 222, 0.3);
+.group:hover .featured-image-frame {
+  border-color: var(--border-accent);
+  box-shadow:
+    0 10px 24px rgba(10, 8, 14, 0.28),
+    0 0 18px rgba(233, 102, 160, 0.16);
 }
 
 .art-tag {

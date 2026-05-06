@@ -26,10 +26,10 @@ export function ArtworkCard({
 
   return (
     <motion.article
-      className={`soft-glow-hover group flex h-full flex-col overflow-hidden transition-colors duration-[var(--duration-base)] ${
+      className={`group flex h-full flex-col overflow-hidden transition-colors duration-[var(--duration-base)] ${
         featured
-          ? "featured-piece rounded-[18px]"
-          : "scrap-card rounded-[var(--radius-lg)] hover:border-border-accent"
+          ? "rounded-[18px]"
+          : "soft-glow-hover scrap-card rounded-[var(--radius-lg)] hover:border-border-accent"
       } ${className}`.trim()}
       whileHover={reduced ? undefined : { y: -3 }}
       transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
@@ -40,7 +40,7 @@ export function ArtworkCard({
         singleFrame
         className={`relative ${
           featured
-            ? "w-full rounded-[14px]"
+            ? "featured-image-frame w-full rounded-[14px]"
             : "m-3 mb-0 w-[calc(100%-1.5rem)] rounded-[var(--radius-md)]"
         }`}
         style={aspectStyle}
