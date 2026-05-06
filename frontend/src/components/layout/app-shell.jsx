@@ -15,11 +15,12 @@ import { Footer } from "@/components/layout/footer";
 export function AppShell({ children }) {
   const reduced = useReducedMotion();
   const [hoverOpen, setHoverOpen] = useState(false);
+  const [focusWithin, setFocusWithin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const openTimerRef = useRef(null);
   const closeTimerRef = useRef(null);
 
-  const collapsed = !hoverOpen;
+  const collapsed = !(hoverOpen || focusWithin);
 
   const clearTimers = useCallback(() => {
     if (openTimerRef.current) {
@@ -83,11 +84,13 @@ export function AppShell({ children }) {
         onMouseLeave={onLeave}
         onFocusCapture={() => {
           clearTimers();
-          setHoverOpen(true);
+          setFocusWithin(true);
         }}
         onBlurCapture={(event) => {
-          // Only collapse if focus has left the sidebar entirely.
-          if (!event.currentTarget.contains(event.relatedTarget)) onLeave();
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setFocusWithin(false);
+            onLeave();
+          }
         }}
       >
         <Sidebar collapsed={collapsed} variant="fixed" />

@@ -17,14 +17,6 @@ function isHomePathname(pathname, locale) {
   return pathname === `/${locale}` || pathname === `/${locale}/`;
 }
 
-function getPathWithoutLocale(pathname, locale) {
-  if (!pathname) return "/";
-  const localePrefix = `/${locale}`;
-  if (!pathname.startsWith(localePrefix)) return pathname;
-  const rest = pathname.slice(localePrefix.length);
-  return rest || "/";
-}
-
 function isPathActive(pathname, href, locale) {
   if (!pathname) return false;
   const fullHref = `/${locale}${href === "/" ? "" : href}`;
@@ -113,12 +105,14 @@ function useSectionObserver(anchors, enabled) {
     elements.forEach(({ el }) => observer.observe(el));
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
+    window.addEventListener("hashchange", schedule);
     schedule();
 
     return () => {
       if (raf !== null) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
+      window.removeEventListener("hashchange", schedule);
       observer.disconnect();
     };
   }, [anchors, enabled]);
@@ -132,7 +126,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const t = useT();
   const locale = useDictLocale() || "en";
   const isHome = isHomePathname(pathname, locale);
-  const routeWithoutLocale = getPathWithoutLocale(pathname, locale);
   const [openSubmenuId, setOpenSubmenuId] = useState(null);
 
   const activeAnchors = useMemo(() => {
@@ -221,7 +214,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                 active={active}
                 collapsed={collapsed}
                 onClick={handleClick}
-                hideText={routeWithoutLocale !== "/"}
               />
             );
           })}
@@ -280,10 +272,10 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                             <Link
                               href={sectionHref}
                               onClick={handleClick}
-                              className={`focus-visible-ring block rounded-md px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
+                              className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
                                 sectionActive
-                                  ? "bg-highlight-soft text-text-primary"
-                                  : "text-text-tertiary hover:text-text-primary"
+                                  ? "border-border-accent bg-highlight-soft text-text-primary"
+                                  : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
                               }`}
                               aria-current={sectionActive ? "true" : undefined}
                             >
@@ -366,12 +358,11 @@ function NavGroup({ label, collapsed, children }) {
   return (
     <div>
       <motion.p
-        className="mb-2 px-3 text-[0.7rem] font-semibold text-text-tertiary transition-opacity duration-[var(--duration-base)]"
+        className="mb-2 px-3 text-[0.7rem] font-semibold text-text-tertiary"
         initial={false}
         animate={{
           opacity: collapsed ? 0 : 1,
-          height: collapsed ? 0 : 16,
-          marginBottom: collapsed ? 0 : 8,
+          x: collapsed ? -6 : 0,
         }}
         transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
         aria-hidden={collapsed}
@@ -393,7 +384,6 @@ function NavItem({
   ariaCurrent,
   hasSubmenu = false,
   submenuOpen = false,
-  hideText = false,
 }) {
   return (
     <Link
@@ -405,7 +395,7 @@ function NavItem({
           : "border-transparent text-text-secondary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
       }`}
       aria-current={ariaCurrent}
-      title={collapsed || hideText ? label : undefined}
+      title={collapsed ? label : undefined}
     >
       {active && (
         <span
@@ -416,10 +406,10 @@ function NavItem({
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">
         <NavIcon id={iconId} />
       </span>
-      <Label collapsed={collapsed} hide={hideText}>
+      <Label collapsed={collapsed}>
         <span className="truncate">{label}</span>
       </Label>
-      {hasSubmenu && !collapsed && !hideText ? (
+      {hasSubmenu && !collapsed ? (
         <motion.span
           className="text-text-tertiary"
           initial={false}
@@ -430,7 +420,7 @@ function NavItem({
           ›
         </motion.span>
       ) : null}
-      {(collapsed || hideText) && <span className="sr-only">{label}</span>}
+      {collapsed && <span className="sr-only">{label}</span>}
     </Link>
   );
 }
