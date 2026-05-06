@@ -93,8 +93,14 @@
   --content-max-w: 1120px;
   --content-px-mobile: 1.25rem;
   --content-px-desktop: 2rem;
-  --divider-inset-mobile: 1.125rem;
-  --divider-inset-desktop: 1.75rem;
+  --divider-inset-mobile: calc(
+    ((100vw - min(100vw, var(--content-max-w))) / 4) +
+      (var(--content-px-mobile) / 2)
+  );
+  --divider-inset-desktop: calc(
+    ((100vw - min(100vw, var(--content-max-w))) / 4) +
+      (var(--content-px-desktop) / 2)
+  );
 }
 
 @media (min-width: 768px) {
