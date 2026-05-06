@@ -101,19 +101,19 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
-  const pattern = ROW_PATTERNS[index % 2];
-  const sideClass = index % 2 === 0 ? "cascade-left" : "cascade-right";
+  const frameClass = FRAME_TILTS[index % FRAME_TILTS.length];
+  const noteClass = getDesktopNoteClass(index);
 
   return (
     <motion.article
-      className={`cascade-row ${sideClass}`}
+      className="cascade-row"
       initial={reduced ? false : { opacity: 0, y: 16 }}
       animate={reduced ? false : { opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
     >
       <div className="portfolio-stage relative min-w-0 w-full">
         <ImageFrame
-          className={`relative z-0 w-full overflow-hidden ${pattern.frame}`}
+          className={`relative z-0 w-full overflow-hidden ${frameClass}`}
           style={aspectStyle}
         >
           <SmartImage
@@ -125,7 +125,7 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
           />
         </ImageFrame>
         <div
-          className={`portfolio-note scrap-caption space-y-2 px-4 py-3 ${pattern.note}`}
+          className={`portfolio-note scrap-caption space-y-2 px-4 py-3 ${noteClass}`}
         >
           <div className="flex items-baseline justify-between gap-3">
             <h3 className="heading-h2 text-[1.1rem] leading-tight text-text-primary">
@@ -142,13 +142,61 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   );
 }
 
-const ROW_PATTERNS = [
-  {
-    frame: "md:rotate-[-0.25deg]",
-    note: "portfolio-note--right",
-  },
-  {
-    frame: "md:rotate-[0.3deg]",
-    note: "portfolio-note--left",
-  },
+const FRAME_TILTS = [
+  "md:rotate-[-0.7deg]",
+  "md:rotate-[0.55deg]",
+  "md:rotate-[0.3deg]",
+  "md:rotate-[-0.45deg]",
 ];
+
+const NOTE_CORNERS = ["br", "tl", "tr", "bl"];
+
+function cornerShape(corner) {
+  return {
+    vertical: corner[0] === "t" ? "top" : "bottom",
+    horizontal: corner[1] === "l" ? "left" : "right",
+  };
+}
+
+function isValidCorner(corner, leftCorner, aboveCorner) {
+  const current = cornerShape(corner);
+
+  if (leftCorner) {
+    const left = cornerShape(leftCorner);
+    const touchSameRowSeam =
+      left.horizontal === "right" &&
+      current.horizontal === "left" &&
+      left.vertical === current.vertical;
+    if (touchSameRowSeam) return false;
+  }
+
+  if (aboveCorner) {
+    const above = cornerShape(aboveCorner);
+    const touchSameColumnSeam =
+      above.vertical === "bottom" &&
+      current.vertical === "top" &&
+      above.horizontal === current.horizontal;
+    if (touchSameColumnSeam) return false;
+  }
+
+  return true;
+}
+
+function getDesktopNoteClass(index) {
+  const columns = 2;
+  const placements = [];
+
+  for (let i = 0; i <= index; i += 1) {
+    const hasLeft = i % columns !== 0;
+    const leftCorner = hasLeft ? placements[i - 1] : null;
+    const aboveCorner = i >= columns ? placements[i - columns] : null;
+
+    const selected =
+      NOTE_CORNERS.find((corner) => isValidCorner(corner, leftCorner, aboveCorner)) ??
+      NOTE_CORNERS[i % NOTE_CORNERS.length];
+
+    placements.push(selected);
+  }
+
+  return `portfolio-note--${placements[index]}`;
+}

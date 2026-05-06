@@ -1851,53 +1851,32 @@ a {
 }
 
 .cascade-artworks {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
 }
 
 .cascade-row {
   position: relative;
-  width: 100%;
-  margin-top: 2.5rem;
-}
-
-.cascade-row:first-child {
-  margin-top: 0;
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
-  .cascade-row {
-    width: 54%;
-    min-width: 300px;
-    margin-top: 0;
+  .cascade-artworks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2vw, 1.9rem);
   }
 
-  .cascade-left {
-    align-self: flex-start;
-  }
-
-  .cascade-right {
-    align-self: flex-end;
-  }
-
-  /* Note badge: absolutely positioned at the bottom corner of the image */
   .portfolio-stage {
-    padding-bottom: 3.5rem;
+    padding: 0.35rem 0.35rem 0.45rem;
   }
 
   .portfolio-note {
     position: absolute;
-    bottom: 0.5rem;
     z-index: 10;
-    max-width: 16rem;
-  }
-
-  .portfolio-note--right {
-    right: 0.5rem;
-  }
-
-  .portfolio-note--left {
-    left: 0.5rem;
+    max-width: min(82%, 14.5rem);
+    margin: 0;
+    pointer-events: none;
   }
 }
 
@@ -1925,12 +1904,32 @@ a {
   display: none;
 }
 
-.portfolio-note--left::before {
-  right: calc(100% - 8px);
-}
+@media (min-width: 768px) {
+  .portfolio-note--bl,
+  .portfolio-note--br {
+    bottom: 0;
+    transform: translateY(24%);
+  }
 
-.portfolio-note--right::before {
-  left: calc(100% - 8px);
+  .portfolio-note--tl,
+  .portfolio-note--tr {
+    top: 0;
+    transform: translateY(-24%);
+  }
+
+  .portfolio-note--bl,
+  .portfolio-note--tl {
+    left: 0;
+  }
+
+  .portfolio-note--br,
+  .portfolio-note--tr {
+    right: 0;
+  }
+
+  .cascade-row .portfolio-note::before {
+    display: none !important;
+  }
 }
 
 .site-ending {
