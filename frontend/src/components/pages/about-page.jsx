@@ -29,8 +29,9 @@ const ABOUT_STORY = {
         layoutVariant: "origin",
         tilt: "-2deg",
         body: [
-          "it started with paper, pencils, and the kind of drawings that happen before anyone calls them serious.",
-          "this part should stay small, a little funny, and easy to replace later.",
+          "it started with messy pencil lines, little drawings in the margins, and the kind of confidence only a child has before they learn to judge everything too hard.",
+          "this part should eventually become the real story of how i started drawing, what i remember from that time, and why these first attempts still feel important to me.",
+          "for now, this is placeholder text, but the layout should already feel like a small memory: imperfect, early, and honest.",
         ],
         note: {
           body: "tiny origin artifact: the first attempt still matters.",
@@ -48,10 +49,14 @@ const ABOUT_STORY = {
         title: "digital art",
         layoutVariant: "board",
         tilt: "1.5deg",
-        body: [
-          "moving into digital art made experiments easier, not cleaner. i could repaint, compare, and notice what actually felt like mine.",
-          "these pieces should read like practice and proof, not polished milestones.",
-        ],
+        noteCard: {
+          label: "transition",
+          body: [
+            "moving into digital art made experimenting easier. i could repaint, compare, undo things, and slowly notice what actually felt like mine.",
+            "these pieces should read like practice and proof, not polished milestones.",
+            "this text is placeholder for the real story of how digital tools changed the way i practiced, experimented with early brushes and colors, and slowly found moments that felt less random.",
+          ],
+        },
         images: [
           {
             id: "portrait-05",
@@ -200,8 +205,9 @@ const ABOUT_STORY = {
         layoutVariant: "origin",
         tilt: "-2deg",
         body: [
-          "всё началось с бумаги, карандашей и рисунков, которые появляются раньше, чем кто-то называет их серьёзными.",
-          "эта часть должна оставаться маленькой, чуть смешной и легко заменяемой позже.",
+          "всё началось с неровных карандашных линий, маленьких рисунков на полях и той уверенности, которая бывает у ребёнка до того, как он начинает слишком строго всё оценивать.",
+          "позже здесь должна появиться настоящая история о том, как я начала рисовать, что я помню о том времени и почему эти первые попытки всё ещё кажутся мне важными.",
+          "пока это плейсхолдерный текст, но сама композиция уже должна ощущаться как маленькое воспоминание: раннее, неровное и честное.",
         ],
         note: {
           body: "маленький артефакт начала: первая попытка всё ещё важна.",
@@ -219,10 +225,14 @@ const ABOUT_STORY = {
         title: "цифровое искусство",
         layoutVariant: "board",
         tilt: "1.5deg",
-        body: [
-          "переход в цифру сделал эксперименты проще, а не чище. я могла переписывать, сравнивать и замечать, что вообще ощущается моим.",
-          "эти работы должны читаться как практика и доказательство, а не как отполированные вехи.",
-        ],
+        noteCard: {
+          label: "переход",
+          body: [
+            "переход в цифровую работу сделал эксперименты проще. я могла переписывать, сравнивать, отменять шаги и постепенно замечать, что вообще ощущается моим.",
+            "эти работы должны читаться как практика и доказательство, а не как отполированные вехи.",
+            "этот текст пока плейсхолдерный и позже станет реальной историей о том, как цифровые инструменты изменили мой способ практиковаться, экспериментировать с первыми кистями и цветами и постепенно находить моменты, которые ощущались уже не такими случайными.",
+          ],
+        },
         images: [
           {
             id: "portrait-05",
@@ -470,51 +480,45 @@ function AboutHero({ t, hero }) {
 }
 
 function OriginChapter({ chapter, locale }) {
-  const [leadParagraph, ...remainingParagraphs] = chapter.body ?? [];
-
   return (
     <article className="about-spread about-origin">
-      <div className="about-chapter-copy about-origin-copy">
-        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
-        <Heading level="h2">
-          {chapter.title}
-        </Heading>
-        <div className="about-underline" aria-hidden />
-        <div className="about-origin-layout">
-          {leadParagraph ? <p className="body">{leadParagraph}</p> : null}
-          <figure className="about-artifact about-origin-artifact">
-            <div className="about-origin-arrow" aria-hidden>
-              <span />
-              <span />
-            </div>
-            <ArtifactImage
-              imageId={chapter.image.id}
-              locale={locale}
-              alt={chapter.image.alt}
-              size="origin"
-              sizes="(max-width: 767px) 78vw, 300px"
-              className="about-origin-frame"
-              imgClassName="object-contain p-2.5 md:p-3"
-            />
-            <figcaption className="about-attached-caption">
-              <p className="caption text-highlight">{chapter.image.label}</p>
-              <p className="body-sm text-text-primary">{chapter.image.caption}</p>
-            </figcaption>
-          </figure>
-          {remainingParagraphs.map((paragraph) => (
+      <div className="about-origin-story">
+        <div className="about-origin-copy">
+          <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+          <Heading level="h2" className="max-w-xl">
+            {chapter.title}
+          </Heading>
+          <div className="about-underline" aria-hidden />
+          {chapter.body?.map((paragraph) => (
             <p key={paragraph} className="body">
               {paragraph}
             </p>
           ))}
         </div>
+
+        <figure className="about-artifact about-origin-artifact">
+          <ArtifactImage
+            imageId={chapter.image.id}
+            locale={locale}
+            alt={chapter.image.alt}
+            size="origin"
+            sizes="(max-width: 767px) 72vw, 300px"
+            className="about-origin-frame"
+            imgClassName="object-contain p-2.5 md:p-3"
+          />
+          <figcaption className="about-attached-caption about-origin-caption">
+            <p className="caption text-highlight">{chapter.image.label}</p>
+            <p className="body-sm text-text-primary">{chapter.image.caption}</p>
+          </figcaption>
+        </figure>
       </div>
     </article>
   );
 }
 
-function EvidenceBoard({ items, locale }) {
+function DigitalArtCompactSpread({ items, locale }) {
   return (
-    <div className="about-evidence-board">
+    <div className="about-board-cluster">
       <div className="about-grid-patch" aria-hidden />
       <div className="about-board-grid">
         {items.map((item) => (
@@ -524,12 +528,13 @@ function EvidenceBoard({ items, locale }) {
               locale={locale}
               alt={item.alt}
               size="board"
-              sizes="(max-width: 767px) 78vw, (max-width: 1199px) 28vw, 220px"
+              sizes="(max-width: 767px) 72vw, (max-width: 1199px) 24vw, 220px"
               className="about-board-frame"
               imgClassName="object-contain p-2 md:p-2.5"
             />
             <figcaption className="about-board-caption">
               <p className="caption text-highlight">{item.label}</p>
+              <p className="body-sm text-text-primary">{item.caption}</p>
             </figcaption>
           </figure>
         ))}
@@ -540,9 +545,30 @@ function EvidenceBoard({ items, locale }) {
 
 function DigitalArtChapter({ chapter, locale }) {
   return (
-    <AboutChapterShell chapter={chapter} className="about-board">
-      <EvidenceBoard items={chapter.images} locale={locale} />
-    </AboutChapterShell>
+    <article className="about-spread about-board">
+      <div className="about-chapter-copy about-board-copy">
+        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+        <Heading level="h2" className="max-w-sm">
+          {chapter.title}
+        </Heading>
+        <div className="about-underline" aria-hidden />
+      </div>
+
+      <div className="about-board-layout">
+        <section className="about-board-main-note">
+          <p className="caption about-board-note-label text-highlight">
+            {chapter.noteCard?.label}
+          </p>
+          {chapter.noteCard?.body?.map((paragraph) => (
+            <p key={paragraph} className="body-sm text-text-primary">
+              {paragraph}
+            </p>
+          ))}
+        </section>
+
+        <DigitalArtCompactSpread items={chapter.images} locale={locale} />
+      </div>
+    </article>
   );
 }
 
