@@ -29,6 +29,20 @@ export function CommissionOfferCards({ locale = "en", cards = [] }) {
                 {pickLocale(card.title, locale)}
               </h3>
               <p className="body-sm mt-2">{pickLocale(card.description, locale)}</p>
+              <ul className="mt-3 grid gap-2">
+                {pickLocale(card.supportPoints, locale)?.map((point) => (
+                  <li
+                    key={point}
+                    className="flex items-start gap-2 rounded-[var(--radius-md)] border border-dashed border-border-subtle bg-highlight-soft/10 px-3 py-2 text-[0.78rem] leading-snug text-text-secondary"
+                  >
+                    <span
+                      className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-highlight/90"
+                      aria-hidden
+                    />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </article>

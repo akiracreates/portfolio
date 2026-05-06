@@ -4,7 +4,7 @@ export function CommissionPricingTable({ locale = "en", rows = [] }) {
   return (
     <div className="scrap-card overflow-hidden border-[color:var(--border-accent)]/35 bg-[color:var(--bg-note)]">
       <div className="overflow-x-auto">
-        <table className="min-w-[760px] w-full border-collapse text-left">
+        <table className="w-full min-w-[720px] border-collapse text-left">
           <thead className="bg-highlight-soft/60">
             <tr>
               {[
@@ -25,13 +25,13 @@ export function CommissionPricingTable({ locale = "en", rows = [] }) {
           <tbody>
             {rows.map((row) => (
               <tr key={row.id} className="align-top">
-                <td className="border-b border-r border-dashed border-border-subtle px-4 py-3 text-sm text-text-primary">
+                <td className="border-r border-b border-dashed border-border-subtle px-4 py-3 text-sm font-medium text-text-primary">
                   {pickLocale(row.type, locale)}
                 </td>
-                <td className="border-b border-r border-dashed border-border-subtle px-4 py-3 text-sm font-semibold text-highlight">
+                <td className="border-r border-b border-dashed border-border-subtle px-4 py-3 text-sm font-semibold text-highlight">
                   {pickLocale(row.price, locale)}
                 </td>
-                <td className="border-b border-r border-dashed border-border-subtle px-4 py-3 text-sm text-text-secondary">
+                <td className="border-r border-b border-dashed border-border-subtle px-4 py-3 text-sm text-text-secondary">
                   {pickLocale(row.includes, locale)}
                 </td>
                 <td className="border-b border-dashed border-border-subtle px-4 py-3 text-sm text-text-secondary">

@@ -31,20 +31,28 @@ export function CommissionPreviewCarousel({
   const [hovered, setHovered] = useState(false);
   const [bias, setBias] = useState(ARROW_BIAS_NONE);
   const [startIndex, setStartIndex] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  const hasRandomizedRef = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
-    if (!randomizeInitial || images.length <= 1) return;
-    const nextStart = Math.floor(Math.random() * images.length);
-    setStartIndex(nextStart);
-    setIndex(0);
+    hasRandomizedRef.current = false;
+  }, [images.length, randomizeInitial]);
+
+  useEffect(() => {
+    if (!randomizeInitial || images.length <= 1 || hasRandomizedRef.current) return;
+    const frameId = window.requestAnimationFrame(() => {
+      hasRandomizedRef.current = true;
+      const nextStart = Math.floor(Math.random() * images.length);
+      setStartIndex(nextStart);
+      setIndex(0);
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
   }, [images.length, randomizeInitial]);
 
   const orderedImages = useMemo(() => {
-    if (!randomizeInitial || !mounted || startIndex === 0) return images;
+    if (!randomizeInitial || startIndex === 0) return images;
     return [...images.slice(startIndex), ...images.slice(0, startIndex)];
-  }, [images, mounted, randomizeInitial, startIndex]);
+  }, [images, randomizeInitial, startIndex]);
 
   const count = orderedImages.length;
 

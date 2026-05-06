@@ -21,6 +21,16 @@ export const commissionTypes = [
       en: ["high-quality png", "process updates", "at least 2 revisions"],
       ru: ["png в высоком качестве", "обновления по процессу", "минимум 2 правки"],
     },
+    supportPoints: {
+      en: [
+        "includes sketch approval before final",
+        "good for icons, gifts, or personal pieces",
+      ],
+      ru: [
+        "включает утверждение скетча перед финалом",
+        "подходит для иконок, подарков или личных работ",
+      ],
+    },
     exampleImage: getArtworksByCategory("portraits")[0]?.imageSrc ?? "",
   },
   {
@@ -42,6 +52,10 @@ export const commissionTypes = [
     included: {
       en: ["high-quality png", "process updates", "at least 2 revisions"],
       ru: ["png в высоком качестве", "обновления по процессу", "минимум 2 правки"],
+    },
+    supportPoints: {
+      en: ["pets, creatures, or animal studies", "simple background included"],
+      ru: ["питомцы, существа или анималистические этюды", "простой фон включен"],
     },
     exampleImage: getArtworksByCategory("animals")[0]?.imageSrc ?? "",
   },
@@ -67,68 +81,42 @@ export const commissionIntro = {
 
 export const commissionPricingRows = [
   {
-    id: "portrait-headshot",
-    type: { en: "portrait bust / headshot", ru: "портрет бюст / голова" },
-    price: { en: "$30-45", ru: "2 700-4 100 ₽" },
+    id: "portraits",
+    type: { en: "portraits", ru: "портреты" },
+    price: { en: "from $30", ru: "от 2 700 ₽" },
     includes: {
-      en: "single character, simple background, stage updates",
-      ru: "один персонаж, простой фон, обновления по этапам",
+      en: "digital portrait in my personal style",
+      ru: "цифровой портрет в моем личном стиле",
     },
     extraNotes: {
-      en: "final price depends on detail level",
-      ru: "финальная цена зависит от уровня детализации",
+      en: "price varies by complexity, pose, and details",
+      ru: "цена зависит от сложности, позы и деталей",
     },
   },
   {
-    id: "portrait-half",
-    type: { en: "half-body portrait", ru: "портрет по пояс" },
-    price: { en: "$45-65", ru: "4 100-5 900 ₽" },
+    id: "animals",
+    type: { en: "animals", ru: "животные" },
+    price: { en: "from $25", ru: "от 2 200 ₽" },
     includes: {
-      en: "single character, clothing details, simple background",
-      ru: "один персонаж, детали одежды, простой фон",
+      en: "pet or animal illustration in my personal style",
+      ru: "иллюстрация питомца или животного в моем личном стиле",
     },
     extraNotes: {
-      en: "complex poses may add cost",
-      ru: "сложные позы могут увеличить стоимость",
+      en: "detailed markings or complex anatomy may affect price",
+      ru: "детальные отметины или сложная анатомия могут влиять на цену",
     },
   },
   {
-    id: "portrait-full",
-    type: { en: "full-body portrait", ru: "портрет в полный рост" },
-    price: { en: "$65-95", ru: "5 900-8 600 ₽" },
+    id: "colored-sketches",
+    type: { en: "colored sketches", ru: "цветные скетчи" },
+    price: { en: "from $15", ru: "от 1 350 ₽" },
     includes: {
-      en: "single character, full pose, basic environment",
-      ru: "один персонаж, полный силуэт, базовое окружение",
+      en: "loose colored sketch with simple rendering",
+      ru: "свободный цветной скетч с простой прорисовкой",
     },
     extraNotes: {
-      en: "detailed outfits are charged separately",
-      ru: "детализированная одежда оплачивается отдельно",
-    },
-  },
-  {
-    id: "animal-simple",
-    type: { en: "pet / animal simple", ru: "питомец / животное простое" },
-    price: { en: "$25-40", ru: "2 200-3 600 ₽" },
-    includes: {
-      en: "single animal, soft background, color correction",
-      ru: "одно животное, мягкий фон, цветокоррекция",
-    },
-    extraNotes: {
-      en: "clean fur patterns are included",
-      ru: "простые паттерны шерсти включены в базу",
-    },
-  },
-  {
-    id: "animal-detailed",
-    type: { en: "animal detailed", ru: "животное детализированное" },
-    price: { en: "$40-70", ru: "3 600-6 300 ₽" },
-    includes: {
-      en: "detailed fur, props, atmospheric lighting",
-      ru: "детализированная шерсть, реквизит, атмосферный свет",
-    },
-    extraNotes: {
-      en: "scene complexity affects final quote",
-      ru: "сложность сцены влияет на финальную цену",
+      en: "best for quick ideas or smaller requests",
+      ru: "лучше всего подходит для быстрых идей и небольших запросов",
     },
   },
   {
@@ -136,12 +124,12 @@ export const commissionPricingRows = [
     type: { en: "extra character", ru: "дополнительный персонаж" },
     price: { en: "+$20-40", ru: "+1 800-3 600 ₽" },
     includes: {
-      en: "additional figure matched to composition",
-      ru: "дополнительная фигура в общей композиции",
+      en: "additional person or animal in the same piece",
+      ru: "дополнительный человек или животное в одной работе",
     },
     extraNotes: {
-      en: "price depends on scale and detail",
-      ru: "стоимость зависит от масштаба и деталей",
+      en: "depends on interaction and complexity",
+      ru: "зависит от взаимодействия и сложности",
     },
   },
   {
@@ -149,12 +137,12 @@ export const commissionPricingRows = [
     type: { en: "complex background", ru: "сложный фон" },
     price: { en: "+$15-45", ru: "+1 300-4 100 ₽" },
     includes: {
-      en: "scene elements, objects, lighting depth",
-      ru: "элементы сцены, объекты, проработка освещения",
+      en: "detailed scene, props, or environment elements",
+      ru: "детальная сцена, реквизит или элементы окружения",
     },
     extraNotes: {
-      en: "charged after discussing references",
-      ru: "рассчитывается после обсуждения референсов",
+      en: "simple background is included by default",
+      ru: "простой фон включен по умолчанию",
     },
   },
   {
@@ -162,25 +150,25 @@ export const commissionPricingRows = [
     type: { en: "rush order", ru: "срочный заказ" },
     price: { en: "+$20-50", ru: "+1 800-4 500 ₽" },
     includes: {
-      en: "priority queue and tighter update schedule",
-      ru: "приоритет в очереди и более плотные апдейты",
+      en: "faster turnaround when available",
+      ru: "более быстрый срок выполнения при наличии возможности",
     },
     extraNotes: {
-      en: "availability is limited",
-      ru: "доступно не для всех периодов",
+      en: "must be discussed before payment",
+      ru: "нужно обсудить до оплаты",
     },
   },
   {
-    id: "commercial-addon",
-    type: { en: "commercial use add-on", ru: "доплата за коммерческое использование" },
+    id: "commercial-use",
+    type: { en: "commercial use", ru: "коммерческое использование" },
     price: { en: "+$30+", ru: "+2 700 ₽+" },
     includes: {
-      en: "written permission for agreed use case",
-      ru: "письменное разрешение для согласованного использования",
+      en: "permission for business or commercial usage",
+      ru: "разрешение на бизнес- или коммерческое использование",
     },
     extraNotes: {
-      en: "final amount depends on scope and platform",
-      ru: "финальная сумма зависит от объема и площадки",
+      en: "must be agreed in writing before use",
+      ru: "должно быть согласовано письменно до использования",
     },
   },
 ];
