@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImageFrame } from "@/components/ui/image-frame";
 import { SmartImage } from "@/components/ui/smart-image";
@@ -20,14 +20,33 @@ const ARROW_BIAS_NONE = "none";
  *  - Wraps around at both ends.
  *  - Keyboard arrows when focused. Real <button>s for accessibility.
  */
-export function CommissionPreviewCarousel({ images = [], locale = "en" }) {
+export function CommissionPreviewCarousel({
+  images = [],
+  locale = "en",
+  randomizeInitial = false,
+}) {
   const reduced = useReducedMotion();
   const containerRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [bias, setBias] = useState(ARROW_BIAS_NONE);
+  const [startIndex, setStartIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
-  const count = images.length;
+  useEffect(() => {
+    setMounted(true);
+    if (!randomizeInitial || images.length <= 1) return;
+    const nextStart = Math.floor(Math.random() * images.length);
+    setStartIndex(nextStart);
+    setIndex(0);
+  }, [images.length, randomizeInitial]);
+
+  const orderedImages = useMemo(() => {
+    if (!randomizeInitial || !mounted || startIndex === 0) return images;
+    return [...images.slice(startIndex), ...images.slice(0, startIndex)];
+  }, [images, mounted, randomizeInitial, startIndex]);
+
+  const count = orderedImages.length;
 
   const goNext = useCallback(() => {
     if (count === 0) return;
@@ -65,7 +84,7 @@ export function CommissionPreviewCarousel({ images = [], locale = "en" }) {
     );
   }
 
-  const current = images[index];
+  const current = orderedImages[index];
   const aspectStyle = {
     aspectRatio: `${current.width ?? 4} / ${current.height ?? 3}`,
   };
@@ -132,7 +151,7 @@ export function CommissionPreviewCarousel({ images = [], locale = "en" }) {
 
       {/* dots */}
       <div className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 flex items-center gap-1.5">
-        {images.map((img, i) => (
+        {orderedImages.map((img, i) => (
           <button
             key={img.id}
             type="button"

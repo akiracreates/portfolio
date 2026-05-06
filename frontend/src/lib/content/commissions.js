@@ -1,106 +1,260 @@
 import { getArtworksByCategory } from "./artworks";
 
-/**
- * Commission data — three datasets:
- *  - commissionTypes: 2 offered types with prices in {usd, rub}
- *  - commissionProcess: 7 numbered steps
- *  - whatToExpect: 6 highlight bullets ({short, long}) shown on home + commissions page
- *
- *  All locale-aware copy uses { en, ru }; pricing uses { usd, rub }.
- */
-
 export const commissionTypes = [
   {
     id: "portrait",
-    title:       { en: "portrait",            ru: "портрет" },
-    shortTitle:  { en: "portraits",           ru: "портреты" },
+    title: { en: "portraits", ru: "портреты" },
+    shortTitle: { en: "portraits", ru: "портреты" },
     description: {
-      en: "a custom portrait painted from your references — calm, considered, story-driven.",
-      ru: "индивидуальный портрет по вашим референсам — спокойный, продуманный, с историей.",
+      en: "digital portraits in my personal style",
+      ru: "цифровые портреты в моем личном стиле",
     },
-    price: { usd: 80, rub: 5500 },
-    revisions: 3,
+    price: { usd: 30, rub: 2700 },
+    startingPriceText: {
+      en: "starting from $30",
+      ru: "от 2 700 ₽",
+    },
+    tabLabel: { en: "portrait", ru: "портрет" },
+    revisions: "3-4",
     deliveryFormats: ["png", "jpeg"],
     included: {
-      en: ["high-resolution image", "web version", "3 revision rounds"],
-      ru: ["изображение в высоком разрешении", "веб-версия", "3 раунда правок"],
+      en: ["high-quality png", "process updates", "at least 2 revisions"],
+      ru: ["png в высоком качестве", "обновления по процессу", "минимум 2 правки"],
     },
-    exampleImage: getArtworksByCategory("portraits")[1]?.imageSrc ?? "",
+    exampleImage: getArtworksByCategory("portraits")[0]?.imageSrc ?? "",
   },
   {
     id: "animal",
-    title:       { en: "animal",              ru: "животное" },
-    shortTitle:  { en: "animals",             ru: "животные" },
+    title: { en: "animals", ru: "животные" },
+    shortTitle: { en: "animals", ru: "животные" },
     description: {
-      en: "warm and detailed animal-focused composition — pets, wildlife, or imagined creatures.",
-      ru: "тёплая и детальная композиция с животными — питомцы, дикие или придуманные.",
+      en: "animal illustrations in my personal style",
+      ru: "иллюстрации животных в моем личном стиле",
     },
-    price: { usd: 90, rub: 6000 },
-    revisions: 3,
+    price: { usd: 25, rub: 2200 },
+    startingPriceText: {
+      en: "starting from $25",
+      ru: "от 2 200 ₽",
+    },
+    tabLabel: { en: "animal", ru: "животное" },
+    revisions: "3-4",
     deliveryFormats: ["png", "jpeg"],
     included: {
-      en: ["high-resolution image", "web version", "3 revision rounds"],
-      ru: ["изображение в высоком разрешении", "веб-версия", "3 раунда правок"],
+      en: ["high-quality png", "process updates", "at least 2 revisions"],
+      ru: ["png в высоком качестве", "обновления по процессу", "минимум 2 правки"],
     },
     exampleImage: getArtworksByCategory("animals")[0]?.imageSrc ?? "",
+  },
+];
+
+export const commissionIntro = {
+  statusLabel: { en: "commissions open", ru: "заказы открыты" },
+  title: { en: "commissions are open", ru: "заказы открыты" },
+  body: {
+    en: "i offer digital portraits and animal illustrations in my personal style",
+    ru: "я создаю цифровые портреты и иллюстрации животных в моем личном стиле",
+  },
+  bodyNote: {
+    en: "all the important details are listed below",
+    ru: "все важные детали указаны ниже",
+  },
+  smallNote: {
+    en: "prices vary depending on type, complexity, and details",
+    ru: "цены зависят от типа, сложности и количества деталей",
+  },
+  button: { en: "order now", ru: "заказать" },
+};
+
+export const commissionPricingRows = [
+  {
+    id: "portrait-headshot",
+    type: { en: "portrait bust / headshot", ru: "портрет бюст / голова" },
+    price: { en: "$30-45", ru: "2 700-4 100 ₽" },
+    includes: {
+      en: "single character, simple background, stage updates",
+      ru: "один персонаж, простой фон, обновления по этапам",
+    },
+    extraNotes: {
+      en: "final price depends on detail level",
+      ru: "финальная цена зависит от уровня детализации",
+    },
+  },
+  {
+    id: "portrait-half",
+    type: { en: "half-body portrait", ru: "портрет по пояс" },
+    price: { en: "$45-65", ru: "4 100-5 900 ₽" },
+    includes: {
+      en: "single character, clothing details, simple background",
+      ru: "один персонаж, детали одежды, простой фон",
+    },
+    extraNotes: {
+      en: "complex poses may add cost",
+      ru: "сложные позы могут увеличить стоимость",
+    },
+  },
+  {
+    id: "portrait-full",
+    type: { en: "full-body portrait", ru: "портрет в полный рост" },
+    price: { en: "$65-95", ru: "5 900-8 600 ₽" },
+    includes: {
+      en: "single character, full pose, basic environment",
+      ru: "один персонаж, полный силуэт, базовое окружение",
+    },
+    extraNotes: {
+      en: "detailed outfits are charged separately",
+      ru: "детализированная одежда оплачивается отдельно",
+    },
+  },
+  {
+    id: "animal-simple",
+    type: { en: "pet / animal simple", ru: "питомец / животное простое" },
+    price: { en: "$25-40", ru: "2 200-3 600 ₽" },
+    includes: {
+      en: "single animal, soft background, color correction",
+      ru: "одно животное, мягкий фон, цветокоррекция",
+    },
+    extraNotes: {
+      en: "clean fur patterns are included",
+      ru: "простые паттерны шерсти включены в базу",
+    },
+  },
+  {
+    id: "animal-detailed",
+    type: { en: "animal detailed", ru: "животное детализированное" },
+    price: { en: "$40-70", ru: "3 600-6 300 ₽" },
+    includes: {
+      en: "detailed fur, props, atmospheric lighting",
+      ru: "детализированная шерсть, реквизит, атмосферный свет",
+    },
+    extraNotes: {
+      en: "scene complexity affects final quote",
+      ru: "сложность сцены влияет на финальную цену",
+    },
+  },
+  {
+    id: "extra-character",
+    type: { en: "extra character", ru: "дополнительный персонаж" },
+    price: { en: "+$20-40", ru: "+1 800-3 600 ₽" },
+    includes: {
+      en: "additional figure matched to composition",
+      ru: "дополнительная фигура в общей композиции",
+    },
+    extraNotes: {
+      en: "price depends on scale and detail",
+      ru: "стоимость зависит от масштаба и деталей",
+    },
+  },
+  {
+    id: "complex-background",
+    type: { en: "complex background", ru: "сложный фон" },
+    price: { en: "+$15-45", ru: "+1 300-4 100 ₽" },
+    includes: {
+      en: "scene elements, objects, lighting depth",
+      ru: "элементы сцены, объекты, проработка освещения",
+    },
+    extraNotes: {
+      en: "charged after discussing references",
+      ru: "рассчитывается после обсуждения референсов",
+    },
+  },
+  {
+    id: "rush-order",
+    type: { en: "rush order", ru: "срочный заказ" },
+    price: { en: "+$20-50", ru: "+1 800-4 500 ₽" },
+    includes: {
+      en: "priority queue and tighter update schedule",
+      ru: "приоритет в очереди и более плотные апдейты",
+    },
+    extraNotes: {
+      en: "availability is limited",
+      ru: "доступно не для всех периодов",
+    },
+  },
+  {
+    id: "commercial-addon",
+    type: { en: "commercial use add-on", ru: "доплата за коммерческое использование" },
+    price: { en: "+$30+", ru: "+2 700 ₽+" },
+    includes: {
+      en: "written permission for agreed use case",
+      ru: "письменное разрешение для согласованного использования",
+    },
+    extraNotes: {
+      en: "final amount depends on scope and platform",
+      ru: "финальная сумма зависит от объема и площадки",
+    },
+  },
+];
+
+export const commissionExpectations = [
+  {
+    id: "expectation-01",
+    label: { en: "expectation 01", ru: "ожидание 01" },
+    title: { en: "digital artwork only", ru: "только цифровой формат" },
+    copy: {
+      en: "you are purchasing a digital png file - no physical prints will be shipped. in special cases, i can provide other non-layered formats, such as tiff or jpeg, upon request.",
+      ru: "вы приобретаете цифровой png-файл - физические отпечатки не отправляются. в отдельных случаях по запросу я могу предоставить другие неслоистые форматы, например tiff или jpeg.",
+    },
+  },
+  {
+    id: "expectation-02",
+    label: { en: "expectation 02", ru: "ожидание 02" },
+    title: { en: "communication and process", ru: "коммуникация и процесс" },
+    copy: {
+      en: "commissions can be discussed via email, discord, or telegram, whichever is most convenient for you. the standard turnaround time is 1 to 3 weeks, depending on complexity and revisions. i will update you at key stages: initial sketch, base colors, pre-final piece, and final artwork. i do not move forward to the next stage without approval of the previous one.",
+      ru: "заказ можно обсудить через email, discord или telegram - как вам удобнее. стандартный срок выполнения составляет от 1 до 3 недель в зависимости от сложности и правок. я обновляю вас на ключевых этапах: первичный скетч, базовые цвета, предфинальная версия и финальная работа. я не перехожу к следующему этапу без подтверждения предыдущего.",
+    },
+  },
+  {
+    id: "expectation-03",
+    label: { en: "expectation 03", ru: "ожидание 03" },
+    title: { en: "revisions and adjustments", ru: "правки и корректировки" },
+    copy: {
+      en: "the price includes at least two revisions, though i usually allow three to four to make sure the result feels right. all adjustments before final approval are included in the price. major changes after final approval may require an additional fee.",
+      ru: "в стоимость входит минимум две правки, но обычно я даю три-четыре, чтобы результат получился точным. все корректировки до финального утверждения включены в цену. крупные изменения после финального утверждения могут оплачиваться отдельно.",
+    },
+  },
+  {
+    id: "expectation-04",
+    label: { en: "expectation 04", ru: "ожидание 04" },
+    title: { en: "backgrounds and additional costs", ru: "фоны и дополнительные расходы" },
+    copy: {
+      en: "a simple background is included in the base price. more complex backgrounds, detailed scenes, or intricate elements require an additional fee. rush orders with strict deadlines require an extra charge.",
+      ru: "простой фон входит в базовую стоимость. более сложные фоны, детальные сцены или сложные элементы оплачиваются отдельно. срочные заказы с жесткими дедлайнами требуют доплаты.",
+    },
   },
 ];
 
 export const commissionProcess = [
   {
     step: 1,
-    title: { en: "request",     ru: "запрос" },
-    body:  {
-      en: "send your idea, references, and timeline through the form. i'll reply within 48 hours.",
-      ru: "пришлите идею, референсы и сроки через форму. отвечу в течение 48 часов.",
+    title: { en: "request and discussion", ru: "запрос и обсуждение" },
+    body: {
+      en: "you send me your idea, references, and any important details.",
+      ru: "вы отправляете мне вашу идею, референсы и все важные детали.",
     },
   },
   {
     step: 2,
-    title: { en: "discussion",  ru: "обсуждение" },
-    body:  {
-      en: "we talk through the concept, scope, and any specific details that matter to you.",
-      ru: "обсуждаем концепцию, объём и любые важные детали.",
+    title: { en: "approval and payment", ru: "утверждение и оплата" },
+    body: {
+      en: "once all details are agreed on, full payment is required before moving forward.",
+      ru: "после согласования всех деталей требуется полная оплата до начала работы.",
     },
   },
   {
     step: 3,
-    title: { en: "payment",     ru: "оплата" },
-    body:  {
-      en: "full payment is collected up front so we can begin without delay.",
-      ru: "полная оплата заранее, чтобы начать без задержек.",
+    title: { en: "process and revisions", ru: "процесс и правки" },
+    body: {
+      en: "i work on the piece while sending regular updates. this stage includes ~3 revisions and ongoing communication to keep the result as close to your vision as possible.",
+      ru: "я работаю над иллюстрацией и регулярно отправляю обновления. этап включает ~3 правки и постоянную коммуникацию, чтобы результат максимально соответствовал вашему видению.",
     },
   },
   {
     step: 4,
-    title: { en: "sketch",      ru: "набросок" },
-    body:  {
-      en: "i share an early sketch so you can shape direction before painting begins.",
-      ru: "присылаю ранний набросок, чтобы вы могли скорректировать направление.",
-    },
-  },
-  {
-    step: 5,
-    title: { en: "revisions",   ru: "правки" },
-    body:  {
-      en: "up to 3 revision rounds are included by default. more available on request.",
-      ru: "до 3 раундов правок включено по умолчанию. больше — по запросу.",
-    },
-  },
-  {
-    step: 6,
-    title: { en: "final piece", ru: "финал" },
-    body:  {
-      en: "i finalise the artwork and prepare delivery files in your preferred format.",
-      ru: "финализирую работу и готовлю файлы в нужном формате.",
-    },
-  },
-  {
-    step: 7,
-    title: { en: "delivery",    ru: "доставка" },
-    body:  {
-      en: "png or jpeg by default; other formats by request. delivered within ~2 weeks.",
-      ru: "png или jpeg по умолчанию; другие форматы по запросу. срок — около 2 недель.",
+    title: { en: "final piece", ru: "финальная работа" },
+    body: {
+      en: "i complete the artwork and send you the final files.",
+      ru: "я завершаю работу и отправляю вам финальные файлы.",
     },
   },
 ];
@@ -158,7 +312,186 @@ export const whatToExpect = [
 
 export const commissionStatus = {
   open: true,
-  label: { en: "commissions are open", ru: "заказы открыты" },
+  label: { en: "commissions open", ru: "заказы открыты" },
+};
+
+export const commissionTerms = {
+  label: { en: "important", ru: "важно" },
+  title: { en: "terms and conditions", ru: "условия и положения" },
+  groups: [
+    {
+      id: "copyright",
+      title: { en: "copyright", ru: "авторское право" },
+      items: [
+        {
+          en: "i retain full copyright to the artwork.",
+          ru: "я сохраняю полное авторское право на работу.",
+        },
+        {
+          en: "my watermark/signature must not be removed.",
+          ru: "мой водяной знак/подпись нельзя удалять.",
+        },
+        {
+          en: "the client may not alter, edit, or modify the artwork without my permission.",
+          ru: "клиент не может изменять или редактировать работу без моего разрешения.",
+        },
+        {
+          en: "the artwork may not be claimed as your own, resold, or used for commercial purposes without written consent.",
+          ru: "работу нельзя выдавать за свою, перепродавать или использовать в коммерческих целях без письменного согласия.",
+        },
+      ],
+    },
+    {
+      id: "payment",
+      title: { en: "payment", ru: "оплата" },
+      items: [
+        {
+          en: "full payment is required upfront before i begin working on the commission.",
+          ru: "полная оплата требуется заранее до начала работы над заказом.",
+        },
+        {
+          en: "no refunds will be issued once work has started.",
+          ru: "после начала работы возвраты не производятся.",
+        },
+        {
+          en: "additional charges may apply if major revisions are requested after the final piece has been delivered.",
+          ru: "при крупных правках после передачи финальной работы может потребоваться доплата.",
+        },
+      ],
+    },
+  ],
+  agreement: {
+    en: "by commissioning me, you agree to these terms.",
+    ru: "оформляя заказ, вы соглашаетесь с этими условиями.",
+  },
+};
+
+export const commissionFaq = [
+  {
+    id: "faq-format",
+    question: {
+      en: "what file format do you provide?",
+      ru: "в каком формате вы отправляете файлы?",
+    },
+    answer: {
+      en: "i provide a high-quality png file by default. other non-layered formats, such as tiff or jpeg, can be provided upon request.",
+      ru: "по умолчанию я отправляю png в высоком качестве. по запросу могу предоставить другие неслоистые форматы, например tiff или jpeg.",
+    },
+  },
+  {
+    id: "faq-commercial",
+    question: {
+      en: "is commercial use allowed?",
+      ru: "разрешено ли коммерческое использование?",
+    },
+    answer: {
+      en: "by default, commissions are for personal use only. commercial use must be discussed beforehand and will require additional fees.",
+      ru: "по умолчанию заказы предназначены только для личного использования. коммерческое использование обсуждается заранее и требует доплаты.",
+    },
+  },
+  {
+    id: "faq-satisfaction",
+    question: {
+      en: "what if i'm not satisfied with the final piece?",
+      ru: "что делать, если итоговая работа не устраивает?",
+    },
+    answer: {
+      en: "since you are involved at every stage of the process, major dissatisfaction is unlikely. minor adjustments can be made before final approval. major revisions after final approval may require additional charges.",
+      ru: "так как вы вовлечены на каждом этапе процесса, серьезное недовольство маловероятно. мелкие корректировки можно внести до финального утверждения. крупные правки после финального утверждения могут требовать доплаты.",
+    },
+  },
+  {
+    id: "faq-refunds",
+    question: { en: "do you offer refunds?", ru: "есть ли возвраты?" },
+    answer: {
+      en: "no refunds will be issued once i have started working on the piece.",
+      ru: "после начала работы над заказом возвраты не производятся.",
+    },
+  },
+  {
+    id: "faq-deadline",
+    question: {
+      en: "do you accept commissions with strict deadlines?",
+      ru: "принимаете ли вы заказы с жестким дедлайном?",
+    },
+    answer: {
+      en: "i generally do not take commissions with hard deadlines. in some cases, rush orders may be accepted for an additional fee.",
+      ru: "обычно я не беру заказы с жесткими дедлайнами. в некоторых случаях возможен срочный заказ за дополнительную оплату.",
+    },
+  },
+];
+
+export const commissionRequestFormContent = {
+  title: {
+    en: "send your commission request",
+    ru: "отправьте запрос на заказ",
+  },
+  intro: {
+    en: "send me the details of your idea and i'll get back to you as soon as possible.",
+    ru: "отправьте детали вашей идеи, и я свяжусь с вами как можно скорее.",
+  },
+  labels: {
+    name: { en: "name", ru: "имя" },
+    email: { en: "email", ru: "email" },
+    handle: {
+      en: "telegram or discord (optional)",
+      ru: "telegram или discord (необязательно)",
+    },
+    preferredContact: {
+      en: "preferred contact method",
+      ru: "предпочтительный способ связи",
+    },
+    commissionType: { en: "commission type", ru: "тип заказа" },
+    description: { en: "description", ru: "описание" },
+    references: { en: "references", ru: "референсы" },
+    terms: {
+      en: "i have read and agree to the terms and conditions",
+      ru: "я прочитал(а) и согласен(на) с условиями и положениями",
+    },
+  },
+  placeholders: {
+    description: {
+      en: "describe your idea, pose, mood, details, or anything important for the piece",
+      ru: "опишите идею, позу, настроение, детали и все важное для работы",
+    },
+    references: {
+      en: "links to images, pinterest boards, or anything visual",
+      ru: "ссылки на изображения, доски pinterest или любые визуальные материалы",
+    },
+  },
+  options: {
+    preferredContact: [
+      { value: "email", label: { en: "email", ru: "email" } },
+      { value: "telegram", label: { en: "telegram", ru: "telegram" } },
+      { value: "discord", label: { en: "discord", ru: "discord" } },
+    ],
+    commissionType: [
+      { value: "portrait", label: { en: "portrait", ru: "портрет" } },
+      { value: "animal", label: { en: "animal", ru: "животное" } },
+    ],
+  },
+  submit: { en: "send request", ru: "отправить заявку" },
+  success: {
+    en: "your request has been sent. i'll get back to you soon.",
+    ru: "ваша заявка отправлена. скоро я свяжусь с вами.",
+  },
+  error: {
+    en: "could not submit right now. please try again later.",
+    ru: "сейчас не удалось отправить заявку. попробуйте позже.",
+  },
+  requiredError: {
+    en: "please fill all required fields.",
+    ru: "пожалуйста, заполните все обязательные поля.",
+  },
+  termsError: {
+    en: "please agree to the terms and conditions before submitting.",
+    ru: "пожалуйста, подтвердите согласие с условиями перед отправкой.",
+  },
+  note: {
+    en: "if it's urgent, feel free to contact me on telegram.",
+    ru: "если срочно, можете написать мне в telegram.",
+  },
+  fastNote: { en: "telegram is fastest", ru: "telegram отвечает быстрее" },
 };
 
 /**
