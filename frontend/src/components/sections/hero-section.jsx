@@ -18,7 +18,10 @@ export function HeroSection({ dict, locale = "en" }) {
           <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
             <div className="hero-copy space-y-8 md:space-y-9">
               <Eyebrow>{t.eyebrow}</Eyebrow>
-              <h1 id="hero-heading" className="heading-display max-w-3xl">
+              <h1
+                id="hero-heading"
+                className="hero-heading-clean heading-display max-w-3xl"
+              >
                 {t.titleLeading}{" "}
                 <span className="text-highlight">{t.titleHighlight}</span>
                 {t.titleTrailing}

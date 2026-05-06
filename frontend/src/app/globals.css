@@ -504,6 +504,12 @@ a {
   background: none;
 }
 
+.process-card::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
 .scrap-caption {
   position: relative;
   border-radius: var(--radius-md);
@@ -712,6 +718,11 @@ a {
   box-shadow:
     0 10px 24px rgba(10, 8, 14, 0.28),
     0 0 18px rgba(233, 102, 160, 0.16);
+}
+
+.hero-heading-clean::before,
+.hero-heading-clean::after {
+  content: none !important;
 }
 
 .art-tag {
@@ -1563,14 +1574,13 @@ a {
 
 .site-ending {
   position: relative;
-  border-top: 1px dashed rgba(244, 241, 248, 0.12);
   background:
     linear-gradient(180deg, rgba(244, 241, 248, 0.02), transparent 30%),
     rgba(43, 39, 48, 0.92);
 }
 
 .site-ending::before {
-  content: "";
+  content: none;
   position: absolute;
   left: clamp(1.25rem, 5vw, 3.5rem);
   right: clamp(1.25rem, 5vw, 3.5rem);
