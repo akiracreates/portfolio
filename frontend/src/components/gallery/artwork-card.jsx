@@ -28,7 +28,7 @@ export function ArtworkCard({
     <motion.article
       className={`soft-glow-hover group flex h-full flex-col overflow-hidden transition-colors duration-[var(--duration-base)] ${
         featured
-          ? "scrap-card featured-piece rounded-[18px] border-border-purple bg-bg-surface-raised/90"
+          ? "featured-piece rounded-[18px]"
           : "scrap-card rounded-[var(--radius-lg)] hover:border-border-accent"
       } ${className}`.trim()}
       whileHover={reduced ? undefined : { y: -3 }}
@@ -37,9 +37,10 @@ export function ArtworkCard({
       <ImageFrame
         variant={featured ? "featured" : "art"}
         rounded={featured ? "lg" : "md"}
+        singleFrame
         className={`relative ${
           featured
-            ? "m-4 w-[calc(100%-2rem)] rounded-[14px]"
+            ? "w-full rounded-[14px]"
             : "m-3 mb-0 w-[calc(100%-1.5rem)] rounded-[var(--radius-md)]"
         }`}
         style={aspectStyle}

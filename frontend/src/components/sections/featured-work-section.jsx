@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Divider } from "@/components/ui/divider";
+import { SectionDividerBleed } from "@/components/ui/divider";
 import { Section } from "@/components/ui/section";
 import { ArtworkCard } from "@/components/gallery/artwork-card";
 import { getHomepageFeaturedArtworks } from "@/lib/content/artworks";
@@ -21,8 +21,9 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
   ];
 
   return (
-    <Container>
-      <Divider className="mt-2 md:mt-4" />
+    <>
+      <SectionDividerBleed className="mt-2 md:mt-4" />
+      <Container>
       <Section
         id="featured"
         eyebrow={t.eyebrow}
@@ -59,6 +60,7 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
           })}
         </div>
       </Section>
-    </Container>
+      </Container>
+    </>
   );
 }
