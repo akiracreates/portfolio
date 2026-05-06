@@ -93,6 +93,14 @@
   --content-max-w: 1120px;
   --content-px-mobile: 1.25rem;
   --content-px-desktop: 2rem;
+  --divider-inset-mobile: calc(
+    ((100vw - min(100vw, var(--content-max-w))) / 4) +
+      (var(--content-px-mobile) / 2)
+  );
+  --divider-inset-desktop: calc(
+    ((100vw - min(100vw, var(--content-max-w))) / 4) +
+      (var(--content-px-desktop) / 2)
+  );
 }
 
 @media (min-width: 768px) {
@@ -106,6 +114,11 @@
   :root {
     --text-display: 3.75rem;
     --text-h1: 2.75rem;
+  }
+
+  .divider-bleed-host {
+    padding-left: var(--divider-inset-desktop);
+    padding-right: var(--divider-inset-desktop);
   }
 }
 
@@ -341,6 +354,17 @@ a {
   border: 0;
 }
 
+.divider-bleed-host {
+  width: 100%;
+  padding-left: var(--divider-inset-mobile);
+  padding-right: var(--divider-inset-mobile);
+}
+
+.divider-bleed-line {
+  width: 100%;
+  margin: 0;
+}
+
 .scroll-mt-header {
   scroll-margin-top: calc(var(--topbar-h) + 16px);
 }
@@ -474,6 +498,12 @@ a {
   opacity: 0.55;
 }
 
+.expect-card::before {
+  content: none;
+  display: none;
+  background: none;
+}
+
 .scrap-caption {
   position: relative;
   border-radius: var(--radius-md);
@@ -528,6 +558,10 @@ a {
   border: 1px dashed rgba(244, 241, 248, 0.16);
   border-radius: inherit;
   opacity: 0.7;
+}
+
+.single-frame::after {
+  content: none;
 }
 
 .art-object-featured {
@@ -635,24 +669,6 @@ a {
   position: relative;
 }
 
-.hero-divider::before {
-  content: "";
-  position: absolute;
-  top: 4.25rem;
-  left: calc(50% + 0.25rem);
-  width: 1px;
-  height: 110px;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(233, 102, 160, 0.28) 0 10px,
-    transparent 10px 17px,
-    rgba(149, 117, 222, 0.18) 17px 25px,
-    transparent 25px 32px
-  );
-  transform: translateX(-0.5px);
-  opacity: 0;
-}
-
 .hero-copy {
   position: relative;
   padding: 1.5rem 1.5rem 1rem;
@@ -685,18 +701,17 @@ a {
   gap: 1.25rem;
 }
 
-.featured-piece {
-  position: relative;
+.featured-image-frame {
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
 }
 
-.featured-piece::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 16px;
-  width: 30px;
-  height: 1px;
-  background: rgba(149, 117, 222, 0.3);
+.group:hover .featured-image-frame {
+  border-color: var(--border-accent);
+  box-shadow:
+    0 10px 24px rgba(10, 8, 14, 0.28),
+    0 0 18px rgba(233, 102, 160, 0.16);
 }
 
 .art-tag {
@@ -1808,10 +1823,6 @@ a {
 
   .about-timeline-artifact {
     min-height: 34.5rem;
-  }
-
-  .hero-divider::before {
-    opacity: 1;
   }
 
   .hero-copy {

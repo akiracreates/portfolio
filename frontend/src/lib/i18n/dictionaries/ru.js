@@ -50,14 +50,12 @@ export const dictionary = {
       "пространство akira для цифровых портретов, исследований животных и небольших натюрмортов. посмотрите свежие работы или закажите свою.",
     ctaPrimary: "смотреть портфолио",
     ctaSecondary: "заказать работу",
+    ctaAbout: "обо мне",
     statCommissions: "заказы",
     statCommissionsValue: "открыты",
     statResponse: "ответ",
     statResponseValue: "до 48 часов",
-    statBased: "где",
-    statBasedValue: "онлайн",
-    badgeLabel: "последняя работа",
-    badgeTitle: "автопортрет №1",
+    badgeTitle: "latest perception of myself",
     imageAlt: "избранный автопортрет akira",
   },
 
@@ -126,7 +124,6 @@ export const dictionary = {
     eyebrow: "найти меня",
     title: "оставайтесь на связи.",
     description: "telegram — самый быстрый способ связаться. остальные каналы — ниже.",
-    contactNote: "по заказам пишите в telegram или через форму на странице заказов.",
   },
 
   about: {

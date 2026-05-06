@@ -1,10 +1,16 @@
 export const socialLinks = [
   {
-    id: "telegram",
+    id: "telegram-personal",
     url: "https://t.me/akira_placeholder",
-    label: "telegram",
+    label: "telegram personal",
     handle: "@akira",
     primary: true,
+  },
+  {
+    id: "telegram-channel",
+    url: "https://t.me/akira_channel_placeholder",
+    label: "telegram channel",
+    handle: "@akira_channel",
   },
   {
     id: "vk",

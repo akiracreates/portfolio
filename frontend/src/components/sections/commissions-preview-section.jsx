@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { SectionDividerBleed } from "@/components/ui/divider";
 import { Section } from "@/components/ui/section";
 import { commissionStatus, commissionTypes } from "@/lib/content/commissions";
 import { formatPrice, pickLocale } from "@/lib/i18n/config";
@@ -31,9 +32,10 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
   return (
     <section
       id="commissions-preview"
-      className="section-scrap scroll-mt-header border-t border-dashed border-border-subtle bg-bg-base"
+      className="section-scrap scroll-mt-header bg-bg-base"
       aria-labelledby="commissions-preview-heading"
     >
+      <SectionDividerBleed />
       <Container>
         <Section
           eyebrow={t.eyebrow}

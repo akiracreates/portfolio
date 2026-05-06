@@ -50,14 +50,12 @@ export const dictionary = {
       "akira's studio for digital portraits, animal studies, and still life. browse recent work or commission a piece made just for you.",
     ctaPrimary: "view portfolio",
     ctaSecondary: "commission a piece",
+    ctaAbout: "about me",
     statCommissions: "commissions",
     statCommissionsValue: "open",
     statResponse: "response",
     statResponseValue: "within 48h",
-    statBased: "based in",
-    statBasedValue: "online",
-    badgeLabel: "latest piece",
-    badgeTitle: "self portrait no. 1",
+    badgeTitle: "latest perception of myself",
     imageAlt: "featured self portrait by akira",
   },
 
@@ -126,7 +124,6 @@ export const dictionary = {
     eyebrow: "find me",
     title: "let's stay in touch.",
     description: "telegram is the fastest way to reach me. for everything else, the channels below.",
-    contactNote: "for commissions, please use telegram or the form on the commissions page.",
   },
 
   about: {

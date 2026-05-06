@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { SectionDividerBleed } from "@/components/ui/divider";
 import { Section } from "@/components/ui/section";
 import { ArtworkCard } from "@/components/gallery/artwork-card";
 import { getHomepageFeaturedArtworks } from "@/lib/content/artworks";
@@ -9,11 +10,6 @@ function categoryAnchor(category) {
   return `category-${category.toLowerCase().replace(/\s+/g, "-")}`;
 }
 
-/**
- * Spec: 4 featured pieces. The card with `isSecret: true` links to /{locale}/spin
- * with prefetch={false}, but is visually indistinguishable from its siblings.
- * Default cards link to /{locale}/portfolio#category-{cat}.
- */
 export function FeaturedWorkSection({ dict, locale = "en" }) {
   const t = dict.featured;
   const featured = getHomepageFeaturedArtworks();
@@ -25,7 +21,9 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
   ];
 
   return (
-    <Container>
+    <>
+      <SectionDividerBleed className="mt-2 md:mt-4" />
+      <Container>
       <Section
         id="featured"
         eyebrow={t.eyebrow}
@@ -43,25 +41,26 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
       >
         <div className="featured-curation grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {featured.map((artwork, index) => {
-            const href = artwork.isSecret
-              ? `/${locale}/spin`
-              : `/${locale}/portfolio#${categoryAnchor(artwork.category)}`;
+            const href = `/${locale}/portfolio#${categoryAnchor(artwork.category)}`;
             return (
               <Link
                 key={artwork.id}
                 href={href}
-                prefetch={artwork.isSecret ? false : undefined}
                 className={`block rounded-[18px] focus-visible-ring transition-transform duration-[var(--duration-base)] ${layouts[index % layouts.length]}`}
-                aria-label={
-                  artwork.isSecret ? undefined : `${artwork.category}`
-                }
+                aria-label={`${artwork.category}`}
               >
-                <ArtworkCard artwork={artwork} locale={locale} variant="featured" />
+                <ArtworkCard
+                  artwork={artwork}
+                  locale={locale}
+                  variant="featured"
+                  showFeaturedBadge={false}
+                />
               </Link>
             );
           })}
         </div>
       </Section>
-    </Container>
+      </Container>
+    </>
   );
 }

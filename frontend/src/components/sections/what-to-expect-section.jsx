@@ -6,6 +6,7 @@ import { pickLocale } from "@/lib/i18n/config";
 
 export function WhatToExpectSection({ dict, locale = "en" }) {
   const t = dict.whatToExpect;
+  const homepageExpectations = whatToExpect.slice(0, 4);
 
   return (
     <Container>
@@ -25,11 +26,11 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
           </Button>
         }
       >
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {whatToExpect.map((item) => (
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+          {homepageExpectations.map((item) => (
             <li
               key={item.id}
-              className="scrap-note soft-glow-hover flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] hover:border-border-accent"
+              className="scrap-note expect-card soft-glow-hover flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] hover:border-border-accent"
             >
               <p className="heading-h3 text-[0.95rem] text-text-primary">
                 {pickLocale(item.short, locale)}
