@@ -516,11 +516,17 @@ function OriginChapter({ chapter, locale }) {
   );
 }
 
-function DigitalArtCompactSpread({ items, locale }) {
+function AboutChapterEvidenceBoard({ items, locale, tabLabel }) {
+  const fallbackTabLabel = locale === "ru" ? "память" : "memory";
+
   return (
-    <div className="about-board-cluster">
+    <section className="about-evidence-board" aria-label={tabLabel || fallbackTabLabel}>
+      <span className="about-evidence-tab caption text-highlight">
+        {tabLabel || fallbackTabLabel}
+      </span>
+      <div className="about-board-connector" aria-hidden />
       <div className="about-grid-patch" aria-hidden />
-      <div className="about-board-grid">
+      <div className="about-board-stage">
         {items.map((item) => (
           <figure key={item.id} className={item.boardClass}>
             <ArtifactImage
@@ -539,7 +545,7 @@ function DigitalArtCompactSpread({ items, locale }) {
           </figure>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -566,7 +572,11 @@ function DigitalArtChapter({ chapter, locale }) {
           ))}
         </section>
 
-        <DigitalArtCompactSpread items={chapter.images} locale={locale} />
+        <AboutChapterEvidenceBoard
+          items={chapter.images}
+          locale={locale}
+          tabLabel={chapter.noteCard?.label}
+        />
       </div>
     </article>
   );
