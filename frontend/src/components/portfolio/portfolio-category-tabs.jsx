@@ -28,6 +28,19 @@ export function PortfolioCategoryShowcase({
     return () => cancelAnimationFrame(frame);
   }, [categories]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const syncFromHash = () => {
+      setActive(categoryFromHash(categories));
+    };
+    window.addEventListener("hashchange", syncFromHash);
+    window.addEventListener("popstate", syncFromHash);
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("popstate", syncFromHash);
+    };
+  }, [categories]);
+
   const selectCategory = useCallback(
     (cat) => {
       setActive(cat);

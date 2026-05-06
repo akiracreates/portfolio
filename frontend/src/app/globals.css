@@ -745,13 +745,13 @@ a {
 
 .portfolio-tabs {
   position: sticky;
-  top: 0.75rem;
+  top: 0;
   z-index: 30;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 0 0.85rem;
+  padding: 0.5rem 0 0.8rem;
   background: linear-gradient(180deg, rgba(43, 39, 48, 0.94), rgba(43, 39, 48, 0.7) 75%, transparent);
   backdrop-filter: blur(10px);
 }
@@ -1857,7 +1857,7 @@ a {
 .portfolio-note {
   position: relative;
   z-index: 2;
-  max-width: 29rem;
+  max-width: 24rem;
 }
 
 .portfolio-note::before {
@@ -1980,11 +1980,11 @@ a {
   }
 
   .portfolio-note--left {
-    margin-left: -2.5rem;
+    margin-left: -1.5rem;
   }
 
   .portfolio-note--right {
-    margin-right: -2.5rem;
+    margin-right: -1.5rem;
   }
 
   .portfolio-note::before {
@@ -2260,11 +2260,11 @@ a {
   }
 
   .portfolio-note--left {
-    margin-left: -4rem;
+    margin-left: -2.35rem;
   }
 
   .portfolio-note--right {
-    margin-right: -4rem;
+    margin-right: -2.35rem;
   }
 }
 

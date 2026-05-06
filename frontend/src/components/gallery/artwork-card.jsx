@@ -101,16 +101,16 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
-  const pattern = ROW_PATTERNS[index % ROW_PATTERNS.length];
+  const pattern = ROW_PATTERNS[index % 2];
 
   return (
     <motion.article
-      className={`grid items-center gap-7 md:grid-cols-12 md:gap-10 ${pattern.row}`}
+      className={`grid min-w-0 items-center gap-5 md:grid-cols-12 md:gap-7 ${pattern.row}`}
       initial={reduced ? false : { opacity: 0, y: 16 }}
       animate={reduced ? false : { opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
     >
-      <div className={`portfolio-stage ${pattern.image}`}>
+      <div className={`portfolio-stage min-w-0 ${pattern.image}`}>
         <ImageFrame
           className={`relative z-0 w-full overflow-hidden ${pattern.frame}`}
           style={aspectStyle}
@@ -124,7 +124,7 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
           />
         </ImageFrame>
         <div
-          className={`portfolio-note scrap-caption mt-4 space-y-3 px-5 py-4 md:mt-0 md:p-5 ${pattern.note}`}
+          className={`portfolio-note scrap-caption mt-2 space-y-2.5 px-4 py-3.5 md:mt-0 md:px-5 md:py-4.5 ${pattern.note}`}
         >
           <div className="flex items-baseline justify-between gap-4">
             <h3 className="heading-h2 text-[1.35rem] leading-tight text-text-primary md:text-[1.5rem]">
@@ -145,31 +145,13 @@ const ROW_PATTERNS = [
   {
     row: "",
     image: "md:col-span-8",
-    frame: "md:rotate-[-0.35deg]",
-    note: "portfolio-note--right md:max-w-[24rem] md:-mt-12 md:ml-auto md:-mr-8",
+    frame: "md:rotate-[-0.25deg]",
+    note: "portfolio-note--right md:max-w-[22rem] md:-mt-7 md:ml-auto",
   },
   {
     row: "md:[&>:first-child]:order-2",
     image: "md:col-span-8 md:col-start-5",
-    frame: "md:rotate-[0.45deg]",
-    note: "portfolio-note--left md:max-w-[23rem] md:-mt-10 md:mr-auto md:-ml-8",
-  },
-  {
-    row: "",
-    image: "md:col-span-9",
-    frame: "md:rotate-[0.25deg]",
-    note: "portfolio-note--right md:max-w-[22rem] md:-mt-16 md:ml-[14%]",
-  },
-  {
-    row: "md:[&>:first-child]:order-2",
-    image: "md:col-span-7 md:col-start-6",
-    frame: "md:rotate-[-0.5deg]",
-    note: "portfolio-note--left md:max-w-[24rem] md:-mt-6 md:mr-auto md:-ml-12",
-  },
-  {
-    row: "",
-    image: "md:col-span-8 md:col-start-2",
-    frame: "md:rotate-[0.18deg]",
-    note: "portfolio-note--right md:max-w-[25rem] md:-mt-14 md:ml-auto md:mr-6",
+    frame: "md:rotate-[0.3deg]",
+    note: "portfolio-note--left md:max-w-[22rem] md:-mt-7 md:mr-auto",
   },
 ];
