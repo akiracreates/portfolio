@@ -776,7 +776,7 @@ export function AboutPage({ dict, locale = "en" }) {
           <AboutHero t={t} hero={story.hero} />
 
           {story.chapters.map((chapter, index) => (
-            <div key={chapter.id}>
+            <div key={chapter.id} id={`about-${chapter.id}`} className="scroll-mt-header">
               {index > 0 ? <ChapterDivider /> : null}
               {renderChapter(chapter, locale)}
             </div>

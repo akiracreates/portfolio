@@ -17,6 +17,7 @@ export function CategorySection({
   piecesLabel = "pieces",
   pieceLabel = "piece",
   startIndex = 0,
+  enableSecretSpin = false,
 }) {
   const id = categoryAnchorId(category);
   const count = artworks.length;
@@ -45,6 +46,11 @@ export function CategorySection({
             artwork={artwork}
             index={startIndex + index}
             locale={locale}
+            enableSecretSpin={
+              enableSecretSpin &&
+              category.toLowerCase() === "animals" &&
+              artwork.path === "images/animals/silly_kitty"
+            }
           />
         ))}
       </div>

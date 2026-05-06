@@ -188,7 +188,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--topbar-h) + 12px);
+  scroll-padding-top: 24px;
 }
 
 html,
@@ -366,7 +366,7 @@ a {
 }
 
 .scroll-mt-header {
-  scroll-margin-top: calc(var(--topbar-h) + 16px);
+  scroll-margin-top: 24px;
 }
 
 /* focus ring helper for non-input interactive elements */
