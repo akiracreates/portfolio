@@ -102,15 +102,16 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
   const pattern = ROW_PATTERNS[index % 2];
+  const sideClass = index % 2 === 0 ? "cascade-left" : "cascade-right";
 
   return (
     <motion.article
-      className={`grid min-w-0 items-center gap-5 md:grid-cols-12 md:gap-7 ${pattern.row}`}
+      className={`cascade-row ${sideClass}`}
       initial={reduced ? false : { opacity: 0, y: 16 }}
       animate={reduced ? false : { opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
     >
-      <div className={`portfolio-stage min-w-0 ${pattern.image}`}>
+      <div className="portfolio-stage relative min-w-0 w-full">
         <ImageFrame
           className={`relative z-0 w-full overflow-hidden ${pattern.frame}`}
           style={aspectStyle}
@@ -119,22 +120,22 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
             src={artwork.imageSrc}
             alt={alt}
             fill
-            sizes="(max-width: 768px) 100vw, 60vw"
+            sizes="(max-width: 768px) 100vw, 55vw"
             imgClassName="object-contain p-3 md:p-4"
           />
         </ImageFrame>
         <div
-          className={`portfolio-note scrap-caption mt-2 space-y-2.5 px-4 py-3.5 md:mt-0 md:px-5 md:py-4.5 ${pattern.note}`}
+          className={`portfolio-note scrap-caption space-y-2 px-4 py-3 ${pattern.note}`}
         >
-          <div className="flex items-baseline justify-between gap-4">
-            <h3 className="heading-h2 text-[1.35rem] leading-tight text-text-primary md:text-[1.5rem]">
+          <div className="flex items-baseline justify-between gap-3">
+            <h3 className="heading-h2 text-[1.1rem] leading-tight text-text-primary">
               {title}
             </h3>
             <span className="art-tag caption shrink-0 text-accent-2">
               {artwork.category}
             </span>
           </div>
-          {note && <p className="body max-w-prose">{note}</p>}
+          {note && <p className="body-sm max-w-[22ch]">{note}</p>}
         </div>
       </div>
     </motion.article>
@@ -143,15 +144,11 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
 
 const ROW_PATTERNS = [
   {
-    row: "",
-    image: "md:col-span-8",
     frame: "md:rotate-[-0.25deg]",
-    note: "portfolio-note--right md:max-w-[22rem] md:-mt-7 md:ml-auto",
+    note: "portfolio-note--right",
   },
   {
-    row: "md:[&>:first-child]:order-2",
-    image: "md:col-span-8 md:col-start-5",
     frame: "md:rotate-[0.3deg]",
-    note: "portfolio-note--left md:max-w-[22rem] md:-mt-7 md:mr-auto",
+    note: "portfolio-note--left",
   },
 ];

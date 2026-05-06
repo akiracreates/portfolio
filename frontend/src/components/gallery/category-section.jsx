@@ -38,7 +38,7 @@ export function CategorySection({
           {count} {label}
         </span>
       </header>
-      <div className="space-y-8 md:space-y-10">
+      <div className="cascade-artworks">
         {artworks.map((artwork, index) => (
           <ArtworkRow
             key={artwork.id}

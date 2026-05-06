@@ -1850,12 +1850,62 @@ a {
   }
 }
 
+.cascade-artworks {
+  display: flex;
+  flex-direction: column;
+}
+
+.cascade-row {
+  position: relative;
+  width: 100%;
+  margin-top: 2.5rem;
+}
+
+.cascade-row:first-child {
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .cascade-row {
+    width: 54%;
+    min-width: 300px;
+    margin-top: 0;
+  }
+
+  .cascade-left {
+    align-self: flex-start;
+  }
+
+  .cascade-right {
+    align-self: flex-end;
+  }
+
+  /* Note badge: absolutely positioned at the bottom corner of the image */
+  .portfolio-stage {
+    padding-bottom: 3.5rem;
+  }
+
+  .portfolio-note {
+    position: absolute;
+    bottom: 0.5rem;
+    z-index: 10;
+    max-width: 16rem;
+  }
+
+  .portfolio-note--right {
+    right: 0.5rem;
+  }
+
+  .portfolio-note--left {
+    left: 0.5rem;
+  }
+}
+
 .portfolio-stage {
   position: relative;
 }
 
 .portfolio-note {
-  position: relative;
   z-index: 2;
   max-width: 24rem;
 }
@@ -1980,15 +2030,11 @@ a {
   }
 
   .portfolio-note--left {
-    margin-left: -1.5rem;
+    margin-left: 0;
   }
 
   .portfolio-note--right {
-    margin-right: -1.5rem;
-  }
-
-  .portfolio-note::before {
-    display: block;
+    margin-right: 0;
   }
 
   .about-storybook {
@@ -2260,11 +2306,11 @@ a {
   }
 
   .portfolio-note--left {
-    margin-left: -2.35rem;
+    margin-left: 0;
   }
 
   .portfolio-note--right {
-    margin-right: -2.35rem;
+    margin-right: 0;
   }
 }
 
