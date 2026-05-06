@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container } from "@/components/ui/container";
-import { Divider } from "@/components/ui/divider";
+import { SectionDividerBleed } from "@/components/ui/divider";
 import { siteConfig } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
 import { NavIcon } from "@/components/layout/nav-icons";
@@ -36,6 +36,7 @@ export function Footer() {
   if (useCompactFooter) {
     return (
       <footer className="site-ending mt-12">
+        <SectionDividerBleed />
         <Container className="py-8 md:py-9">
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="caption">
@@ -58,6 +59,7 @@ export function Footer() {
 
   return (
     <footer id="socials" className="site-ending mt-12">
+      <SectionDividerBleed />
       <Container className="py-12 md:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
@@ -144,9 +146,9 @@ export function Footer() {
             </ul>
           </div>
         </div>
-
-        <Divider className="my-10" />
-
+      </Container>
+      <SectionDividerBleed className="my-10" />
+      <Container className="pb-12 md:pb-14">
         <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="caption">
             © {year} akira. {t.rights || "all rights reserved."}
