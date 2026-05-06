@@ -128,9 +128,9 @@ export const dictionary = {
 
   about: {
     pageEyebrow: "about",
-    pageTitle: "a longer story about growth, portraits, and reinterpretation.",
+    pageTitle: "a longer story about growing up through art.",
     pageDescription:
-      "from old sketchbooks to digital studies — a quiet path that keeps returning to the same face, told differently each time.",
+      "from early drawings to newer self portraits, this page holds the slower version of the story.",
     bioEyebrow: "today",
     bioTitle: "where i am right now.",
     bio1: "i'm 20. i make digital portraits, animal studies, and the occasional still life.",
