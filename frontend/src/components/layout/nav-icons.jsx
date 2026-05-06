@@ -51,6 +51,8 @@ export function NavIcon({ id, className = "" }) {
         </svg>
       );
     case "telegram":
+    case "telegram-personal":
+    case "telegram-channel":
       return (
         <svg className={cn} {...stroke}>
           <path d="M3 11.5 21 4l-3 16-5.5-4-3 3-1-5z" />

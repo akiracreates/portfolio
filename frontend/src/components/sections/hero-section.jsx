@@ -10,7 +10,7 @@ export function HeroSection({ dict, locale = "en" }) {
   return (
     <section
       id="hero"
-      className="scroll-mt-header relative overflow-hidden border-b border-dashed border-border-subtle"
+      className="scroll-mt-header relative overflow-hidden"
       aria-labelledby="hero-heading"
     >
       <Container className="relative py-16 md:py-20 lg:py-24">
@@ -41,14 +41,20 @@ export function HeroSection({ dict, locale = "en" }) {
                 >
                   {t.ctaSecondary}
                 </Button>
+                <Button
+                  as="link"
+                  href={`/${locale}/about`}
+                  variant="ghost"
+                  size="lg"
+                >
+                  {t.ctaAbout}
+                </Button>
               </div>
               <div className="broken-divider max-w-lg" aria-hidden />
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
                 <Stat label={t.statCommissions} value={t.statCommissionsValue} />
                 <Sep />
                 <Stat label={t.statResponse} value={t.statResponseValue} />
-                <Sep />
-                <Stat label={t.statBased} value={t.statBasedValue} />
               </div>
             </div>
 
@@ -68,12 +74,9 @@ export function HeroSection({ dict, locale = "en" }) {
                     imgClassName="object-contain p-4 md:p-6"
                   />
                 </ImageFrame>
-                <div className="hero-badge scrap-caption absolute -bottom-4 left-2 hidden max-w-[240px] px-4 py-3 shadow-md sm:block">
-                  <p className="caption">{t.badgeLabel}</p>
-                  <p className="body-sm font-medium text-text-primary">
-                    {t.badgeTitle}
-                  </p>
-                </div>
+                <p className="absolute -bottom-4 left-3 text-xs text-text-tertiary/80 sm:left-2">
+                  {t.badgeTitle}
+                </p>
               </div>
             </div>
           </div>

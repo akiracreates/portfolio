@@ -474,6 +474,10 @@ a {
   opacity: 0.55;
 }
 
+.expect-card::before {
+  content: none;
+}
+
 .scrap-caption {
   position: relative;
   border-radius: var(--radius-md);
@@ -633,24 +637,6 @@ a {
 
 .hero-divider {
   position: relative;
-}
-
-.hero-divider::before {
-  content: "";
-  position: absolute;
-  top: 4.25rem;
-  left: calc(50% + 0.25rem);
-  width: 1px;
-  height: 110px;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(233, 102, 160, 0.28) 0 10px,
-    transparent 10px 17px,
-    rgba(149, 117, 222, 0.18) 17px 25px,
-    transparent 25px 32px
-  );
-  transform: translateX(-0.5px);
-  opacity: 0;
 }
 
 .hero-copy {
@@ -1808,10 +1794,6 @@ a {
 
   .about-timeline-artifact {
     min-height: 34.5rem;
-  }
-
-  .hero-divider::before {
-    opacity: 1;
   }
 
   .hero-copy {

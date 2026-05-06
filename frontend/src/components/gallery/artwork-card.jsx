@@ -22,6 +22,7 @@ export function ArtworkCard({
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
   const featured = variant === "featured";
+  const isFeaturedGalleryCard = featured;
 
   return (
     <motion.article
@@ -36,7 +37,11 @@ export function ArtworkCard({
       <ImageFrame
         variant={featured ? "featured" : "art"}
         rounded={featured ? "lg" : "md"}
-        className={`relative ${featured ? "m-4 mb-0 w-[calc(100%-2rem)] rounded-[14px]" : "m-3 mb-0 w-[calc(100%-1.5rem)] rounded-[var(--radius-md)]"}`}
+        className={`relative ${
+          featured
+            ? "m-4 w-[calc(100%-2rem)] rounded-[14px]"
+            : "m-3 mb-0 w-[calc(100%-1.5rem)] rounded-[var(--radius-md)]"
+        }`}
         style={aspectStyle}
       >
         <SmartImage
@@ -57,21 +62,23 @@ export function ArtworkCard({
         )}
       </ImageFrame>
 
-      <div className={`flex flex-1 flex-col ${featured ? "gap-2.5 px-5 pb-5 pt-4 md:px-6 md:pb-6" : "gap-2 p-5"}`}>
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className={`heading-h3 leading-snug text-text-primary ${featured ? "text-[1.05rem]" : "text-[1rem]"}`}>
-            {title}
-          </h3>
-          <span className="art-tag caption shrink-0 text-accent-2">
-            {artwork.category}
-          </span>
+      {!isFeaturedGalleryCard && (
+        <div className="flex flex-1 flex-col gap-2 p-5">
+          <div className="flex items-baseline justify-between gap-3">
+            <h3 className="heading-h3 text-[1rem] leading-snug text-text-primary">
+              {title}
+            </h3>
+            <span className="art-tag caption shrink-0 text-accent-2">
+              {artwork.category}
+            </span>
+          </div>
+          {note && (
+            <p className="body-sm line-clamp-2 text-text-secondary">
+              {note}
+            </p>
+          )}
         </div>
-        {note && (
-          <p className={`body-sm text-text-secondary ${featured ? "line-clamp-3 max-w-[22ch]" : "line-clamp-2"}`}>
-            {note}
-          </p>
-        )}
-      </div>
+      )}
     </motion.article>
   );
 }

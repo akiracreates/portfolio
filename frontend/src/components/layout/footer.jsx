@@ -12,7 +12,14 @@ import {
   useDictLocale,
 } from "@/components/i18n/locale-provider";
 
-const FOOTER_SOCIALS = ["telegram", "vk", "cara", "patreon", "email"];
+const FOOTER_SOCIALS = [
+  "telegram-personal",
+  "telegram-channel",
+  "vk",
+  "cara",
+  "patreon",
+  "email",
+];
 
 export function Footer() {
   const dict = useDictionary();
@@ -79,10 +86,7 @@ export function Footer() {
                   <p className="body max-w-md">{socialsT.description}</p>
                 )}
               </div>
-              <div className="scrap-caption max-w-md px-5 py-4">
-                <p className="body-sm text-text-primary">{socialsT.contactNote}</p>
-                <p className="caption mt-3 max-w-sm">{bio}</p>
-              </div>
+              <p className="caption max-w-sm">{bio}</p>
               <a
                 href="#hero"
                 className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
