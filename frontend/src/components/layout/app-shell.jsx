@@ -14,50 +14,34 @@ import { Footer } from "@/components/layout/footer";
  */
 export function AppShell({ children }) {
   const reduced = useReducedMotion();
-  const [hoverOpen, setHoverOpen] = useState(false);
+  const [pointerInside, setPointerInside] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const openTimerRef = useRef(null);
   const closeTimerRef = useRef(null);
 
-  const collapsed = !(hoverOpen || focusWithin);
+  const collapsed = !(pointerInside || focusWithin);
 
-  const clearTimers = useCallback(() => {
-    if (openTimerRef.current) {
-      window.clearTimeout(openTimerRef.current);
-      openTimerRef.current = null;
-    }
+  const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
       window.clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
   }, []);
 
-  useEffect(() => () => clearTimers(), [clearTimers]);
+  useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
 
   const onEnter = useCallback(() => {
-    if (closeTimerRef.current) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-    if (openTimerRef.current) return;
-    openTimerRef.current = window.setTimeout(() => {
-      setHoverOpen(true);
-      openTimerRef.current = null;
-    }, 50);
-  }, []);
+    clearCloseTimer();
+    setPointerInside(true);
+  }, [clearCloseTimer]);
 
   const onLeave = useCallback(() => {
-    if (openTimerRef.current) {
-      window.clearTimeout(openTimerRef.current);
-      openTimerRef.current = null;
-    }
-    if (closeTimerRef.current) return;
+    clearCloseTimer();
     closeTimerRef.current = window.setTimeout(() => {
-      setHoverOpen(false);
+      setPointerInside(false);
       closeTimerRef.current = null;
-    }, 110);
-  }, []);
+    }, 80);
+  }, [clearCloseTimer]);
 
   const sidebarWidth = collapsed
     ? "var(--sidebar-w-collapsed)"
@@ -83,8 +67,9 @@ export function AppShell({ children }) {
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
         onFocusCapture={() => {
-          clearTimers();
+          clearCloseTimer();
           setFocusWithin(true);
+          setPointerInside(true);
         }}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) {

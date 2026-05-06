@@ -145,13 +145,16 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const pageItems = navStructure.pages;
 
   const activeSubmenuId = useMemo(() => {
+    const activePageWithSubmenuByPath = pageItems.find(
+      (item) => item.sections?.length && isPathActive(pathname, item.href, locale),
+    );
     const activePageWithSubmenu = pageItems.find(
       (item) =>
         item.sections?.length &&
         isPathActive(pathname, item.href, locale) &&
         item.sections.some((section) => section.anchor === activeAnchor),
     );
-    return activePageWithSubmenu?.id ?? null;
+    return activePageWithSubmenu?.id ?? activePageWithSubmenuByPath?.id ?? null;
   }, [activeAnchor, locale, pageItems, pathname]);
 
   const effectiveOpenSubmenuId = activeSubmenuId ?? openSubmenuId;
@@ -236,23 +239,30 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
 
             return (
               <li key={item.id} className="space-y-1">
-                <NavItem
-                  href={href}
-                  iconId={item.icon}
-                  label={t(item.labelKey)}
-                  active={active}
-                  collapsed={collapsed}
-                  onClick={() => {
-                    setOpenSubmenuId((prev) => {
-                      if (!hasSubmenu) return null;
-                      return prev === item.id ? null : item.id;
-                    });
-                    handleClick();
-                  }}
-                  ariaCurrent={itemPathActive ? "page" : undefined}
-                  hasSubmenu={hasSubmenu}
-                  submenuOpen={submenuOpen}
-                />
+                {hasSubmenu ? (
+                  <NavItemToggle
+                    iconId={item.icon}
+                    label={t(item.labelKey)}
+                    active={active}
+                    collapsed={collapsed}
+                    submenuOpen={submenuOpen}
+                    onClick={() => {
+                      setOpenSubmenuId((prev) => (prev === item.id ? null : item.id));
+                    }}
+                  />
+                ) : (
+                  <NavItem
+                    href={href}
+                    iconId={item.icon}
+                    label={t(item.labelKey)}
+                    active={active}
+                    collapsed={collapsed}
+                    onClick={handleClick}
+                    ariaCurrent={itemPathActive ? "page" : undefined}
+                    hasSubmenu={false}
+                    submenuOpen={false}
+                  />
+                )}
                 <AnimatePresence initial={false}>
                   {hasSubmenu && submenuOpen && !collapsed && (
                     <motion.ul
@@ -339,13 +349,12 @@ function Label({ collapsed, children, hide = false }) {
       initial={false}
       animate={{
         opacity: shouldHide ? 0 : 1,
-        x: shouldHide ? -6 : 0,
         maxWidth: shouldHide ? 0 : 220,
       }}
       transition={{
-        duration: 0.24,
+        duration: 0.2,
         ease: [0.2, 0, 0, 1],
-        delay: shouldHide ? 0 : 0.08,
+        delay: shouldHide ? 0 : 0.04,
       }}
       aria-hidden={shouldHide}
     >
@@ -362,10 +371,12 @@ function NavGroup({ label, collapsed, children }) {
         initial={false}
         animate={{
           opacity: collapsed ? 0 : 1,
-          x: collapsed ? -6 : 0,
+          maxHeight: collapsed ? 0 : 24,
+          marginBottom: collapsed ? 0 : 8,
         }}
         transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
         aria-hidden={collapsed}
+        style={{ overflow: "hidden" }}
       >
         {label}
       </motion.p>
@@ -422,5 +433,53 @@ function NavItem({
       ) : null}
       {collapsed && <span className="sr-only">{label}</span>}
     </Link>
+  );
+}
+
+function NavItemToggle({
+  iconId,
+  label,
+  active,
+  collapsed,
+  submenuOpen,
+  onClick,
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`group relative grid w-full grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 rounded-md border border-dashed px-3 py-2 text-left text-[0.875rem] transition-colors duration-[var(--duration-fast)] focus-visible-ring ${
+        active
+          ? "border-border-accent bg-highlight-soft text-text-primary"
+          : "border-transparent text-text-secondary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
+      }`}
+      aria-expanded={submenuOpen}
+      title={collapsed ? label : undefined}
+    >
+      {active && (
+        <span
+          className="absolute bottom-1.5 left-1 top-1.5 w-[3px] rounded-r-full bg-highlight"
+          aria-hidden
+        />
+      )}
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+        <NavIcon id={iconId} />
+      </span>
+      <Label collapsed={collapsed}>
+        <span className="truncate">{label}</span>
+      </Label>
+      {!collapsed ? (
+        <motion.span
+          className="text-text-tertiary"
+          initial={false}
+          animate={{ rotate: submenuOpen ? 90 : 0, opacity: 1 }}
+          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          aria-hidden
+        >
+          ›
+        </motion.span>
+      ) : null}
+      {collapsed && <span className="sr-only">{label}</span>}
+    </button>
   );
 }
