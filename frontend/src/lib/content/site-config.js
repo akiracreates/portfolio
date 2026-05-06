@@ -19,9 +19,29 @@ export const navStructure = {
     { id: "commissions", icon: "commissions", anchor: "commissions-preview", labelKey: "nav.commissions" },
   ],
   pages: [
-    { id: "about",     icon: "about",       href: "/about",       labelKey: "nav.about" },
+    {
+      id: "about",
+      icon: "about",
+      href: "/about",
+      labelKey: "nav.about",
+      sections: [
+        { id: "about-started", anchor: "about-started", labelKey: "nav.aboutStarted" },
+        { id: "about-timeline", anchor: "about-timeline", labelKey: "nav.aboutTimeline" },
+        { id: "about-now", anchor: "about-now", labelKey: "nav.aboutNow" },
+      ],
+    },
     { id: "portfolio", icon: "portfolio",   href: "/portfolio",   labelKey: "nav.portfolio" },
-    { id: "work",      icon: "commissions", href: "/commissions", labelKey: "nav.work" },
+    {
+      id: "work",
+      icon: "commissions",
+      href: "/commissions",
+      labelKey: "nav.work",
+      sections: [
+        { id: "work-offers", anchor: "offers", labelKey: "nav.workOffers" },
+        { id: "work-process", anchor: "process", labelKey: "nav.workProcess" },
+        { id: "work-faq", anchor: "faq", labelKey: "nav.workFaq" },
+      ],
+    },
   ],
 };
 

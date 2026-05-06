@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useId, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { navStructure } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
 import { NavIcon } from "@/components/layout/nav-icons";
@@ -16,38 +17,113 @@ function isHomePathname(pathname, locale) {
   return pathname === `/${locale}` || pathname === `/${locale}/`;
 }
 
+function getPathWithoutLocale(pathname, locale) {
+  if (!pathname) return "/";
+  const localePrefix = `/${locale}`;
+  if (!pathname.startsWith(localePrefix)) return pathname;
+  const rest = pathname.slice(localePrefix.length);
+  return rest || "/";
+}
+
 function isPathActive(pathname, href, locale) {
   if (!pathname) return false;
   const fullHref = `/${locale}${href === "/" ? "" : href}`;
   return pathname === fullHref || pathname.startsWith(`${fullHref}/`);
 }
 
-/**
- * Tracks which `homepageSections` anchor is currently in view. Only runs when
- * we're actually on the home route — sub-pages don't get scroll-spy state.
- */
-function useScrollSpy(anchors, enabled) {
-  const [activeRaw, setActive] = useState("");
+function useSectionObserver(anchors, enabled) {
+  const [active, setActive] = useState("");
+
   useEffect(() => {
     if (!enabled) return undefined;
-    const observers = [];
-    anchors.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) setActive(id);
-          });
-        },
-        { rootMargin: "-45% 0px -45% 0px", threshold: 0.01 },
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
+    if (!anchors.length) return undefined;
+
+    const elements = anchors
+      .map((id) => ({ id, el: document.getElementById(id) }))
+      .filter((item) => item.el);
+    if (!elements.length) return undefined;
+
+    let raf = null;
+    const intersections = new Map();
+
+    const computeActive = () => {
+      raf = null;
+      const viewportHeight = window.innerHeight || 0;
+
+      if (intersections.size > 0) {
+        let best = null;
+        intersections.forEach((data, id) => {
+          const distance = Math.abs(data.top - viewportHeight * 0.3);
+          const score = data.ratio * 1000 - distance;
+          if (!best || score > best.score) best = { id, score };
+        });
+        if (best) {
+          setActive(best.id);
+          return;
+        }
+      }
+
+      const doc = document.documentElement;
+      const atTop = window.scrollY <= 12;
+      const atBottom =
+        Math.ceil(window.innerHeight + window.scrollY) >= doc.scrollHeight - 6;
+      if (atTop) {
+        setActive(anchors[0] ?? "");
+        return;
+      }
+      if (atBottom) {
+        setActive(anchors[anchors.length - 1] ?? "");
+        return;
+      }
+
+      let bestByTop = anchors[0] ?? "";
+      for (const item of elements) {
+        const top = item.el.getBoundingClientRect().top;
+        if (top <= viewportHeight * 0.35) bestByTop = item.id;
+      }
+      setActive(bestByTop);
+    };
+
+    const schedule = () => {
+      if (raf !== null) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(computeActive);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            intersections.set(entry.target.id, {
+              ratio: entry.intersectionRatio,
+              top: entry.boundingClientRect.top,
+            });
+          } else {
+            intersections.delete(entry.target.id);
+          }
+        });
+        schedule();
+      },
+      {
+        root: null,
+        threshold: [0, 0.1, 0.2, 0.35, 0.5, 0.7, 1],
+        rootMargin: "-20% 0px -55% 0px",
+      },
+    );
+
+    elements.forEach(({ el }) => observer.observe(el));
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    schedule();
+
+    return () => {
+      if (raf !== null) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      observer.disconnect();
+    };
   }, [anchors, enabled]);
-  return enabled ? activeRaw : "";
+
+  return enabled ? active : "";
 }
 
 export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
@@ -56,9 +132,17 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const t = useT();
   const locale = useDictLocale() || "en";
   const isHome = isHomePathname(pathname, locale);
+  const routeWithoutLocale = getPathWithoutLocale(pathname, locale);
+  const [openSubmenuId, setOpenSubmenuId] = useState(null);
 
-  const anchors = navStructure.homepageSections.map((i) => i.anchor);
-  const activeAnchor = useScrollSpy(anchors, isHome);
+  const activeAnchors = useMemo(() => {
+    if (isHome) return navStructure.homepageSections.map((item) => item.anchor);
+    const activePage = navStructure.pages.find((item) =>
+      isPathActive(pathname, item.href, locale),
+    );
+    return activePage?.sections?.map((item) => item.anchor) ?? [];
+  }, [isHome, locale, pathname]);
+  const activeAnchor = useSectionObserver(activeAnchors, activeAnchors.length > 0);
 
   const handleClick = useCallback(() => {
     if (onNavigate) onNavigate();
@@ -66,6 +150,18 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
 
   const sectionItems = navStructure.homepageSections;
   const pageItems = navStructure.pages;
+
+  const activeSubmenuId = useMemo(() => {
+    const activePageWithSubmenu = pageItems.find(
+      (item) =>
+        item.sections?.length &&
+        isPathActive(pathname, item.href, locale) &&
+        item.sections.some((section) => section.anchor === activeAnchor),
+    );
+    return activePageWithSubmenu?.id ?? null;
+  }, [activeAnchor, locale, pageItems, pathname]);
+
+  const effectiveOpenSubmenuId = activeSubmenuId ?? openSubmenuId;
 
   const visibleSocials = socialLinks.filter((s) =>
     FOOTER_SOCIALS.includes(s.id),
@@ -125,6 +221,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                 active={active}
                 collapsed={collapsed}
                 onClick={handleClick}
+                hideText={routeWithoutLocale !== "/"}
               />
             );
           })}
@@ -134,19 +231,71 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
 
         <NavGroup label={t("nav.more", "more")} collapsed={collapsed}>
           {pageItems.map((item) => {
-            const active = isPathActive(pathname, item.href, locale);
+            const hasSubmenu = Boolean(item.sections?.length);
+            const itemPathActive = isPathActive(pathname, item.href, locale);
+            const childActive = Boolean(
+              hasSubmenu &&
+                itemPathActive &&
+                item.sections.some((section) => section.anchor === activeAnchor),
+            );
+            const active = itemPathActive || childActive;
             const href = `/${locale}${item.href === "/" ? "" : item.href}`;
+            const submenuOpen = effectiveOpenSubmenuId === item.id || childActive;
+
             return (
-              <NavItem
-                key={item.id}
-                href={href}
-                iconId={item.icon}
-                label={t(item.labelKey)}
-                active={active}
-                collapsed={collapsed}
-                onClick={handleClick}
-                ariaCurrent={active ? "page" : undefined}
-              />
+              <li key={item.id} className="space-y-1">
+                <NavItem
+                  href={href}
+                  iconId={item.icon}
+                  label={t(item.labelKey)}
+                  active={active}
+                  collapsed={collapsed}
+                  onClick={() => {
+                    setOpenSubmenuId((prev) => {
+                      if (!hasSubmenu) return null;
+                      return prev === item.id ? null : item.id;
+                    });
+                    handleClick();
+                  }}
+                  ariaCurrent={itemPathActive ? "page" : undefined}
+                  hasSubmenu={hasSubmenu}
+                  submenuOpen={submenuOpen}
+                />
+                <AnimatePresence initial={false}>
+                  {hasSubmenu && submenuOpen && !collapsed && (
+                    <motion.ul
+                      key={`${item.id}-submenu`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.24, ease: [0.2, 0, 0, 1] }}
+                      className="overflow-hidden pl-8"
+                    >
+                      {item.sections.map((section) => {
+                        const sectionHref = `${href}#${section.anchor}`;
+                        const sectionActive =
+                          itemPathActive && activeAnchor === section.anchor;
+                        return (
+                          <li key={section.id}>
+                            <Link
+                              href={sectionHref}
+                              onClick={handleClick}
+                              className={`focus-visible-ring block rounded-md px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
+                                sectionActive
+                                  ? "bg-highlight-soft text-text-primary"
+                                  : "text-text-tertiary hover:text-text-primary"
+                              }`}
+                              aria-current={sectionActive ? "true" : undefined}
+                            >
+                              {t(section.labelKey)}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+              </li>
             );
           })}
         </NavGroup>
@@ -190,36 +339,45 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
  * width when the sidebar is collapsed. This avoids layout flashes that we'd
  * otherwise get from mounting/unmounting on every hover.
  */
-function Label({ collapsed, children }) {
+function Label({ collapsed, children, hide = false }) {
+  const shouldHide = collapsed || hide;
   return (
-    <span
-      className="min-w-0 overflow-hidden transition-[opacity,max-width] duration-[var(--duration-base)] ease-[var(--ease-out)]"
-      style={{
-        opacity: collapsed ? 0 : 1,
-        maxWidth: collapsed ? "0px" : "180px",
+    <motion.span
+      className="min-w-0 overflow-hidden whitespace-nowrap"
+      initial={false}
+      animate={{
+        opacity: shouldHide ? 0 : 1,
+        x: shouldHide ? -6 : 0,
+        maxWidth: shouldHide ? 0 : 220,
       }}
-      aria-hidden={collapsed}
+      transition={{
+        duration: 0.24,
+        ease: [0.2, 0, 0, 1],
+        delay: shouldHide ? 0 : 0.08,
+      }}
+      aria-hidden={shouldHide}
     >
       {children}
-    </span>
+    </motion.span>
   );
 }
 
 function NavGroup({ label, collapsed, children }) {
   return (
     <div>
-      <p
+      <motion.p
         className="mb-2 px-3 text-[0.7rem] font-semibold text-text-tertiary transition-opacity duration-[var(--duration-base)]"
-        style={{
+        initial={false}
+        animate={{
           opacity: collapsed ? 0 : 1,
-          visibility: collapsed ? "hidden" : "visible",
-          height: collapsed ? "0" : undefined,
-          marginBottom: collapsed ? "0" : undefined,
+          height: collapsed ? 0 : 16,
+          marginBottom: collapsed ? 0 : 8,
         }}
+        transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
         aria-hidden={collapsed}
       >
         {label}
-      </p>
+      </motion.p>
       <ul className="space-y-0.5">{children}</ul>
     </div>
   );
@@ -233,34 +391,46 @@ function NavItem({
   collapsed,
   onClick,
   ariaCurrent,
+  hasSubmenu = false,
+  submenuOpen = false,
+  hideText = false,
 }) {
   return (
-    <li>
-      <Link
-        href={href}
-        onClick={onClick}
-        className={`group relative flex items-center gap-3 rounded-md border border-dashed px-3 py-2 text-[0.875rem] transition-colors duration-[var(--duration-fast)] focus-visible-ring ${
-          active
-            ? "border-border-accent bg-highlight-soft text-text-primary"
-            : "border-transparent text-text-secondary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
-        }`}
-        aria-current={ariaCurrent}
-        title={collapsed ? label : undefined}
-      >
-        {active && (
-          <span
-            className="absolute bottom-1.5 left-1 top-1.5 w-[3px] rounded-r-full bg-highlight"
-            aria-hidden
-          />
-        )}
-        <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-          <NavIcon id={iconId} />
-        </span>
-        <Label collapsed={collapsed}>
-          <span className="truncate">{label}</span>
-        </Label>
-        {collapsed && <span className="sr-only">{label}</span>}
-      </Link>
-    </li>
+    <Link
+      href={href}
+      onClick={onClick}
+      className={`group relative grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-3 rounded-md border border-dashed px-3 py-2 text-[0.875rem] transition-colors duration-[var(--duration-fast)] focus-visible-ring ${
+        active
+          ? "border-border-accent bg-highlight-soft text-text-primary"
+          : "border-transparent text-text-secondary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
+      }`}
+      aria-current={ariaCurrent}
+      title={collapsed || hideText ? label : undefined}
+    >
+      {active && (
+        <span
+          className="absolute bottom-1.5 left-1 top-1.5 w-[3px] rounded-r-full bg-highlight"
+          aria-hidden
+        />
+      )}
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+        <NavIcon id={iconId} />
+      </span>
+      <Label collapsed={collapsed} hide={hideText}>
+        <span className="truncate">{label}</span>
+      </Label>
+      {hasSubmenu && !collapsed && !hideText ? (
+        <motion.span
+          className="text-text-tertiary"
+          initial={false}
+          animate={{ rotate: submenuOpen ? 90 : 0, opacity: 1 }}
+          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          aria-hidden
+        >
+          ›
+        </motion.span>
+      ) : null}
+      {(collapsed || hideText) && <span className="sr-only">{label}</span>}
+    </Link>
   );
 }

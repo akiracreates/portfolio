@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ImageFrame } from "@/components/ui/image-frame";
 import { SmartImage } from "@/components/ui/smart-image";
@@ -93,8 +94,14 @@ export function ArtworkCard({
  *
  * Animates on mount (no scroll-gating) — see plan note about whileInView race.
  */
-export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
+export function ArtworkRow({
+  artwork,
+  index = 0,
+  locale = "en",
+  enableSecretSpin = false,
+}) {
   const reduced = useReducedMotion();
+  const router = useRouter();
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
   const note = pickLocale(artwork.artistComment, locale);
@@ -115,6 +122,13 @@ export function ArtworkRow({ artwork, index = 0, locale = "en" }) {
         <ImageFrame
           className={`relative z-0 w-full overflow-hidden ${frameClass}`}
           style={aspectStyle}
+          onClick={
+            enableSecretSpin
+              ? () => {
+                  router.push(`/${locale}/spin`);
+                }
+              : undefined
+          }
         >
           <SmartImage
             src={artwork.imageSrc}

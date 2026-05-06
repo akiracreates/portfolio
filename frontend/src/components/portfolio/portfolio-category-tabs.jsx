@@ -82,6 +82,7 @@ export function PortfolioCategoryShowcase({
             piecesLabel={piecesLabel}
             pieceLabel={pieceLabel}
             startIndex={0}
+            enableSecretSpin
           />
         </motion.div>
       </AnimatePresence>

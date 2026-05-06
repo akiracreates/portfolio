@@ -9,6 +9,7 @@ export function ImageFrame({
   style,
   variant = "art",
   singleFrame = false,
+  ...rest
 }) {
   const radiusClass =
     rounded === "md"
@@ -32,6 +33,7 @@ export function ImageFrame({
     <div
       className={`relative overflow-hidden ${variantClass} ${singleFrame ? "single-frame" : ""} ${radiusClass} ${className}`.trim()}
       style={style}
+      {...rest}
     >
       {children}
     </div>

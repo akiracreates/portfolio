@@ -38,6 +38,12 @@ export const dictionary = {
     about: "обо мне",
     portfolio: "полное портфолио",
     work: "работать со мной",
+    aboutStarted: "как всё началось",
+    aboutTimeline: "таймлайн",
+    aboutNow: "где я сейчас",
+    workOffers: "предложения",
+    workProcess: "процесс",
+    workFaq: "faq",
     primaryNavigation: "основная навигация",
   },
 

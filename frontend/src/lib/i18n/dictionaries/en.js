@@ -38,6 +38,12 @@ export const dictionary = {
     about: "about me",
     portfolio: "full portfolio",
     work: "work with me",
+    aboutStarted: "how it started",
+    aboutTimeline: "timeline",
+    aboutNow: "where i am now",
+    workOffers: "offers",
+    workProcess: "process",
+    workFaq: "faq",
     primaryNavigation: "primary navigation",
   },
 
