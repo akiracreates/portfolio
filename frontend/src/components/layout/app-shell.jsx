@@ -1,23 +1,25 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileFab } from "@/components/layout/mobile-fab";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 import { Footer } from "@/components/layout/footer";
 
-/**
- * Desktop sidebar opens on hover (or keyboard focus inside) and collapses
- * back when the cursor leaves. Width is animated via CSS transition on the
- * `--sidebar-w` style. Mobile keeps its FAB-driven drawer.
- */
+const SIDEBAR_EXPANDED_PX = 240;
+const SAFETY_MARGIN_PX = 20;
+const CLOSE_DELAY_MS = 120;
+
 export function AppShell({ children }) {
   const reduced = useReducedMotion();
+  const pathname = usePathname();
   const [pointerInside, setPointerInside] = useState(false);
   const [focusWithin, setFocusWithin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const closeTimerRef = useRef(null);
+  const asideRef = useRef(null);
 
   const collapsed = !(pointerInside || focusWithin);
 
@@ -30,6 +32,12 @@ export function AppShell({ children }) {
 
   useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
 
+  useEffect(() => {
+    setPointerInside(false);
+    setFocusWithin(false);
+    clearCloseTimer();
+  }, [pathname, clearCloseTimer]);
+
   const onEnter = useCallback(() => {
     clearCloseTimer();
     setPointerInside(true);
@@ -40,8 +48,21 @@ export function AppShell({ children }) {
     closeTimerRef.current = window.setTimeout(() => {
       setPointerInside(false);
       closeTimerRef.current = null;
-    }, 80);
+    }, CLOSE_DELAY_MS);
   }, [clearCloseTimer]);
+
+  useEffect(() => {
+    const onPointerMove = (e) => {
+      if (!pointerInside && !focusWithin) return;
+      if (e.clientX > SIDEBAR_EXPANDED_PX + SAFETY_MARGIN_PX) {
+        clearCloseTimer();
+        setPointerInside(false);
+        setFocusWithin(false);
+      }
+    };
+    document.addEventListener("pointermove", onPointerMove, { passive: true });
+    return () => document.removeEventListener("pointermove", onPointerMove);
+  }, [pointerInside, focusWithin, clearCloseTimer]);
 
   const sidebarWidth = collapsed
     ? "var(--sidebar-w-collapsed)"
@@ -54,6 +75,7 @@ export function AppShell({ children }) {
     >
       {/* desktop fixed sidebar */}
       <motion.aside
+        ref={asideRef}
         layout={false}
         className="fixed inset-y-0 left-0 z-40 hidden border-r border-border-strong md:block"
         initial={false}
@@ -69,7 +91,6 @@ export function AppShell({ children }) {
         onFocusCapture={() => {
           clearCloseTimer();
           setFocusWithin(true);
-          setPointerInside(true);
         }}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) {

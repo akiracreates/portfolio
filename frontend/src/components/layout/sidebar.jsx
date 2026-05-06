@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { navStructure } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
 import { NavIcon } from "@/components/layout/nav-icons";
@@ -11,6 +11,8 @@ import { LocaleSwitcher } from "@/components/i18n/locale-switcher";
 import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 
 const FOOTER_SOCIALS = ["telegram", "vk", "cara"];
+const ACTIVATION_OFFSET = 48;
+const CLICK_LOCK_MS = 800;
 
 function isHomePathname(pathname, locale) {
   if (!pathname) return false;
@@ -25,9 +27,14 @@ function isPathActive(pathname, href, locale) {
 
 function useSectionObserver(anchors, enabled) {
   const [active, setActive] = useState("");
+  const lastEmittedRef = useRef("");
 
   useEffect(() => {
-    if (!enabled) return undefined;
+    if (!enabled) {
+      lastEmittedRef.current = "";
+      setActive("");
+      return undefined;
+    }
     if (!anchors.length) return undefined;
 
     const elements = anchors
@@ -36,84 +43,56 @@ function useSectionObserver(anchors, enabled) {
     if (!elements.length) return undefined;
 
     let raf = null;
-    const intersections = new Map();
 
-    const computeActive = () => {
+    const emitIfChanged = (nextId) => {
+      if (lastEmittedRef.current === nextId) return;
+      lastEmittedRef.current = nextId;
+      setActive(nextId);
+    };
+
+    const computeNextActive = () => {
       raf = null;
-      const viewportHeight = window.innerHeight || 0;
+      const line = ACTIVATION_OFFSET;
+      let bestId = "";
+      let bestScore = Number.NEGATIVE_INFINITY;
+      let anyPastLine = false;
 
-      if (intersections.size > 0) {
-        let best = null;
-        intersections.forEach((data, id) => {
-          const distance = Math.abs(data.top - viewportHeight * 0.3);
-          const score = data.ratio * 1000 - distance;
-          if (!best || score > best.score) best = { id, score };
-        });
-        if (best) {
-          setActive(best.id);
-          return;
+      for (const { id, el } of elements) {
+        const rect = el.getBoundingClientRect();
+        const pastLine = rect.top <= line;
+        const spansLine = pastLine && rect.bottom >= line;
+
+        if (pastLine) anyPastLine = true;
+
+        let score = -Math.abs(line - rect.top);
+        if (pastLine) score += 1000;
+        if (spansLine) score += 5000;
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestId = id;
         }
       }
 
-      const doc = document.documentElement;
-      const atTop = window.scrollY <= 12;
-      const atBottom =
-        Math.ceil(window.innerHeight + window.scrollY) >= doc.scrollHeight - 6;
-      if (atTop) {
-        setActive(anchors[0] ?? "");
-        return;
-      }
-      if (atBottom) {
-        setActive(anchors[anchors.length - 1] ?? "");
-        return;
-      }
-
-      let bestByTop = anchors[0] ?? "";
-      for (const item of elements) {
-        const top = item.el.getBoundingClientRect().top;
-        if (top <= viewportHeight * 0.35) bestByTop = item.id;
-      }
-      setActive(bestByTop);
+      if (!anyPastLine) return "";
+      return bestId;
     };
 
     const schedule = () => {
       if (raf !== null) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(computeActive);
+      raf = requestAnimationFrame(() => {
+        emitIfChanged(computeNextActive());
+      });
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            intersections.set(entry.target.id, {
-              ratio: entry.intersectionRatio,
-              top: entry.boundingClientRect.top,
-            });
-          } else {
-            intersections.delete(entry.target.id);
-          }
-        });
-        schedule();
-      },
-      {
-        root: null,
-        threshold: [0, 0.1, 0.2, 0.35, 0.5, 0.7, 1],
-        rootMargin: "-20% 0px -55% 0px",
-      },
-    );
-
-    elements.forEach(({ el }) => observer.observe(el));
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    window.addEventListener("hashchange", schedule);
+    window.addEventListener("scroll", schedule, { passive: true, capture: true });
+    window.addEventListener("resize", schedule, { passive: true });
     schedule();
 
     return () => {
       if (raf !== null) cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("scroll", schedule, true);
       window.removeEventListener("resize", schedule);
-      window.removeEventListener("hashchange", schedule);
-      observer.disconnect();
     };
   }, [anchors, enabled]);
 
@@ -127,37 +106,80 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const locale = useDictLocale() || "en";
   const isHome = isHomePathname(pathname, locale);
   const [openSubmenuId, setOpenSubmenuId] = useState(null);
+  const [clickLockedSection, setClickLockedSection] = useState("");
+  const clickLockTimerRef = useRef(null);
 
-  const activeAnchors = useMemo(() => {
-    if (isHome) return navStructure.homepageSections.map((item) => item.anchor);
-    const activePage = navStructure.pages.find((item) =>
-      isPathActive(pathname, item.href, locale),
+  useEffect(() => {
+    setOpenSubmenuId(null);
+    setClickLockedSection("");
+    if (clickLockTimerRef.current) {
+      clearTimeout(clickLockTimerRef.current);
+      clickLockTimerRef.current = null;
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (clickLockTimerRef.current) clearTimeout(clickLockTimerRef.current);
+    };
+  }, []);
+
+  const pageItems = navStructure.pages;
+  const sectionItems = navStructure.homepageSections;
+  const activePage = useMemo(() => {
+    if (isHome) return null;
+    return (
+      pageItems.find((item) => isPathActive(pathname, item.href, locale)) ?? null
     );
-    return activePage?.sections?.map((item) => item.anchor) ?? [];
-  }, [isHome, locale, pathname]);
-  const activeAnchor = useSectionObserver(activeAnchors, activeAnchors.length > 0);
+  }, [isHome, locale, pageItems, pathname]);
+  const activeAnchors = useMemo(
+    () =>
+      isHome
+        ? sectionItems.map((item) => item.anchor)
+        : activePage?.sections?.map((item) => item.anchor) ?? [],
+    [activePage?.sections, isHome, sectionItems],
+  );
+  const activeSection = useSectionObserver(activeAnchors, activeAnchors.length > 0);
+  const resolvedActiveSection = clickLockedSection || activeSection;
 
   const handleClick = useCallback(() => {
     if (onNavigate) onNavigate();
   }, [onNavigate]);
 
-  const sectionItems = navStructure.homepageSections;
-  const pageItems = navStructure.pages;
+  const handleSectionClick = useCallback(
+    (e, anchor) => {
+      const el = document.getElementById(anchor);
+      if (el) {
+        e.preventDefault();
+        setClickLockedSection(anchor);
+        if (clickLockTimerRef.current) clearTimeout(clickLockTimerRef.current);
+        clickLockTimerRef.current = setTimeout(
+          () => setClickLockedSection(""),
+          CLICK_LOCK_MS,
+        );
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", pathname);
+      }
+      if (onNavigate) onNavigate();
+    },
+    [pathname, onNavigate],
+  );
+
+  const effectiveOpenSubmenuId = useMemo(() => {
+    if (collapsed) return null;
+    if (openSubmenuId) return openSubmenuId;
+    if (activePage?.sections?.length) return activePage.id;
+    return null;
+  }, [activePage, collapsed, openSubmenuId]);
 
   const activeSubmenuId = useMemo(() => {
-    const activePageWithSubmenuByPath = pageItems.find(
-      (item) => item.sections?.length && isPathActive(pathname, item.href, locale),
+    if (!activePage?.sections?.length) return null;
+    const bySection = activePage.sections.find(
+      (section) => section.anchor === resolvedActiveSection,
     );
-    const activePageWithSubmenu = pageItems.find(
-      (item) =>
-        item.sections?.length &&
-        isPathActive(pathname, item.href, locale) &&
-        item.sections.some((section) => section.anchor === activeAnchor),
-    );
-    return activePageWithSubmenu?.id ?? activePageWithSubmenuByPath?.id ?? null;
-  }, [activeAnchor, locale, pageItems, pathname]);
-
-  const effectiveOpenSubmenuId = activeSubmenuId ?? openSubmenuId;
+    if (bySection) return activePage.id;
+    return null;
+  }, [activePage, resolvedActiveSection]);
 
   const visibleSocials = socialLinks.filter((s) =>
     FOOTER_SOCIALS.includes(s.id),
@@ -206,7 +228,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
           collapsed={collapsed}
         >
           {sectionItems.map((item) => {
-            const active = isHome && activeAnchor === item.anchor;
+            const active = isHome && resolvedActiveSection === item.anchor;
             const href = `/${locale}#${item.anchor}`;
             return (
               <NavItem
@@ -216,7 +238,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                 label={t(item.labelKey)}
                 active={active}
                 collapsed={collapsed}
-                onClick={handleClick}
+                onClick={(e) => handleSectionClick(e, item.anchor)}
               />
             );
           })}
@@ -231,11 +253,16 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
             const childActive = Boolean(
               hasSubmenu &&
                 itemPathActive &&
-                item.sections.some((section) => section.anchor === activeAnchor),
+                item.sections.some(
+                  (section) => section.anchor === resolvedActiveSection,
+                ),
             );
             const active = itemPathActive || childActive;
             const href = `/${locale}${item.href === "/" ? "" : item.href}`;
-            const submenuOpen = effectiveOpenSubmenuId === item.id || childActive;
+            const submenuOpen =
+              effectiveOpenSubmenuId === item.id ||
+              activeSubmenuId === item.id ||
+              childActive;
 
             return (
               <li key={item.id} className="space-y-1">
@@ -247,7 +274,10 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                     collapsed={collapsed}
                     submenuOpen={submenuOpen}
                     onClick={() => {
-                      setOpenSubmenuId((prev) => (prev === item.id ? null : item.id));
+                      setOpenSubmenuId((prev) => {
+                        if (prev === item.id) return null;
+                        return item.id;
+                      });
                     }}
                   />
                 ) : (
@@ -276,18 +306,23 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                       {item.sections.map((section) => {
                         const sectionHref = `${href}#${section.anchor}`;
                         const sectionActive =
-                          itemPathActive && activeAnchor === section.anchor;
+                          itemPathActive &&
+                          resolvedActiveSection === section.anchor;
                         return (
                           <li key={section.id}>
                             <Link
                               href={sectionHref}
-                              onClick={handleClick}
+                              onClick={(e) =>
+                                handleSectionClick(e, section.anchor)
+                              }
                               className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
                                 sectionActive
                                   ? "border-border-accent bg-highlight-soft text-text-primary"
                                   : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
                               }`}
-                              aria-current={sectionActive ? "true" : undefined}
+                              aria-current={
+                                sectionActive ? "location" : undefined
+                              }
                             >
                               {t(section.labelKey)}
                             </Link>
@@ -336,11 +371,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   );
 }
 
-/**
- * `Label` keeps the label always mounted but smoothly fades + shrinks its
- * width when the sidebar is collapsed. This avoids layout flashes that we'd
- * otherwise get from mounting/unmounting on every hover.
- */
 function Label({ collapsed, children, hide = false }) {
   const shouldHide = collapsed || hide;
   return (
