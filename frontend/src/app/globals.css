@@ -749,13 +749,13 @@ a {
 
 .portfolio-tabs {
   position: sticky;
-  top: 0.75rem;
+  top: 0;
   z-index: 30;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.25rem 0 0.85rem;
+  padding: 0.5rem 0 0.8rem;
   background: linear-gradient(180deg, rgba(43, 39, 48, 0.94), rgba(43, 39, 48, 0.7) 75%, transparent);
   backdrop-filter: blur(10px);
 }
@@ -1854,14 +1854,43 @@ a {
   }
 }
 
+.cascade-artworks {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.cascade-row {
+  position: relative;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .cascade-artworks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2vw, 1.9rem);
+  }
+
+  .portfolio-stage {
+    padding: 0.35rem 0.35rem 0.45rem;
+  }
+
+  .portfolio-note {
+    position: absolute;
+    z-index: 10;
+    max-width: min(82%, 14.5rem);
+    margin: 0;
+    pointer-events: none;
+  }
+}
+
 .portfolio-stage {
   position: relative;
 }
 
 .portfolio-note {
-  position: relative;
   z-index: 2;
-  max-width: 29rem;
+  max-width: 24rem;
 }
 
 .portfolio-note::before {
@@ -1879,12 +1908,32 @@ a {
   display: none;
 }
 
-.portfolio-note--left::before {
-  right: calc(100% - 8px);
-}
+@media (min-width: 768px) {
+  .portfolio-note--bl,
+  .portfolio-note--br {
+    bottom: 0;
+    transform: translateY(24%);
+  }
 
-.portfolio-note--right::before {
-  left: calc(100% - 8px);
+  .portfolio-note--tl,
+  .portfolio-note--tr {
+    top: 0;
+    transform: translateY(-24%);
+  }
+
+  .portfolio-note--bl,
+  .portfolio-note--tl {
+    left: 0;
+  }
+
+  .portfolio-note--br,
+  .portfolio-note--tr {
+    right: 0;
+  }
+
+  .cascade-row .portfolio-note::before {
+    display: none !important;
+  }
 }
 
 .site-ending {
@@ -1984,15 +2033,11 @@ a {
   }
 
   .portfolio-note--left {
-    margin-left: -2.5rem;
+    margin-left: 0;
   }
 
   .portfolio-note--right {
-    margin-right: -2.5rem;
-  }
-
-  .portfolio-note::before {
-    display: block;
+    margin-right: 0;
   }
 
   .about-storybook {
@@ -2264,11 +2309,11 @@ a {
   }
 
   .portfolio-note--left {
-    margin-left: -4rem;
+    margin-left: 0;
   }
 
   .portfolio-note--right {
-    margin-right: -4rem;
+    margin-right: 0;
   }
 }
 

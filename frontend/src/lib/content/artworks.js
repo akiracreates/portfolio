@@ -50,15 +50,15 @@ const rawArtworks = [
     },
   },
   {
-    id: "portrait-03",
+    id: "portrait-06",
     category: "portraits",
-    path: "images/portraits/some_dude",
-    featured: true,
-    title: { en: "evening light", ru: "вечерний свет" },
-    alt: { en: "portrait at dusk", ru: "портрет в сумерках" },
+    path: "images/portraits/owner_pet1",
+    featured: false,
+    title: { en: "owner + pet", ru: "хозяйка и питомец" },
+    alt: { en: "portrait of owner with pet", ru: "портрет хозяйки с питомцем" },
     artistComment: {
-      en: "warm colour study at dusk — a reminder to slow down.",
-      ru: "тёплый цветовой этюд в сумерках — напоминание замедлиться.",
+      en: "a quiet dual portrait focusing on connection and warmth.",
+      ru: "тихий двойной портрет с акцентом на связь и тепло.",
     },
   },
   {
@@ -86,15 +86,15 @@ const rawArtworks = [
     },
   },
   {
-    id: "portrait-06",
+    id: "portrait-03",
     category: "portraits",
-    path: "images/portraits/owner_pet1",
-    featured: false,
-    title: { en: "owner + pet", ru: "хозяйка и питомец" },
-    alt: { en: "portrait of owner with pet", ru: "портрет хозяйки с питомцем" },
+    path: "images/portraits/some_dude",
+    featured: true,
+    title: { en: "evening light", ru: "вечерний свет" },
+    alt: { en: "portrait at dusk", ru: "портрет в сумерках" },
     artistComment: {
-      en: "a quiet dual portrait focusing on connection and warmth.",
-      ru: "тихий двойной портрет с акцентом на связь и тепло.",
+      en: "warm colour study at dusk — a reminder to slow down.",
+      ru: "тёплый цветовой этюд в сумерках — напоминание замедлиться.",
     },
   },
 
@@ -169,42 +169,6 @@ const rawArtworks = [
 
   // ---------------- landscapes (5) ----------------
   {
-    id: "landscape-01",
-    category: "landscapes",
-    path: "images/landscapes/cloudscape2",
-    featured: false,
-    title: { en: "cloudscope ii", ru: "облака ii" },
-    alt: { en: "cloud landscape study", ru: "этюд облачного пейзажа" },
-    artistComment: {
-      en: "a broad sky study focused on shape and atmosphere.",
-      ru: "пейзажный этюд неба с фокусом на форме и атмосфере.",
-    },
-  },
-  {
-    id: "landscape-02",
-    category: "landscapes",
-    path: "images/landscapes/cityscape",
-    featured: false,
-    title: { en: "cityscape", ru: "городской пейзаж" },
-    alt: { en: "cityscape painting", ru: "живопись городского пейзажа" },
-    artistComment: {
-      en: "a city scene built from soft geometry and restrained color.",
-      ru: "городская сцена из мягкой геометрии и сдержанного цвета.",
-    },
-  },
-  {
-    id: "landscape-03",
-    category: "landscapes",
-    path: "images/landscapes/oceanscape",
-    featured: false,
-    title: { en: "oceanscape", ru: "морской пейзаж" },
-    alt: { en: "ocean landscape", ru: "морской пейзаж" },
-    artistComment: {
-      en: "quiet water rhythms and layered blues across the horizon.",
-      ru: "тихие ритмы воды и слои синего вдоль горизонта.",
-    },
-  },
-  {
     id: "landscape-04",
     category: "landscapes",
     path: "images/landscapes/cloudscape",
@@ -226,6 +190,42 @@ const rawArtworks = [
     artistComment: {
       en: "a mountain composition balancing depth and stillness.",
       ru: "горная композиция с балансом глубины и тишины.",
+    },
+  },
+  {
+    id: "landscape-02",
+    category: "landscapes",
+    path: "images/landscapes/cityscape",
+    featured: false,
+    title: { en: "cityscape", ru: "городской пейзаж" },
+    alt: { en: "cityscape painting", ru: "живопись городского пейзажа" },
+    artistComment: {
+      en: "a city scene built from soft geometry and restrained color.",
+      ru: "городская сцена из мягкой геометрии и сдержанного цвета.",
+    },
+  },
+  {
+    id: "landscape-01",
+    category: "landscapes",
+    path: "images/landscapes/cloudscape2",
+    featured: false,
+    title: { en: "cloudscope ii", ru: "облака ii" },
+    alt: { en: "cloud landscape study", ru: "этюд облачного пейзажа" },
+    artistComment: {
+      en: "a broad sky study focused on shape and atmosphere.",
+      ru: "пейзажный этюд неба с фокусом на форме и атмосфере.",
+    },
+  },
+  {
+    id: "landscape-03",
+    category: "landscapes",
+    path: "images/landscapes/oceanscape",
+    featured: false,
+    title: { en: "oceanscape", ru: "морской пейзаж" },
+    alt: { en: "ocean landscape", ru: "морской пейзаж" },
+    artistComment: {
+      en: "quiet water rhythms and layered blues across the horizon.",
+      ru: "тихие ритмы воды и слои синего вдоль горизонта.",
     },
   },
 

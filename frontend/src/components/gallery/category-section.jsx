@@ -22,20 +22,23 @@ export function CategorySection({
   const count = artworks.length;
   const label = count === 1 ? pieceLabel : piecesLabel;
 
+  const categoryIntro = categoryIntroCopy[category] ?? categoryIntroCopy.default;
+
   return (
-    <section id={id} className="scroll-mt-header space-y-8 md:space-y-11">
+    <section id={id} className="scroll-mt-header space-y-6 md:space-y-8">
       <header className="category-banner corner-marks relative flex items-baseline justify-between gap-4 border border-dashed border-border-subtle p-5 md:p-6">
         <div className="space-y-1.5">
           <Eyebrow>{eyebrow}</Eyebrow>
           <h3 className="heading-h2 text-[1.9rem] leading-tight md:text-[2.15rem]">
             {category}
           </h3>
+          <p className="body-sm max-w-[52ch]">{categoryIntro}</p>
         </div>
         <span className="tilt-chip caption shrink-0 pt-2 text-highlight">
           {count} {label}
         </span>
       </header>
-      <div className="space-y-10 md:space-y-14">
+      <div className="cascade-artworks">
         {artworks.map((artwork, index) => (
           <ArtworkRow
             key={artwork.id}
@@ -48,5 +51,13 @@ export function CategorySection({
     </section>
   );
 }
+
+const categoryIntroCopy = {
+  portraits: "intimate studies of expression, memory, and quiet mood.",
+  animals: "character-driven companions with soft edges and warm contrast.",
+  landscapes: "atmospheric places focused on light, weather, and distance.",
+  "still life": "small everyday objects arranged as calm narrative moments.",
+  default: "a curated sequence of recent pieces from this collection.",
+};
 
 export { categoryAnchorId };
