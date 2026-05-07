@@ -1200,6 +1200,10 @@ a {
   display: none;
 }
 
+.about-board-cluster-inner {
+  transform: translateY(1.25rem);
+}
+
 .about-board-cluster-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -1451,10 +1455,27 @@ a {
   max-width: 14.25rem;
 }
 
-.about-timeline-grid > .about-timeline-item:nth-child(4) .about-timeline-media,
-.about-timeline-item:has(.about-timeline-frame--4) .about-timeline-media {
-  width: min(100%, 20rem);
-  max-width: 20rem;
+/*
+ * 2023 / age 17 only: grid columns are ~20% of the row, so min(100%, Xrem) never
+ * exceeds the column — use an explicit width so the frame can actually grow.
+ */
+.about-timeline-item.about-timeline-item--large-wide {
+  overflow: visible;
+  z-index: 4;
+}
+
+.about-timeline-item.about-timeline-item--large-wide .about-timeline-media,
+.about-timeline-item:has(.timeline-large-wide) .about-timeline-media {
+  /* explicit width — not min(100%, …) — so we beat the narrow grid cell */
+  width: clamp(240px, 24vw, 340px);
+  max-width: 340px;
+}
+
+.about-timeline-item.about-timeline-item--large-wide
+  .about-timeline-frame.timeline-large-wide.about-artifact-display--timeline,
+.about-timeline-frame.timeline-large-wide.about-artifact-display--timeline {
+  max-width: none;
+  width: 100%;
 }
 
 .about-timeline-frame {
@@ -1467,12 +1488,34 @@ a {
   transform: rotate(-0.55deg);
 }
 
+/* image 1: square artwork, widen so visual height matches portrait image 5 */
+.about-timeline-item:has(.about-timeline-frame--1) .about-timeline-media {
+  width: 16.5rem;
+  max-width: 16.5rem;
+}
+
+.about-timeline-frame--1.about-artifact-display--timeline {
+  max-width: none;
+  width: 100%;
+}
+
 .about-timeline-frame--2 {
   transform: rotate(0.45deg);
 }
 
 .about-timeline-frame--3 {
   transform: rotate(-0.3deg);
+}
+
+/* image 3: near-square artwork, same target visual height as image 5 */
+.about-timeline-item:has(.about-timeline-frame--3) .about-timeline-media {
+  width: 16.5rem;
+  max-width: 16.5rem;
+}
+
+.about-timeline-frame--3.about-artifact-display--timeline {
+  max-width: none;
+  width: 100%;
 }
 
 .about-timeline-frame--4 {
@@ -1891,6 +1934,11 @@ a {
     width: min(100%, 18rem);
     max-width: 18rem;
   }
+
+  .about-timeline-item.about-timeline-item--large-wide .about-timeline-media {
+    width: min(100%, 20rem);
+    max-width: 20rem;
+  }
 }
 
 .cascade-artworks {
@@ -2262,7 +2310,7 @@ a {
   }
 
   .about-origin-prose {
-    max-width: min(100%, 88ch);
+    max-width: min(100%, 100ch);
   }
 
   .about-origin-cluster {
@@ -2280,14 +2328,16 @@ a {
 
   .about-board-cluster {
     float: right;
-    width: clamp(340px, 34vw, 520px);
-    margin: 0 0 0.96rem 1.6rem;
-    shape-outside: inset(0 round 16px);
+    width: clamp(380px, 38vw, 560px);
+    margin: -1rem -0.25rem 0rem 2.25rem;
+    shape-outside: inset(0 0 28% 0 round 16px);
     padding: 0;
   }
+  
 
   .about-board-header {
     max-width: 36rem;
+    margin-bottom: 0.4rem;
   }
 
   .about-board-title {

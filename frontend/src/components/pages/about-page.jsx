@@ -155,26 +155,28 @@ function BoardCluster({ items, locale, tabLabel }) {
       <span className="about-board-cluster-tab caption text-highlight">
         {tabLabel || fallbackTabLabel}
       </span>
-      <div className="about-board-cluster-grid">
-        {items.map((item) => (
-          <figure key={item.id} className={item.boardClass}>
-            <ArtifactImage
-              image={item}
-              alt={item.alt}
-              size="board"
-              displayVariant={
-                item.id === "doritos" ? "evidenceAnchor" : "evidenceSmall"
-              }
-              sizes="(max-width: 767px) 80vw, (max-width: 1199px) 36vw, 280px"
-              className="about-board-frame"
-              imgClassName="object-contain p-2.5 md:p-3"
-            />
-            <figcaption className="about-board-caption">
-              <p className="caption text-highlight">{item.label}</p>
-              <p className="body-sm text-text-primary">{item.caption}</p>
-            </figcaption>
-          </figure>
-        ))}
+      <div className="about-board-cluster-inner">
+        <div className="about-board-cluster-grid">
+          {items.map((item) => (
+            <figure key={item.id} className={item.boardClass}>
+              <ArtifactImage
+                image={item}
+                alt={item.alt}
+                size="board"
+                displayVariant={
+                  item.id === "doritos" ? "evidenceAnchor" : "evidenceSmall"
+                }
+                sizes="(max-width: 767px) 80vw, (max-width: 1199px) 36vw, 280px"
+                className="about-board-frame"
+                imgClassName="object-contain p-2.5 md:p-3"
+              />
+              <figcaption className="about-board-caption">
+                <p className="caption text-highlight">{item.label}</p>
+                <p className="body-sm text-text-primary">{item.caption}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </aside>
   );
@@ -253,7 +255,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
                 index % 2 === 0
                   ? "about-timeline-item--bottom"
                   : "about-timeline-item--top"
-              }`}
+              }${item.sizeClass === "timeline-large-wide" ? " about-timeline-item--large-wide" : ""}`}
               style={{ gridColumn: index + 1 }}
             >
               <div className="about-timeline-meta">
@@ -268,7 +270,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
                   size="timeline"
                   displayVariant="timeline"
                   sizes="(max-width: 767px) 72vw, 16vw"
-                  className={`about-timeline-frame about-timeline-frame--${index + 1}`}
+                  className={`about-timeline-frame about-timeline-frame--${index + 1} ${item.sizeClass ?? ""}`.trim()}
                   imgClassName="object-contain p-2 md:p-3"
                 />
               </div>
