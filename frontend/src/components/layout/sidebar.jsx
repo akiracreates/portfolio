@@ -29,18 +29,18 @@ function isPathActive(pathname, href, locale) {
 }
 
 function useSectionObserver(anchors, enabled, routeKey) {
-  const [active, setActive] = useState("");
+  const [activeState, setActiveState] = useState({ routeKey: "", id: "" });
   const lastEmittedRef = useRef("");
+  const active =
+    activeState.routeKey === routeKey ? activeState.id : anchors[0] || "";
 
   useEffect(() => {
     if (!enabled) {
       lastEmittedRef.current = "";
-      setActive("");
       return undefined;
     }
     if (!anchors.length) return undefined;
     lastEmittedRef.current = anchors[0] || "";
-    setActive(anchors[0] || "");
 
     let raf = null;
     let hasAttachedListeners = false;
@@ -49,7 +49,7 @@ function useSectionObserver(anchors, enabled, routeKey) {
     const emitIfChanged = (nextId) => {
       if (lastEmittedRef.current === nextId) return;
       lastEmittedRef.current = nextId;
-      setActive(nextId);
+      setActiveState({ routeKey, id: nextId });
     };
 
     const getElements = () =>
@@ -139,13 +139,21 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const reducedMotion = useReducedMotion();
   const locale = useDictLocale() || "en";
   const isHome = isHomePathname(pathname, locale);
-  const [openSubmenuId, setOpenSubmenuId] = useState(null);
-  const [clickLockedSection, setClickLockedSection] = useState("");
+  const [openSubmenuState, setOpenSubmenuState] = useState({
+    routeKey: "",
+    id: null,
+  });
+  const [clickLockState, setClickLockState] = useState({
+    routeKey: "",
+    anchor: "",
+  });
   const clickLockTimerRef = useRef(null);
+  const openSubmenuId =
+    openSubmenuState.routeKey === pathname ? openSubmenuState.id : null;
+  const clickLockedSection =
+    clickLockState.routeKey === pathname ? clickLockState.anchor : "";
 
   useEffect(() => {
-    setOpenSubmenuId(null);
-    setClickLockedSection("");
     if (clickLockTimerRef.current) {
       clearTimeout(clickLockTimerRef.current);
       clickLockTimerRef.current = null;
@@ -189,10 +197,10 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
       const el = document.getElementById(anchor);
       if (el) {
         e.preventDefault();
-        setClickLockedSection(anchor);
+        setClickLockState({ routeKey: pathname, anchor });
         if (clickLockTimerRef.current) clearTimeout(clickLockTimerRef.current);
         clickLockTimerRef.current = setTimeout(
-          () => setClickLockedSection(""),
+          () => setClickLockState({ routeKey: pathname, anchor: "" }),
           CLICK_LOCK_MS,
         );
         el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -310,9 +318,12 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                     collapsed={collapsed}
                     submenuOpen={submenuOpenLogical}
                     onClick={() => {
-                      setOpenSubmenuId((prev) => {
-                        if (prev === item.id) return null;
-                        return item.id;
+                      setOpenSubmenuState((prev) => {
+                        const prevId = prev.routeKey === pathname ? prev.id : null;
+                        if (prevId === item.id) {
+                          return { routeKey: pathname, id: null };
+                        }
+                        return { routeKey: pathname, id: item.id };
                       });
                     }}
                   />
