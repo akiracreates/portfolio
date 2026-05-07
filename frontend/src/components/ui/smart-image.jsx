@@ -27,6 +27,8 @@ export function SmartImage({
   ...rest
 }) {
   const [loaded, setLoaded] = useState(false);
+  const useImageKitDirect =
+    typeof src === "string" && src.includes("ik.imagekit.io");
 
   const handleLoad = (event) => {
     setLoaded(true);
@@ -55,6 +57,7 @@ export function SmartImage({
         {...(fill ? { fill: true } : { width, height })}
         sizes={sizes}
         priority={priority}
+        unoptimized={useImageKitDirect}
         onLoad={handleLoad}
         data-smart-image-loaded={loaded ? "true" : "false"}
         className={imgClassName}

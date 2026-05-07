@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { navStructure } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
@@ -10,9 +10,12 @@ import { NavIcon } from "@/components/layout/nav-icons";
 import { LocaleSwitcher } from "@/components/i18n/locale-switcher";
 import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 
-const FOOTER_SOCIALS = ["telegram", "vk", "cara"];
+const FOOTER_SOCIALS = ["telegram-personal", "vk", "cara"];
 const ACTIVATION_OFFSET = 48;
 const CLICK_LOCK_MS = 800;
+const SIDEBAR_EASE = [0.22, 1, 0.36, 1];
+const SIDEBAR_TRANSITION = { duration: 0.26, ease: SIDEBAR_EASE };
+const SUBMENU_ROW_HEIGHT = 34;
 
 function isHomePathname(pathname, locale) {
   if (!pathname) return false;
@@ -25,33 +28,44 @@ function isPathActive(pathname, href, locale) {
   return pathname === fullHref || pathname.startsWith(`${fullHref}/`);
 }
 
-function useSectionObserver(anchors, enabled) {
-  const [active, setActive] = useState("");
+function useSectionObserver(anchors, enabled, routeKey) {
+  const [activeState, setActiveState] = useState({ routeKey: "", id: "" });
   const lastEmittedRef = useRef("");
+  const active =
+    activeState.routeKey === routeKey ? activeState.id : anchors[0] || "";
 
   useEffect(() => {
     if (!enabled) {
       lastEmittedRef.current = "";
-      setActive("");
       return undefined;
     }
     if (!anchors.length) return undefined;
-
-    const elements = anchors
-      .map((id) => ({ id, el: document.getElementById(id) }))
-      .filter((item) => item.el);
-    if (!elements.length) return undefined;
+    lastEmittedRef.current = anchors[0] || "";
 
     let raf = null;
+    let hasAttachedListeners = false;
+    let elements = [];
 
     const emitIfChanged = (nextId) => {
       if (lastEmittedRef.current === nextId) return;
       lastEmittedRef.current = nextId;
-      setActive(nextId);
+      setActiveState({ routeKey, id: nextId });
+    };
+
+    const getElements = () =>
+      anchors
+        .map((id) => ({ id, el: document.getElementById(id) }))
+        .filter((item) => item.el);
+
+    const selectElements = () => {
+      elements = getElements();
+      return elements.length > 0;
     };
 
     const computeNextActive = () => {
       raf = null;
+      elements = getElements();
+      if (!elements.length) return anchors[0] || "";
       const line = ACTIVATION_OFFSET;
       let bestId = "";
       let bestScore = Number.NEGATIVE_INFINITY;
@@ -74,7 +88,7 @@ function useSectionObserver(anchors, enabled) {
         }
       }
 
-      if (!anyPastLine) return "";
+      if (!anyPastLine) return elements[0]?.id || "";
       return bestId;
     };
 
@@ -85,16 +99,35 @@ function useSectionObserver(anchors, enabled) {
       });
     };
 
-    window.addEventListener("scroll", schedule, { passive: true, capture: true });
-    window.addEventListener("resize", schedule, { passive: true });
-    schedule();
+    const attachListeners = () => {
+      if (hasAttachedListeners) return;
+      window.addEventListener("scroll", schedule, { passive: true, capture: true });
+      window.addEventListener("resize", schedule, { passive: true });
+      hasAttachedListeners = true;
+      schedule();
+    };
+
+    const trySetup = (attempt = 0) => {
+      if (selectElements()) {
+        attachListeners();
+        return;
+      }
+      if (attempt >= 9) return;
+      raf = requestAnimationFrame(() => {
+        trySetup(attempt + 1);
+      });
+    };
+
+    trySetup();
 
     return () => {
       if (raf !== null) cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", schedule, true);
-      window.removeEventListener("resize", schedule);
+      if (hasAttachedListeners) {
+        window.removeEventListener("scroll", schedule, true);
+        window.removeEventListener("resize", schedule);
+      }
     };
-  }, [anchors, enabled]);
+  }, [anchors, enabled, routeKey]);
 
   return enabled ? active : "";
 }
@@ -103,15 +136,24 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const pathname = usePathname();
   const labelId = useId();
   const t = useT();
+  const reducedMotion = useReducedMotion();
   const locale = useDictLocale() || "en";
   const isHome = isHomePathname(pathname, locale);
-  const [openSubmenuId, setOpenSubmenuId] = useState(null);
-  const [clickLockedSection, setClickLockedSection] = useState("");
+  const [openSubmenuState, setOpenSubmenuState] = useState({
+    routeKey: "",
+    id: null,
+  });
+  const [clickLockState, setClickLockState] = useState({
+    routeKey: "",
+    anchor: "",
+  });
   const clickLockTimerRef = useRef(null);
+  const openSubmenuId =
+    openSubmenuState.routeKey === pathname ? openSubmenuState.id : null;
+  const clickLockedSection =
+    clickLockState.routeKey === pathname ? clickLockState.anchor : "";
 
   useEffect(() => {
-    setOpenSubmenuId(null);
-    setClickLockedSection("");
     if (clickLockTimerRef.current) {
       clearTimeout(clickLockTimerRef.current);
       clickLockTimerRef.current = null;
@@ -139,7 +181,11 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
         : activePage?.sections?.map((item) => item.anchor) ?? [],
     [activePage?.sections, isHome, sectionItems],
   );
-  const activeSection = useSectionObserver(activeAnchors, activeAnchors.length > 0);
+  const activeSection = useSectionObserver(
+    activeAnchors,
+    activeAnchors.length > 0,
+    pathname,
+  );
   const resolvedActiveSection = clickLockedSection || activeSection;
 
   const handleClick = useCallback(() => {
@@ -151,10 +197,10 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
       const el = document.getElementById(anchor);
       if (el) {
         e.preventDefault();
-        setClickLockedSection(anchor);
+        setClickLockState({ routeKey: pathname, anchor });
         if (clickLockTimerRef.current) clearTimeout(clickLockTimerRef.current);
         clickLockTimerRef.current = setTimeout(
-          () => setClickLockedSection(""),
+          () => setClickLockState({ routeKey: pathname, anchor: "" }),
           CLICK_LOCK_MS,
         );
         el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -165,21 +211,9 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
     [pathname, onNavigate],
   );
 
-  const effectiveOpenSubmenuId = useMemo(() => {
-    if (collapsed) return null;
-    if (openSubmenuId) return openSubmenuId;
-    if (activePage?.sections?.length) return activePage.id;
-    return null;
-  }, [activePage, collapsed, openSubmenuId]);
-
-  const activeSubmenuId = useMemo(() => {
-    if (!activePage?.sections?.length) return null;
-    const bySection = activePage.sections.find(
-      (section) => section.anchor === resolvedActiveSection,
-    );
-    if (bySection) return activePage.id;
-    return null;
-  }, [activePage, resolvedActiveSection]);
+  const currentParentId = activePage?.id ?? null;
+  const effectiveOpenSubmenuId = openSubmenuId || currentParentId;
+  const motionTransition = reducedMotion ? { duration: 0 } : SIDEBAR_TRANSITION;
 
   const visibleSocials = socialLinks.filter((s) =>
     FOOTER_SOCIALS.includes(s.id),
@@ -250,6 +284,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
           {pageItems.map((item) => {
             const hasSubmenu = Boolean(item.sections?.length);
             const itemPathActive = isPathActive(pathname, item.href, locale);
+            const suppressChildren = item.id === "portfolio";
             const childActive = Boolean(
               hasSubmenu &&
                 itemPathActive &&
@@ -259,10 +294,19 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
             );
             const active = itemPathActive || childActive;
             const href = `/${locale}${item.href === "/" ? "" : item.href}`;
-            const submenuOpen =
-              effectiveOpenSubmenuId === item.id ||
-              activeSubmenuId === item.id ||
-              childActive;
+            const submenuOpenLogical =
+              !suppressChildren &&
+              hasSubmenu &&
+              (effectiveOpenSubmenuId === item.id || itemPathActive || childActive);
+            const fallbackActiveAnchor =
+              itemPathActive && hasSubmenu ? item.sections[0]?.anchor : "";
+            const currentItemActiveSection =
+              resolvedActiveSection || fallbackActiveAnchor;
+            const showCollapsedChildren = collapsed && submenuOpenLogical;
+            const showExpandedChildren = !collapsed && submenuOpenLogical;
+            const submenuReservedHeight = hasSubmenu
+              ? item.sections.length * SUBMENU_ROW_HEIGHT
+              : 0;
 
             return (
               <li key={item.id} className="space-y-1">
@@ -272,11 +316,14 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                     label={t(item.labelKey)}
                     active={active}
                     collapsed={collapsed}
-                    submenuOpen={submenuOpen}
+                    submenuOpen={submenuOpenLogical}
                     onClick={() => {
-                      setOpenSubmenuId((prev) => {
-                        if (prev === item.id) return null;
-                        return item.id;
+                      setOpenSubmenuState((prev) => {
+                        const prevId = prev.routeKey === pathname ? prev.id : null;
+                        if (prevId === item.id) {
+                          return { routeKey: pathname, id: null };
+                        }
+                        return { routeKey: pathname, id: item.id };
                       });
                     }}
                   />
@@ -293,36 +340,49 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                     submenuOpen={false}
                   />
                 )}
-                <AnimatePresence initial={false}>
-                  {hasSubmenu && submenuOpen && !collapsed && (
+                {hasSubmenu && !suppressChildren ? (
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      opacity: submenuOpenLogical ? 1 : 0,
+                      maxHeight: submenuOpenLogical ? submenuReservedHeight : 0,
+                    }}
+                    transition={motionTransition}
+                    className="relative overflow-hidden"
+                    aria-hidden={!submenuOpenLogical}
+                    style={{ pointerEvents: submenuOpenLogical ? "auto" : "none" }}
+                  >
+                    <div style={{ height: submenuReservedHeight }} />
                     <motion.ul
-                      key={`${item.id}-submenu`}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.24, ease: [0.2, 0, 0, 1] }}
-                      className="overflow-hidden pl-8"
+                      initial={false}
+                      animate={{
+                        opacity: showExpandedChildren ? 1 : 0,
+                        y: showExpandedChildren ? 0 : -3,
+                      }}
+                      transition={{
+                        ...motionTransition,
+                        delay: showExpandedChildren && !reducedMotion ? 0.03 : 0,
+                      }}
+                      className="absolute inset-x-0 top-0 overflow-hidden pl-8"
+                      aria-hidden={!showExpandedChildren}
+                      style={{ pointerEvents: showExpandedChildren ? "auto" : "none" }}
                     >
                       {item.sections.map((section) => {
                         const sectionHref = `${href}#${section.anchor}`;
                         const sectionActive =
-                          itemPathActive &&
-                          resolvedActiveSection === section.anchor;
+                          itemPathActive && currentItemActiveSection === section.anchor;
                         return (
                           <li key={section.id}>
                             <Link
                               href={sectionHref}
-                              onClick={(e) =>
-                                handleSectionClick(e, section.anchor)
-                              }
+                              onClick={(e) => handleSectionClick(e, section.anchor)}
                               className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
                                 sectionActive
                                   ? "border-border-accent bg-highlight-soft text-text-primary"
                                   : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
                               }`}
-                              aria-current={
-                                sectionActive ? "location" : undefined
-                              }
+                              aria-current={sectionActive ? "location" : undefined}
+                              tabIndex={showExpandedChildren ? 0 : -1}
                             >
                               {t(section.labelKey)}
                             </Link>
@@ -330,8 +390,44 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                         );
                       })}
                     </motion.ul>
-                  )}
-                </AnimatePresence>
+                    <motion.ul
+                      initial={false}
+                      animate={{ opacity: showCollapsedChildren ? 1 : 0 }}
+                      transition={{
+                        ...motionTransition,
+                        delay: showCollapsedChildren && !reducedMotion ? 0.02 : 0,
+                      }}
+                      className="absolute inset-x-0 top-0 ml-[18px] flex h-full w-[20px] flex-col items-center justify-between overflow-hidden"
+                      aria-hidden={!showCollapsedChildren}
+                      style={{ pointerEvents: showCollapsedChildren ? "auto" : "none" }}
+                    >
+                      {item.sections.map((section) => {
+                        const sectionHref = `${href}#${section.anchor}`;
+                        const sectionActive =
+                          itemPathActive && currentItemActiveSection === section.anchor;
+                        return (
+                          <li
+                            key={`${section.id}-collapsed`}
+                            className="flex h-[34px] items-center"
+                          >
+                            <Link
+                              href={sectionHref}
+                              onClick={(e) => handleSectionClick(e, section.anchor)}
+                              className={`focus-visible-ring block h-2.5 w-2.5 rounded-full border border-dashed transition-all duration-[var(--duration-fast)] ${
+                                sectionActive
+                                  ? "border-border-accent bg-highlight shadow-[0_0_10px_rgba(233,102,160,0.35)]"
+                                  : "border-border-default/70 bg-highlight-soft hover:border-border-accent hover:bg-highlight/70"
+                              }`}
+                              aria-label={t(section.labelKey)}
+                              title={t(section.labelKey)}
+                              aria-current={sectionActive ? "location" : undefined}
+                            />
+                          </li>
+                        );
+                      })}
+                    </motion.ul>
+                  </motion.div>
+                ) : null}
               </li>
             );
           })}
@@ -357,8 +453,8 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                 target={s.id === "email" ? undefined : "_blank"}
                 rel={s.id === "email" ? undefined : "noreferrer noopener"}
                 className="flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-transparent text-text-tertiary transition-colors hover:border-border-default hover:bg-bg-surface hover:text-text-primary focus-visible-ring"
-                aria-label={s.label}
-                title={s.label}
+                aria-label={locale === "ru" ? (s.labelRu ?? s.label) : s.label}
+                title={locale === "ru" ? (s.labelRu ?? s.label) : s.label}
                 tabIndex={collapsed ? -1 : 0}
               >
                 <NavIcon id={s.id} />
@@ -379,14 +475,15 @@ function Label({ collapsed, children, hide = false }) {
       initial={false}
       animate={{
         opacity: shouldHide ? 0 : 1,
-        maxWidth: shouldHide ? 0 : 220,
+        x: shouldHide ? -4 : 0,
       }}
       transition={{
-        duration: 0.2,
-        ease: [0.2, 0, 0, 1],
-        delay: shouldHide ? 0 : 0.04,
+        duration: 0.18,
+        ease: SIDEBAR_EASE,
+        delay: shouldHide ? 0 : 0.03,
       }}
       aria-hidden={shouldHide}
+      style={{ visibility: shouldHide ? "hidden" : "visible" }}
     >
       {children}
     </motion.span>
@@ -402,9 +499,10 @@ function NavGroup({ label, collapsed, children }) {
         animate={{
           opacity: collapsed ? 0 : 1,
           maxHeight: collapsed ? 0 : 24,
+          y: collapsed ? -3 : 0,
           marginBottom: collapsed ? 0 : 8,
         }}
-        transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+        transition={SIDEBAR_TRANSITION}
         aria-hidden={collapsed}
         style={{ overflow: "hidden" }}
       >
@@ -455,7 +553,7 @@ function NavItem({
           className="text-text-tertiary"
           initial={false}
           animate={{ rotate: submenuOpen ? 90 : 0, opacity: 1 }}
-          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          transition={SIDEBAR_TRANSITION}
           aria-hidden
         >
           ›
@@ -503,7 +601,7 @@ function NavItemToggle({
           className="text-text-tertiary"
           initial={false}
           animate={{ rotate: submenuOpen ? 90 : 0, opacity: 1 }}
-          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          transition={SIDEBAR_TRANSITION}
           aria-hidden
         >
           ›

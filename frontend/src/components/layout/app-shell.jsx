@@ -8,18 +8,19 @@ import { MobileFab } from "@/components/layout/mobile-fab";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 import { Footer } from "@/components/layout/footer";
 
-const SIDEBAR_EXPANDED_PX = 240;
-const SAFETY_MARGIN_PX = 20;
 const CLOSE_DELAY_MS = 120;
 
 export function AppShell({ children }) {
   const reduced = useReducedMotion();
   const pathname = usePathname();
-  const [pointerInside, setPointerInside] = useState(false);
-  const [focusWithin, setFocusWithin] = useState(false);
+  const [pointerState, setPointerState] = useState({ routeKey: "", value: false });
+  const [focusState, setFocusState] = useState({ routeKey: "", value: false });
   const [drawerOpen, setDrawerOpen] = useState(false);
   const closeTimerRef = useRef(null);
   const asideRef = useRef(null);
+  const pointerInside =
+    pointerState.routeKey === pathname ? pointerState.value : false;
+  const focusWithin = focusState.routeKey === pathname ? focusState.value : false;
 
   const collapsed = !(pointerInside || focusWithin);
 
@@ -33,36 +34,21 @@ export function AppShell({ children }) {
   useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
 
   useEffect(() => {
-    setPointerInside(false);
-    setFocusWithin(false);
     clearCloseTimer();
   }, [pathname, clearCloseTimer]);
 
   const onEnter = useCallback(() => {
     clearCloseTimer();
-    setPointerInside(true);
-  }, [clearCloseTimer]);
+    setPointerState({ routeKey: pathname, value: true });
+  }, [clearCloseTimer, pathname]);
 
   const onLeave = useCallback(() => {
     clearCloseTimer();
     closeTimerRef.current = window.setTimeout(() => {
-      setPointerInside(false);
+      setPointerState({ routeKey: pathname, value: false });
       closeTimerRef.current = null;
     }, CLOSE_DELAY_MS);
-  }, [clearCloseTimer]);
-
-  useEffect(() => {
-    const onPointerMove = (e) => {
-      if (!pointerInside && !focusWithin) return;
-      if (e.clientX > SIDEBAR_EXPANDED_PX + SAFETY_MARGIN_PX) {
-        clearCloseTimer();
-        setPointerInside(false);
-        setFocusWithin(false);
-      }
-    };
-    document.addEventListener("pointermove", onPointerMove, { passive: true });
-    return () => document.removeEventListener("pointermove", onPointerMove);
-  }, [pointerInside, focusWithin, clearCloseTimer]);
+  }, [clearCloseTimer, pathname]);
 
   const sidebarWidth = collapsed
     ? "var(--sidebar-w-collapsed)"
@@ -83,18 +69,18 @@ export function AppShell({ children }) {
         transition={
           reduced
             ? { duration: 0 }
-            : { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+            : { duration: 0.24, ease: [0.22, 1, 0.36, 1] }
         }
         aria-label="primary sidebar"
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
         onFocusCapture={() => {
           clearCloseTimer();
-          setFocusWithin(true);
+          setFocusState({ routeKey: pathname, value: true });
         }}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) {
-            setFocusWithin(false);
+            setFocusState({ routeKey: pathname, value: false });
             onLeave();
           }
         }}

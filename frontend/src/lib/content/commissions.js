@@ -250,50 +250,34 @@ export const commissionProcess = [
 export const whatToExpect = [
   {
     id: "communication",
-    short: { en: "clear communication",          ru: "ясная коммуникация" },
+    short: { en: "regular updates and clear communication", ru: "регулярные обновления и понятная связь" },
     long:  {
-      en: "i reply within 48 hours and check in at every stage of the project.",
-      ru: "отвечаю в течение 48 часов и держу в курсе на каждом этапе.",
+      en: "regular updates and clear communication",
+      ru: "регулярные обновления и понятная связь",
     },
   },
   {
     id: "payment",
-    short: { en: "full payment beforehand",      ru: "полная оплата заранее" },
+    short: { en: "sketches + revisions before the final piece", ru: "скетчи + правки до финальной версии" },
     long:  {
-      en: "payment is collected up front before the sketch begins.",
-      ru: "оплата собирается заранее до начала наброска.",
+      en: "sketches + revisions before the final piece",
+      ru: "скетчи + правки до финальной версии",
     },
   },
   {
     id: "revisions",
-    short: { en: "3 revisions by default",       ru: "3 правки в базе" },
+    short: { en: "full payment upfront", ru: "полная оплата заранее" },
     long:  {
-      en: "extra revision rounds available if your piece needs them.",
-      ru: "дополнительные правки доступны, если работе они нужны.",
+      en: "full payment upfront",
+      ru: "полная оплата заранее",
     },
   },
   {
     id: "turnaround",
-    short: { en: "around 2 week turnaround",     ru: "около 2 недель срок" },
+    short: { en: "finished within ~2 weeks", ru: "готово примерно за ~2 недели" },
     long:  {
-      en: "the typical timeline from sketch to final delivery.",
-      ru: "стандартное время от наброска до финальной сдачи.",
-    },
-  },
-  {
-    id: "delivery",
-    short: { en: "png or jpeg delivery",         ru: "png или jpeg" },
-    long:  {
-      en: "other formats by request — just ask in the order form.",
-      ru: "другие форматы по запросу — просто напишите в форме.",
-    },
-  },
-  {
-    id: "scope",
-    short: { en: "portraits + animals",          ru: "портреты + животные" },
-    long:  {
-      en: "still life and other scopes available by arrangement.",
-      ru: "натюрморты и другие задачи доступны по договорённости.",
+      en: "finished within ~2 weeks",
+      ru: "готово примерно за ~2 недели",
     },
   },
 ];

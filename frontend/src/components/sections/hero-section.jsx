@@ -26,12 +26,23 @@ export function HeroSection({ dict, locale = "en" }) {
                 <span className="text-highlight">{t.titleHighlight}</span>
                 {t.titleTrailing}
               </h1>
-              <p className="body-lg max-w-2xl">{t.lead}</p>
+              <div className="max-w-2xl space-y-2">
+                <p className="body-lg">{t.lead}</p>
+                {t.supportingText ? <p className="body">{t.supportingText}</p> : null}
+              </div>
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <Button
                   as="link"
-                  href={`/${locale}/portfolio`}
+                  href={`/${locale}/about`}
                   variant="primary"
+                  size="lg"
+                >
+                  {t.ctaAbout}
+                </Button>
+                <Button
+                  as="link"
+                  href={`/${locale}/portfolio`}
+                  variant="outline"
                   size="lg"
                 >
                   {t.ctaPrimary}
@@ -39,18 +50,10 @@ export function HeroSection({ dict, locale = "en" }) {
                 <Button
                   as="link"
                   href={`/${locale}/commissions`}
-                  variant="outline"
-                  size="lg"
-                >
-                  {t.ctaSecondary}
-                </Button>
-                <Button
-                  as="link"
-                  href={`/${locale}/about`}
                   variant="ghost"
                   size="lg"
                 >
-                  {t.ctaAbout}
+                  {t.ctaSecondary}
                 </Button>
               </div>
               <div className="broken-divider max-w-lg" aria-hidden />

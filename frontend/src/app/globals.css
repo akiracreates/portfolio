@@ -836,7 +836,7 @@ a {
 .about-storybook {
   display: flex;
   flex-direction: column;
-  gap: 0.82rem;
+  gap: 1.1rem;
 }
 
 .about-storybook > div {
@@ -856,7 +856,7 @@ a {
 }
 
 .about-spread {
-  padding: 1rem;
+  padding: 1.15rem;
 }
 
 .about-hero {
@@ -894,7 +894,7 @@ a {
 }
 
 .about-chapter-copy {
-  max-width: 43rem;
+  max-width: 49rem;
 }
 
 .about-chapter-label {
@@ -988,26 +988,27 @@ a {
   width: 100%;
   max-width: 100%;
   margin-inline: auto;
+  height: auto;
 }
 
-.about-artifact-image--origin {
-  max-width: 19rem;
+.about-artifact-display--chapterFeature {
+  max-width: min(100%, 19rem);
 }
 
-.about-artifact-image--board {
-  max-width: 14rem;
+.about-artifact-display--evidenceAnchor {
+  max-width: min(100%, 15.75rem);
 }
 
-.about-artifact-image--comparison {
-  max-width: 13.25rem;
+.about-artifact-display--evidenceSmall {
+  max-width: min(100%, 11.75rem);
 }
 
-.about-artifact-image--current {
-  max-width: 22.5rem;
+.about-artifact-display--timeline {
+  max-width: min(100%, 13rem);
 }
 
-.about-artifact-image--timeline {
-  max-width: 12rem;
+.about-artifact-display--currentPortrait {
+  max-width: min(100%, 20rem);
 }
 
 .about-origin-artifact,
@@ -1018,17 +1019,42 @@ a {
 }
 
 .about-origin-story {
-  display: grid;
-  gap: 0.85rem;
+  display: block;
+  gap: 1rem;
   align-items: start;
+}
+
+.about-origin-story::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .about-origin-copy {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.76rem;
-  max-width: 34rem;
+  gap: 0.9rem;
+  max-width: min(100%, 74ch);
+}
+
+.about-origin-prose {
+  display: block;
+  min-width: 0;
+}
+
+.about-origin-prose > p {
+  margin: 0 0 0.85rem;
+}
+
+.about-origin-prose > p:last-child {
+  margin-bottom: 0;
+}
+
+.about-origin-prose::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .about-origin-copy .about-chapter-label,
@@ -1037,10 +1063,29 @@ a {
   margin-bottom: 0.25rem;
 }
 
+.about-origin-cluster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  align-items: start;
+  width: min(100%, 22rem);
+  float: none;
+  margin: 0.2rem auto 0.8rem;
+}
+
 .about-origin-artifact {
   position: relative;
-  width: min(100%, 17.75rem);
-  justify-self: start;
+  width: 100%;
+  justify-self: stretch;
+}
+
+.about-origin-artifact--1 {
+  transform: rotate(-0.7deg);
+}
+
+.about-origin-artifact--2 {
+  transform: rotate(0.85deg);
+  margin-top: 0.85rem;
 }
 
 .about-origin-frame {
@@ -1072,9 +1117,9 @@ a {
 }
 
 .about-origin-caption {
-  width: calc(100% - 0.55rem);
+  width: calc(100% - 0.35rem);
   margin-top: -0.16rem;
-  margin-left: 0.3rem;
+  margin-left: 0.2rem;
   padding: 0.54rem 0.72rem;
   border-top-left-radius: 6px;
 }
@@ -1083,30 +1128,30 @@ a {
   background:
     linear-gradient(180deg, rgba(101, 84, 175, 0.07), transparent 65%),
     rgba(31, 27, 36, 0.82);
-  padding: 1rem;
+  padding: 1.15rem;
 }
 
-.about-board-copy {
-  max-width: 33rem;
-  gap: 0.64rem;
-}
-
-.about-board-layout {
-  display: grid;
-  gap: 1.25rem;
-  align-items: start;
-}
-
-.about-board-main-note {
+.about-board-flow {
   position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.about-board-flow::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.about-board-header {
   display: flex;
   flex-direction: column;
-  gap: 0.72rem;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  padding: 0.1rem 0 0.15rem;
-  max-width: 25rem;
+  gap: 0.62rem;
+  max-width: 64ch;
+}
+
+.about-board-title {
+  max-width: 22rem;
 }
 
 .about-board-note-label {
@@ -1120,102 +1165,54 @@ a {
   letter-spacing: 0.04em;
 }
 
-.about-board-main-note::before,
-.about-board-main-note::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.about-board-main-note::before {
-  left: 0.1rem;
-  bottom: -0.12rem;
-  width: 3.2rem;
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(233, 102, 160, 0.5) 0 7px,
-    transparent 7px 12px
-  );
-  opacity: 0.76;
-}
-
-.about-board-main-note::after {
-  left: -0.42rem;
-  top: 1.55rem;
-  width: 0.28rem;
-  height: 1.9rem;
-  background-image: repeating-linear-gradient(
-    180deg,
-    rgba(149, 117, 222, 0.5) 0 5px,
-    transparent 5px 9px
-  );
-  opacity: 0.75;
-}
-
-.about-board-main-note .body-sm {
-  line-height: 1.68;
-}
-
-.about-evidence-board {
-  position: relative;
-  overflow: visible;
-  width: 100%;
+.about-board-prose {
+  display: block;
   min-width: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  padding: 0.9rem 0.48rem 0.72rem;
+  max-width: min(100%, 86ch);
 }
 
-.about-evidence-board::before {
+.about-board-paragraph {
+  line-height: 1.66;
+  max-width: none;
+  margin: 0 0 0.72rem;
+}
+
+.about-board-prose::after {
   content: "";
-  position: absolute;
-  right: 0.2rem;
-  top: 0.35rem;
-  width: min(100%, 23rem);
-  height: calc(100% - 0.6rem);
-  border-radius: 14px;
-  border: 1px dashed rgba(149, 117, 222, 0.16);
-  background:
-    linear-gradient(180deg, rgba(149, 117, 222, 0.05), transparent 62%),
-    rgba(42, 36, 48, 0.3);
-  pointer-events: none;
+  display: block;
+  clear: both;
 }
 
-.about-evidence-tab {
-  position: absolute;
-  top: 0.32rem;
-  left: 0.92rem;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 10px;
-  border: 1px dashed rgba(233, 102, 160, 0.45);
-  background: rgba(233, 102, 160, 0.12);
-  padding: 0.22rem 0.52rem;
-  transform: rotate(-1.8deg);
-  z-index: 3;
-}
-
-.about-board-connector {
-  position: absolute;
-  left: -0.66rem;
-  top: 47%;
-  width: 0.72rem;
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(149, 117, 222, 0.58) 0 6px,
-    transparent 6px 10px
-  );
-  opacity: 0.72;
-}
-
-.about-board-stage {
+.about-board-cluster {
   position: relative;
-  min-height: 22rem;
-  padding-top: 1.32rem;
-  z-index: 1;
+  display: block;
+  float: none;
+  width: min(100%, 25rem);
+  margin: 0.25rem auto 0.75rem;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.about-board-cluster-tab {
+  display: none;
+}
+
+.about-board-cluster-inner {
+  transform: translateY(1.25rem);
+}
+
+.about-board-cluster-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-areas:
+    "anchor detailA"
+    "anchor detailB";
+  gap: 0.6rem 0.52rem;
+  justify-items: stretch;
+  align-items: start;
 }
 
 .about-grid-patch {
@@ -1245,53 +1242,31 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.28rem;
+  gap: 0.32rem;
+  width: 100%;
   margin: 0;
   overflow: visible;
-  z-index: 1;
 }
 
 .about-board-item--one {
-  width: min(100%, 11.6rem);
+  grid-area: anchor;
+  transform: rotate(-0.85deg);
   z-index: 3;
 }
 
 .about-board-item--two {
-  width: min(100%, 11.1rem);
+  grid-area: detailA;
+  transform: rotate(0.7deg);
+  margin-top: 0.32rem;
   z-index: 2;
 }
 
 .about-board-item--three {
-  width: min(100%, 10.5rem);
+  grid-area: detailB;
+  transform: rotate(-0.45deg);
+  margin-top: -0.1rem;
+  margin-left: 0.28rem;
   z-index: 4;
-}
-
-.about-board-item--one::before,
-.about-board-item--one::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.about-board-item--one::before {
-  right: 1rem;
-  top: -0.34rem;
-  width: 0.92rem;
-  height: 1.35rem;
-  border: 1px solid rgba(244, 241, 248, 0.3);
-  border-radius: 999px;
-  transform: rotate(8deg);
-}
-
-.about-board-item--one::after {
-  right: 1.18rem;
-  top: -0.12rem;
-  width: 0.48rem;
-  height: 0.88rem;
-  border: 1px solid rgba(244, 241, 248, 0.18);
-  border-radius: 999px;
-  transform: rotate(8deg);
 }
 
 .about-board-frame {
@@ -1300,57 +1275,76 @@ a {
 
 .about-board-caption {
   align-self: flex-end;
-  margin-top: -0.36rem;
+  margin-top: -0.28rem;
   margin-right: 0.2rem;
-  padding: 0.34rem 0.46rem;
+  padding: 0.4rem 0.55rem;
   border-top-left-radius: 6px;
-  max-width: calc(100% - 0.45rem);
-  background: rgba(42, 37, 49, 0.92);
-  border-color: rgba(149, 117, 222, 0.3);
-  box-shadow: 0 8px 16px rgba(10, 8, 14, 0.2);
+  max-width: calc(100% - 0.4rem);
+  background: rgba(42, 37, 49, 0.94);
+  border-color: rgba(149, 117, 222, 0.32);
+  box-shadow: 0 10px 18px rgba(10, 8, 14, 0.22);
 }
 
 .about-board-caption .caption {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   line-height: 1;
 }
 
 .about-board-caption .body-sm {
   display: block;
-  margin-top: 0.14rem;
-  font-size: 0.72rem;
-  line-height: 1.22;
+  margin-top: 0.18rem;
+  font-size: 0.78rem;
+  line-height: 1.3;
 }
 
 .about-board-item--one .about-board-caption {
-  transform: rotate(0.5deg);
+  transform: rotate(0.6deg);
 }
 
 .about-board-item--two .about-board-caption {
   align-self: flex-start;
   margin-right: 0;
   margin-left: 0.26rem;
-  transform: rotate(-0.7deg);
+  transform: rotate(-0.75deg);
 }
 
 .about-board-item--three .about-board-caption {
   margin-right: 0.34rem;
-  transform: rotate(0.8deg);
+  transform: rotate(0.7deg);
 }
 
 .about-timeline {
   background:
     linear-gradient(180deg, rgba(233, 102, 160, 0.05), transparent 65%),
     rgba(36, 31, 42, 0.82);
+  gap: 1.05rem;
 }
 
-.about-timeline-intro {
+.about-timeline-copy {
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  gap: 0.68rem;
+  max-width: min(100%, 56rem);
 }
 
-.about-timeline-note {
-  max-width: 24rem;
+.about-timeline-title {
+  max-width: 26rem;
+}
+
+.about-timeline-paragraph {
+  max-width: 72ch;
+  line-height: 1.65;
+}
+
+.about-timeline-reflection {
+  position: relative;
+  margin-top: 0.45rem;
+  padding-left: 0.95rem;
+  border-left: 2px dashed rgba(233, 102, 160, 0.34);
+  color: var(--text-primary);
+  font-style: italic;
+  max-width: 70ch;
+  line-height: 1.6;
 }
 
 .about-timeline-stage {
@@ -1457,8 +1451,31 @@ a {
 }
 
 .about-timeline-media {
-  width: min(100%, 12rem);
-  max-width: 12rem;
+  width: min(100%, 14.25rem);
+  max-width: 14.25rem;
+}
+
+/*
+ * 2023 / age 17 only: grid columns are ~20% of the row, so min(100%, Xrem) never
+ * exceeds the column — use an explicit width so the frame can actually grow.
+ */
+.about-timeline-item.about-timeline-item--large-wide {
+  overflow: visible;
+  z-index: 4;
+}
+
+.about-timeline-item.about-timeline-item--large-wide .about-timeline-media,
+.about-timeline-item:has(.timeline-large-wide) .about-timeline-media {
+  /* explicit width — not min(100%, …) — so we beat the narrow grid cell */
+  width: clamp(240px, 24vw, 340px);
+  max-width: 340px;
+}
+
+.about-timeline-item.about-timeline-item--large-wide
+  .about-timeline-frame.timeline-large-wide.about-artifact-display--timeline,
+.about-timeline-frame.timeline-large-wide.about-artifact-display--timeline {
+  max-width: none;
+  width: 100%;
 }
 
 .about-timeline-frame {
@@ -1471,12 +1488,34 @@ a {
   transform: rotate(-0.55deg);
 }
 
+/* image 1: square artwork, widen so visual height matches portrait image 5 */
+.about-timeline-item:has(.about-timeline-frame--1) .about-timeline-media {
+  width: 16.5rem;
+  max-width: 16.5rem;
+}
+
+.about-timeline-frame--1.about-artifact-display--timeline {
+  max-width: none;
+  width: 100%;
+}
+
 .about-timeline-frame--2 {
   transform: rotate(0.45deg);
 }
 
 .about-timeline-frame--3 {
   transform: rotate(-0.3deg);
+}
+
+/* image 3: near-square artwork, same target visual height as image 5 */
+.about-timeline-item:has(.about-timeline-frame--3) .about-timeline-media {
+  width: 16.5rem;
+  max-width: 16.5rem;
+}
+
+.about-timeline-frame--3.about-artifact-display--timeline {
+  max-width: none;
+  width: 100%;
 }
 
 .about-timeline-frame--4 {
@@ -1523,6 +1562,12 @@ a {
   background:
     radial-gradient(circle at 11% 18%, rgba(149, 117, 222, 0.12) 0 2px, transparent 2.7px),
     rgba(34, 29, 39, 0.86);
+  gap: 1.1rem;
+}
+
+.about-comparison-copy {
+  max-width: min(100%, 58rem);
+  gap: 0.9rem;
 }
 
 .about-comparison-layout {
@@ -1605,20 +1650,56 @@ a {
     rgba(36, 31, 42, 0.84);
 }
 
-.about-current-layout {
-  display: grid;
-  gap: 1rem;
-  align-items: start;
+.about-current-flow {
+  position: relative;
+  display: block;
+  min-width: 0;
 }
 
-.about-current-copy {
-  max-width: 36rem;
+.about-current-flow::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.about-current-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-width: 64ch;
+  margin-bottom: 0.55rem;
+}
+
+.about-current-title {
+  max-width: 26rem;
+}
+
+.about-current-prose {
+  display: block;
+  min-width: 0;
+}
+
+.about-current-prose::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.about-current-paragraph {
+  max-width: 70ch;
+  line-height: 1.65;
+  margin: 0 0 0.72rem;
 }
 
 .about-current-artifact {
   position: relative;
-  width: min(100%, 24rem);
-  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: min(100%, 21rem);
+  align-self: center;
+  float: none;
+  margin: 0 auto 0.72rem;
 }
 
 .about-current-tag {
@@ -1695,65 +1776,55 @@ a {
     padding-top: 1.78rem;
   }
 
+  .about-origin-cluster {
+    width: min(100%, 21rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    float: none;
+    margin: 0.15rem auto 0.82rem;
+    shape-outside: none;
+  }
+
+  .about-origin-artifact--2 {
+    margin-top: 0;
+  }
+
   .about-origin-artifact {
-    max-width: 17rem;
+    max-width: 16rem;
   }
 
-  .about-board-main-note {
-    max-width: none;
+  .about-board-cluster {
+    width: min(100%, 21rem);
+    margin-top: 0.6rem;
   }
 
-  .about-board-layout {
-    gap: 0.92rem;
-  }
-
-  .about-evidence-board {
-    padding: 0.75rem 0.2rem 0.25rem;
-  }
-
-  .about-evidence-board::before {
-    right: 0;
-    left: 0;
-    width: auto;
-    height: calc(100% - 0.4rem);
-  }
-
-  .about-board-connector {
-    display: none;
-  }
-
-  .about-board-stage {
-    min-height: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.7rem;
-    padding-top: 1.06rem;
-    justify-items: start;
+  .about-board-cluster-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "anchor anchor"
+      "detailA detailB";
+    gap: 0.65rem;
+    justify-items: stretch;
   }
 
   .about-board-item,
   .about-board-item--one,
   .about-board-item--two,
   .about-board-item--three {
-    position: relative;
-    inset: auto;
     width: 100%;
-    max-width: 12rem;
     transform: none;
   }
 
   .about-board-item--one {
-    transform: rotate(-0.65deg);
+    transform: rotate(-0.5deg);
   }
 
   .about-board-item--two {
-    justify-self: end;
-    transform: rotate(0.55deg);
+    transform: rotate(0.4deg);
   }
 
   .about-board-item--three {
-    justify-self: center;
-    transform: rotate(-0.35deg);
+    transform: rotate(-0.3deg);
   }
 
   .about-board-caption {
@@ -1775,7 +1846,18 @@ a {
   }
 
   .about-current-artifact {
-    max-width: 19rem;
+    width: min(100%, 16.5rem);
+    align-self: center;
+    float: none;
+    margin: 0 auto;
+    shape-outside: none;
+  }
+
+  .about-board-cluster {
+    float: none;
+    width: min(100%, 21rem);
+    margin: 0.5rem auto 0;
+    shape-outside: none;
   }
 
   .about-timeline-stage {
@@ -1849,8 +1931,13 @@ a {
   }
 
   .about-timeline-item .about-timeline-media {
-    width: min(100%, 17rem);
-    max-width: 17rem;
+    width: min(100%, 18rem);
+    max-width: 18rem;
+  }
+
+  .about-timeline-item.about-timeline-item--large-wide .about-timeline-media {
+    width: min(100%, 20rem);
+    max-width: 20rem;
   }
 }
 
@@ -1860,17 +1947,46 @@ a {
   gap: 1.5rem;
 }
 
+.portfolio-mobile-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.portfolio-columns {
+  display: none;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 2vw, 1.9rem);
+  align-items: start;
+}
+
+.portfolio-column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 1.8vw, 1.6rem);
+  min-width: 0;
+}
+
+.portfolio-column > * {
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .portfolio-mobile-list {
+    display: none;
+  }
+
+  .portfolio-columns {
+    display: grid;
+  }
+}
+
 .cascade-row {
   position: relative;
   min-width: 0;
 }
 
 @media (min-width: 768px) {
-  .cascade-artworks {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.25rem, 2vw, 1.9rem);
-  }
-
   .portfolio-stage {
     padding: 0.35rem 0.35rem 0.45rem;
   }
@@ -2041,11 +2157,11 @@ a {
   }
 
   .about-storybook {
-    gap: 1.02rem;
+    gap: 1.24rem;
   }
 
   .about-spread {
-    padding: 1.35rem;
+    padding: 1.5rem;
   }
 
   .about-hero {
@@ -2065,64 +2181,17 @@ a {
     padding-top: 2.05rem;
   }
 
-  .about-origin-story {
-    grid-template-columns: minmax(0, 1fr) minmax(255px, 0.68fr);
-    gap: 0.95rem;
-  }
-
-  .about-origin-artifact {
-    width: clamp(16.25rem, 30vw, 19rem);
-    justify-self: end;
-    margin-top: 0.25rem;
+  .about-origin-cluster {
+    width: clamp(17.5rem, 36%, 22rem);
+    margin: 0.25rem 2.25rem 0.85rem 0;
   }
 
   .about-board {
-    gap: 0.26rem;
+    padding: 1.5rem 1.6rem;
   }
 
-  .about-board-layout {
-    grid-template-columns: minmax(280px, 0.92fr) minmax(340px, 1.24fr);
-    gap: 1.55rem;
-    align-items: start;
-  }
-
-  .about-board-main-note {
-    width: min(100%, 24.6rem);
-    margin-top: 0.2rem;
-  }
-
-  .about-evidence-board {
-    min-height: 23rem;
-    padding: 0.95rem 0.4rem 0.72rem;
-  }
-
-  .about-board-stage {
-    min-height: 21.4rem;
-    padding-top: 1.2rem;
-  }
-
-  .about-board-item--one {
-    position: absolute;
-    left: 0.2rem;
-    top: 0.95rem;
-    width: min(100%, 12.3rem);
-    transform: rotate(-1.1deg);
-  }
-
-  .about-board-item--two {
-    position: absolute;
-    right: 0.55rem;
-    top: 0.45rem;
-    width: min(100%, 11.7rem);
-    transform: rotate(0.95deg);
-  }
-
-  .about-board-item--three {
-    position: absolute;
-    left: 32%;
-    bottom: 0.5rem;
-    width: min(100%, 12.5rem);
-    transform: rotate(-0.8deg);
+  .about-board-paragraph {
+    max-width: none;
   }
 
   .about-comparison-grid {
@@ -2211,28 +2280,21 @@ a {
   }
 
   .about-comparison-notes {
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .about-timeline-grid {
-    min-height: 32rem;
+    min-height: 33rem;
   }
 
-  .about-current-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
-    align-items: center;
-    gap: 1.15rem;
-  }
-
-  .about-current-artifact {
-    justify-self: end;
-    max-width: 24rem;
+  .about-current {
+    padding: 1.25rem 1.4rem;
   }
 }
 
 @media (min-width: 1024px) {
   .about-spread {
-    padding: 1.55rem;
+    padding: 1.72rem;
   }
 
   .about-hero {
@@ -2243,61 +2305,103 @@ a {
     margin-left: 1.25rem;
   }
 
+  .about-origin-copy {
+    max-width: none;
+  }
+
+  .about-origin-prose {
+    max-width: min(100%, 100ch);
+  }
+
+  .about-origin-cluster {
+    float: left;
+    width: clamp(300px, 36%, 470px);
+    margin: 0.28rem 3.5rem 0.95rem 0;
+    shape-outside: inset(0 round 14px);
+    padding-right: 0.1rem;
+  }
+
   .about-board {
     margin-right: 0.5rem;
+    padding: 1.7rem 1.85rem;
   }
 
-  .about-board-layout {
-    grid-template-columns: minmax(320px, 0.9fr) minmax(450px, 1.22fr);
-    gap: 1.72rem;
+  .about-board-cluster {
+    float: right;
+    width: clamp(380px, 38vw, 560px);
+    margin: -1rem -0.25rem 0rem 2.25rem;
+    shape-outside: inset(0 0 28% 0 round 16px);
+    padding: 0;
+  }
+  
+
+  .about-board-header {
+    max-width: 36rem;
+    margin-bottom: 0.4rem;
   }
 
-  .about-board-main-note {
-    width: min(100%, 25.4rem);
+  .about-board-title {
+    max-width: 26rem;
   }
 
-  .about-evidence-board {
-    min-height: 24rem;
-    padding-right: 0.12rem;
+  .about-board-paragraph {
+    max-width: none;
   }
 
-  .about-board-stage {
-    min-height: 22.2rem;
-  }
-
-  .about-board-item--one {
-    left: 0.32rem;
-    top: 0.92rem;
-    width: min(100%, 12.7rem);
+  .about-board-cluster-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 0.45rem 0.55rem;
   }
 
   .about-board-item--two {
-    right: 0.92rem;
-    top: 0.32rem;
-    width: min(100%, 12.15rem);
+    margin-top: 0.18rem;
   }
 
   .about-board-item--three {
-    left: 34%;
-    bottom: 0.36rem;
-    width: min(100%, 13rem);
+    margin-top: 0.85rem;
+    margin-left: 0.4rem;
+  }
+
+  .about-artifact-display--evidenceAnchor {
+    max-width: min(100%, 14.5rem);
+  }
+
+  .about-artifact-display--evidenceSmall {
+    max-width: min(100%, 10.15rem);
   }
 
   .about-comparison {
-    margin-right: 1.5rem;
+    margin-right: 0.8rem;
+    margin-left: 0.8rem;
+  }
+
+  .about-comparison-copy {
+    max-width: none;
+    width: min(100%, 64rem);
   }
 
   .about-timeline-grid {
-    min-height: 34rem;
+    min-height: 35rem;
   }
 
-  .about-current-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 0.8fr);
-    gap: 1.35rem;
+  .about-current {
+    padding: 1.2rem 1.5rem;
   }
 
   .about-current-artifact {
-    max-width: 24.5rem;
+    float: right;
+    width: clamp(220px, 26%, 320px);
+    margin: 0 0 0.6rem 1.3rem;
+    shape-outside: inset(0 round 14px);
+    align-self: auto;
+  }
+
+  .about-current-header {
+    max-width: 36rem;
+  }
+
+  .about-current-paragraph {
+    max-width: 70ch;
   }
 
   .hero-copy {

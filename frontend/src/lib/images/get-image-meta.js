@@ -9,7 +9,8 @@ const DEFAULT_DIMENSIONS = { width: 4, height: 5 };
  */
 export function getImageMeta(path) {
   if (!path) return DEFAULT_DIMENSIONS;
-  const m = meta[path];
+  const normalizedPath = String(path).split("?")[0];
+  const m = meta[path] ?? meta[normalizedPath];
   if (!m || typeof m.width !== "number" || typeof m.height !== "number") {
     return DEFAULT_DIMENSIONS;
   }

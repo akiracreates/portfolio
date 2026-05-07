@@ -24,19 +24,7 @@ export const homepageFeaturedArtworkIds = [
 ];
 
 const rawArtworks = [
-  // ---------------- portraits (6) ----------------
-  {
-    id: "portrait-01",
-    category: "portraits",
-    path: "images/portraits/self",
-    featured: false,
-    title: { en: "self portrait no. 1", ru: "автопортрет №1" },
-    alt: { en: "self portrait by akira", ru: "автопортрет akira" },
-    artistComment: {
-      en: "the first piece in a long thread of self portraits — soft and slightly tired.",
-      ru: "первая работа в длинной серии автопортретов — мягкая и слегка уставшая.",
-    },
-  },
+  // ---------------- portraits (8) ----------------
   {
     id: "portrait-02",
     category: "portraits",
@@ -97,8 +85,83 @@ const rawArtworks = [
       ru: "тёплый цветовой этюд в сумерках — напоминание замедлиться.",
     },
   },
+  {
+    id: "portrait-07",
+    category: "portraits",
+    path: "images/portraits/heavily_stylized?updatedAt=1777912076764",
+    featured: false,
+    title: { en: "heavily stylized", ru: "heavily stylized" },
+    alt: {
+      en: "heavily stylized portrait by akira",
+      ru: "стилизованный портрет akira",
+    },
+    artistComment: {
+      en: "temporary note: portrait note is under construction.",
+      ru: "временная заметка: описание портрета пока в разработке.",
+    },
+  },
+  {
+    id: "portrait-08",
+    category: "portraits",
+    path: "images/portraits/fishtank?updatedAt=1778161839934",
+    featured: false,
+    title: { en: "fishtank", ru: "fishtank" },
+    alt: { en: "fishtank portrait by akira", ru: "портрет fishtank от akira" },
+    artistComment: {
+      en: "temporary note: portrait note is under construction.",
+      ru: "временная заметка: описание портрета пока в разработке.",
+    },
+  },
+  {
+    id: "portrait-09",
+    category: "portraits",
+    path: "images/portraits/monthly",
+    featured: false,
+    title: { en: "monthly", ru: "monthly" },
+    alt: { en: "monthly portrait by akira", ru: "портрет monthly от akira" },
+    artistComment: {
+      en: "temporary note: portrait note is under construction.",
+      ru: "временная заметка: описание портрета пока в разработке.",
+    },
+  },
 
-  // ---------------- animals (5) ----------------
+  // ---------------- animals (8) ----------------
+  {
+    id: "animal-06",
+    category: "animals",
+    path: "images/animals/horsey?updatedAt=1777912296674",
+    featured: false,
+    title: { en: "horsey", ru: "horsey" },
+    alt: { en: "horsey animal artwork by akira", ru: "работа horsey от akira" },
+    artistComment: {
+      en: "temporary note: animal note is under construction.",
+      ru: "временная заметка: описание работы пока в разработке.",
+    },
+  },
+  {
+    id: "animal-07",
+    category: "animals",
+    path: "images/animals/sooreekaat?updatedAt=1777912292344",
+    featured: false,
+    title: { en: "sooreekaat", ru: "sooreekaat" },
+    alt: { en: "sooreekaat animal artwork by akira", ru: "работа sooreekaat от akira" },
+    artistComment: {
+      en: "temporary note: animal note is under construction.",
+      ru: "временная заметка: описание работы пока в разработке.",
+    },
+  },
+  {
+    id: "animal-08",
+    category: "animals",
+    path: "images/animals/layin_kitten?updatedAt=1777912292067",
+    featured: false,
+    title: { en: "layin kitten", ru: "layin kitten" },
+    alt: { en: "layin kitten animal artwork by akira", ru: "работа layin kitten от akira" },
+    artistComment: {
+      en: "temporary note: animal note is under construction.",
+      ru: "временная заметка: описание работы пока в разработке.",
+    },
+  },
   {
     id: "animal-01",
     category: "animals",
@@ -167,7 +230,31 @@ const rawArtworks = [
     },
   },
 
-  // ---------------- landscapes (5) ----------------
+  // ---------------- landscapes (8) ----------------
+  {
+    id: "landscape-03",
+    category: "landscapes",
+    path: "images/landscapes/oceanscape",
+    featured: false,
+    title: { en: "oceanscape", ru: "морской пейзаж" },
+    alt: { en: "ocean landscape", ru: "морской пейзаж" },
+    artistComment: {
+      en: "quiet water rhythms and layered blues across the horizon.",
+      ru: "тихие ритмы воды и слои синего вдоль горизонта.",
+    },
+  },
+  {
+    id: "landscape-01",
+    category: "landscapes",
+    path: "images/landscapes/cloudscape2",
+    featured: false,
+    title: { en: "cloudscope ii", ru: "облака ii" },
+    alt: { en: "cloud landscape study", ru: "этюд облачного пейзажа" },
+    artistComment: {
+      en: "a broad sky study focused on shape and atmosphere.",
+      ru: "пейзажный этюд неба с фокусом на форме и атмосфере.",
+    },
+  },
   {
     id: "landscape-04",
     category: "landscapes",
@@ -193,6 +280,32 @@ const rawArtworks = [
     },
   },
   {
+    id: "landscape-06",
+    category: "landscapes",
+    path: "images/landscapes/planes?updatedAt=1778163055883",
+    imageTransforms: ["f-jpg", "q-auto"],
+    featured: false,
+    title: { en: "planes", ru: "planes" },
+    alt: { en: "planes landscape by akira", ru: "пейзаж planes от akira" },
+    artistComment: {
+      en: "temporary note: landscape note is under construction.",
+      ru: "временная заметка: описание пейзажа пока в разработке.",
+    },
+  },
+  {
+    id: "landscape-07",
+    category: "landscapes",
+    path: "images/landscapes/myuniverse?updatedAt=1778163056828",
+    imageTransforms: ["f-jpg", "q-auto"],
+    featured: false,
+    title: { en: "myuniverse", ru: "myuniverse" },
+    alt: { en: "myuniverse landscape by akira", ru: "пейзаж myuniverse от akira" },
+    artistComment: {
+      en: "temporary note: landscape note is under construction.",
+      ru: "временная заметка: описание пейзажа пока в разработке.",
+    },
+  },
+  {
     id: "landscape-02",
     category: "landscapes",
     path: "images/landscapes/cityscape",
@@ -205,31 +318,59 @@ const rawArtworks = [
     },
   },
   {
-    id: "landscape-01",
+    id: "landscape-08",
     category: "landscapes",
-    path: "images/landscapes/cloudscape2",
+    path: "images/landscapes/calm?updatedAt=1778163092135",
+    imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
-    title: { en: "cloudscope ii", ru: "облака ii" },
-    alt: { en: "cloud landscape study", ru: "этюд облачного пейзажа" },
+    title: { en: "calm", ru: "calm" },
+    alt: { en: "calm landscape by akira", ru: "пейзаж calm от akira" },
     artistComment: {
-      en: "a broad sky study focused on shape and atmosphere.",
-      ru: "пейзажный этюд неба с фокусом на форме и атмосфере.",
-    },
-  },
-  {
-    id: "landscape-03",
-    category: "landscapes",
-    path: "images/landscapes/oceanscape",
-    featured: false,
-    title: { en: "oceanscape", ru: "морской пейзаж" },
-    alt: { en: "ocean landscape", ru: "морской пейзаж" },
-    artistComment: {
-      en: "quiet water rhythms and layered blues across the horizon.",
-      ru: "тихие ритмы воды и слои синего вдоль горизонта.",
+      en: "temporary note: landscape note is under construction.",
+      ru: "временная заметка: описание пейзажа пока в разработке.",
     },
   },
 
-  // ---------------- still life (5) ----------------
+  // ---------------- still life (8) ----------------
+  {
+    id: "still-06",
+    category: "still life",
+    path: "images/still life/tomato",
+    imageTransforms: ["f-jpg", "q-auto"],
+    featured: false,
+    title: { en: "tomato", ru: "tomato" },
+    alt: { en: "still life tomato study", ru: "натюрморт tomato" },
+    artistComment: {
+      en: "temporary note: still life note is under construction.",
+      ru: "временная заметка: описание натюрморта пока в разработке.",
+    },
+  },
+  {
+    id: "still-07",
+    category: "still life",
+    path: "images/still life/vase_study",
+    imageTransforms: ["f-webp", "q-auto"],
+    featured: false,
+    title: { en: "vase study", ru: "vase study" },
+    alt: { en: "still life vase study", ru: "натюрморт vase study" },
+    artistComment: {
+      en: "temporary note: still life note is under construction.",
+      ru: "временная заметка: описание натюрморта пока в разработке.",
+    },
+  },
+  {
+    id: "still-08",
+    category: "still life",
+    path: "images/still life/yay",
+    imageTransforms: ["f-jpg", "q-auto"],
+    featured: false,
+    title: { en: "yay", ru: "yay" },
+    alt: { en: "still life yay study", ru: "натюрморт yay" },
+    artistComment: {
+      en: "temporary note: still life note is under construction.",
+      ru: "временная заметка: описание натюрморта пока в разработке.",
+    },
+  },
   {
     id: "still-01",
     category: "still life",
@@ -298,9 +439,10 @@ const rawArtworks = [
  */
 export const artworks = rawArtworks.map((a) => {
   const meta = getImageMeta(a.path);
+  const transforms = a.imageTransforms ?? ["f-jpg", "q-auto"];
   return {
     ...a,
-    imageSrc: imagekitUrl(a.path),
+    imageSrc: imagekitUrl(a.path, transforms),
     width: meta.width,
     height: meta.height,
   };

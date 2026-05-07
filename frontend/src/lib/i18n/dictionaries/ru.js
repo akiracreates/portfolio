@@ -38,6 +38,7 @@ export const dictionary = {
     about: "обо мне",
     portfolio: "полное портфолио",
     work: "работать со мной",
+    aboutOverview: "обзор",
     aboutStarted: "как всё началось",
     aboutDigital: "цифровое искусство",
     aboutTimeline: "таймлайн",
@@ -57,20 +58,21 @@ export const dictionary = {
   },
 
   hero: {
-    eyebrow: "цифровой портрет-художник",
-    titleLeading: "тихие портреты,",
-    titleHighlight: "мягкие истории",
-    titleTrailing: ", сделанные осознанно.",
+    eyebrow: "akira",
+    titleLeading: "",
+    titleHighlight: "akira",
+    titleTrailing: "",
     lead:
-      "пространство akira для цифровых портретов, исследований животных и небольших натюрмортов. посмотрите свежие работы или закажите свою.",
-    ctaPrimary: "смотреть портфолио",
-    ctaSecondary: "заказать работу",
+      "digital-художница, рисую портреты и животных",
+    supportingText: "я люблю экспериментировать и делать работы выразительными",
+    ctaPrimary: "полное портфолио",
+    ctaSecondary: "коммишены",
     ctaAbout: "обо мне",
-    statCommissions: "заказы",
-    statCommissionsValue: "открыты",
-    statResponse: "ответ",
-    statResponseValue: "до 48 часов",
-    badgeTitle: "latest perception of myself",
+    statCommissions: "заметка",
+    statCommissionsValue: "коммишены открыты",
+    statResponse: "настроение",
+    statResponseValue: "выразительно и живо",
+    badgeTitle: "я люблю экспериментировать и делать работы выразительными",
     imageAlt: "избранный автопортрет akira",
   },
 
@@ -86,26 +88,26 @@ export const dictionary = {
   },
 
   featured: {
-    eyebrow: "избранное",
-    title: "недавние свежие работы.",
-    cta: "все работы",
+    eyebrow: "избранные работы",
+    title: "избранные работы",
+    cta: "полное портфолио",
   },
 
   commissionsPreview: {
-    eyebrow: "работать со мной",
-    title: "заказы открыты.",
+    eyebrow: "коммишены: открыты",
+    title: "коммишены: открыты",
     description:
-      "несколько мест каждый сезон для вдумчивых, сюжетных портретов и работ с животными.",
-    typesLabel: "что я делаю",
+      "я нарисую вас, вашу семью, ваших друзей или ваших любимых питомцев в моем стиле. это очень личный и классный подарок (или просто потому что вам хочется).",
+    typesLabel: "типы коммишенов",
     typesValue: "портреты + животные",
     startingLabel: "от",
     cta: "заказать",
   },
 
   whatToExpect: {
-    eyebrow: "процесс",
-    title: "что ждать при работе со мной.",
-    description: "коротко. подробности — на странице заказов.",
+    eyebrow: "что ожидать",
+    title: "что ожидать",
+    description: "",
     cta: "работать со мной",
     items: {
       communication: {
@@ -136,16 +138,17 @@ export const dictionary = {
   },
 
   socialsFooter: {
-    eyebrow: "найти меня",
-    title: "оставайтесь на связи.",
-    description: "telegram — самый быстрый способ связаться. остальные каналы — ниже.",
+    eyebrow: "найти меня здесь",
+    title: "найти меня здесь",
+    description: "быстрее всего связаться со мной можно в telegram",
+    contactNote: "быстрее всего связаться со мной можно в telegram",
   },
 
   about: {
     pageEyebrow: "обо мне",
-    pageTitle: "более длинная история о взрослении через искусство.",
+    pageTitle: "взрослею вместе с искусством.",
     pageDescription:
-      "от ранних рисунков до новых автопортретов — здесь собрана более медленная версия этой истории.",
+      "от каракулей в садике до профессиональных digital-портретов.",
     bioEyebrow: "сегодня",
     bioTitle: "где я сейчас.",
     bio1: "мне 20. я делаю цифровые портреты, исследования животных и иногда натюрморты.",
@@ -193,7 +196,7 @@ export const dictionary = {
   portfolio: {
     pageEyebrow: "портфолио",
     pageTitle: "все работы по категориям.",
-    pageDescription: "только готовые работы. большой архив живёт в моих соцсетях.",
+    pageDescription: "заметки под работами пока в процессе и будут дополняться.",
     pieces: "работ",
     piece: "работа",
     jumpTo: "перейти к",

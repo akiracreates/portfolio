@@ -18,7 +18,10 @@ export function ArtworkCard({
   const reduced = useReducedMotion();
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
-  const note = pickLocale(artwork.artistComment, locale);
+  const note =
+    locale === "ru"
+      ? "заметка под работой пока в разработке."
+      : "notes under art are still under construction.";
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
@@ -104,7 +107,10 @@ export function ArtworkRow({
   const router = useRouter();
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
-  const note = pickLocale(artwork.artistComment, locale);
+  const note =
+    locale === "ru"
+      ? "заметка под работой пока в разработке."
+      : "notes under art are still under construction.";
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
