@@ -21,7 +21,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const FRONTEND_ROOT = resolve(__dirname, "..");
-const ARTWORKS_PATH = resolve(FRONTEND_ROOT, "src/lib/content/artworks.js");
+const SOURCE_PATHS = [
+  resolve(FRONTEND_ROOT, "src/lib/content/artworks.js"),
+  resolve(FRONTEND_ROOT, "src/lib/content/about-story.js"),
+];
 const META_OUT_PATH = resolve(FRONTEND_ROOT, "src/lib/images/image-meta.json");
 const ENV_PATH = resolve(FRONTEND_ROOT, ".env");
 
@@ -59,15 +62,26 @@ function extractImageKitPaths(text) {
   // Matches:
   //   imagekitUrl("images/foo/bar")
   //   path: "images/foo/bar"
-  // so we keep working whether artworks.js stores raw paths or wraps them.
+  //   aboutImage("name")     -> images/about me/<name>
+  //   portfolioImage("name") -> images/portraits/<name>
+  // so we keep working whether content files store raw paths, wrap them, or
+  // reach for shared content helpers.
   const found = new Set();
-  const patterns = [
+  const literalPatterns = [
     /imagekitUrl\(\s*["']([^"']+)["']\s*\)/g,
     /\bpath\s*:\s*["'](images\/[^"']+)["']/g,
   ];
-  for (const re of patterns) {
+  const helperPatterns = [
+    { re: /\baboutImage\(\s*["']([^"']+)["']\s*\)/g, prefix: "images/about me/" },
+    { re: /\bportfolioImage\(\s*["']([^"']+)["']\s*\)/g, prefix: "images/portraits/" },
+  ];
+  for (const re of literalPatterns) {
     let m;
     while ((m = re.exec(text))) found.add(m[1]);
+  }
+  for (const { re, prefix } of helperPatterns) {
+    let m;
+    while ((m = re.exec(text))) found.add(`${prefix}${m[1]}`);
   }
   return [...found];
 }
@@ -82,8 +96,13 @@ async function main() {
     return;
   }
 
-  const artworks = readFileSync(ARTWORKS_PATH, "utf8");
-  const paths = extractImageKitPaths(artworks);
+  const collected = new Set();
+  for (const sourcePath of SOURCE_PATHS) {
+    if (!existsSync(sourcePath)) continue;
+    const text = readFileSync(sourcePath, "utf8");
+    for (const p of extractImageKitPaths(text)) collected.add(p);
+  }
+  const paths = [...collected];
 
   if (!existsSync(dirname(META_OUT_PATH))) {
     mkdirSync(dirname(META_OUT_PATH), { recursive: true });
@@ -110,23 +129,16 @@ async function main() {
     `[image-meta] probing ${todo.length}/${paths.length} ImageKit images...`,
   );
 
-  const results = await Promise.allSettled(
-    todo.map(async (path) => {
-      const url = `${endpoint}/${encodeURI(path)}`;
-      const res = await probe(url);
-      return [path, { width: res.width, height: res.height }];
-    }),
-  );
-
   let okCount = 0;
-  for (const r of results) {
-    if (r.status === "fulfilled") {
-      const [p, meta] = r.value;
-      cache[p] = meta;
+  for (const path of todo) {
+    const url = `${endpoint}/${encodeURI(path)}`;
+    try {
+      const res = await probe(url);
+      cache[path] = { width: res.width, height: res.height };
       okCount += 1;
-    } else {
+    } catch (err) {
       console.warn(
-        `[image-meta] failed to probe an image: ${r.reason?.message || r.reason}`,
+        `[image-meta] failed to probe ${path}: ${err?.message || err}`,
       );
     }
   }

@@ -7,9 +7,23 @@ import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
 import { SmartImage } from "@/components/ui/smart-image";
 import { aboutStory } from "@/lib/content/about-story";
+import { getImageMeta } from "@/lib/images/get-image-meta";
 
-function imageAspect(image) {
-  return { aspectRatio: image?.ratio ?? "4 / 5" };
+const FALLBACK_RATIO = "4 / 5";
+
+function resolveAspectRatio(image) {
+  if (!image) return FALLBACK_RATIO;
+  if (image.ratio) return image.ratio;
+  if (typeof image.width === "number" && typeof image.height === "number") {
+    return `${image.width} / ${image.height}`;
+  }
+  if (image.path) {
+    const meta = getImageMeta(image.path);
+    if (meta?.width && meta?.height) {
+      return `${meta.width} / ${meta.height}`;
+    }
+  }
+  return FALLBACK_RATIO;
 }
 
 function ArtifactImage({
@@ -17,15 +31,18 @@ function ArtifactImage({
   alt,
   sizes,
   size = "origin",
+  displayVariant = "chapterFeature",
   className = "",
   variant = "plain",
   imgClassName = "object-contain p-3 md:p-4",
+  singleFrame = true,
 }) {
   return (
     <ImageFrame
       variant={variant}
-      className={`about-artifact-image about-artifact-image--${size} relative ${className}`.trim()}
-      style={imageAspect(image)}
+      singleFrame={singleFrame}
+      className={`about-artifact-image about-artifact-image--${size} about-artifact-display--${displayVariant} relative ${className}`.trim()}
+      style={{ aspectRatio: resolveAspectRatio(image) }}
     >
       <SmartImage
         src={image.src}
@@ -65,37 +82,11 @@ function ChapterDivider() {
   );
 }
 
-function AboutChapterShell({
-  chapter,
-  className = "",
-  children,
-  headingClassName = "",
-  copyClassName = "",
-}) {
-  return (
-    <article className={`about-spread ${className}`.trim()}>
-      <div className={`about-chapter-copy ${copyClassName}`.trim()}>
-        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
-        <Heading level="h2" className={headingClassName}>
-          {chapter.title}
-        </Heading>
-        <div className="about-underline" aria-hidden />
-        {chapter.body?.map((paragraph) => (
-          <p key={paragraph} className="body">
-            {paragraph}
-          </p>
-        ))}
-      </div>
-      {children}
-    </article>
-  );
-}
-
 function AboutHero({ t, locale, heroNote }) {
   return (
     <section className="about-spread about-hero">
       <div className="about-hero-card">
-        <ChapterLabel tilt="-1.5deg">{hero.label}</ChapterLabel>
+        <ChapterLabel tilt="-1.5deg">{t.pageEyebrow}</ChapterLabel>
         <Eyebrow>{t.pageEyebrow}</Eyebrow>
         <Heading level="h1" className="max-w-3xl">
           {t.pageTitle}
@@ -117,6 +108,28 @@ function OriginChapter({ chapter }) {
   return (
     <article className="about-spread about-origin">
       <div className="about-origin-story">
+        <div className="about-origin-cluster" aria-label={chapter.title}>
+          {chapter.images?.map((image, index) => (
+            <figure
+              key={image.id}
+              className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
+            >
+              <ArtifactImage
+                image={image}
+                alt={image.alt}
+                size="origin"
+                sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
+                className="about-origin-frame"
+                imgClassName="object-contain p-2.5 md:p-3"
+              />
+              <figcaption className="about-attached-caption about-origin-caption">
+                <p className="caption text-highlight">{image.label}</p>
+                <p className="body-sm text-text-primary">{image.caption}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
         <div className="about-origin-copy">
           <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
           <Heading level="h2" className="max-w-xl">
@@ -129,48 +142,31 @@ function OriginChapter({ chapter }) {
             </p>
           ))}
         </div>
-
-        {chapter.images?.map((image) => (
-          <figure key={image.id} className="about-artifact about-origin-artifact">
-            <ArtifactImage
-              image={image}
-              alt={image.alt}
-              size="origin"
-              sizes="(max-width: 767px) 72vw, 300px"
-              className="about-origin-frame"
-              imgClassName="object-contain p-2.5 md:p-3"
-            />
-            <figcaption className="about-attached-caption about-origin-caption">
-              <p className="caption text-highlight">{image.label}</p>
-              <p className="body-sm text-text-primary">{image.caption}</p>
-            </figcaption>
-          </figure>
-        ))}
       </div>
     </article>
   );
 }
 
-function AboutChapterEvidenceBoard({ items, locale, tabLabel }) {
+function BoardCluster({ items, locale, tabLabel }) {
   const fallbackTabLabel = locale === "ru" ? "память" : "memory";
-
   return (
-    <section className="about-evidence-board" aria-label={tabLabel || fallbackTabLabel}>
-      <span className="about-evidence-tab caption text-highlight">
+    <aside className="about-board-cluster" aria-label={tabLabel || fallbackTabLabel}>
+      <span className="about-board-cluster-tab caption text-highlight">
         {tabLabel || fallbackTabLabel}
       </span>
-      <div className="about-board-connector" aria-hidden />
-      <div className="about-grid-patch" aria-hidden />
-      <div className="about-board-stage">
+      <div className="about-board-cluster-grid">
         {items.map((item) => (
           <figure key={item.id} className={item.boardClass}>
             <ArtifactImage
               image={item}
               alt={item.alt}
               size="board"
-              sizes="(max-width: 767px) 72vw, (max-width: 1199px) 24vw, 220px"
+              displayVariant={
+                item.id === "doritos" ? "evidenceAnchor" : "evidenceSmall"
+              }
+              sizes="(max-width: 767px) 80vw, (max-width: 1199px) 36vw, 280px"
               className="about-board-frame"
-              imgClassName="object-contain p-2 md:p-2.5"
+              imgClassName="object-contain p-2.5 md:p-3"
             />
             <figcaption className="about-board-caption">
               <p className="caption text-highlight">{item.label}</p>
@@ -179,38 +175,42 @@ function AboutChapterEvidenceBoard({ items, locale, tabLabel }) {
           </figure>
         ))}
       </div>
-    </section>
+    </aside>
   );
 }
 
 function DigitalArtChapter({ chapter, locale }) {
+  const body = chapter.noteCard?.body ?? [];
   return (
     <article className="about-spread about-board">
-      <div className="about-chapter-copy about-board-copy">
-        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
-        <Heading level="h2" className="max-w-sm">
-          {chapter.title}
-        </Heading>
-        <div className="about-underline" aria-hidden />
-      </div>
-
-      <div className="about-board-layout">
-        <section className="about-board-main-note">
-          <p className="caption about-board-note-label text-highlight">
-            {chapter.noteCard?.label}
-          </p>
-          {chapter.noteCard?.body?.map((paragraph) => (
-            <p key={paragraph} className="body-sm text-text-primary">
-              {paragraph}
+      <div className="about-board-flow">
+        <div className="about-board-header">
+          <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+          <Heading level="h2" className="about-board-title">
+            {chapter.title}
+          </Heading>
+          <div className="about-underline" aria-hidden />
+          {chapter.noteCard?.label ? (
+            <p className="caption about-board-note-label text-highlight">
+              {chapter.noteCard.label}
             </p>
-          ))}
-        </section>
+          ) : null}
+        </div>
 
-        <AboutChapterEvidenceBoard
-          items={chapter.images}
-          locale={locale}
-          tabLabel={chapter.noteCard?.label}
-        />
+        <div className="about-board-prose">
+          {body.map((paragraph, index) => (
+            <Fragment key={paragraph}>
+              {index === 1 ? (
+                <BoardCluster
+                  items={chapter.images}
+                  locale={locale}
+                  tabLabel={chapter.noteCard?.label}
+                />
+              ) : null}
+              <p className="body about-board-paragraph">{paragraph}</p>
+            </Fragment>
+          ))}
+        </div>
       </div>
     </article>
   );
@@ -218,10 +218,20 @@ function DigitalArtChapter({ chapter, locale }) {
 
 function SelfPortraitTimeline({ chapter, locale }) {
   return (
-    <AboutChapterShell chapter={chapter} className="about-timeline">
-      <div className="about-timeline-intro">
-        {chapter.note ? (
-          <StickyNote body={chapter.note.body} className="about-timeline-note" />
+    <article className="about-spread about-timeline">
+      <div className="about-timeline-copy">
+        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+        <Heading level="h2" className="about-timeline-title">
+          {chapter.title}
+        </Heading>
+        <div className="about-underline" aria-hidden />
+        {chapter.body?.map((paragraph) => (
+          <p key={paragraph} className="body about-timeline-paragraph">
+            {paragraph}
+          </p>
+        ))}
+        {chapter.note?.body ? (
+          <p className="body about-timeline-reflection">{chapter.note.body}</p>
         ) : null}
       </div>
 
@@ -257,6 +267,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
                   image={item}
                   alt={item.alt}
                   size="timeline"
+                  displayVariant="timeline"
                   sizes="(max-width: 767px) 72vw, 16vw"
                   className={`about-timeline-frame about-timeline-frame--${index + 1}`}
                   imgClassName="object-contain p-2 md:p-3"
@@ -266,7 +277,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
           ))}
         </div>
       </div>
-    </AboutChapterShell>
+    </article>
   );
 }
 
@@ -290,6 +301,7 @@ function PortraitComparison({ items, locale }) {
                   image={item}
                   alt={item.alt}
                   size="comparison"
+                  displayVariant="chapterFeature"
                   sizes="(max-width: 767px) 74vw, 18vw"
                   className="about-comparison-frame"
                   imgClassName="object-contain p-2.5 md:p-3"
@@ -309,7 +321,18 @@ function PortraitComparison({ items, locale }) {
 
 function UpsAndDownsChapter({ chapter, locale }) {
   return (
-    <AboutChapterShell chapter={chapter} className="about-comparison">
+    <article className="about-spread about-comparison">
+      <div className="about-chapter-copy about-comparison-copy">
+        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+        <Heading level="h2">{chapter.title}</Heading>
+        <div className="about-underline" aria-hidden />
+        {chapter.body?.map((paragraph) => (
+          <p key={paragraph} className="body">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+
       <PortraitComparison items={chapter.comparisonItems} locale={locale} />
       <div className="about-comparison-notes">
         {chapter.notes?.map((note, index) => (
@@ -320,38 +343,44 @@ function UpsAndDownsChapter({ chapter, locale }) {
           />
         ))}
       </div>
-    </AboutChapterShell>
+    </article>
   );
 }
 
 function CurrentSelfSection({ chapter, locale }) {
+  const body = chapter.body ?? [];
   return (
     <article className="about-spread about-current">
-      <div className="about-current-layout">
-        <div className="about-current-copy">
+      <div className="about-current-flow">
+        <div className="about-current-header">
           <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
-          <Heading level="h2" className="max-w-xl">
+          <Heading level="h2" className="about-current-title">
             {chapter.title}
           </Heading>
           <div className="about-underline" aria-hidden />
-          {chapter.body?.map((paragraph) => (
-            <p key={paragraph} className="body">
-              {paragraph}
-            </p>
-          ))}
         </div>
 
-        <figure className="about-artifact about-current-artifact">
-          <span className="about-current-tag">{chapter.image.label}</span>
-          <ArtifactImage
-            image={chapter.image}
-            alt={chapter.image.alt}
-            size="current"
-            sizes="(max-width: 767px) 82vw, 360px"
-            className="about-current-frame"
-            imgClassName="object-contain p-3 md:p-5"
-          />
-        </figure>
+        <div className="about-current-prose">
+          {body.map((paragraph, index) => (
+            <Fragment key={paragraph}>
+              {index === 0 ? (
+                <figure className="about-artifact about-current-artifact">
+                  <span className="about-current-tag">{chapter.image.label}</span>
+                  <ArtifactImage
+                    image={chapter.image}
+                    alt={chapter.image.alt}
+                    size="current"
+                    displayVariant="currentPortrait"
+                    sizes="(max-width: 767px) 86vw, (max-width: 1199px) 42vw, 420px"
+                    className="about-current-frame"
+                    imgClassName="object-contain p-3 md:p-5"
+                  />
+                </figure>
+              ) : null}
+              <p className="body about-current-paragraph">{paragraph}</p>
+            </Fragment>
+          ))}
+        </div>
       </div>
     </article>
   );

@@ -1,9 +1,69 @@
 {
+  "images/about me/apple": {
+    "width": 829,
+    "height": 822
+  },
+  "images/about me/doritos": {
+    "width": 768,
+    "height": 768
+  },
+  "images/about me/ket": {
+    "width": 829,
+    "height": 822
+  },
+  "images/about me/kindergarten": {
+    "width": 3714,
+    "height": 2978
+  },
+  "images/about me/mom": {
+    "width": 3024,
+    "height": 4032
+  },
+  "images/about me/y2015age8": {
+    "width": 768,
+    "height": 768
+  },
+  "images/about me/y2020": {
+    "width": 2048,
+    "height": 2548
+  },
+  "images/about me/y2020age14": {
+    "width": 3193,
+    "height": 3630
+  },
+  "images/about me/y2021age15": {
+    "width": 3033,
+    "height": 3005
+  },
+  "images/about me/y2022": {
+    "width": 1774,
+    "height": 2461
+  },
+  "images/about me/y2023age17": {
+    "width": 2640,
+    "height": 1830
+  },
+  "images/about me/y2024": {
+    "width": 2048,
+    "height": 2732
+  },
+  "images/about me/y2024age18": {
+    "width": 1181,
+    "height": 1462
+  },
   "images/animals/doggo_comm": {
     "width": 1647,
     "height": 2048
   },
+  "images/animals/fishies": {
+    "width": 2039,
+    "height": 2894
+  },
   "images/animals/horsey": {
+    "width": 3770,
+    "height": 5027
+  },
+  "images/animals/horsey?updatedAt=1777912296674": {
     "width": 3770,
     "height": 5027
   },
@@ -11,9 +71,9 @@
     "width": 2020,
     "height": 2500
   },
-  "images/animals/fishies": {
-    "width": 2039,
-    "height": 2894
+  "images/animals/layin_kitten?updatedAt=1777912292067": {
+    "width": 2020,
+    "height": 2500
   },
   "images/animals/silly_birb": {
     "width": 1654,
@@ -27,11 +87,19 @@
     "width": 1519,
     "height": 2048
   },
+  "images/animals/sooreekaat?updatedAt=1777912292344": {
+    "width": 1519,
+    "height": 2048
+  },
   "images/animals/tiger": {
     "width": 3000,
     "height": 4000
   },
   "images/landscapes/calm": {
+    "width": 687,
+    "height": 822
+  },
+  "images/landscapes/calm?updatedAt=1778163092135": {
     "width": 687,
     "height": 822
   },
@@ -55,11 +123,19 @@
     "width": 1752,
     "height": 2116
   },
+  "images/landscapes/myuniverse?updatedAt=1778163056828": {
+    "width": 1752,
+    "height": 2116
+  },
   "images/landscapes/oceanscape": {
     "width": 3000,
     "height": 5166
   },
   "images/landscapes/planes": {
+    "width": 2160,
+    "height": 3840
+  },
+  "images/landscapes/planes?updatedAt=1778163055883": {
     "width": 2160,
     "height": 3840
   },
@@ -71,11 +147,19 @@
     "width": 3500,
     "height": 4666
   },
+  "images/portraits/fishtank?updatedAt=1778161839934": {
+    "width": 3500,
+    "height": 4666
+  },
   "images/portraits/flowers_hairstyle_lady": {
     "width": 3000,
     "height": 4000
   },
   "images/portraits/heavily_stylized": {
+    "width": 3351,
+    "height": 4242
+  },
+  "images/portraits/heavily_stylized?updatedAt=1777912076764": {
     "width": 3351,
     "height": 4242
   },

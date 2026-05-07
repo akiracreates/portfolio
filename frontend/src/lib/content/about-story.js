@@ -1,7 +1,13 @@
 import { imagekitUrl } from "@/lib/images/imagekit";
 
 function aboutImage(name) {
-  return imagekitUrl(`images/about%20me/${name}`);
+  const path = `images/about me/${name}`;
+  return { path, src: imagekitUrl(path) };
+}
+
+function portfolioImage(name) {
+  const path = `images/portraits/${name}`;
+  return { path, src: imagekitUrl(path) };
 }
 
 export const aboutStory = {
@@ -28,16 +34,14 @@ export const aboutStory = {
             label: "kindergarten",
             caption: "an early memory of taking drawing very seriously.",
             alt: "kindergarten drawing memory",
-            src: aboutImage("kindergarten"),
-            ratio: "4 / 5",
+            ...aboutImage("kindergarten"),
           },
           {
             id: "mom",
             label: "mom portrait assignment",
             caption: "the grade 4 portrait assignment that stayed with me.",
             alt: "portrait assignment of mom from childhood",
-            src: aboutImage("mom"),
-            ratio: "4 / 5",
+            ...aboutImage("mom"),
           },
         ],
       },
@@ -66,8 +70,7 @@ export const aboutStory = {
             label: "doritos era",
             caption: "messy, bright, and very experimental.",
             alt: "early digital painting named doritos",
-            src: aboutImage("doritos"),
-            ratio: "4 / 5",
+            ...aboutImage("doritos"),
             boardClass: "about-board-item about-board-item--one",
           },
           {
@@ -75,8 +78,7 @@ export const aboutStory = {
             label: "apple study",
             caption: "learning form, color, and patience.",
             alt: "digital apple study",
-            src: aboutImage("apple"),
-            ratio: "4 / 5",
+            ...aboutImage("apple"),
             boardClass: "about-board-item about-board-item--two",
           },
           {
@@ -84,8 +86,7 @@ export const aboutStory = {
             label: "cat practice",
             caption: "because i was always painting cats.",
             alt: "early digital cat practice painting",
-            src: aboutImage("ket"),
-            ratio: "4 / 5",
+            ...aboutImage("ket"),
             boardClass: "about-board-item about-board-item--three",
           },
         ],
@@ -104,11 +105,11 @@ export const aboutStory = {
           body: "every portrait here felt accurate at the time. i still find that difficult to comprehend somehow.",
         },
         timelineItems: [
-          { year: "2015", age: "age 8", alt: "self portrait from 2015 age 8", src: aboutImage("y2015age8"), ratio: "4 / 5" },
-          { year: "2020", age: "age 14", alt: "self portrait from 2020 age 14", src: aboutImage("y2020age14"), ratio: "4 / 5" },
-          { year: "2021", age: "age 15", alt: "self portrait from 2021 age 15", src: aboutImage("y2021age15"), ratio: "4 / 5" },
-          { year: "2023", age: "age 17", alt: "self portrait from 2023 age 17", src: aboutImage("y2023age17"), ratio: "4 / 5" },
-          { year: "2024", age: "age 18", alt: "self portrait from 2024 age 18", src: aboutImage("y2024age18"), ratio: "4 / 5" },
+          { year: "2015", age: "age 8", alt: "self portrait from 2015 age 8", ...aboutImage("y2015age8") },
+          { year: "2020", age: "age 14", alt: "self portrait from 2020 age 14", ...aboutImage("y2020age14") },
+          { year: "2021", age: "age 15", alt: "self portrait from 2021 age 15", ...aboutImage("y2021age15") },
+          { year: "2023", age: "age 17", alt: "self portrait from 2023 age 17", ...aboutImage("y2023age17") },
+          { year: "2024", age: "age 18", alt: "self portrait from 2024 age 18", ...aboutImage("y2024age18") },
         ],
       },
       {
@@ -124,9 +125,9 @@ export const aboutStory = {
           "accepting imperfections helped me improve more than perfectionism ever did.",
         ],
         comparisonItems: [
-          { year: "2020", age: "age 14", alt: "self portrait from 2020", src: aboutImage("y2020"), ratio: "4 / 5" },
-          { year: "2022", age: "age 16", alt: "self portrait from 2022", src: aboutImage("y2022"), ratio: "4 / 5" },
-          { year: "2024", age: "age 18", alt: "self portrait from 2024", src: aboutImage("y2024"), ratio: "4 / 5" },
+          { year: "2020", age: "age 14", alt: "self portrait from 2020", ...aboutImage("y2020") },
+          { year: "2022", age: "age 16", alt: "self portrait from 2022", ...aboutImage("y2022") },
+          { year: "2024", age: "age 18", alt: "self portrait from 2024", ...aboutImage("y2024") },
         ],
         notes: ['"figuring it out" usually meant repainting something four times'],
       },
@@ -145,8 +146,7 @@ export const aboutStory = {
         image: {
           label: "current",
           alt: "most recent self portrait",
-          src: aboutImage("self"),
-          ratio: "4 / 5",
+          ...portfolioImage("self"),
         },
       },
     ],
@@ -180,16 +180,14 @@ export const aboutStory = {
             label: "садик",
             caption: "самое раннее воспоминание о том, как я отношусь к рисованию.",
             alt: "детский рисунок из садика",
-            src: aboutImage("kindergarten"),
-            ratio: "4 / 5",
+            ...aboutImage("kindergarten"),
           },
           {
             id: "mom",
             label: "портрет мамы",
             caption: "то самое школьное задание из 4 класса.",
             alt: "детский портрет мамы",
-            src: aboutImage("mom"),
-            ratio: "4 / 5",
+            ...aboutImage("mom"),
           },
         ],
       },
@@ -218,8 +216,7 @@ export const aboutStory = {
             label: "doritos-период",
             caption: "ярко, шумно и максимально экспериментально.",
             alt: "ранняя digital работа doritos",
-            src: aboutImage("doritos"),
-            ratio: "4 / 5",
+            ...aboutImage("doritos"),
             boardClass: "about-board-item about-board-item--one",
           },
           {
@@ -227,8 +224,7 @@ export const aboutStory = {
             label: "apple study",
             caption: "про форму, цвет и терпение.",
             alt: "digital этюд яблока",
-            src: aboutImage("apple"),
-            ratio: "4 / 5",
+            ...aboutImage("apple"),
             boardClass: "about-board-item about-board-item--two",
           },
           {
@@ -236,8 +232,7 @@ export const aboutStory = {
             label: "котопрактика",
             caption: "потому что котов я рисовала постоянно.",
             alt: "ранняя digital работа с котом",
-            src: aboutImage("ket"),
-            ratio: "4 / 5",
+            ...aboutImage("ket"),
             boardClass: "about-board-item about-board-item--three",
           },
         ],
@@ -256,11 +251,11 @@ export const aboutStory = {
           body: "каждый портрет здесь в тот момент казался мне абсолютно точным. и это до сих пор трудно осознать.",
         },
         timelineItems: [
-          { year: "2015", age: "8 лет", alt: "автопортрет 2015 года в 8 лет", src: aboutImage("y2015age8"), ratio: "4 / 5" },
-          { year: "2020", age: "14 лет", alt: "автопортрет 2020 года в 14 лет", src: aboutImage("y2020age14"), ratio: "4 / 5" },
-          { year: "2021", age: "15 лет", alt: "автопортрет 2021 года в 15 лет", src: aboutImage("y2021age15"), ratio: "4 / 5" },
-          { year: "2023", age: "17 лет", alt: "автопортрет 2023 года в 17 лет", src: aboutImage("y2023age17"), ratio: "4 / 5" },
-          { year: "2024", age: "18 лет", alt: "автопортрет 2024 года в 18 лет", src: aboutImage("y2024age18"), ratio: "4 / 5" },
+          { year: "2015", age: "8 лет", alt: "автопортрет 2015 года в 8 лет", ...aboutImage("y2015age8") },
+          { year: "2020", age: "14 лет", alt: "автопортрет 2020 года в 14 лет", ...aboutImage("y2020age14") },
+          { year: "2021", age: "15 лет", alt: "автопортрет 2021 года в 15 лет", ...aboutImage("y2021age15") },
+          { year: "2023", age: "17 лет", alt: "автопортрет 2023 года в 17 лет", ...aboutImage("y2023age17") },
+          { year: "2024", age: "18 лет", alt: "автопортрет 2024 года в 18 лет", ...aboutImage("y2024age18") },
         ],
       },
       {
@@ -276,9 +271,9 @@ export const aboutStory = {
           "принятие несовершенств помогло мне вырасти куда сильнее, чем перфекционизм.",
         ],
         comparisonItems: [
-          { year: "2020", age: "14 лет", alt: "автопортрет 2020", src: aboutImage("y2020"), ratio: "4 / 5" },
-          { year: "2022", age: "16 лет", alt: "автопортрет 2022", src: aboutImage("y2022"), ratio: "4 / 5" },
-          { year: "2024", age: "18 лет", alt: "автопортрет 2024", src: aboutImage("y2024"), ratio: "4 / 5" },
+          { year: "2020", age: "14 лет", alt: "автопортрет 2020", ...aboutImage("y2020") },
+          { year: "2022", age: "16 лет", alt: "автопортрет 2022", ...aboutImage("y2022") },
+          { year: "2024", age: "18 лет", alt: "автопортрет 2024", ...aboutImage("y2024") },
         ],
         notes: ['"разобраться" обычно означало перерисовать одну и ту же работу четыре раза'],
       },
@@ -297,8 +292,7 @@ export const aboutStory = {
         image: {
           label: "сейчас",
           alt: "самый недавний автопортрет",
-          src: aboutImage("self"),
-          ratio: "4 / 5",
+          ...portfolioImage("self"),
         },
       },
     ],
