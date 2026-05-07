@@ -1,18 +1,23 @@
 import { pickLocale } from "@/lib/i18n/config";
 
-export function CommissionPricingTable({ locale = "en", rows = [] }) {
+export function CommissionPricingTable({
+  locale = "en",
+  rows = [],
+  headers = null,
+}) {
+  const cols =
+    headers ??
+    (locale === "ru"
+      ? ["тип коммишена", "базовая цена / диапазон", "что входит", "дополнительно"]
+      : ["commission type", "base price / range", "includes", "extra cost notes"]);
+
   return (
     <div className="scrap-card overflow-hidden border-[color:var(--border-accent)]/35 bg-[color:var(--bg-note)]">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[720px] border-collapse text-left">
           <thead className="bg-highlight-soft/60">
             <tr>
-              {[
-                "commission type",
-                "base price / range",
-                "includes",
-                "extra cost notes",
-              ].map((label) => (
+              {cols.map((label) => (
                 <th
                   key={label}
                   className="border-b border-dashed border-border-default px-4 py-3 text-[0.75rem] font-semibold text-text-primary first:border-r first:border-dashed first:border-border-subtle [&:not(:last-child)]:border-r [&:not(:last-child)]:border-dashed [&:not(:last-child)]:border-border-subtle"

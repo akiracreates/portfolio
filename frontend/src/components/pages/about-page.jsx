@@ -6,378 +6,14 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
 import { SmartImage } from "@/components/ui/smart-image";
-import { getArtworkById } from "@/lib/content/artworks";
-import { pickLocale } from "@/lib/i18n/config";
+import { aboutStory } from "@/lib/content/about-story";
 
-const FALLBACK_IMAGE_ID = "portrait-01";
-
-const ABOUT_STORY = {
-  en: {
-    hero: {
-      label: "opening note",
-      note: {
-        title: "longer version",
-        body:
-          "placeholder note for the slower story. this can become a short personal aside later.",
-      },
-    },
-    chapters: [
-      {
-        id: "started",
-        label: "chapter 1",
-        title: "how it started",
-        layoutVariant: "origin",
-        tilt: "-2deg",
-        body: [
-          "it started with messy pencil lines, little drawings in the margins, and the kind of confidence only a child has before they learn to judge everything too hard.",
-          "this part should eventually become the real story of how i started drawing, what i remember from that time, and why these first attempts still feel important to me.",
-          "for now, this is placeholder text, but the layout should already feel like a small memory: imperfect, early, and honest.",
-        ],
-        note: {
-          body: "tiny origin artifact: the first attempt still matters.",
-        },
-        image: {
-          id: "portrait-04",
-          label: "early evidence",
-          caption: "placeholder for the earliest sketchbook page or drawing.",
-          alt: "early drawing placeholder",
-        },
-      },
-      {
-        id: "digital",
-        label: "chapter 2",
-        title: "digital art",
-        layoutVariant: "board",
-        tilt: "1.5deg",
-        noteCard: {
-          label: "transition",
-          body: [
-            "moving into digital art made experimenting easier. i could repaint, compare, undo things, and slowly notice what actually felt like mine.",
-            "these pieces should read like practice and proof, not polished milestones.",
-            "this text is placeholder for the real story of how digital tools changed the way i practiced, experimented with early brushes and colors, and slowly found moments that felt less random.",
-          ],
-        },
-        images: [
-          {
-            id: "portrait-05",
-            label: "early face study",
-            caption: "placeholder note about learning to paint slowly.",
-            alt: "early digital portrait placeholder",
-            boardClass: "about-board-item about-board-item--one",
-          },
-          {
-            id: "landscape-04",
-            label: "color test",
-            caption: "placeholder note about skies and atmosphere.",
-            alt: "early landscape study placeholder",
-            boardClass: "about-board-item about-board-item--two",
-          },
-          {
-            id: "still-02",
-            label: "ordinary objects",
-            caption: "placeholder note about mood showing up in simple things.",
-            alt: "early still life placeholder",
-            boardClass: "about-board-item about-board-item--three",
-          },
-        ],
-      },
-      {
-        id: "timeline",
-        label: "chapter 3",
-        title: "how i see myself: timeline",
-        layoutVariant: "timeline",
-        tilt: "-1deg",
-        body: [
-          "self portraits became the cleanest way to track change. the face stayed familiar, but the way i looked at it kept shifting.",
-        ],
-        note: {
-          body:
-            "the timeline is the record. it should stay compact, reflective, and easy to update later.",
-        },
-        timelineItems: [
-          {
-            id: "portrait-04",
-            year: "2018",
-            age: "age 12",
-            alt: "self portrait from 2018 placeholder",
-          },
-          {
-            id: "portrait-05",
-            year: "2020",
-            age: "age 14",
-            alt: "self portrait from 2020 placeholder",
-          },
-          {
-            id: "portrait-03",
-            year: "2022",
-            age: "age 16",
-            alt: "self portrait from 2022 placeholder",
-          },
-          {
-            id: "portrait-02",
-            year: "2024",
-            age: "age 18",
-            alt: "self portrait from 2024 placeholder",
-          },
-          {
-            id: "portrait-01",
-            year: "2026",
-            age: "age 20",
-            alt: "current self portrait placeholder",
-          },
-        ],
-      },
-      {
-        id: "ups-downs",
-        label: "chapter 4",
-        title: "my ups and downs",
-        layoutVariant: "comparison",
-        tilt: "2deg",
-        body: [
-          "growth was not a straight line. some years felt sharp and certain, some felt quieter and harder to read.",
-          "this chapter should hold the messy middle without turning it into a dramatic speech.",
-          "some stretches looked clear from the outside and confusing from the inside. some felt productive, some felt stalled, and most of them were probably both at once.",
-          "the comparison below is here to show change directly: what became more intentional, what stayed familiar, and what kept moving even when the process felt uneven.",
-        ],
-        comparisonItems: [
-          {
-            id: "portrait-04",
-            year: "2018",
-            age: "age 12",
-            alt: "earlier self portrait placeholder",
-          },
-          {
-            id: "portrait-03",
-            year: "2022",
-            age: "age 16",
-            alt: "middle self portrait placeholder",
-          },
-          {
-            id: "portrait-01",
-            year: "2026",
-            age: "age 20",
-            alt: "recent self portrait placeholder",
-          },
-        ],
-        notes: ["some changes were technical.", "some were emotional."],
-      },
-      {
-        id: "now",
-        label: "chapter 5",
-        title: "where i am now",
-        layoutVariant: "current",
-        tilt: "-1.5deg",
-        body: [
-          "this is the current version: more deliberate, more patient, and still open to change.",
-          "this section will later hold the real present-tense text about what i make now, what i care about, and where the work is going next.",
-          "for now, it should feel settled without feeling finished. the work is clearer, the process is steadier, and there is still room for the next version to appear slowly.",
-          "the story lands here for the moment, then continues forward into the portfolio itself.",
-        ],
-        image: {
-          id: "portrait-01",
-          label: "current",
-          caption: "most recent self portrait placeholder.",
-          alt: "current self portrait placeholder",
-        },
-      },
-    ],
-    ending: {
-      title: "thanks for reading.",
-      body: "the story keeps going. the present tense lives in the work itself.",
-      ctaArt: "see my work in the present",
-      ctaHome: "back home",
-    },
-  },
-  ru: {
-    hero: {
-      label: "начальная заметка",
-      note: {
-        title: "длинная версия",
-        body:
-          "плейсхолдер для более медленной истории. позже сюда можно вставить короткую личную ремарку.",
-      },
-    },
-    chapters: [
-      {
-        id: "started",
-        label: "глава 1",
-        title: "как всё началось",
-        layoutVariant: "origin",
-        tilt: "-2deg",
-        body: [
-          "всё началось с неровных карандашных линий, маленьких рисунков на полях и той уверенности, которая бывает у ребёнка до того, как он начинает слишком строго всё оценивать.",
-          "позже здесь должна появиться настоящая история о том, как я начала рисовать, что я помню о том времени и почему эти первые попытки всё ещё кажутся мне важными.",
-          "пока это плейсхолдерный текст, но сама композиция уже должна ощущаться как маленькое воспоминание: раннее, неровное и честное.",
-        ],
-        note: {
-          body: "маленький артефакт начала: первая попытка всё ещё важна.",
-        },
-        image: {
-          id: "portrait-04",
-          label: "раннее доказательство",
-          caption: "плейсхолдер для самой ранней страницы скетчбука или рисунка.",
-          alt: "плейсхолдер раннего рисунка",
-        },
-      },
-      {
-        id: "digital",
-        label: "глава 2",
-        title: "цифровое искусство",
-        layoutVariant: "board",
-        tilt: "1.5deg",
-        noteCard: {
-          label: "переход",
-          body: [
-            "переход в цифровую работу сделал эксперименты проще. я могла переписывать, сравнивать, отменять шаги и постепенно замечать, что вообще ощущается моим.",
-            "эти работы должны читаться как практика и доказательство, а не как отполированные вехи.",
-            "этот текст пока плейсхолдерный и позже станет реальной историей о том, как цифровые инструменты изменили мой способ практиковаться, экспериментировать с первыми кистями и цветами и постепенно находить моменты, которые ощущались уже не такими случайными.",
-          ],
-        },
-        images: [
-          {
-            id: "portrait-05",
-            label: "ранний этюд лица",
-            caption: "плейсхолдер заметки о медленном освоении живописи.",
-            alt: "плейсхолдер раннего цифрового портрета",
-            boardClass: "about-board-item about-board-item--one",
-          },
-          {
-            id: "landscape-04",
-            label: "цветовой тест",
-            caption: "плейсхолдер заметки о небе и атмосфере.",
-            alt: "плейсхолдер раннего пейзажного этюда",
-            boardClass: "about-board-item about-board-item--two",
-          },
-          {
-            id: "still-02",
-            label: "обычные предметы",
-            caption: "плейсхолдер заметки о том, как настроение появилось в простых вещах.",
-            alt: "плейсхолдер раннего натюрморта",
-            boardClass: "about-board-item about-board-item--three",
-          },
-        ],
-      },
-      {
-        id: "timeline",
-        label: "глава 3",
-        title: "как я вижу себя: таймлайн",
-        layoutVariant: "timeline",
-        tilt: "-1deg",
-        body: [
-          "автопортреты стали самым понятным способом замечать перемены. лицо оставалось знакомым, а взгляд на него всё время менялся.",
-        ],
-        note: {
-          body:
-            "таймлайн остаётся записью. он должен быть компактным, рефлексивным и удобным для замены позже.",
-        },
-        timelineItems: [
-          {
-            id: "portrait-04",
-            year: "2018",
-            age: "12 лет",
-            alt: "плейсхолдер автопортрета 2018 года",
-          },
-          {
-            id: "portrait-05",
-            year: "2020",
-            age: "14 лет",
-            alt: "плейсхолдер автопортрета 2020 года",
-          },
-          {
-            id: "portrait-03",
-            year: "2022",
-            age: "16 лет",
-            alt: "плейсхолдер автопортрета 2022 года",
-          },
-          {
-            id: "portrait-02",
-            year: "2024",
-            age: "18 лет",
-            alt: "плейсхолдер автопортрета 2024 года",
-          },
-          {
-            id: "portrait-01",
-            year: "2026",
-            age: "20 лет",
-            alt: "плейсхолдер текущего автопортрета",
-          },
-        ],
-      },
-      {
-        id: "ups-downs",
-        label: "глава 4",
-        title: "мои взлёты и спады",
-        layoutVariant: "comparison",
-        tilt: "2deg",
-        body: [
-          "рост не шёл по прямой. одни годы были резкими и уверенными, другие казались тише и сложнее для чтения.",
-          "эта глава должна держать сложную середину без превращения в драматическую речь.",
-          "какие-то отрезки выглядели ясными снаружи и запутанными изнутри. какие-то казались продуктивными, какие-то застойными, и чаще всего это было сразу и то и другое.",
-          "сравнение ниже нужно, чтобы показать перемены напрямую: что стало более намеренным, что осталось знакомым и что продолжало двигаться, даже когда сам процесс ощущался неровным.",
-        ],
-        comparisonItems: [
-          {
-            id: "portrait-04",
-            year: "2018",
-            age: "12 лет",
-            alt: "плейсхолдер раннего автопортрета",
-          },
-          {
-            id: "portrait-03",
-            year: "2022",
-            age: "16 лет",
-            alt: "плейсхолдер среднего автопортрета",
-          },
-          {
-            id: "portrait-01",
-            year: "2026",
-            age: "20 лет",
-            alt: "плейсхолдер недавнего автопортрета",
-          },
-        ],
-        notes: ["какие-то перемены были техническими.", "какие-то были эмоциональными."],
-      },
-      {
-        id: "now",
-        label: "глава 5",
-        title: "где я сейчас",
-        layoutVariant: "current",
-        tilt: "-1.5deg",
-        body: [
-          "это текущая версия: более намеренная, более терпеливая и всё ещё открытая переменам.",
-          "позже здесь будет настоящий текст в настоящем времени о том, что я делаю сейчас, что для меня важно и куда работа движется дальше.",
-          "пока эта часть должна ощущаться собранной, но не окончательной. работа стала яснее, сам процесс спокойнее, и у следующей версии всё ещё есть место появиться постепенно.",
-          "история пока останавливается здесь, а затем продолжается уже внутри самого портфолио.",
-        ],
-        image: {
-          id: "portrait-01",
-          label: "сейчас",
-          caption: "плейсхолдер самого недавнего автопортрета.",
-          alt: "плейсхолдер текущего автопортрета",
-        },
-      },
-    ],
-    ending: {
-      title: "спасибо, что прочитали.",
-      body: "история продолжается. настоящее время уже живёт в самих работах.",
-      ctaArt: "смотреть нынешние работы",
-      ctaHome: "на главную",
-    },
-  },
-};
-
-function artworkImage(id) {
-  return getArtworkById(id) ?? getArtworkById(FALLBACK_IMAGE_ID);
-}
-
-function imageAspect(artwork) {
-  if (!artwork) return undefined;
-  return { aspectRatio: `${artwork.width ?? 4} / ${artwork.height ?? 5}` };
+function imageAspect(image) {
+  return { aspectRatio: image?.ratio ?? "4 / 5" };
 }
 
 function ArtifactImage({
-  imageId,
-  locale,
+  image,
   alt,
   sizes,
   size = "origin",
@@ -385,17 +21,15 @@ function ArtifactImage({
   variant = "plain",
   imgClassName = "object-contain p-3 md:p-4",
 }) {
-  const art = artworkImage(imageId);
-
   return (
     <ImageFrame
       variant={variant}
       className={`about-artifact-image about-artifact-image--${size} relative ${className}`.trim()}
-      style={imageAspect(art)}
+      style={imageAspect(image)}
     >
       <SmartImage
-        src={art.imageSrc}
-        alt={alt || pickLocale(art.alt, locale)}
+        src={image.src}
+        alt={alt || image.alt}
         fill
         sizes={sizes}
         imgClassName={imgClassName}
@@ -457,7 +91,7 @@ function AboutChapterShell({
   );
 }
 
-function AboutHero({ t, hero }) {
+function AboutHero({ t, locale, heroNote }) {
   return (
     <section className="about-spread about-hero">
       <div className="about-hero-card">
@@ -471,15 +105,15 @@ function AboutHero({ t, hero }) {
       </div>
 
       <StickyNote
-        title={hero.note.title}
-        body={hero.note.body}
+        title={locale === "ru" ? "заметка" : "sticky note"}
+        body={heroNote}
         className="about-hero-note"
       />
     </section>
   );
 }
 
-function OriginChapter({ chapter, locale }) {
+function OriginChapter({ chapter }) {
   return (
     <article className="about-spread about-origin">
       <div className="about-origin-story">
@@ -496,21 +130,22 @@ function OriginChapter({ chapter, locale }) {
           ))}
         </div>
 
-        <figure className="about-artifact about-origin-artifact">
-          <ArtifactImage
-            imageId={chapter.image.id}
-            locale={locale}
-            alt={chapter.image.alt}
-            size="origin"
-            sizes="(max-width: 767px) 72vw, 300px"
-            className="about-origin-frame"
-            imgClassName="object-contain p-2.5 md:p-3"
-          />
-          <figcaption className="about-attached-caption about-origin-caption">
-            <p className="caption text-highlight">{chapter.image.label}</p>
-            <p className="body-sm text-text-primary">{chapter.image.caption}</p>
-          </figcaption>
-        </figure>
+        {chapter.images?.map((image) => (
+          <figure key={image.id} className="about-artifact about-origin-artifact">
+            <ArtifactImage
+              image={image}
+              alt={image.alt}
+              size="origin"
+              sizes="(max-width: 767px) 72vw, 300px"
+              className="about-origin-frame"
+              imgClassName="object-contain p-2.5 md:p-3"
+            />
+            <figcaption className="about-attached-caption about-origin-caption">
+              <p className="caption text-highlight">{image.label}</p>
+              <p className="body-sm text-text-primary">{image.caption}</p>
+            </figcaption>
+          </figure>
+        ))}
       </div>
     </article>
   );
@@ -530,8 +165,7 @@ function AboutChapterEvidenceBoard({ items, locale, tabLabel }) {
         {items.map((item) => (
           <figure key={item.id} className={item.boardClass}>
             <ArtifactImage
-              imageId={item.id}
-              locale={locale}
+              image={item}
               alt={item.alt}
               size="board"
               sizes="(max-width: 767px) 72vw, (max-width: 1199px) 24vw, 220px"
@@ -620,8 +254,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
               <div className="about-timeline-connector" aria-hidden />
               <div className="about-timeline-media">
                 <ArtifactImage
-                  imageId={item.id}
-                  locale={locale}
+                  image={item}
                   alt={item.alt}
                   size="timeline"
                   sizes="(max-width: 767px) 72vw, 16vw"
@@ -654,8 +287,7 @@ function PortraitComparison({ items, locale }) {
             >
               <div className="about-comparison-media">
                 <ArtifactImage
-                  imageId={item.id}
-                  locale={locale}
+                  image={item}
                   alt={item.alt}
                   size="comparison"
                   sizes="(max-width: 767px) 74vw, 18vw"
@@ -712,8 +344,7 @@ function CurrentSelfSection({ chapter, locale }) {
         <figure className="about-artifact about-current-artifact">
           <span className="about-current-tag">{chapter.image.label}</span>
           <ArtifactImage
-            imageId={chapter.image.id}
-            locale={locale}
+            image={chapter.image}
             alt={chapter.image.alt}
             size="current"
             sizes="(max-width: 767px) 82vw, 360px"
@@ -775,14 +406,14 @@ const ABOUT_SECTION_ANCHORS = {
 
 export function AboutPage({ dict, locale = "en" }) {
   const t = dict.about;
-  const story = ABOUT_STORY[locale] ?? ABOUT_STORY.en;
+  const story = aboutStory[locale] ?? aboutStory.en;
 
   return (
     <section id="about" className="section-scrap">
       <Container className="py-12 md:py-14" style={{ maxWidth: "1280px" }}>
         <div className="about-storybook">
           <div id="overview" className="scroll-mt-header">
-            <AboutHero t={t} hero={story.hero} />
+            <AboutHero t={t} locale={locale} heroNote={story.heroNote} />
           </div>
 
           {story.chapters.map((chapter, index) => (

@@ -3,9 +3,9 @@ import { Section } from "@/components/ui/section";
 import { socialLinks } from "@/lib/content/socials";
 import { NavIcon } from "@/components/layout/nav-icons";
 
-const VISIBLE = ["telegram", "vk", "cara", "patreon", "email"];
+const VISIBLE = ["telegram-personal", "vk", "cara", "patreon", "email"];
 
-export function SocialsFooterSection({ dict }) {
+export function SocialsFooterSection({ dict, locale = "en" }) {
   const t = dict.socialsFooter;
   const links = socialLinks.filter((s) => VISIBLE.includes(s.id));
 
@@ -50,7 +50,7 @@ export function SocialsFooterSection({ dict }) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline gap-2">
                     <p className="body-sm font-medium text-text-primary">
-                      {s.label}
+                      {locale === "ru" ? (s.labelRu ?? s.label) : s.label}
                     </p>
                     {s.primary && (
                       <span className="caption text-highlight">

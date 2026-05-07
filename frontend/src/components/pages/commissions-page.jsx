@@ -56,8 +56,8 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="offers"
-          eyebrow={pickLocale({ en: "commission offers", ru: "предложения по заказам" }, locale)}
-          title={pickLocale({ en: "choose your commission type", ru: "выберите тип заказа" }, locale)}
+          eyebrow={pickLocale({ en: "pricing cards", ru: "карточки с ценами" }, locale)}
+          title={pickLocale({ en: "commissions are open", ru: "коммишены открыты" }, locale)}
           size="md"
         >
           <CommissionOfferCards locale={locale} cards={commissionTypes} />
@@ -69,6 +69,15 @@ export function CommissionsPage({ locale = "en" }) {
           size="md"
         >
           <CommissionPricingTable locale={locale} rows={commissionPricingRows} />
+          <p className="caption mt-3">
+            {pickLocale(
+              {
+                en: "table's texts to be adjusted later. english shows usd only, russian shows ruble only.",
+                ru: "тексты таблицы позже будут уточнены. в english версии только usd, в русской — только рубли.",
+              },
+              locale,
+            )}
+          </p>
         </Section>
 
         <Section
@@ -145,7 +154,11 @@ export function CommissionsPage({ locale = "en" }) {
           />
         </Section>
 
-        <Section id="faq" title="faq" size="md">
+        <Section
+          id="faq"
+          title={pickLocale({ en: "additional information and faq", ru: "дополнительная информация и faq" }, locale)}
+          size="md"
+        >
           <FaqAccordion locale={locale} items={commissionFaq} />
         </Section>
 
@@ -189,7 +202,9 @@ export function CommissionsPage({ locale = "en" }) {
                       <NavIcon id={s.id} />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="body-sm font-medium text-text-primary">{s.label}</p>
+                      <p className="body-sm font-medium text-text-primary">
+                        {locale === "ru" ? (s.labelRu ?? s.label) : s.label}
+                      </p>
                       {s.handle ? <p className="caption truncate">{s.handle}</p> : null}
                     </div>
                   </a>

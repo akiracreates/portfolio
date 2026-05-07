@@ -10,7 +10,7 @@ import { NavIcon } from "@/components/layout/nav-icons";
 import { LocaleSwitcher } from "@/components/i18n/locale-switcher";
 import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 
-const FOOTER_SOCIALS = ["telegram", "vk", "cara"];
+const FOOTER_SOCIALS = ["telegram-personal", "vk", "cara"];
 const ACTIVATION_OFFSET = 48;
 const CLICK_LOCK_MS = 800;
 const SIDEBAR_EASE = [0.22, 1, 0.36, 1];
@@ -442,8 +442,8 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                 target={s.id === "email" ? undefined : "_blank"}
                 rel={s.id === "email" ? undefined : "noreferrer noopener"}
                 className="flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-transparent text-text-tertiary transition-colors hover:border-border-default hover:bg-bg-surface hover:text-text-primary focus-visible-ring"
-                aria-label={s.label}
-                title={s.label}
+                aria-label={locale === "ru" ? (s.labelRu ?? s.label) : s.label}
+                title={locale === "ru" ? (s.labelRu ?? s.label) : s.label}
                 tabIndex={collapsed ? -1 : 0}
               >
                 <NavIcon id={s.id} />

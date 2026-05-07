@@ -58,20 +58,21 @@ export const dictionary = {
   },
 
   hero: {
-    eyebrow: "digital portrait artist",
-    titleLeading: "quiet portraits,",
-    titleHighlight: "soft stories",
-    titleTrailing: ", drawn with intention.",
+    eyebrow: "akira",
+    titleLeading: "",
+    titleHighlight: "akira",
+    titleTrailing: "",
     lead:
-      "akira's studio for digital portraits, animal studies, and still life. browse recent work or commission a piece made just for you.",
-    ctaPrimary: "view portfolio",
-    ctaSecondary: "commission a piece",
+      "digital artist specializing in portraits and animals",
+    supportingText: "i love experimenting and being expressive in my work",
+    ctaPrimary: "full portfolio",
+    ctaSecondary: "commissions",
     ctaAbout: "about me",
-    statCommissions: "commissions",
-    statCommissionsValue: "open",
-    statResponse: "response",
-    statResponseValue: "within 48h",
-    badgeTitle: "latest perception of myself",
+    statCommissions: "note",
+    statCommissionsValue: "open for commissions",
+    statResponse: "vibe",
+    statResponseValue: "expressive and experimental",
+    badgeTitle: "i love experimenting and being expressive in my work",
     imageAlt: "featured self portrait by akira",
   },
 
@@ -87,26 +88,26 @@ export const dictionary = {
   },
 
   featured: {
-    eyebrow: "featured",
-    title: "recent pieces, freshly made.",
-    cta: "view all",
+    eyebrow: "featured art",
+    title: "featured art",
+    cta: "full portfolio",
   },
 
   commissionsPreview: {
-    eyebrow: "work with me",
-    title: "commissions are open.",
+    eyebrow: "commissions: open",
+    title: "commissions: open",
     description:
-      "a few slots each season for considered, story-driven portraits and animal studies.",
-    typesLabel: "what i offer",
+      "i will paint you, your family, your friends, or your beloved pets in my personal style. a great and personal gift idea (or just because you want one).",
+    typesLabel: "commission types",
     typesValue: "portraits + animals",
     startingLabel: "starting from",
     cta: "order now",
   },
 
   whatToExpect: {
-    eyebrow: "process",
-    title: "what to expect when working with me.",
-    description: "the short version. the full process lives on the commissions page.",
+    eyebrow: "what to expect",
+    title: "what to expect",
+    description: "",
     cta: "work with me",
     items: {
       communication: {
@@ -137,16 +138,17 @@ export const dictionary = {
   },
 
   socialsFooter: {
-    eyebrow: "find me",
-    title: "let's stay in touch.",
-    description: "telegram is the fastest way to reach me. for everything else, the channels below.",
+    eyebrow: "find me here",
+    title: "find me here",
+    description: "fastest way to reach me is telegram",
+    contactNote: "fastest way to reach me is telegram",
   },
 
   about: {
     pageEyebrow: "about",
-    pageTitle: "a longer story about growing up through art.",
+    pageTitle: "growing up alongside art.",
     pageDescription:
-      "from early drawings to newer self portraits, this page holds the slower version of the story.",
+      "from kindergarten scribbles on paper to professional digital portraits.",
     bioEyebrow: "today",
     bioTitle: "where i am right now.",
     bio1: "i'm 20. i make digital portraits, animal studies, and the occasional still life.",
@@ -194,7 +196,7 @@ export const dictionary = {
   portfolio: {
     pageEyebrow: "portfolio",
     pageTitle: "all artwork, sorted by category.",
-    pageDescription: "polished pieces only. the bigger archive lives on my socials.",
+    pageDescription: "notes under art are still under construction.",
     pieces: "pieces",
     piece: "piece",
     jumpTo: "jump to",

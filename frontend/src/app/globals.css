@@ -1043,6 +1043,10 @@ a {
   justify-self: start;
 }
 
+.about-origin-story .about-origin-artifact + .about-origin-artifact {
+  margin-top: 0.55rem;
+}
+
 .about-origin-frame {
   transform: rotate(-0.45deg);
 }

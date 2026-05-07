@@ -103,6 +103,9 @@ export function Footer() {
             <ul className="grid gap-3 sm:grid-cols-2">
               {links.map((s) => (
                 <li key={s.id}>
+                  {(() => {
+                    const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
+                    return (
                   <a
                     href={s.url}
                     target={s.id === "email" ? undefined : "_blank"}
@@ -128,7 +131,7 @@ export function Footer() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2">
                         <p className="body-sm font-medium text-text-primary">
-                          {s.label}
+                          {label}
                         </p>
                         {s.primary && (
                           <span className="caption text-highlight">
@@ -141,6 +144,8 @@ export function Footer() {
                       )}
                     </div>
                   </a>
+                    );
+                  })()}
                 </li>
               ))}
             </ul>
