@@ -108,39 +108,40 @@ function OriginChapter({ chapter }) {
   return (
     <article className="about-spread about-origin">
       <div className="about-origin-story">
-        <div className="about-origin-cluster" aria-label={chapter.title}>
-          {chapter.images?.map((image, index) => (
-            <figure
-              key={image.id}
-              className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
-            >
-              <ArtifactImage
-                image={image}
-                alt={image.alt}
-                size="origin"
-                sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
-                className="about-origin-frame"
-                imgClassName="object-contain p-2.5 md:p-3"
-              />
-              <figcaption className="about-attached-caption about-origin-caption">
-                <p className="caption text-highlight">{image.label}</p>
-                <p className="body-sm text-text-primary">{image.caption}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-
         <div className="about-origin-copy">
           <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
           <Heading level="h2" className="max-w-xl">
             {chapter.title}
           </Heading>
           <div className="about-underline" aria-hidden />
-          {chapter.body?.map((paragraph) => (
-            <p key={paragraph} className="body">
-              {paragraph}
-            </p>
-          ))}
+          <div className="about-origin-prose">
+            <div className="about-origin-cluster" aria-label={chapter.title}>
+              {chapter.images?.map((image, index) => (
+                <figure
+                  key={image.id}
+                  className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
+                >
+                  <ArtifactImage
+                    image={image}
+                    alt={image.alt}
+                    size="origin"
+                    sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
+                    className="about-origin-frame"
+                    imgClassName="object-contain p-2.5 md:p-3"
+                  />
+                  <figcaption className="about-attached-caption about-origin-caption">
+                    <p className="caption text-highlight">{image.label}</p>
+                    <p className="body-sm text-text-primary">{image.caption}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            {chapter.body?.map((paragraph) => (
+              <p key={paragraph} className="body">
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </article>
@@ -184,6 +185,11 @@ function DigitalArtChapter({ chapter, locale }) {
   return (
     <article className="about-spread about-board">
       <div className="about-board-flow">
+        <BoardCluster
+          items={chapter.images}
+          locale={locale}
+          tabLabel={chapter.noteCard?.label}
+        />
         <div className="about-board-header">
           <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
           <Heading level="h2" className="about-board-title">
@@ -198,17 +204,10 @@ function DigitalArtChapter({ chapter, locale }) {
         </div>
 
         <div className="about-board-prose">
-          {body.map((paragraph, index) => (
-            <Fragment key={paragraph}>
-              {index === 1 ? (
-                <BoardCluster
-                  items={chapter.images}
-                  locale={locale}
-                  tabLabel={chapter.noteCard?.label}
-                />
-              ) : null}
-              <p className="body about-board-paragraph">{paragraph}</p>
-            </Fragment>
+          {body.map((paragraph) => (
+            <p key={paragraph} className="body about-board-paragraph">
+              {paragraph}
+            </p>
           ))}
         </div>
       </div>
@@ -352,6 +351,18 @@ function CurrentSelfSection({ chapter, locale }) {
   return (
     <article className="about-spread about-current">
       <div className="about-current-flow">
+        <figure className="about-artifact about-current-artifact">
+          <span className="about-current-tag">{chapter.image.label}</span>
+          <ArtifactImage
+            image={chapter.image}
+            alt={chapter.image.alt}
+            size="current"
+            displayVariant="currentPortrait"
+            sizes="(max-width: 767px) 86vw, (max-width: 1199px) 42vw, 420px"
+            className="about-current-frame"
+            imgClassName="object-contain p-3 md:p-5"
+          />
+        </figure>
         <div className="about-current-header">
           <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
           <Heading level="h2" className="about-current-title">
@@ -361,24 +372,10 @@ function CurrentSelfSection({ chapter, locale }) {
         </div>
 
         <div className="about-current-prose">
-          {body.map((paragraph, index) => (
-            <Fragment key={paragraph}>
-              {index === 0 ? (
-                <figure className="about-artifact about-current-artifact">
-                  <span className="about-current-tag">{chapter.image.label}</span>
-                  <ArtifactImage
-                    image={chapter.image}
-                    alt={chapter.image.alt}
-                    size="current"
-                    displayVariant="currentPortrait"
-                    sizes="(max-width: 767px) 86vw, (max-width: 1199px) 42vw, 420px"
-                    className="about-current-frame"
-                    imgClassName="object-contain p-3 md:p-5"
-                  />
-                </figure>
-              ) : null}
-              <p className="body about-current-paragraph">{paragraph}</p>
-            </Fragment>
+          {body.map((paragraph) => (
+            <p key={paragraph} className="body about-current-paragraph">
+              {paragraph}
+            </p>
           ))}
         </div>
       </div>
