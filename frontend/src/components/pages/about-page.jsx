@@ -765,6 +765,14 @@ function renderChapter(chapter, locale) {
   }
 }
 
+const ABOUT_SECTION_ANCHORS = {
+  started: "how-it-started",
+  digital: "digital-art",
+  timeline: "timeline",
+  "ups-downs": "ups-and-downs",
+  now: "where-i-am-now",
+};
+
 export function AboutPage({ dict, locale = "en" }) {
   const t = dict.about;
   const story = ABOUT_STORY[locale] ?? ABOUT_STORY.en;
@@ -773,10 +781,16 @@ export function AboutPage({ dict, locale = "en" }) {
     <section id="about" className="section-scrap">
       <Container className="py-12 md:py-14" style={{ maxWidth: "1280px" }}>
         <div className="about-storybook">
-          <AboutHero t={t} hero={story.hero} />
+          <div id="overview" className="scroll-mt-header">
+            <AboutHero t={t} hero={story.hero} />
+          </div>
 
           {story.chapters.map((chapter, index) => (
-            <div key={chapter.id} id={`about-${chapter.id}`} className="scroll-mt-header">
+            <div
+              key={chapter.id}
+              id={ABOUT_SECTION_ANCHORS[chapter.id] ?? chapter.id}
+              className="scroll-mt-header"
+            >
               {index > 0 ? <ChapterDivider /> : null}
               {renderChapter(chapter, locale)}
             </div>

@@ -8,8 +8,6 @@ import { MobileFab } from "@/components/layout/mobile-fab";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 import { Footer } from "@/components/layout/footer";
 
-const SIDEBAR_EXPANDED_PX = 240;
-const SAFETY_MARGIN_PX = 20;
 const CLOSE_DELAY_MS = 120;
 
 export function AppShell({ children }) {
@@ -50,19 +48,6 @@ export function AppShell({ children }) {
       closeTimerRef.current = null;
     }, CLOSE_DELAY_MS);
   }, [clearCloseTimer]);
-
-  useEffect(() => {
-    const onPointerMove = (e) => {
-      if (!pointerInside && !focusWithin) return;
-      if (e.clientX > SIDEBAR_EXPANDED_PX + SAFETY_MARGIN_PX) {
-        clearCloseTimer();
-        setPointerInside(false);
-        setFocusWithin(false);
-      }
-    };
-    document.addEventListener("pointermove", onPointerMove, { passive: true });
-    return () => document.removeEventListener("pointermove", onPointerMove);
-  }, [pointerInside, focusWithin, clearCloseTimer]);
 
   const sidebarWidth = collapsed
     ? "var(--sidebar-w-collapsed)"

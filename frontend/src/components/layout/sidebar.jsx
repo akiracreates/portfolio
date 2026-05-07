@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { navStructure } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
@@ -13,6 +13,29 @@ import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 const FOOTER_SOCIALS = ["telegram", "vk", "cara"];
 const ACTIVATION_OFFSET = 48;
 const CLICK_LOCK_MS = 800;
+const DEBUG_ENDPOINT =
+  "http://127.0.0.1:7527/ingest/d05fa829-4364-4c3d-9b36-30f14f471207";
+
+function debugLog({ runId, hypothesisId, location, message, data }) {
+  // #region agent log
+  fetch(DEBUG_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Debug-Session-Id": "cad504",
+    },
+    body: JSON.stringify({
+      sessionId: "cad504",
+      runId,
+      hypothesisId,
+      location,
+      message,
+      data,
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
+}
 
 function isHomePathname(pathname, locale) {
   if (!pathname) return false;
@@ -28,8 +51,18 @@ function isPathActive(pathname, href, locale) {
 function useSectionObserver(anchors, enabled) {
   const [active, setActive] = useState("");
   const lastEmittedRef = useRef("");
+  const setupCounterRef = useRef(0);
 
   useEffect(() => {
+    // #region agent log
+    debugLog({
+      runId: "pre-fix",
+      hypothesisId: "H1",
+      location: "sidebar.jsx:useSectionObserver:effectStart",
+      message: "observer effect started",
+      data: { enabled, anchors },
+    });
+    // #endregion
     if (!enabled) {
       lastEmittedRef.current = "";
       setActive("");
@@ -40,14 +73,37 @@ function useSectionObserver(anchors, enabled) {
     const elements = anchors
       .map((id) => ({ id, el: document.getElementById(id) }))
       .filter((item) => item.el);
+    // #region agent log
+    debugLog({
+      runId: "pre-fix",
+      hypothesisId: "H1",
+      location: "sidebar.jsx:useSectionObserver:elementsSelected",
+      message: "selected section elements for observer",
+      data: {
+        requestedAnchorCount: anchors.length,
+        foundElementCount: elements.length,
+        foundIds: elements.map((item) => item.id),
+      },
+    });
+    // #endregion
     if (!elements.length) return undefined;
 
     let raf = null;
+    setupCounterRef.current += 1;
 
     const emitIfChanged = (nextId) => {
       if (lastEmittedRef.current === nextId) return;
       lastEmittedRef.current = nextId;
       setActive(nextId);
+      // #region agent log
+      debugLog({
+        runId: "pre-fix",
+        hypothesisId: "H4",
+        location: "sidebar.jsx:useSectionObserver:activeChanged",
+        message: "active section changed",
+        data: { nextId },
+      });
+      // #endregion
     };
 
     const computeNextActive = () => {
@@ -90,6 +146,15 @@ function useSectionObserver(anchors, enabled) {
     schedule();
 
     return () => {
+      // #region agent log
+      debugLog({
+        runId: "pre-fix",
+        hypothesisId: "H2",
+        location: "sidebar.jsx:useSectionObserver:cleanup",
+        message: "observer effect cleaned up",
+        data: { setupCount: setupCounterRef.current, anchors },
+      });
+      // #endregion
       if (raf !== null) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", schedule, true);
       window.removeEventListener("resize", schedule);
@@ -103,6 +168,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const pathname = usePathname();
   const labelId = useId();
   const t = useT();
+  const reducedMotion = useReducedMotion();
   const locale = useDictLocale() || "en";
   const isHome = isHomePathname(pathname, locale);
   const [openSubmenuId, setOpenSubmenuId] = useState(null);
@@ -110,6 +176,15 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const clickLockTimerRef = useRef(null);
 
   useEffect(() => {
+    // #region agent log
+    debugLog({
+      runId: "pre-fix",
+      hypothesisId: "H3",
+      location: "sidebar.jsx:routeResetEffect",
+      message: "route change reset local section state",
+      data: { pathname, locale },
+    });
+    // #endregion
     setOpenSubmenuId(null);
     setClickLockedSection("");
     if (clickLockTimerRef.current) {
@@ -149,6 +224,15 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const handleSectionClick = useCallback(
     (e, anchor) => {
       const el = document.getElementById(anchor);
+      // #region agent log
+      debugLog({
+        runId: "pre-fix",
+        hypothesisId: "H5",
+        location: "sidebar.jsx:handleSectionClick",
+        message: "section nav clicked",
+        data: { pathname, anchor, elementFound: Boolean(el) },
+      });
+      // #endregion
       if (el) {
         e.preventDefault();
         setClickLockedSection(anchor);
@@ -165,21 +249,8 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
     [pathname, onNavigate],
   );
 
-  const effectiveOpenSubmenuId = useMemo(() => {
-    if (collapsed) return null;
-    if (openSubmenuId) return openSubmenuId;
-    if (activePage?.sections?.length) return activePage.id;
-    return null;
-  }, [activePage, collapsed, openSubmenuId]);
-
-  const activeSubmenuId = useMemo(() => {
-    if (!activePage?.sections?.length) return null;
-    const bySection = activePage.sections.find(
-      (section) => section.anchor === resolvedActiveSection,
-    );
-    if (bySection) return activePage.id;
-    return null;
-  }, [activePage, resolvedActiveSection]);
+  const currentParentId = activePage?.id ?? null;
+  const effectiveOpenSubmenuId = openSubmenuId || currentParentId;
 
   const visibleSocials = socialLinks.filter((s) =>
     FOOTER_SOCIALS.includes(s.id),
@@ -250,6 +321,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
           {pageItems.map((item) => {
             const hasSubmenu = Boolean(item.sections?.length);
             const itemPathActive = isPathActive(pathname, item.href, locale);
+            const suppressChildren = item.id === "portfolio";
             const childActive = Boolean(
               hasSubmenu &&
                 itemPathActive &&
@@ -259,10 +331,16 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
             );
             const active = itemPathActive || childActive;
             const href = `/${locale}${item.href === "/" ? "" : item.href}`;
-            const submenuOpen =
-              effectiveOpenSubmenuId === item.id ||
-              activeSubmenuId === item.id ||
-              childActive;
+            const submenuOpenLogical =
+              !suppressChildren &&
+              hasSubmenu &&
+              (effectiveOpenSubmenuId === item.id || itemPathActive || childActive);
+            const fallbackActiveAnchor =
+              itemPathActive && hasSubmenu ? item.sections[0]?.anchor : "";
+            const currentItemActiveSection =
+              resolvedActiveSection || fallbackActiveAnchor;
+            const showCollapsedChildren = collapsed && submenuOpenLogical;
+            const showExpandedChildren = !collapsed && submenuOpenLogical;
 
             return (
               <li key={item.id} className="space-y-1">
@@ -272,7 +350,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                     label={t(item.labelKey)}
                     active={active}
                     collapsed={collapsed}
-                    submenuOpen={submenuOpen}
+                    submenuOpen={submenuOpenLogical}
                     onClick={() => {
                       setOpenSubmenuId((prev) => {
                         if (prev === item.id) return null;
@@ -293,45 +371,71 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                     submenuOpen={false}
                   />
                 )}
-                <AnimatePresence initial={false}>
-                  {hasSubmenu && submenuOpen && !collapsed && (
-                    <motion.ul
-                      key={`${item.id}-submenu`}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.24, ease: [0.2, 0, 0, 1] }}
-                      className="overflow-hidden pl-8"
-                    >
-                      {item.sections.map((section) => {
-                        const sectionHref = `${href}#${section.anchor}`;
-                        const sectionActive =
-                          itemPathActive &&
-                          resolvedActiveSection === section.anchor;
-                        return (
-                          <li key={section.id}>
-                            <Link
-                              href={sectionHref}
-                              onClick={(e) =>
-                                handleSectionClick(e, section.anchor)
-                              }
-                              className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
-                                sectionActive
-                                  ? "border-border-accent bg-highlight-soft text-text-primary"
-                                  : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
-                              }`}
-                              aria-current={
-                                sectionActive ? "location" : undefined
-                              }
-                            >
-                              {t(section.labelKey)}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </motion.ul>
-                  )}
-                </AnimatePresence>
+                {hasSubmenu && !suppressChildren ? (
+                  <motion.ul
+                    initial={false}
+                    animate={{
+                      opacity: showExpandedChildren ? 1 : 0,
+                      maxHeight: showExpandedChildren ? 320 : 0,
+                    }}
+                    transition={
+                      reducedMotion
+                        ? { duration: 0 }
+                        : { duration: 0.2, ease: [0.2, 0, 0, 1] }
+                    }
+                    className="overflow-hidden pl-8"
+                    aria-hidden={!showExpandedChildren}
+                    style={{ pointerEvents: showExpandedChildren ? "auto" : "none" }}
+                  >
+                    {item.sections.map((section) => {
+                      const sectionHref = `${href}#${section.anchor}`;
+                      const sectionActive =
+                        itemPathActive && currentItemActiveSection === section.anchor;
+                      return (
+                        <li key={section.id}>
+                          <Link
+                            href={sectionHref}
+                            onClick={(e) => handleSectionClick(e, section.anchor)}
+                            className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
+                              sectionActive
+                                ? "border-border-accent bg-highlight-soft text-text-primary"
+                                : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
+                            }`}
+                            aria-current={sectionActive ? "location" : undefined}
+                            tabIndex={showExpandedChildren ? 0 : -1}
+                          >
+                            {t(section.labelKey)}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </motion.ul>
+                ) : null}
+                {hasSubmenu && showCollapsedChildren ? (
+                  <ul className="ml-[18px] flex w-[20px] flex-col items-center gap-1.5 py-1">
+                    {item.sections.map((section) => {
+                      const sectionHref = `${href}#${section.anchor}`;
+                      const sectionActive =
+                        itemPathActive && currentItemActiveSection === section.anchor;
+                      return (
+                        <li key={`${section.id}-collapsed`}>
+                          <Link
+                            href={sectionHref}
+                            onClick={(e) => handleSectionClick(e, section.anchor)}
+                            className={`focus-visible-ring block h-2.5 w-2.5 rounded-full border border-dashed transition-all duration-[var(--duration-fast)] ${
+                              sectionActive
+                                ? "border-border-accent bg-highlight shadow-[0_0_10px_rgba(233,102,160,0.35)]"
+                                : "border-border-default/70 bg-highlight-soft hover:border-border-accent hover:bg-highlight/70"
+                            }`}
+                            aria-label={t(section.labelKey)}
+                            title={t(section.labelKey)}
+                            aria-current={sectionActive ? "location" : undefined}
+                          />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
               </li>
             );
           })}
