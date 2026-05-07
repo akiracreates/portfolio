@@ -48,15 +48,16 @@ function isPathActive(pathname, href, locale) {
   return pathname === fullHref || pathname.startsWith(`${fullHref}/`);
 }
 
-function useSectionObserver(anchors, enabled) {
+function useSectionObserver(anchors, enabled, routeKey) {
   const [active, setActive] = useState("");
   const lastEmittedRef = useRef("");
   const setupCounterRef = useRef(0);
+  const scheduleLogCounterRef = useRef(0);
 
   useEffect(() => {
     // #region agent log
     debugLog({
-      runId: "pre-fix",
+      runId: "post-fix",
       hypothesisId: "H1",
       location: "sidebar.jsx:useSectionObserver:effectStart",
       message: "observer effect started",
@@ -69,26 +70,12 @@ function useSectionObserver(anchors, enabled) {
       return undefined;
     }
     if (!anchors.length) return undefined;
-
-    const elements = anchors
-      .map((id) => ({ id, el: document.getElementById(id) }))
-      .filter((item) => item.el);
-    // #region agent log
-    debugLog({
-      runId: "pre-fix",
-      hypothesisId: "H1",
-      location: "sidebar.jsx:useSectionObserver:elementsSelected",
-      message: "selected section elements for observer",
-      data: {
-        requestedAnchorCount: anchors.length,
-        foundElementCount: elements.length,
-        foundIds: elements.map((item) => item.id),
-      },
-    });
-    // #endregion
-    if (!elements.length) return undefined;
+    lastEmittedRef.current = anchors[0] || "";
+    setActive(anchors[0] || "");
 
     let raf = null;
+    let hasAttachedListeners = false;
+    let elements = [];
     setupCounterRef.current += 1;
 
     const emitIfChanged = (nextId) => {
@@ -97,13 +84,34 @@ function useSectionObserver(anchors, enabled) {
       setActive(nextId);
       // #region agent log
       debugLog({
-        runId: "pre-fix",
+        runId: "post-fix",
         hypothesisId: "H4",
         location: "sidebar.jsx:useSectionObserver:activeChanged",
         message: "active section changed",
         data: { nextId },
       });
       // #endregion
+    };
+
+    const selectElements = () => {
+      elements = anchors
+        .map((id) => ({ id, el: document.getElementById(id) }))
+        .filter((item) => item.el);
+      // #region agent log
+      debugLog({
+        runId: "post-fix",
+        hypothesisId: "H1",
+        location: "sidebar.jsx:useSectionObserver:elementsSelected",
+        message: "selected section elements for observer",
+        data: {
+          routeKey,
+          requestedAnchorCount: anchors.length,
+          foundElementCount: elements.length,
+          foundIds: elements.map((item) => item.id),
+        },
+      });
+      // #endregion
+      return elements.length > 0;
     };
 
     const computeNextActive = () => {
@@ -130,25 +138,54 @@ function useSectionObserver(anchors, enabled) {
         }
       }
 
-      if (!anyPastLine) return "";
+      if (!anyPastLine) return elements[0]?.id || "";
       return bestId;
     };
 
     const schedule = () => {
       if (raf !== null) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
+        if (scheduleLogCounterRef.current < 5) {
+          // #region agent log
+          debugLog({
+            runId: "post-fix",
+            hypothesisId: "H6",
+            location: "sidebar.jsx:useSectionObserver:scheduleTick",
+            message: "schedule tick executed",
+            data: { routeKey, anchorsCount: anchors.length, elementsCount: elements.length },
+          });
+          // #endregion
+          scheduleLogCounterRef.current += 1;
+        }
         emitIfChanged(computeNextActive());
       });
     };
 
-    window.addEventListener("scroll", schedule, { passive: true, capture: true });
-    window.addEventListener("resize", schedule, { passive: true });
-    schedule();
+    const attachListeners = () => {
+      if (hasAttachedListeners) return;
+      window.addEventListener("scroll", schedule, { passive: true, capture: true });
+      window.addEventListener("resize", schedule, { passive: true });
+      hasAttachedListeners = true;
+      schedule();
+    };
+
+    const trySetup = (attempt = 0) => {
+      if (selectElements()) {
+        attachListeners();
+        return;
+      }
+      if (attempt >= 9) return;
+      raf = requestAnimationFrame(() => {
+        trySetup(attempt + 1);
+      });
+    };
+
+    trySetup();
 
     return () => {
       // #region agent log
       debugLog({
-        runId: "pre-fix",
+        runId: "post-fix",
         hypothesisId: "H2",
         location: "sidebar.jsx:useSectionObserver:cleanup",
         message: "observer effect cleaned up",
@@ -156,10 +193,12 @@ function useSectionObserver(anchors, enabled) {
       });
       // #endregion
       if (raf !== null) cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", schedule, true);
-      window.removeEventListener("resize", schedule);
+      if (hasAttachedListeners) {
+        window.removeEventListener("scroll", schedule, true);
+        window.removeEventListener("resize", schedule);
+      }
     };
-  }, [anchors, enabled]);
+  }, [anchors, enabled, routeKey]);
 
   return enabled ? active : "";
 }
@@ -178,7 +217,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   useEffect(() => {
     // #region agent log
     debugLog({
-      runId: "pre-fix",
+      runId: "post-fix",
       hypothesisId: "H3",
       location: "sidebar.jsx:routeResetEffect",
       message: "route change reset local section state",
@@ -214,8 +253,40 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
         : activePage?.sections?.map((item) => item.anchor) ?? [],
     [activePage?.sections, isHome, sectionItems],
   );
-  const activeSection = useSectionObserver(activeAnchors, activeAnchors.length > 0);
+  const activeSection = useSectionObserver(
+    activeAnchors,
+    activeAnchors.length > 0,
+    pathname,
+  );
   const resolvedActiveSection = clickLockedSection || activeSection;
+
+  useEffect(() => {
+    // #region agent log
+    debugLog({
+      runId: "post-fix",
+      hypothesisId: "H7",
+      location: "sidebar.jsx:routeAnchorResolution",
+      message: "resolved route and anchors for tracking",
+      data: {
+        pathname,
+        isHome,
+        activePageId: activePage?.id ?? null,
+        activeAnchors,
+        activeSection,
+        clickLockedSection,
+        resolvedActiveSection,
+      },
+    });
+    // #endregion
+  }, [
+    pathname,
+    isHome,
+    activePage,
+    activeAnchors,
+    activeSection,
+    clickLockedSection,
+    resolvedActiveSection,
+  ]);
 
   const handleClick = useCallback(() => {
     if (onNavigate) onNavigate();
@@ -226,7 +297,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
       const el = document.getElementById(anchor);
       // #region agent log
       debugLog({
-        runId: "pre-fix",
+        runId: "post-fix",
         hypothesisId: "H5",
         location: "sidebar.jsx:handleSectionClick",
         message: "section nav clicked",
