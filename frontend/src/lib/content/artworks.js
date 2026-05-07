@@ -235,6 +235,7 @@ const rawArtworks = [
     id: "landscape-06",
     category: "landscapes",
     path: "images/landscapes/planes?updatedAt=1778163055883",
+    imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
     title: { en: "planes", ru: "planes" },
     alt: { en: "planes landscape by akira", ru: "пейзаж planes от akira" },
@@ -247,6 +248,7 @@ const rawArtworks = [
     id: "landscape-07",
     category: "landscapes",
     path: "images/landscapes/myuniverse?updatedAt=1778163056828",
+    imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
     title: { en: "myuniverse", ru: "myuniverse" },
     alt: { en: "myuniverse landscape by akira", ru: "пейзаж myuniverse от akira" },
@@ -259,6 +261,7 @@ const rawArtworks = [
     id: "landscape-08",
     category: "landscapes",
     path: "images/landscapes/calm?updatedAt=1778163092135",
+    imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
     title: { en: "calm", ru: "calm" },
     alt: { en: "calm landscape by akira", ru: "пейзаж calm от akira" },
@@ -333,6 +336,7 @@ const rawArtworks = [
     id: "still-06",
     category: "still life",
     path: "images/still life/tomato",
+    imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
     title: { en: "tomato", ru: "tomato" },
     alt: { en: "still life tomato study", ru: "натюрморт tomato" },
@@ -345,6 +349,7 @@ const rawArtworks = [
     id: "still-07",
     category: "still life",
     path: "images/still life/vase_study",
+    imageTransforms: ["f-webp", "q-auto"],
     featured: false,
     title: { en: "vase study", ru: "vase study" },
     alt: { en: "still life vase study", ru: "натюрморт vase study" },
@@ -357,6 +362,7 @@ const rawArtworks = [
     id: "still-08",
     category: "still life",
     path: "images/still life/yay",
+    imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
     title: { en: "yay", ru: "yay" },
     alt: { en: "still life yay study", ru: "натюрморт yay" },
@@ -433,9 +439,10 @@ const rawArtworks = [
  */
 export const artworks = rawArtworks.map((a) => {
   const meta = getImageMeta(a.path);
+  const transforms = a.imageTransforms ?? ["f-jpg", "q-auto"];
   return {
     ...a,
-    imageSrc: imagekitUrl(a.path),
+    imageSrc: imagekitUrl(a.path, transforms),
     width: meta.width,
     height: meta.height,
   };
