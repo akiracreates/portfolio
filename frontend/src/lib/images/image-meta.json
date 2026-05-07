@@ -3,6 +3,14 @@
     "width": 1647,
     "height": 2048
   },
+  "images/animals/horsey": {
+    "width": 3770,
+    "height": 5027
+  },
+  "images/animals/layin_kitten": {
+    "width": 2020,
+    "height": 2500
+  },
   "images/animals/fishies": {
     "width": 2039,
     "height": 2894
@@ -15,9 +23,17 @@
     "width": 3000,
     "height": 4000
   },
+  "images/animals/sooreekaat": {
+    "width": 1519,
+    "height": 2048
+  },
   "images/animals/tiger": {
     "width": 3000,
     "height": 4000
+  },
+  "images/landscapes/calm": {
+    "width": 687,
+    "height": 822
   },
   "images/landscapes/cityscape": {
     "width": 683,
@@ -35,17 +51,33 @@
     "width": 2930,
     "height": 3914
   },
+  "images/landscapes/myuniverse": {
+    "width": 1752,
+    "height": 2116
+  },
   "images/landscapes/oceanscape": {
     "width": 3000,
     "height": 5166
+  },
+  "images/landscapes/planes": {
+    "width": 2160,
+    "height": 3840
   },
   "images/portraits/accidental_success": {
     "width": 2328,
     "height": 2881
   },
+  "images/portraits/fishtank": {
+    "width": 3500,
+    "height": 4666
+  },
   "images/portraits/flowers_hairstyle_lady": {
     "width": 3000,
     "height": 4000
+  },
+  "images/portraits/heavily_stylized": {
+    "width": 3351,
+    "height": 4242
   },
   "images/portraits/monthly": {
     "width": 3000,
@@ -86,5 +118,17 @@
   "images/still life/subsurface_scattering": {
     "width": 2480,
     "height": 3508
+  },
+  "images/still life/tomato": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/still life/vase_study": {
+    "width": 3000,
+    "height": 4000
+  },
+  "images/still life/yay": {
+    "width": 4000,
+    "height": 4000
   }
 }

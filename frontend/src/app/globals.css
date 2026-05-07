@@ -1864,17 +1864,46 @@ a {
   gap: 1.5rem;
 }
 
+.portfolio-mobile-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.portfolio-columns {
+  display: none;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 2vw, 1.9rem);
+  align-items: start;
+}
+
+.portfolio-column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 1.8vw, 1.6rem);
+  min-width: 0;
+}
+
+.portfolio-column > * {
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .portfolio-mobile-list {
+    display: none;
+  }
+
+  .portfolio-columns {
+    display: grid;
+  }
+}
+
 .cascade-row {
   position: relative;
   min-width: 0;
 }
 
 @media (min-width: 768px) {
-  .cascade-artworks {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.25rem, 2vw, 1.9rem);
-  }
-
   .portfolio-stage {
     padding: 0.35rem 0.35rem 0.45rem;
   }

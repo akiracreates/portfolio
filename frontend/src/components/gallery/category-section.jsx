@@ -1,5 +1,8 @@
+"use client";
+
 import { ArtworkRow } from "@/components/gallery/artwork-card";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function categoryAnchorId(category) {
   return `category-${category.toLowerCase().replace(/\s+/g, "-")}`;
@@ -22,9 +25,63 @@ export function CategorySection({
   const id = categoryAnchorId(category);
   const count = artworks.length;
   const label = count === 1 ? pieceLabel : piecesLabel;
+  const pairsRef = useRef(null);
+  const [columnWidth, setColumnWidth] = useState(null);
 
   const categoryIntro = categoryIntroCopy[category] ?? categoryIntroCopy.default;
   const introText = locale === "ru" ? categoryIntro.ru : categoryIntro.en;
+
+  const orderedArtworks = useMemo(() => {
+    if (!columnWidth) return artworks;
+    const scored = artworks.map((artwork, idx) => {
+      const width = typeof artwork.width === "number" && artwork.width > 0 ? artwork.width : 4;
+      const height =
+        typeof artwork.height === "number" && artwork.height > 0 ? artwork.height : 5;
+      const visualHeight = columnWidth * (height / width);
+      return { artwork, idx, visualHeight };
+    });
+    scored.sort((a, b) => b.visualHeight - a.visualHeight || a.idx - b.idx);
+    return scored.map((s) => s.artwork);
+  }, [artworks, columnWidth]);
+
+  const desktopColumns = useMemo(() => {
+    const columns = [[], []];
+    const heights = [0, 0];
+    const noteFootprint = 168;
+
+    for (let i = 0; i < orderedArtworks.length; i += 1) {
+      const artwork = orderedArtworks[i];
+      const width = typeof artwork.width === "number" && artwork.width > 0 ? artwork.width : 4;
+      const height = typeof artwork.height === "number" && artwork.height > 0 ? artwork.height : 5;
+      const visualHeight =
+        (columnWidth || 360) * (height / width) + noteFootprint;
+      const target = heights[0] <= heights[1] ? 0 : 1;
+      columns[target].push({ artwork, index: i });
+      heights[target] += visualHeight;
+    }
+
+    return columns;
+  }, [orderedArtworks, columnWidth]);
+
+  useEffect(() => {
+    const root = pairsRef.current;
+    if (!root) return undefined;
+
+    const measure = () => {
+      const sample = root.querySelector(".cascade-pair-item");
+      const width = sample?.getBoundingClientRect().width ?? 0;
+      if (width > 0) setColumnWidth(width);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [orderedArtworks.length]);
 
   return (
     <section id={id} className="scroll-mt-header space-y-6 md:space-y-8">
@@ -40,8 +97,8 @@ export function CategorySection({
           {count} {label}
         </span>
       </header>
-      <div className="cascade-artworks">
-        {artworks.map((artwork, index) => (
+      <div className="portfolio-mobile-list">
+        {orderedArtworks.map((artwork, index) => (
           <ArtworkRow
             key={artwork.id}
             artwork={artwork}
@@ -53,6 +110,25 @@ export function CategorySection({
               artwork.path === "images/animals/silly_kitty"
             }
           />
+        ))}
+      </div>
+      <div ref={pairsRef} className="portfolio-columns">
+        {desktopColumns.map((column, columnIndex) => (
+          <div key={`column-${columnIndex}`} className="portfolio-column">
+            {column.map(({ artwork, index }) => (
+              <ArtworkRow
+                key={artwork.id}
+                artwork={artwork}
+                index={startIndex + index}
+                locale={locale}
+                enableSecretSpin={
+                  enableSecretSpin &&
+                  category.toLowerCase() === "animals" &&
+                  artwork.path === "images/animals/silly_kitty"
+                }
+              />
+            ))}
+          </div>
         ))}
       </div>
     </section>
