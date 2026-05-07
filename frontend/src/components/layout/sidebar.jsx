@@ -13,29 +13,6 @@ import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 const FOOTER_SOCIALS = ["telegram", "vk", "cara"];
 const ACTIVATION_OFFSET = 48;
 const CLICK_LOCK_MS = 800;
-const DEBUG_ENDPOINT =
-  "http://127.0.0.1:7527/ingest/d05fa829-4364-4c3d-9b36-30f14f471207";
-
-function debugLog({ runId, hypothesisId, location, message, data }) {
-  // #region agent log
-  fetch(DEBUG_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "cad504",
-    },
-    body: JSON.stringify({
-      sessionId: "cad504",
-      runId,
-      hypothesisId,
-      location,
-      message,
-      data,
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-}
 
 function isHomePathname(pathname, locale) {
   if (!pathname) return false;
@@ -51,19 +28,8 @@ function isPathActive(pathname, href, locale) {
 function useSectionObserver(anchors, enabled, routeKey) {
   const [active, setActive] = useState("");
   const lastEmittedRef = useRef("");
-  const setupCounterRef = useRef(0);
-  const scheduleLogCounterRef = useRef(0);
 
   useEffect(() => {
-    // #region agent log
-    debugLog({
-      runId: "post-fix",
-      hypothesisId: "H1",
-      location: "sidebar.jsx:useSectionObserver:effectStart",
-      message: "observer effect started",
-      data: { enabled, anchors },
-    });
-    // #endregion
     if (!enabled) {
       lastEmittedRef.current = "";
       setActive("");
@@ -76,46 +42,27 @@ function useSectionObserver(anchors, enabled, routeKey) {
     let raf = null;
     let hasAttachedListeners = false;
     let elements = [];
-    setupCounterRef.current += 1;
 
     const emitIfChanged = (nextId) => {
       if (lastEmittedRef.current === nextId) return;
       lastEmittedRef.current = nextId;
       setActive(nextId);
-      // #region agent log
-      debugLog({
-        runId: "post-fix",
-        hypothesisId: "H4",
-        location: "sidebar.jsx:useSectionObserver:activeChanged",
-        message: "active section changed",
-        data: { nextId },
-      });
-      // #endregion
     };
 
-    const selectElements = () => {
-      elements = anchors
+    const getElements = () =>
+      anchors
         .map((id) => ({ id, el: document.getElementById(id) }))
         .filter((item) => item.el);
-      // #region agent log
-      debugLog({
-        runId: "post-fix",
-        hypothesisId: "H1",
-        location: "sidebar.jsx:useSectionObserver:elementsSelected",
-        message: "selected section elements for observer",
-        data: {
-          routeKey,
-          requestedAnchorCount: anchors.length,
-          foundElementCount: elements.length,
-          foundIds: elements.map((item) => item.id),
-        },
-      });
-      // #endregion
+
+    const selectElements = () => {
+      elements = getElements();
       return elements.length > 0;
     };
 
     const computeNextActive = () => {
       raf = null;
+      elements = getElements();
+      if (!elements.length) return anchors[0] || "";
       const line = ACTIVATION_OFFSET;
       let bestId = "";
       let bestScore = Number.NEGATIVE_INFINITY;
@@ -145,18 +92,6 @@ function useSectionObserver(anchors, enabled, routeKey) {
     const schedule = () => {
       if (raf !== null) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        if (scheduleLogCounterRef.current < 5) {
-          // #region agent log
-          debugLog({
-            runId: "post-fix",
-            hypothesisId: "H6",
-            location: "sidebar.jsx:useSectionObserver:scheduleTick",
-            message: "schedule tick executed",
-            data: { routeKey, anchorsCount: anchors.length, elementsCount: elements.length },
-          });
-          // #endregion
-          scheduleLogCounterRef.current += 1;
-        }
         emitIfChanged(computeNextActive());
       });
     };
@@ -183,15 +118,6 @@ function useSectionObserver(anchors, enabled, routeKey) {
     trySetup();
 
     return () => {
-      // #region agent log
-      debugLog({
-        runId: "post-fix",
-        hypothesisId: "H2",
-        location: "sidebar.jsx:useSectionObserver:cleanup",
-        message: "observer effect cleaned up",
-        data: { setupCount: setupCounterRef.current, anchors },
-      });
-      // #endregion
       if (raf !== null) cancelAnimationFrame(raf);
       if (hasAttachedListeners) {
         window.removeEventListener("scroll", schedule, true);
@@ -215,15 +141,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const clickLockTimerRef = useRef(null);
 
   useEffect(() => {
-    // #region agent log
-    debugLog({
-      runId: "post-fix",
-      hypothesisId: "H3",
-      location: "sidebar.jsx:routeResetEffect",
-      message: "route change reset local section state",
-      data: { pathname, locale },
-    });
-    // #endregion
     setOpenSubmenuId(null);
     setClickLockedSection("");
     if (clickLockTimerRef.current) {
@@ -260,34 +177,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   );
   const resolvedActiveSection = clickLockedSection || activeSection;
 
-  useEffect(() => {
-    // #region agent log
-    debugLog({
-      runId: "post-fix",
-      hypothesisId: "H7",
-      location: "sidebar.jsx:routeAnchorResolution",
-      message: "resolved route and anchors for tracking",
-      data: {
-        pathname,
-        isHome,
-        activePageId: activePage?.id ?? null,
-        activeAnchors,
-        activeSection,
-        clickLockedSection,
-        resolvedActiveSection,
-      },
-    });
-    // #endregion
-  }, [
-    pathname,
-    isHome,
-    activePage,
-    activeAnchors,
-    activeSection,
-    clickLockedSection,
-    resolvedActiveSection,
-  ]);
-
   const handleClick = useCallback(() => {
     if (onNavigate) onNavigate();
   }, [onNavigate]);
@@ -295,15 +184,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   const handleSectionClick = useCallback(
     (e, anchor) => {
       const el = document.getElementById(anchor);
-      // #region agent log
-      debugLog({
-        runId: "post-fix",
-        hypothesisId: "H5",
-        location: "sidebar.jsx:handleSectionClick",
-        message: "section nav clicked",
-        data: { pathname, anchor, elementFound: Boolean(el) },
-      });
-      // #endregion
       if (el) {
         e.preventDefault();
         setClickLockedSection(anchor);
