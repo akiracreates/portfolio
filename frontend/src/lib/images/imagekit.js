@@ -20,9 +20,10 @@ export function imagekitUrl(path, transforms = ["f-auto", "q-auto"]) {
   const endpoint = getImageKitEndpoint();
   if (!endpoint) return "";
   const cleanPath = trimLeadingSlash(path);
+  const separator = cleanPath.includes("?") ? "&" : "?";
   const transformParam =
     transforms && transforms.length > 0
-      ? `?tr=${encodeURIComponent(transforms.join(","))}`
+      ? `${separator}tr=${encodeURIComponent(transforms.join(","))}`
       : "";
 
   return `${endpoint}/${cleanPath}${transformParam}`;
