@@ -13,6 +13,9 @@ import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 const FOOTER_SOCIALS = ["telegram", "vk", "cara"];
 const ACTIVATION_OFFSET = 48;
 const CLICK_LOCK_MS = 800;
+const SIDEBAR_EASE = [0.22, 1, 0.36, 1];
+const SIDEBAR_TRANSITION = { duration: 0.26, ease: SIDEBAR_EASE };
+const SUBMENU_ROW_HEIGHT = 34;
 
 function isHomePathname(pathname, locale) {
   if (!pathname) return false;
@@ -202,6 +205,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
 
   const currentParentId = activePage?.id ?? null;
   const effectiveOpenSubmenuId = openSubmenuId || currentParentId;
+  const motionTransition = reducedMotion ? { duration: 0 } : SIDEBAR_TRANSITION;
 
   const visibleSocials = socialLinks.filter((s) =>
     FOOTER_SOCIALS.includes(s.id),
@@ -292,6 +296,9 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
               resolvedActiveSection || fallbackActiveAnchor;
             const showCollapsedChildren = collapsed && submenuOpenLogical;
             const showExpandedChildren = !collapsed && submenuOpenLogical;
+            const submenuReservedHeight = hasSubmenu
+              ? item.sections.length * SUBMENU_ROW_HEIGHT
+              : 0;
 
             return (
               <li key={item.id} className="space-y-1">
@@ -323,69 +330,92 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                   />
                 )}
                 {hasSubmenu && !suppressChildren ? (
-                  <motion.ul
+                  <motion.div
                     initial={false}
                     animate={{
-                      opacity: showExpandedChildren ? 1 : 0,
-                      maxHeight: showExpandedChildren ? 320 : 0,
+                      opacity: submenuOpenLogical ? 1 : 0,
+                      maxHeight: submenuOpenLogical ? submenuReservedHeight : 0,
                     }}
-                    transition={
-                      reducedMotion
-                        ? { duration: 0 }
-                        : { duration: 0.2, ease: [0.2, 0, 0, 1] }
-                    }
-                    className="overflow-hidden pl-8"
-                    aria-hidden={!showExpandedChildren}
-                    style={{ pointerEvents: showExpandedChildren ? "auto" : "none" }}
+                    transition={motionTransition}
+                    className="relative overflow-hidden"
+                    aria-hidden={!submenuOpenLogical}
+                    style={{ pointerEvents: submenuOpenLogical ? "auto" : "none" }}
                   >
-                    {item.sections.map((section) => {
-                      const sectionHref = `${href}#${section.anchor}`;
-                      const sectionActive =
-                        itemPathActive && currentItemActiveSection === section.anchor;
-                      return (
-                        <li key={section.id}>
-                          <Link
-                            href={sectionHref}
-                            onClick={(e) => handleSectionClick(e, section.anchor)}
-                            className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
-                              sectionActive
-                                ? "border-border-accent bg-highlight-soft text-text-primary"
-                                : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
-                            }`}
-                            aria-current={sectionActive ? "location" : undefined}
-                            tabIndex={showExpandedChildren ? 0 : -1}
+                    <div style={{ height: submenuReservedHeight }} />
+                    <motion.ul
+                      initial={false}
+                      animate={{
+                        opacity: showExpandedChildren ? 1 : 0,
+                        y: showExpandedChildren ? 0 : -3,
+                      }}
+                      transition={{
+                        ...motionTransition,
+                        delay: showExpandedChildren && !reducedMotion ? 0.03 : 0,
+                      }}
+                      className="absolute inset-x-0 top-0 overflow-hidden pl-8"
+                      aria-hidden={!showExpandedChildren}
+                      style={{ pointerEvents: showExpandedChildren ? "auto" : "none" }}
+                    >
+                      {item.sections.map((section) => {
+                        const sectionHref = `${href}#${section.anchor}`;
+                        const sectionActive =
+                          itemPathActive && currentItemActiveSection === section.anchor;
+                        return (
+                          <li key={section.id}>
+                            <Link
+                              href={sectionHref}
+                              onClick={(e) => handleSectionClick(e, section.anchor)}
+                              className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
+                                sectionActive
+                                  ? "border-border-accent bg-highlight-soft text-text-primary"
+                                  : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
+                              }`}
+                              aria-current={sectionActive ? "location" : undefined}
+                              tabIndex={showExpandedChildren ? 0 : -1}
+                            >
+                              {t(section.labelKey)}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </motion.ul>
+                    <motion.ul
+                      initial={false}
+                      animate={{ opacity: showCollapsedChildren ? 1 : 0 }}
+                      transition={{
+                        ...motionTransition,
+                        delay: showCollapsedChildren && !reducedMotion ? 0.02 : 0,
+                      }}
+                      className="absolute inset-x-0 top-0 ml-[18px] flex h-full w-[20px] flex-col items-center justify-between overflow-hidden"
+                      aria-hidden={!showCollapsedChildren}
+                      style={{ pointerEvents: showCollapsedChildren ? "auto" : "none" }}
+                    >
+                      {item.sections.map((section) => {
+                        const sectionHref = `${href}#${section.anchor}`;
+                        const sectionActive =
+                          itemPathActive && currentItemActiveSection === section.anchor;
+                        return (
+                          <li
+                            key={`${section.id}-collapsed`}
+                            className="flex h-[34px] items-center"
                           >
-                            {t(section.labelKey)}
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </motion.ul>
-                ) : null}
-                {hasSubmenu && showCollapsedChildren ? (
-                  <ul className="ml-[18px] flex w-[20px] flex-col items-center gap-1.5 py-1">
-                    {item.sections.map((section) => {
-                      const sectionHref = `${href}#${section.anchor}`;
-                      const sectionActive =
-                        itemPathActive && currentItemActiveSection === section.anchor;
-                      return (
-                        <li key={`${section.id}-collapsed`}>
-                          <Link
-                            href={sectionHref}
-                            onClick={(e) => handleSectionClick(e, section.anchor)}
-                            className={`focus-visible-ring block h-2.5 w-2.5 rounded-full border border-dashed transition-all duration-[var(--duration-fast)] ${
-                              sectionActive
-                                ? "border-border-accent bg-highlight shadow-[0_0_10px_rgba(233,102,160,0.35)]"
-                                : "border-border-default/70 bg-highlight-soft hover:border-border-accent hover:bg-highlight/70"
-                            }`}
-                            aria-label={t(section.labelKey)}
-                            title={t(section.labelKey)}
-                            aria-current={sectionActive ? "location" : undefined}
-                          />
-                        </li>
-                      );
-                    })}
-                  </ul>
+                            <Link
+                              href={sectionHref}
+                              onClick={(e) => handleSectionClick(e, section.anchor)}
+                              className={`focus-visible-ring block h-2.5 w-2.5 rounded-full border border-dashed transition-all duration-[var(--duration-fast)] ${
+                                sectionActive
+                                  ? "border-border-accent bg-highlight shadow-[0_0_10px_rgba(233,102,160,0.35)]"
+                                  : "border-border-default/70 bg-highlight-soft hover:border-border-accent hover:bg-highlight/70"
+                              }`}
+                              aria-label={t(section.labelKey)}
+                              title={t(section.labelKey)}
+                              aria-current={sectionActive ? "location" : undefined}
+                            />
+                          </li>
+                        );
+                      })}
+                    </motion.ul>
+                  </motion.div>
                 ) : null}
               </li>
             );
@@ -434,14 +464,15 @@ function Label({ collapsed, children, hide = false }) {
       initial={false}
       animate={{
         opacity: shouldHide ? 0 : 1,
-        maxWidth: shouldHide ? 0 : 220,
+        x: shouldHide ? -4 : 0,
       }}
       transition={{
-        duration: 0.2,
-        ease: [0.2, 0, 0, 1],
-        delay: shouldHide ? 0 : 0.04,
+        duration: 0.18,
+        ease: SIDEBAR_EASE,
+        delay: shouldHide ? 0 : 0.03,
       }}
       aria-hidden={shouldHide}
+      style={{ visibility: shouldHide ? "hidden" : "visible" }}
     >
       {children}
     </motion.span>
@@ -457,9 +488,10 @@ function NavGroup({ label, collapsed, children }) {
         animate={{
           opacity: collapsed ? 0 : 1,
           maxHeight: collapsed ? 0 : 24,
+          y: collapsed ? -3 : 0,
           marginBottom: collapsed ? 0 : 8,
         }}
-        transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+        transition={SIDEBAR_TRANSITION}
         aria-hidden={collapsed}
         style={{ overflow: "hidden" }}
       >
@@ -510,7 +542,7 @@ function NavItem({
           className="text-text-tertiary"
           initial={false}
           animate={{ rotate: submenuOpen ? 90 : 0, opacity: 1 }}
-          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          transition={SIDEBAR_TRANSITION}
           aria-hidden
         >
           ›
@@ -558,7 +590,7 @@ function NavItemToggle({
           className="text-text-tertiary"
           initial={false}
           animate={{ rotate: submenuOpen ? 90 : 0, opacity: 1 }}
-          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          transition={SIDEBAR_TRANSITION}
           aria-hidden
         >
           ›

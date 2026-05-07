@@ -68,7 +68,7 @@ export function AppShell({ children }) {
         transition={
           reduced
             ? { duration: 0 }
-            : { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+            : { duration: 0.24, ease: [0.22, 1, 0.36, 1] }
         }
         aria-label="primary sidebar"
         onMouseEnter={onEnter}
