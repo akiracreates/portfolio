@@ -36,122 +36,127 @@ export function Footer() {
   if (useCompactFooter) {
     return (
       <footer className="site-ending">
-        <SectionDividerBleed className="mt-0 mb-6 md:mb-7" />
-        <Container className="py-8 md:py-9">
-          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="caption">
-              © {year} akira. {t.rights || "all rights reserved."}
-            </p>
-            <div className="flex items-center gap-5">
-              <a
-                href="#hero"
-                className="caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
-              >
-                ↑ {dict?.common?.backToTop || "back to top"}
-              </a>
-              <span className="caption">{t.crafted || "crafted with care."}</span>
+        <div className="site-ending-zone">
+          <SectionDividerBleed className="mt-0" />
+          <Container className="pt-6 pb-8 md:pt-7 md:pb-9">
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="caption">
+                © {year} akira. {t.rights || "all rights reserved."}
+              </p>
+              <div className="flex items-center gap-5">
+                <a
+                  href="#hero"
+                  className="caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
+                >
+                  ↑ {dict?.common?.backToTop || "back to top"}
+                </a>
+                <span className="caption">{t.crafted || "crafted with care."}</span>
+              </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </div>
       </footer>
     );
   }
 
   return (
     <footer id="socials" className="site-ending">
-      <SectionDividerBleed className="mt-0 mb-7 md:mb-8" />
-      <Container className="py-12 md:py-14">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
-            <div className="space-y-5">
-              <p className="eyebrow">{socialsT.eyebrow || t.connect || "connect"}</p>
-              <div className="space-y-3">
-                <Link
-                  href={`/${locale}`}
-                  className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
-                  aria-label="akira — home"
-                >
-                  <span
-                    className="flex h-9 w-9 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-base font-semibold text-highlight"
-                    aria-hidden
-                  >
-                    a
-                  </span>
-                  <span className="font-display text-[1.2rem] font-medium text-text-primary">
-                    akira
-                  </span>
-                </Link>
-                <h2 className="heading-h2 max-w-md">
-                  {socialsT.title || "let's stay in touch."}
-                </h2>
-                {socialsT.description && (
-                  <p className="body max-w-md">{socialsT.description}</p>
-                )}
-              </div>
-              <p className="caption max-w-sm">{bio}</p>
-              <a
-                href="#hero"
-                className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
-              >
-                <span aria-hidden>↑</span>
-                {dict?.common?.backToTop || "back to top"}
-              </a>
-            </div>
-          </div>
-
-          <div className="lg:col-span-7">
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {links.map((s) => (
-                <li key={s.id}>
-                  {(() => {
-                    const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
-                    return (
-                  <a
-                    href={s.url}
-                    target={s.id === "email" ? undefined : "_blank"}
-                    rel={
-                      s.id === "email" ? undefined : "noreferrer noopener"
-                    }
-                    className={`social-pill group flex items-center gap-3 p-4 transition-colors focus-visible-ring ${
-                      s.primary
-                        ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
-                        : "hover:border-border-default hover:bg-bg-surface-raised"
-                    }`}
+      <div className="site-ending-zone">
+        <SectionDividerBleed className="mt-0" />
+        <Container className="pt-7 pb-12 md:pt-8 md:pb-14">
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-5">
+              <div className="space-y-5">
+                <p className="eyebrow">{socialsT.eyebrow || t.connect || "connect"}</p>
+                <div className="space-y-3">
+                  <Link
+                    href={`/${locale}`}
+                    className="inline-flex items-center gap-2.5 rounded-md focus-visible-ring"
+                    aria-label="akira — home"
                   >
                     <span
-                      className={`flex h-8 w-8 items-center justify-center rounded-md ${
-                        s.primary
-                          ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
-                          : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
-                      }`}
+                      className="flex h-9 w-9 items-center justify-center rounded-md border border-dashed border-highlight bg-highlight-soft font-display text-base font-semibold text-highlight"
                       aria-hidden
                     >
-                      <NavIcon id={s.id} />
+                      a
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline gap-2">
-                        <p className="body-sm font-medium text-text-primary">
-                          {label}
-                        </p>
-                        {s.primary && (
-                          <span className="caption text-highlight">
-                            {dict?.common?.preferred || "preferred"}
-                          </span>
+                    <span className="font-display text-[1.2rem] font-medium text-text-primary">
+                      akira
+                    </span>
+                  </Link>
+                  <h2 className="heading-h2 max-w-md">
+                    {socialsT.title || "let's stay in touch."}
+                  </h2>
+                  {socialsT.description && (
+                    <p className="body max-w-md">{socialsT.description}</p>
+                  )}
+                </div>
+                <p className="caption max-w-sm">{bio}</p>
+                <a
+                  href="#hero"
+                  className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
+                >
+                  <span aria-hidden>↑</span>
+                  {dict?.common?.backToTop || "back to top"}
+                </a>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7">
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {links.map((s) => (
+                  <li key={s.id}>
+                    {(() => {
+                      const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
+                      return (
+                    <a
+                      href={s.url}
+                      target={s.id === "email" ? undefined : "_blank"}
+                      rel={
+                        s.id === "email" ? undefined : "noreferrer noopener"
+                      }
+                      className={`social-pill group flex items-center gap-3 p-4 transition-colors focus-visible-ring ${
+                        s.primary
+                          ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
+                          : "hover:border-border-default hover:bg-bg-surface-raised"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-8 w-8 items-center justify-center rounded-md ${
+                          s.primary
+                            ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
+                            : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
+                        }`}
+                        aria-hidden
+                      >
+                        <NavIcon id={s.id} />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline gap-2">
+                          <p className="body-sm font-medium text-text-primary">
+                            {label}
+                          </p>
+                          {s.primary && (
+                            <span className="caption text-highlight">
+                              {dict?.common?.preferred || "preferred"}
+                            </span>
+                          )}
+                        </div>
+                        {s.handle && (
+                          <p className="caption truncate">{s.handle}</p>
                         )}
                       </div>
-                      {s.handle && (
-                        <p className="caption truncate">{s.handle}</p>
-                      )}
-                    </div>
-                  </a>
-                    );
-                  })()}
-                </li>
-              ))}
-            </ul>
+                    </a>
+                      );
+                    })()}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
+
       <SectionDividerBleed className="my-10" />
       <Container className="pb-12 md:pb-14">
         <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">

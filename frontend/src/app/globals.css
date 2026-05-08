@@ -2103,6 +2103,10 @@ a {
 
 .site-ending {
   position: relative;
+  background: transparent;
+}
+
+.site-ending-zone {
   background: linear-gradient(
     180deg,
     rgba(56, 49, 63, 0.96) 0%,
@@ -2113,18 +2117,26 @@ a {
 
 .site-ending::before {
   content: none;
-  position: absolute;
-  left: clamp(1.25rem, 5vw, 3.5rem);
-  right: clamp(1.25rem, 5vw, 3.5rem);
-  top: 0;
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(233, 102, 160, 0.18) 0 10px,
-    transparent 10px 16px,
-    rgba(149, 117, 222, 0.18) 16px 22px,
-    transparent 22px 30px
-  );
+}
+
+.site-ending-zone > .divider-bleed-host {
+  transform: translateY(-0.5px);
+}
+
+.site-ending-zone > .divider-bleed-host .broken-divider {
+  box-shadow: 0 0 8px rgba(233, 102, 160, 0.12);
+}
+
+.site-ending-zone > .divider-bleed-host + .container {
+  padding-top: clamp(1.5rem, 2.6vw, 2rem);
+}
+
+.site-ending-zone
+  > .divider-bleed-host
+  + .container
+  + .divider-bleed-host
+  + .container {
+  padding-top: 0;
 }
 
 .social-pill {
