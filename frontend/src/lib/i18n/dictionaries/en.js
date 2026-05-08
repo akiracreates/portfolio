@@ -31,6 +31,7 @@ export const dictionary = {
 
   nav: {
     onThisPage: "on this page",
+    mainPages: "main pages",
     more: "more",
     home: "home",
     featured: "featured art",

@@ -6,9 +6,9 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 
 const sizes = {
-  sm: "py-10 md:py-14",
-  md: "py-14 md:py-20",
-  lg: "py-16 md:py-24",
+  sm: "py-9 md:py-14",
+  md: "py-11 md:py-20",
+  lg: "py-13 md:py-24",
 };
 
 export function Section({
@@ -45,7 +45,7 @@ export function Section({
       >
         {(eyebrow || title || action) && (
           <header
-            className={`mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between ${
+            className={`mb-6 flex flex-col gap-4 md:mb-8 sm:flex-row sm:items-end sm:justify-between ${
               align === "center" ? "sm:items-center sm:text-center" : ""
             }`}
           >

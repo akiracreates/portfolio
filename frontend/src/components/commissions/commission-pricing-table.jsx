@@ -13,8 +13,8 @@ export function CommissionPricingTable({
 
   return (
     <div className="scrap-card overflow-hidden border-[color:var(--border-accent)]/35 bg-[color:var(--bg-note)]">
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[720px] border-collapse text-left">
+      <div className="overflow-x-auto overscroll-x-contain [scrollbar-gutter:stable]">
+        <table className="w-full min-w-[680px] border-collapse text-left sm:min-w-[720px]">
           <thead className="bg-highlight-soft/60">
             <tr>
               {cols.map((label) => (

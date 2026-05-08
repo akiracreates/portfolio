@@ -22,25 +22,28 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
 
   return (
     <>
-      <SectionDividerBleed className="mt-2 md:mt-4" />
+      <SectionDividerBleed className="mt-1 md:mt-4" />
       <Container>
       <Section
         id="featured"
-        className="featured-section"
+        className="featured-section py-10 md:py-20"
         eyebrow={t.eyebrow}
         title={t.title}
         action={
-          <Button
-            as="link"
-            href={`/${locale}/portfolio`}
-            variant="ghost"
-            size="sm"
-          >
-            {t.cta} →
-          </Button>
+          <div className="pt-1 sm:pt-0">
+            <Button
+              as="link"
+              href={`/${locale}/portfolio`}
+              variant="ghost"
+              size="sm"
+              className="self-start"
+            >
+              {t.cta} →
+            </Button>
+          </div>
         }
       >
-        <div className="featured-curation grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="featured-curation grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {featured.map((artwork, index) => {
             const href = `/${locale}/portfolio#${categoryAnchor(artwork.category)}`;
             return (

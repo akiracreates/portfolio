@@ -4,7 +4,7 @@ import { Section } from "@/components/ui/section";
 import { whatToExpect } from "@/lib/content/commissions";
 import { pickLocale } from "@/lib/i18n/config";
 
-const WARM_EXPECTATION_IDS = new Set(["communication", "payment"]);
+const WARM_EXPECTATION_IDS = new Set(["communication", "revisions"]);
 
 export function WhatToExpectSection({ dict, locale = "en" }) {
   const t = dict.whatToExpect;
@@ -25,16 +25,17 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
             href={`/${locale}/commissions`}
             variant="outline"
             size="md"
+            className="hidden md:inline-flex"
           >
             {t.cta}
           </Button>
         }
       >
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <ul className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-2">
           {homepageExpectations.map((item) => (
             <li
               key={item.id}
-              className={`scrap-note expect-card process-card flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] ${
+              className={`scrap-note expect-card process-card flex flex-col gap-2 p-4 md:p-5 transition-colors duration-[var(--duration-base)] ${
                 WARM_EXPECTATION_IDS.has(item.id) ? "note-surface-warm" : ""
               } ${item.id === "turnaround" ? "expect-card--turnaround expect-card--turnaround-amber" : ""}`.trim()}
             >
@@ -43,10 +44,17 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
               >
                 {pickLocale(item.short, locale)}
               </p>
-              <p className="body-sm">{pickLocale(item.long, locale)}</p>
+              <p className="body-sm leading-[1.6] text-text-secondary/95">
+                {pickLocale(item.long, locale)}
+              </p>
             </li>
           ))}
         </ul>
+        <div className="mt-4 md:hidden">
+          <Button as="link" href={`/${locale}/commissions`} variant="outline" size="md">
+            {t.cta}
+          </Button>
+        </div>
       </Section>
     </Container>
   );

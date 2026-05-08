@@ -104,7 +104,7 @@ export function AppShell({ children }) {
       </div>
 
       {/* mobile floating action button (opens drawer) */}
-      <MobileFab onOpenDrawer={() => setDrawerOpen(true)} />
+      <MobileFab open={drawerOpen} onOpenDrawer={() => setDrawerOpen(true)} />
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </div>

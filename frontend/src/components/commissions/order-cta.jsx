@@ -13,7 +13,7 @@ export function OrderCta({ locale = "en", route, text }) {
           href={route}
           variant="primary"
           size="lg"
-          className="h-12 min-w-[220px] border-[1.5px]"
+          className="h-12 w-full min-w-0 max-w-[260px] border-[1.5px] sm:w-auto sm:min-w-[220px]"
         >
           {pickLocale(text?.button, locale) || "order now"}
         </Button>

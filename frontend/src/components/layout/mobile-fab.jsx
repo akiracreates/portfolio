@@ -2,18 +2,22 @@
 
 import { useT } from "@/components/i18n/locale-provider";
 
-export function MobileFab({ onOpenDrawer }) {
+export function MobileFab({ onOpenDrawer, open = false }) {
   const t = useT();
   return (
     <button
       type="button"
       onClick={onOpenDrawer}
-      className="fixed bottom-5 right-5 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-dashed border-highlight bg-bg-surface text-highlight shadow-lg transition-colors duration-[var(--duration-base)] hover:bg-highlight-soft focus-visible-ring md:hidden"
+      className={`fixed bottom-5 right-5 z-30 h-12 w-12 items-center justify-center rounded-full border border-dashed border-highlight bg-bg-surface text-highlight shadow-lg transition-colors duration-[var(--duration-base)] hover:bg-highlight-soft focus-visible-ring md:hidden ${
+        open ? "hidden" : "flex"
+      }`}
       style={{
         bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.25rem)",
+        right: "calc(env(safe-area-inset-right, 0px) + 1rem)",
       }}
       aria-label={t("common.openNavigation", "open navigation")}
       aria-controls="mobile-drawer"
+      aria-expanded={open}
     >
       <svg
         width="20"

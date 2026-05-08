@@ -31,6 +31,7 @@ export const dictionary = {
 
   nav: {
     onThisPage: "на этой странице",
+    mainPages: "основные страницы",
     more: "ещё",
     home: "главная",
     featured: "избранные работы",

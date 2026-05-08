@@ -55,7 +55,7 @@ export function ArtworkCard({
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           imgClassName={`object-contain transition-transform duration-[var(--duration-slow)] group-hover:scale-[1.015] ${
-            featured ? "p-4 md:p-5" : "p-3"
+            featured ? "p-2 md:p-5" : "p-3"
           }`}
         />
         {showFeaturedBadge && artwork.featured && (

@@ -100,6 +100,29 @@ function AboutHero({ t, locale, heroNote }) {
 }
 
 function OriginChapter({ chapter }) {
+  const imageCluster = (
+    <div className="about-origin-cluster" aria-label={chapter.title}>
+      {chapter.images?.map((image, index) => (
+        <figure
+          key={image.id}
+          className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
+        >
+          <ArtifactImage
+            image={image}
+            alt={image.alt}
+            size="origin"
+            sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
+            className={`about-origin-frame ${index === 0 ? "deco-warm-corner" : ""}`.trim()}
+            imgClassName="object-contain p-2.5 md:p-3"
+          />
+          <figcaption className="about-attached-caption about-origin-caption note-surface-warm">
+            <p className="caption text-highlight deco-warm-label">{image.label}</p>
+            <p className="body-sm text-text-primary">{image.caption}</p>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  );
   return (
     <article className="about-spread about-origin">
       <div className="about-origin-story">
@@ -111,28 +134,9 @@ function OriginChapter({ chapter }) {
             {chapter.title}
           </Heading>
           <Divider className="about-underline" />
+          <div className="about-origin-cluster-mobile">{imageCluster}</div>
           <div className="about-origin-prose">
-            <div className="about-origin-cluster" aria-label={chapter.title}>
-              {chapter.images?.map((image, index) => (
-                <figure
-                  key={image.id}
-                  className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
-                >
-                  <ArtifactImage
-                    image={image}
-                    alt={image.alt}
-                    size="origin"
-                    sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
-                    className={`about-origin-frame ${index === 0 ? "deco-warm-corner" : ""}`.trim()}
-                    imgClassName="object-contain p-2.5 md:p-3"
-                  />
-                  <figcaption className="about-attached-caption about-origin-caption note-surface-warm">
-                    <p className="caption text-highlight deco-warm-label">{image.label}</p>
-                    <p className="body-sm text-text-primary">{image.caption}</p>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+            <div className="about-origin-cluster-desktop">{imageCluster}</div>
             {chapter.body?.map((paragraph) => (
               <p key={paragraph} className="body">
                 {paragraph}
@@ -183,14 +187,17 @@ function DigitalArtChapter({ chapter, locale }) {
   const body = chapter.noteCard?.body ?? [];
   const wrappedParagraphs = body.slice(0, 4);
   const continuationParagraphs = body.slice(4);
+  const boardCluster = (
+    <BoardCluster
+      items={chapter.images}
+      locale={locale}
+      tabLabel={chapter.noteCard?.label}
+    />
+  );
   return (
     <article className="about-spread about-board">
       <div className="about-board-flow">
-        <BoardCluster
-          items={chapter.images}
-          locale={locale}
-          tabLabel={chapter.noteCard?.label}
-        />
+        <div className="about-board-cluster-desktop">{boardCluster}</div>
         <div className="about-board-header">
           <ChapterLabel tilt={chapter.tilt} tone="purple">
             {chapter.label}
@@ -213,6 +220,7 @@ function DigitalArtChapter({ chapter, locale }) {
             </p>
           ))}
         </div>
+        <div className="about-board-cluster-mobile">{boardCluster}</div>
         <div className="about-board-prose about-board-prose--continuation">
           {continuationParagraphs.map((paragraph) => (
             <p key={paragraph} className="body about-board-paragraph">

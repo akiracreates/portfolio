@@ -27,6 +27,7 @@ function isHomePathname(pathname, locale) {
 
 function isPathActive(pathname, href, locale) {
   if (!pathname) return false;
+  if (href === "/") return isHomePathname(pathname, locale);
   const fullHref = `/${locale}${href === "/" ? "" : href}`;
   return pathname === fullHref || pathname.startsWith(`${fullHref}/`);
 }
@@ -135,7 +136,12 @@ function useSectionObserver(anchors, enabled, routeKey) {
   return enabled ? active : "";
 }
 
-export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
+export function Sidebar({
+  collapsed = false,
+  onNavigate,
+  onCloseDrawer,
+  variant = "fixed",
+}) {
   const pathname = usePathname();
   const labelId = useId();
   const t = useT();
@@ -170,19 +176,38 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
   }, []);
 
   const pageItems = navStructure.pages;
+  const isDrawer = variant === "drawer";
   const sectionItems = navStructure.homepageSections;
+  const drawerHomeSectionItems = useMemo(
+    () => [
+      ...sectionItems.filter((item) => item.anchor !== "hero"),
+      { id: "socials", anchor: "socials", labelKey: "socialsFooter.eyebrow" },
+    ],
+    [sectionItems],
+  );
+  const mainPageItems = useMemo(
+    () => [
+      { id: "home", icon: "home", href: "/", labelKey: "nav.home" },
+      ...pageItems,
+    ],
+    [pageItems],
+  );
   const activePage = useMemo(() => {
     if (isHome) return null;
     return (
       pageItems.find((item) => isPathActive(pathname, item.href, locale)) ?? null
     );
   }, [isHome, locale, pageItems, pathname]);
+  const currentSectionItems = useMemo(
+    () => (isHome ? drawerHomeSectionItems : activePage?.sections ?? []),
+    [activePage?.sections, drawerHomeSectionItems, isHome],
+  );
   const activeAnchors = useMemo(
     () =>
       isHome
-        ? sectionItems.map((item) => item.anchor)
+        ? currentSectionItems.map((item) => item.anchor)
         : activePage?.sections?.map((item) => item.anchor) ?? [],
-    [activePage?.sections, isHome, sectionItems],
+    [activePage?.sections, currentSectionItems, isHome],
   );
   const activeSection = useSectionObserver(
     activeAnchors,
@@ -224,7 +249,9 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
 
   return (
     <div
-      className="flex h-full w-full flex-col overflow-hidden bg-bg-sidebar text-text-secondary"
+      className={`flex h-full w-full flex-col bg-bg-sidebar text-text-secondary ${
+        isDrawer ? "overflow-y-auto" : "overflow-hidden"
+      }`}
       aria-labelledby={labelId}
       data-variant={variant}
       data-collapsed={collapsed ? "true" : "false"}
@@ -234,7 +261,7 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
       </span>
 
       {/* brand row */}
-      <div className="flex h-[var(--topbar-h)] shrink-0 items-center gap-2.5 border-b border-dashed border-border-subtle px-4">
+      <div className="flex h-[var(--topbar-h)] shrink-0 items-center justify-between gap-2.5 border-b border-dashed border-border-subtle px-4">
         <Link
           href={`/${locale}`}
           onClick={handleClick}
@@ -253,40 +280,107 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
             </span>
           </Label>
         </Link>
+        {isDrawer && typeof onCloseDrawer === "function" ? (
+          <button
+            type="button"
+            className="focus-visible-ring flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-dashed border-transparent text-text-tertiary transition-colors hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
+            onClick={onCloseDrawer}
+            aria-label={t("common.closeNavigation", "close navigation")}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              aria-hidden
+            >
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        ) : null}
       </div>
 
       {/* nav body — flex-1 + min-h-0 makes this the single scroll region
           inside the sidebar (without min-h-0 the flex child grows to fit
           its content instead of allowing overflow-y to scroll). */}
       <nav
-        className="sidebar-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2 pb-6 pt-4"
+        className={`sidebar-scroll min-h-0 overflow-x-hidden px-2 pt-3 ${
+          isDrawer
+            ? "pb-3"
+            : "flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom,0px)+1.1rem)]"
+        }`}
         aria-label="primary"
       >
-        <NavGroup
-          label={t("nav.onThisPage", "on this page")}
-          collapsed={collapsed}
-        >
-          {sectionItems.map((item) => {
-            const active = isHome && resolvedActiveSection === item.anchor;
-            const href = `/${locale}#${item.anchor}`;
-            return (
-              <NavItem
-                key={item.id}
-                href={href}
-                iconId={item.icon}
-                label={t(item.labelKey)}
-                active={active}
-                collapsed={collapsed}
-                onClick={(e) => handleSectionClick(e, item.anchor)}
-              />
-            );
-          })}
-        </NavGroup>
+        {isDrawer ? (
+          <>
+            <NavGroup label={t("nav.mainPages", "main pages")} collapsed={collapsed}>
+              {mainPageItems.map((item) => {
+                const itemPathActive = isPathActive(pathname, item.href, locale);
+                const href = `/${locale}${item.href === "/" ? "" : item.href}`;
+                return (
+                  <li key={item.id} className="space-y-1">
+                    <NavItem
+                      href={href}
+                      iconId={item.icon}
+                      label={t(item.labelKey)}
+                      active={itemPathActive}
+                      collapsed={collapsed}
+                      onClick={handleClick}
+                      ariaCurrent={itemPathActive ? "page" : undefined}
+                      hasSubmenu={false}
+                      submenuOpen={false}
+                    />
+                  </li>
+                );
+              })}
+            </NavGroup>
+            <div className="broken-divider mx-3 my-3" aria-hidden />
+            <NavGroup label={t("nav.onThisPage", "on this page")} collapsed={collapsed}>
+              {activeAnchors.map((anchor) => {
+                const active = resolvedActiveSection === anchor;
+                const href = `/${locale}#${anchor}`;
+                return (
+                  <SectionNavItem
+                    key={anchor}
+                    href={href}
+                    label={resolveSectionLabel(anchor, isHome, currentSectionItems, activePage, t)}
+                    active={active}
+                    onClick={(e) => handleSectionClick(e, anchor)}
+                  />
+                );
+              })}
+            </NavGroup>
+          </>
+        ) : (
+          <>
+            <NavGroup
+              label={t("nav.onThisPage", "on this page")}
+              collapsed={collapsed}
+            >
+              {sectionItems.map((item) => {
+                const active = isHome && resolvedActiveSection === item.anchor;
+                const href = `/${locale}#${item.anchor}`;
+                return (
+                  <NavItem
+                    key={item.id}
+                    href={href}
+                    iconId={item.icon}
+                    label={t(item.labelKey)}
+                    active={active}
+                    collapsed={collapsed}
+                    onClick={(e) => handleSectionClick(e, item.anchor)}
+                  />
+                );
+              })}
+            </NavGroup>
 
-        <div className="broken-divider mx-3 my-3" aria-hidden />
+            <div className="broken-divider mx-3 my-3" aria-hidden />
 
-        <NavGroup label={t("nav.more", "more")} collapsed={collapsed}>
-          {pageItems.map((item) => {
+            <NavGroup label={t("nav.more", "more")} collapsed={collapsed}>
+              {pageItems.map((item) => {
             const hasSubmenu = Boolean(item.sections?.length);
             const itemPathActive = isPathActive(pathname, item.href, locale);
             const suppressChildren = item.id === "portfolio";
@@ -361,7 +455,9 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
               </li>
             );
           })}
-        </NavGroup>
+            </NavGroup>
+          </>
+        )}
       </nav>
 
       {/* footer: language switcher + socials */}
@@ -420,6 +516,15 @@ function Label({ collapsed, children, hide = false }) {
   );
 }
 
+function resolveSectionLabel(anchor, isHome, sectionItems, activePage, t) {
+  if (isHome) {
+    const homeSection = sectionItems.find((item) => item.anchor === anchor);
+    return homeSection ? t(homeSection.labelKey) : anchor;
+  }
+  const currentSection = activePage?.sections?.find((item) => item.anchor === anchor);
+  return currentSection ? t(currentSection.labelKey) : anchor;
+}
+
 function NavGroup({ label, collapsed, children }) {
   return (
     <div>
@@ -440,6 +545,25 @@ function NavGroup({ label, collapsed, children }) {
       </motion.p>
       <ul className="space-y-0.5">{children}</ul>
     </div>
+  );
+}
+
+function SectionNavItem({ href, label, active, onClick }) {
+  return (
+    <li>
+      <Link
+        href={href}
+        onClick={onClick}
+        className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
+          active
+            ? "border-border-default bg-highlight-soft/65 text-text-primary"
+            : "border-transparent text-text-tertiary hover:border-border-subtle hover:bg-bg-surface hover:text-text-primary"
+        }`}
+        aria-current={active ? "location" : undefined}
+      >
+        <span className="block truncate">{label}</span>
+      </Link>
+    </li>
   );
 }
 

@@ -46,9 +46,9 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
             </Button>
           }
         >
-          <div className="scrap-card card-surface-warm flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div className="scrap-card card-surface-warm flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between md:gap-6 md:p-8">
             {/* status pill + types */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5">
               <span className="inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">
                 <span
                   className="h-1.5 w-1.5 rounded-full bg-success"
@@ -62,9 +62,9 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
               </div>
             </div>
             {/* starting price */}
-            <div className="commissions-preview-price md:text-right">
+            <div className="commissions-preview-price border-t border-dashed border-border-subtle pt-3 md:border-t-0 md:pt-0 md:text-right">
               <p className="caption">{t.startingLabel}</p>
-              <p className="heading-h2 text-[1.75rem] leading-tight text-text-primary">
+              <p className="heading-h2 text-[1.78rem] leading-tight text-text-primary md:text-[1.75rem]">
                 {homepageStartingPrice}
               </p>
             </div>

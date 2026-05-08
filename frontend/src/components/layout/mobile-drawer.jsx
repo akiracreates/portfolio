@@ -3,7 +3,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
-import { useT } from "@/components/i18n/locale-provider";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -12,7 +11,6 @@ export function MobileDrawer({ open, onClose }) {
   const reduced = useReducedMotion();
   const panelRef = useRef(null);
   const lastFocusRef = useRef(null);
-  const t = useT();
 
   useEffect(() => {
     if (!open) return undefined;
@@ -86,7 +84,7 @@ export function MobileDrawer({ open, onClose }) {
           />
           <motion.div
             ref={panelRef}
-            className="absolute left-0 top-0 h-full w-[280px] max-w-[85vw] border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg"
+            className="absolute left-0 top-0 h-[100dvh] max-h-[100dvh] w-[300px] max-w-[86vw] overflow-hidden border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg"
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
@@ -99,28 +97,9 @@ export function MobileDrawer({ open, onClose }) {
             <Sidebar
               variant="drawer"
               collapsed={false}
-              showCollapseToggle={false}
+              onCloseDrawer={onClose}
               onNavigate={onClose}
             />
-            <button
-              type="button"
-              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-md border border-dashed border-transparent text-text-tertiary transition-colors hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
-              onClick={onClose}
-              aria-label={t("common.closeNavigation", "close navigation")}
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                aria-hidden
-              >
-                <path d="M6 6l12 12M18 6 6 18" />
-              </svg>
-            </button>
           </motion.div>
         </div>
       )}
