@@ -141,19 +141,25 @@ export function ArtworkRow({
             alt={alt}
             fill
             sizes="(max-width: 768px) 100vw, 55vw"
-            imgClassName="object-contain p-3 md:p-4"
+            imgClassName="object-contain p-2 md:p-4"
           />
         </ImageFrame>
-        <div className={`portfolio-note scrap-caption space-y-2 px-4 py-3 ${noteClass}`}>
-          <div className="flex items-baseline justify-between gap-3">
-            <h3 className="heading-h2 text-[1.1rem] leading-tight text-text-primary">
+        <div
+          className={`portfolio-note scrap-caption mt-2 space-y-1.5 px-2.5 py-2 md:mt-0 md:space-y-2 md:px-4 md:py-3 ${noteClass}`}
+        >
+          <div className="flex items-baseline justify-between gap-2 md:gap-3">
+            <h3 className="heading-h2 text-[1.05rem] leading-tight text-text-primary md:text-[1.1rem]">
               {title}
             </h3>
-            <span className="art-tag caption shrink-0 text-accent-2">
+            <span className="art-tag caption hidden shrink-0 text-accent-2 md:inline-block">
               {artwork.category}
             </span>
           </div>
-          {note && <p className="body-sm max-w-[22ch]">{note}</p>}
+          {note && (
+            <p className="body-sm max-w-[24ch] max-md:text-[0.8125rem] max-md:leading-relaxed md:max-w-[22ch]">
+              {note}
+            </p>
+          )}
         </div>
       </div>
     </motion.article>

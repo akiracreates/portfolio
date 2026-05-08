@@ -59,7 +59,7 @@ export function PortfolioCategoryShowcase({
   if (!activeSection) return null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <PortfolioCategoryTabs
         categories={categories}
         jumpToLabel={jumpToLabel}
@@ -103,26 +103,30 @@ export function PortfolioCategoryTabs({
       className="portfolio-tabs text-[0.8125rem] text-text-tertiary"
       aria-label={jumpToLabel}
     >
-      <span className="caption mr-2 text-text-tertiary">{jumpToLabel}</span>
-      {categories.map((cat) => {
-        const isActive = active === cat;
-        return (
-          <a
-            key={cat}
-            href={`#${categoryAnchorId(cat)}`}
-            onClick={(event) => {
-              event.preventDefault();
-              onSelect(cat);
-            }}
-            aria-current={isActive ? "true" : undefined}
-            className={`portfolio-tab focus-visible-ring ${
-              isActive ? "is-active note-surface-warm deco-warm-pin" : ""
-            }`}
-          >
-            {cat}
-          </a>
-        );
-      })}
+      <span className="portfolio-tabs-label caption shrink-0 text-text-tertiary">
+        {jumpToLabel}
+      </span>
+      <div className="portfolio-tabs-inner">
+        {categories.map((cat) => {
+          const isActive = active === cat;
+          return (
+            <a
+              key={cat}
+              href={`#${categoryAnchorId(cat)}`}
+              onClick={(event) => {
+                event.preventDefault();
+                onSelect(cat);
+              }}
+              aria-current={isActive ? "true" : undefined}
+              className={`portfolio-tab focus-visible-ring ${
+                isActive ? "is-active note-surface-warm deco-warm-pin" : ""
+              }`}
+            >
+              {cat}
+            </a>
+          );
+        })}
+      </div>
     </nav>
   );
 }

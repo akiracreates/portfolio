@@ -27,6 +27,7 @@ export function PortfolioPage({ dict, locale = "en" }) {
         description={t.pageDescription}
         tone="warm"
         contentClassName="w-full max-w-5xl"
+        scrapNoteClassName="max-md:space-y-3 max-md:p-4"
       />
 
       <Container className="pt-8 pb-16 md:pb-24">
@@ -44,10 +45,10 @@ export function PortfolioPage({ dict, locale = "en" }) {
       <section className="section-scrap bg-bg-base">
         <SectionDividerBleed />
         <Container className="py-16 md:py-20">
-          <div className="scrap-note note-surface-warm mx-auto max-w-2xl space-y-6 p-6 text-center md:p-8">
+          <div className="scrap-note note-surface-warm mx-auto max-w-2xl space-y-5 p-5 text-center max-md:px-5 max-md:py-6 md:space-y-6 md:p-8">
             <Heading level="h2">{t.closingTitle}</Heading>
             <p className="body-lg">{t.closingBody}</p>
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2 md:gap-3 md:pt-2">
               <Button
                 as="link"
                 href={`/${locale}/commissions`}
