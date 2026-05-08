@@ -84,20 +84,20 @@ export function CategorySection({
   }, [orderedArtworks.length]);
 
   return (
-    <section id={id} className="scroll-mt-header space-y-6 md:space-y-8">
-      <header className="category-banner corner-marks relative flex items-baseline justify-between gap-4 border border-dashed border-border-subtle p-5 md:p-6">
-        <div className="space-y-1.5">
+    <section id={id} className="scroll-mt-header space-y-5 md:space-y-8">
+      <header className="category-banner corner-marks relative flex flex-col items-start gap-3 border border-dashed border-border-subtle p-5 max-md:border-border-subtle/55 md:flex-row md:items-baseline md:justify-between md:border-border-subtle md:gap-4 md:p-6">
+        <div className="min-w-0 w-full space-y-2 md:max-w-[68ch] md:flex-none md:space-y-1.5">
           <Eyebrow>{eyebrow}</Eyebrow>
           <h3 className="heading-h2 text-[1.9rem] leading-tight md:text-[2.15rem]">
             {category}
           </h3>
-          <p className="body-sm max-w-[52ch]">{introText}</p>
+          <p className="body-sm max-md:leading-[1.68] md:leading-normal">{introText}</p>
         </div>
-        <span className="tilt-chip caption shrink-0 pt-2 text-highlight">
+        <span className="tilt-chip caption w-full shrink-0 border-t border-dashed border-border-subtle/40 pt-3 text-left text-highlight max-md:text-[0.8125rem] md:ml-4 md:w-auto md:border-t-0 md:pt-2 md:text-right md:self-baseline">
           {count} {label}
         </span>
       </header>
-      <div className="portfolio-mobile-list">
+      <div className="portfolio-mobile-list max-md:mt-3 md:mt-0">
         {orderedArtworks.map((artwork, index) => (
           <ArtworkRow
             key={artwork.id}
