@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/container";
 import { SectionDividerBleed } from "@/components/ui/divider";
 import { Section } from "@/components/ui/section";
 import { commissionStatus, commissionTypes } from "@/lib/content/commissions";
-import { formatPrice, pickLocale } from "@/lib/i18n/config";
+import { pickLocale } from "@/lib/i18n/config";
 
 /**
  * Slim homepage preview per spec:
@@ -15,15 +15,7 @@ import { formatPrice, pickLocale } from "@/lib/i18n/config";
 export function CommissionsPreviewSection({ dict, locale = "en" }) {
   const t = dict.commissionsPreview;
 
-  const lowestPrice = commissionTypes.reduce(
-    (min, type) => {
-      if (!min) return type.price;
-      const a = locale === "ru" ? type.price.rub : type.price.usd;
-      const b = locale === "ru" ? min.rub : min.usd;
-      return a < b ? type.price : min;
-    },
-    null,
-  );
+  const homepageStartingPrice = locale === "ru" ? "1 500 ₽" : "$25";
 
   const typeNames = commissionTypes
     .map((c) => pickLocale(c.shortTitle, locale))
@@ -70,10 +62,10 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
               </div>
             </div>
             {/* starting price */}
-            <div className="md:text-right">
+            <div className="commissions-preview-price md:text-right">
               <p className="caption">{t.startingLabel}</p>
               <p className="heading-h2 text-[1.75rem] leading-tight text-text-primary">
-                {lowestPrice ? formatPrice(lowestPrice, locale) : ""}
+                {homepageStartingPrice}
               </p>
             </div>
           </div>

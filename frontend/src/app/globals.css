@@ -537,6 +537,55 @@ a {
   background: none !important;
 }
 
+.commissions-preview-price {
+  position: relative;
+}
+
+.commissions-preview-price .heading-h2 {
+  position: relative;
+  display: inline-block;
+}
+
+.commissions-preview-price .heading-h2::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -0.2rem;
+  width: 1.65rem;
+  height: 1px;
+  background: rgba(240, 175, 129, 0.5);
+  pointer-events: none;
+}
+
+.expect-card--turnaround .expect-card-turnaround-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-warm) 12%);
+  padding-bottom: 0.16rem;
+}
+
+.expect-card--turnaround .expect-card-turnaround-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.04rem;
+  width: 2.35rem;
+  height: 1px;
+  background: rgba(240, 175, 129, 0.46);
+  pointer-events: none;
+}
+
+.expect-card--turnaround .expect-card-turnaround-title::after {
+  content: none;
+}
+
+.expect-card--turnaround-amber {
+  background: color-mix(in srgb, var(--bg-note-warm) 88%, var(--accent-warm) 12%);
+  border-color: rgba(240, 175, 129, 0.26) !important;
+}
+
 .scrap-caption {
   position: relative;
   border-radius: var(--radius-md);
@@ -844,7 +893,7 @@ a {
 
 .hero-cover {
   position: relative;
-  border: 1px dashed rgba(244, 241, 248, 0.14);
+  border: 1px dashed rgba(244, 241, 248, 0.2);
   border-radius: 18px;
   background:
     linear-gradient(180deg, rgba(244, 241, 248, 0.012), transparent 20%),
@@ -854,6 +903,33 @@ a {
   box-shadow:
     0 22px 48px rgba(9, 7, 12, 0.28),
     0 0 0 1px rgba(244, 241, 248, 0.03);
+}
+
+/* Inset offset-frame mimic — stays inside overflow:hidden (no negative-inset bleed). */
+.hero-cover-inner {
+  position: relative;
+  isolation: isolate;
+  border-radius: 14px;
+}
+
+.hero-cover-inner::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 9px;
+  z-index: 0;
+  border-radius: calc(14px - 4px);
+  background:
+    linear-gradient(var(--highlight), var(--highlight)) left top / 14px 1px no-repeat,
+    linear-gradient(var(--highlight), var(--highlight)) left top / 1px 14px no-repeat,
+    linear-gradient(var(--accent-secondary), var(--accent-secondary)) right bottom / 14px 1px no-repeat,
+    linear-gradient(var(--accent-secondary), var(--accent-secondary)) right bottom / 1px 14px no-repeat;
+  opacity: 0.24;
+}
+
+.hero-divider {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-cover::before {
@@ -868,10 +944,6 @@ a {
     linear-gradient(var(--accent-secondary), var(--accent-secondary)) right bottom / 24px 1px no-repeat,
     linear-gradient(var(--accent-secondary), var(--accent-secondary)) right bottom / 1px 24px no-repeat;
   opacity: 0.44;
-}
-
-.hero-divider {
-  position: relative;
 }
 
 .hero-copy {
@@ -897,6 +969,70 @@ a {
   padding: 1.25rem 1.25rem 1.5rem;
 }
 
+@media (max-width: 767px) {
+  .hero-cover-inner::after {
+    inset: 7px;
+    opacity: 0.16;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-cover::before {
+    opacity: 0.52;
+  }
+}
+
+.hero-copy .body-lg .deco-dashed-underline {
+  padding-bottom: 3px;
+}
+
+.hero-portrait-frame {
+  box-shadow:
+    var(--shadow-scrap),
+    0 22px 46px rgba(10, 8, 14, 0.38),
+    0 0 0 1px rgba(244, 241, 248, 0.05);
+}
+
+.hero-portrait-wrap .deco-warm-tape::before {
+  width: 3rem;
+  height: 0.82rem;
+  left: 1.05rem;
+  top: 0.98rem;
+  border-color: rgba(240, 175, 129, 0.38);
+  background: rgba(240, 175, 129, 0.13);
+  transform: rotate(-12deg);
+  box-shadow:
+    0 1px 2px rgba(10, 8, 14, 0.22),
+    inset 0 1px 0 rgba(244, 241, 248, 0.06);
+}
+
+.hero-portrait-art {
+  z-index: 4;
+}
+
+.hero-portrait-art.deco-warm-tape::before {
+  z-index: 5;
+}
+
+@media (min-width: 768px) {
+  .hero-portrait-art.deco-warm-tape::before {
+    left: 1.2rem;
+    top: 1.05rem;
+  }
+}
+
+.hero-meta-row {
+  color: var(--text-secondary);
+}
+
+.hero-meta-row .caption {
+  color: color-mix(in srgb, var(--text-tertiary) 78%, var(--accent-secondary) 22%);
+}
+
+.hero-meta-row .body-sm {
+  color: color-mix(in srgb, var(--text-primary) 86%, var(--highlight) 14%);
+}
+
 .hero-badge {
   transform: rotate(-1.5deg);
 }
@@ -906,8 +1042,17 @@ a {
   gap: 1.25rem;
 }
 
+.featured-curation .art-object-featured {
+  border-style: dashed;
+  border-color: rgba(149, 117, 222, 0.32);
+  box-shadow:
+    0 20px 38px rgba(12, 9, 15, 0.36),
+    0 0 0 1px rgba(244, 241, 248, 0.045);
+}
+
 .featured-image-frame {
   transition:
+    transform var(--duration-base) var(--ease-out),
     border-color var(--duration-base) var(--ease-out),
     box-shadow var(--duration-base) var(--ease-out);
 }
@@ -919,9 +1064,54 @@ a {
     0 0 18px rgba(233, 102, 160, 0.16);
 }
 
+.featured-item--taped [data-smart-image] {
+  position: absolute;
+}
+
+.featured-item--taped [data-smart-image]::before {
+  content: "";
+  position: absolute;
+  top: 1.2rem;
+  left: 0.98rem;
+  width: 2.9rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(240, 175, 129, 0.3);
+  background: rgba(240, 175, 129, 0.1);
+  transform: rotate(-9deg);
+  box-shadow:
+    0 1px 1px rgba(10, 8, 14, 0.16),
+    inset 0 1px 0 rgba(244, 241, 248, 0.04);
+  pointer-events: none;
+  z-index: 6;
+}
+
+@media (max-width: 767px) {
+  .featured-item {
+    transform: none !important;
+  }
+
+  .featured-item--taped [data-smart-image]::before {
+    top: 0.98rem;
+    left: 0.82rem;
+    width: 2.35rem;
+    height: 0.44rem;
+  }
+}
+
 .hero-heading-clean::before,
 .hero-heading-clean::after {
   content: none !important;
+}
+
+.socials-link {
+  box-shadow: 0 0 0 0 rgba(233, 102, 160, 0);
+}
+
+.socials-link:hover {
+  box-shadow:
+    0 0 0 2px rgba(233, 102, 160, 0.09),
+    0 10px 22px rgba(10, 8, 14, 0.24);
 }
 
 .art-tag {
@@ -2266,6 +2456,12 @@ a {
     linear-gradient(var(--highlight), var(--highlight)) right top / 12px 1px no-repeat,
     linear-gradient(var(--highlight), var(--highlight)) right top / 1px 12px no-repeat;
   opacity: 0.32;
+}
+
+.social-pill:hover {
+  box-shadow:
+    0 0 0 2px rgba(233, 102, 160, 0.09),
+    0 10px 22px rgba(10, 8, 14, 0.24);
 }
 
 .spin-celebration {

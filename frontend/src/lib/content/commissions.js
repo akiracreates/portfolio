@@ -250,34 +250,34 @@ export const commissionProcess = [
 export const whatToExpect = [
   {
     id: "communication",
-    short: { en: "regular updates and clear communication", ru: "регулярные обновления и понятная связь" },
+    short: { en: "regular updates and clear communication", ru: "регулярные апдейты и понятное общение" },
     long:  {
-      en: "regular updates and clear communication",
-      ru: "регулярные обновления и понятная связь",
+      en: "i’ll keep you in the loop while the piece develops",
+      ru: "я буду показывать, как работа развивается в процессе",
     },
   },
   {
     id: "payment",
-    short: { en: "sketches + revisions before the final piece", ru: "скетчи + правки до финальной версии" },
+    short: { en: "sketches + revisions before the final piece", ru: "скетч и правки до финальной работы" },
     long:  {
-      en: "sketches + revisions before the final piece",
-      ru: "скетчи + правки до финальной версии",
+      en: "you’ll see the direction early, before everything is finalized",
+      ru: "ты увидишь направление заранее, пока всё ещё можно поправить",
     },
   },
   {
     id: "revisions",
     short: { en: "full payment upfront", ru: "полная оплата заранее" },
     long:  {
-      en: "full payment upfront",
-      ru: "полная оплата заранее",
+      en: "payment is completed after we agree on the idea and price",
+      ru: "оплата происходит после того, как мы согласуем идею и цену",
     },
   },
   {
     id: "turnaround",
     short: { en: "finished within ~2 weeks", ru: "готово примерно за ~2 недели" },
     long:  {
-      en: "finished within ~2 weeks",
-      ru: "готово примерно за ~2 недели",
+      en: "timing depends on complexity, but i’ll tell you before we start",
+      ru: "срок зависит от сложности, но я скажу его до начала работы",
     },
   },
 ];

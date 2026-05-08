@@ -30,7 +30,7 @@ export function SocialsFooterSection({ dict, locale = "en" }) {
                 href={s.url}
                 target={s.id === "email" ? undefined : "_blank"}
                 rel={s.id === "email" ? undefined : "noreferrer noopener"}
-                className={`group flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors duration-[var(--duration-base)] focus-visible-ring ${
+                className={`socials-link group flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-[background-color,border-color,box-shadow] duration-[var(--duration-base)] focus-visible-ring ${
                   s.primary
                     ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
                     : "border-border-subtle bg-bg-surface hover:border-border-default hover:bg-bg-surface-raised"

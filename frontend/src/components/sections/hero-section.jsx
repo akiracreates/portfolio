@@ -15,74 +15,80 @@ export function HeroSection({ dict, locale = "en" }) {
     >
       <Container className="relative py-16 md:py-20 lg:py-24">
         <div className="hero-cover card-surface-warm overflow-hidden p-2 md:p-3">
-          <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
-            <div className="hero-copy space-y-8 md:space-y-9">
-              <Eyebrow>{t.eyebrow}</Eyebrow>
-              <h1
-                id="hero-heading"
-                className="hero-heading-clean heading-display max-w-3xl"
-              >
-                {t.titleLeading}{" "}
-                <span className="text-highlight">{t.titleHighlight}</span>
-                {t.titleTrailing}
-              </h1>
-              <div className="max-w-2xl space-y-2">
-                <p className="body-lg">{t.lead}</p>
-                {t.supportingText ? <p className="body">{t.supportingText}</p> : null}
-              </div>
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Button
-                  as="link"
-                  href={`/${locale}/about`}
-                  variant="warm-outline"
-                  size="lg"
+          <div className="hero-cover-inner">
+            <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
+              <div className="hero-copy space-y-8 md:space-y-9">
+                <Eyebrow>{t.eyebrow}</Eyebrow>
+                <h1
+                  id="hero-heading"
+                  className="hero-heading-clean heading-display max-w-3xl"
                 >
-                  {t.ctaAbout}
-                </Button>
-                <Button
-                  as="link"
-                  href={`/${locale}/portfolio`}
-                  variant="outline"
-                  size="lg"
-                >
-                  {t.ctaPrimary}
-                </Button>
-                <Button
-                  as="link"
-                  href={`/${locale}/commissions`}
-                  variant="primary"
-                  size="lg"
-                >
-                  {t.ctaSecondary}
-                </Button>
+                  {t.titleLeading}{" "}
+                  <span className="text-highlight">{t.titleHighlight}</span>
+                  {t.titleTrailing}
+                </h1>
+                <div className="max-w-2xl space-y-2">
+                  <p className="body-lg">
+                    {t.leadPrefix}
+                    <span className="deco-dashed-underline">{t.leadEmphasis}</span>
+                  </p>
+                  {t.supportingText ? <p className="body">{t.supportingText}</p> : null}
+                </div>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <Button
+                    as="link"
+                    href={`/${locale}/about`}
+                    variant="warm-outline"
+                    size="lg"
+                  >
+                    {t.ctaAbout}
+                  </Button>
+                  <Button
+                    as="link"
+                    href={`/${locale}/portfolio`}
+                    variant="outline"
+                    size="lg"
+                  >
+                    {t.ctaPrimary}
+                  </Button>
+                  <Button
+                    as="link"
+                    href={`/${locale}/commissions`}
+                    variant="primary"
+                    size="lg"
+                  >
+                    {t.ctaSecondary}
+                  </Button>
+                </div>
+                <div className="broken-divider max-w-lg" aria-hidden />
+                <div className="hero-meta-row flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
+                  <Stat label={t.statCommissions} value={t.statCommissionsValue} />
+                  <Sep />
+                  <Stat label={t.statResponse} value={t.statResponseValue} />
+                </div>
               </div>
-              <div className="broken-divider max-w-lg" aria-hidden />
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
-                <Stat label={t.statCommissions} value={t.statCommissionsValue} />
-                <Sep />
-                <Stat label={t.statResponse} value={t.statResponseValue} />
-              </div>
-            </div>
 
-            <div className="hero-portrait-wrap">
-              <div className="relative mx-auto max-w-[620px] lg:ml-auto">
-                <ImageFrame
-                  variant="hero"
-                  className="deco-warm-tape relative w-full shadow-lg md:rotate-[0.4deg]"
-                  style={{ aspectRatio: "2500 / 3000" }}
-                >
-                  <SmartImage
-                    src={imagekitUrl("images/portraits/self")}
-                    alt={t.imageAlt}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 560px"
-                    imgClassName="object-contain p-4 md:p-6"
-                  />
-                </ImageFrame>
-                <p className="deco-warm-dot absolute -bottom-4 left-3 text-xs text-text-tertiary/80 sm:left-2">
-                  {t.badgeTitle}
-                </p>
+              <div className="hero-portrait-wrap">
+                <div className="relative mx-auto max-w-[620px] lg:ml-auto">
+                  <ImageFrame
+                    variant="hero"
+                    className="hero-portrait-frame relative w-full md:rotate-[0.4deg]"
+                    style={{ aspectRatio: "2500 / 3000" }}
+                  >
+                    <SmartImage
+                      src={imagekitUrl("images/portraits/self")}
+                      alt={t.imageAlt}
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 560px"
+                      className="hero-portrait-art deco-warm-tape"
+                      imgClassName="object-contain p-4 md:p-6"
+                    />
+                  </ImageFrame>
+                  <p className="absolute -bottom-3 left-3 text-xs text-text-secondary/86 sm:left-2">
+                    {t.badgeTitle}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -103,6 +109,9 @@ function Stat({ label, value }) {
 
 function Sep() {
   return (
-    <span className="hidden h-3 w-px bg-border-default sm:block" aria-hidden />
+    <span
+      className="inline-block h-[5px] w-[5px] rounded-full bg-border-default/70 align-middle"
+      aria-hidden
+    />
   );
 }

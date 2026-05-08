@@ -58,12 +58,12 @@ export const dictionary = {
   },
 
   hero: {
-    eyebrow: "akira",
+    eyebrow: "akiracreates",
     titleLeading: "",
     titleHighlight: "akira",
     titleTrailing: "",
-    lead:
-      "digital-художница, рисую портреты и животных",
+    leadPrefix: "digital-художница, рисую ",
+    leadEmphasis: "портреты и животных",
     supportingText: "я люблю экспериментировать и делать работы выразительными",
     ctaPrimary: "полное портфолио",
     ctaSecondary: "коммишены",
@@ -138,8 +138,8 @@ export const dictionary = {
   },
 
   socialsFooter: {
-    eyebrow: "найти меня здесь",
-    title: "найти меня здесь",
+    eyebrow: "найди меня здесь",
+    title: "найди меня здесь",
     description: "быстрее всего связаться со мной можно в telegram",
     contactNote: "быстрее всего связаться со мной можно в telegram",
   },
@@ -333,7 +333,7 @@ export const dictionary = {
     info: "инфо",
     connect: "связь",
     rights: "все права защищены.",
-    crafted: "сделано с заботой.",
+    crafted: "добро пожаловать в мой творческий беспорядок",
   },
 
   notFound: {

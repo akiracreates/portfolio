@@ -14,10 +14,10 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
   const t = dict.featured;
   const featured = getHomepageFeaturedArtworks();
   const layouts = [
-    "md:translate-y-2 md:rotate-[-0.7deg]",
-    "md:-translate-y-2 md:rotate-[0.55deg]",
-    "md:translate-y-4 md:rotate-[0.35deg]",
-    "md:translate-y-1 md:rotate-[-0.45deg]",
+    "md:translate-y-2 md:rotate-[-0.85deg]",
+    "md:-translate-y-2 md:rotate-[0.7deg]",
+    "md:translate-y-3 md:rotate-[-0.35deg]",
+    "md:-translate-y-1 md:rotate-[0.95deg]",
   ];
 
   return (
@@ -26,6 +26,7 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
       <Container>
       <Section
         id="featured"
+        className="featured-section"
         eyebrow={t.eyebrow}
         title={t.title}
         action={
@@ -46,7 +47,7 @@ export function FeaturedWorkSection({ dict, locale = "en" }) {
               <Link
                 key={artwork.id}
                 href={href}
-                className={`block rounded-[18px] focus-visible-ring transition-transform duration-[var(--duration-base)] ${layouts[index % layouts.length]}`}
+                className={`featured-item block rounded-[18px] focus-visible-ring transition-transform duration-[var(--duration-base)] ${layouts[index % layouts.length]} ${index === 1 ? "featured-item--taped" : ""}`}
                 aria-label={`${artwork.category}`}
               >
                 <ArtworkCard

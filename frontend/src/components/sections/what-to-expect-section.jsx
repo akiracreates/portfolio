@@ -34,11 +34,13 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
           {homepageExpectations.map((item) => (
             <li
               key={item.id}
-              className={`scrap-note expect-card process-card soft-glow-hover flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] hover:border-border-accent ${
+              className={`scrap-note expect-card process-card flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] ${
                 WARM_EXPECTATION_IDS.has(item.id) ? "note-surface-warm" : ""
-              }`}
+              } ${item.id === "turnaround" ? "expect-card--turnaround expect-card--turnaround-amber" : ""}`.trim()}
             >
-              <p className="heading-h3 text-[0.95rem] text-text-primary">
+              <p
+                className={`heading-h3 text-[0.95rem] text-text-primary ${item.id === "turnaround" ? "expect-card-turnaround-title" : ""}`.trim()}
+              >
                 {pickLocale(item.short, locale)}
               </p>
               <p className="body-sm">{pickLocale(item.long, locale)}</p>

@@ -58,12 +58,12 @@ export const dictionary = {
   },
 
   hero: {
-    eyebrow: "akira",
+    eyebrow: "akiracreates",
     titleLeading: "",
     titleHighlight: "akira",
     titleTrailing: "",
-    lead:
-      "digital artist specializing in portraits and animals",
+    leadPrefix: "digital artist specializing in ",
+    leadEmphasis: "portraits and animals",
     supportingText: "i love experimenting and being expressive in my work",
     ctaPrimary: "full portfolio",
     ctaSecondary: "commissions",
@@ -333,7 +333,7 @@ export const dictionary = {
     info: "info",
     connect: "connect",
     rights: "all rights reserved.",
-    crafted: "crafted with care.",
+    crafted: "welcome to my artistic mess",
   },
 
   notFound: {

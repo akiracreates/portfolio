@@ -80,7 +80,7 @@ export function Footer() {
                     >
                       a
                     </span>
-                    <span className="deco-warm-dot font-display text-[1.2rem] font-medium text-text-primary">
+                    <span className="font-display text-[1.2rem] font-medium text-text-primary">
                       akira
                     </span>
                   </Link>
@@ -103,9 +103,9 @@ export function Footer() {
             </div>
 
             <div className="lg:col-span-7">
-              <ul className="grid gap-3 sm:grid-cols-2">
+              <ul className="grid items-stretch gap-3 sm:grid-cols-2">
                 {links.map((s) => (
-                  <li key={s.id}>
+                  <li key={s.id} className="min-w-0">
                     {(() => {
                       const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
                       return (
@@ -115,7 +115,7 @@ export function Footer() {
                       rel={
                         s.id === "email" ? undefined : "noreferrer noopener"
                       }
-                      className={`social-pill group flex items-center gap-3 p-4 transition-colors focus-visible-ring ${
+                      className={`social-pill group flex h-full min-h-[92px] items-start gap-3 p-4 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
                         s.id === "telegram-personal" ? "note-surface-warm " : ""
                       }${
                         s.primary
@@ -124,7 +124,7 @@ export function Footer() {
                       }`}
                     >
                       <span
-                        className={`flex h-8 w-8 items-center justify-center rounded-md ${
+                        className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-md ${
                           s.primary
                             ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
                             : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
@@ -133,13 +133,13 @@ export function Footer() {
                       >
                         <NavIcon id={s.id} />
                       </span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline gap-2">
+                      <div className="flex min-w-0 flex-1 flex-col justify-between gap-1.5">
+                        <div className="flex items-start justify-between gap-2">
                           <p className="body-sm font-medium text-text-primary">
                             {label}
                           </p>
                           {s.primary && (
-                            <span className="caption text-highlight">
+                            <span className="caption shrink-0 text-highlight">
                               {dict?.common?.preferred || "preferred"}
                             </span>
                           )}
