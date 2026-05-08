@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { SectionDividerBleed } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { PageHeader } from "@/components/layout/page-header";
 import { PortfolioCategoryShowcase } from "@/components/portfolio/portfolio-category-tabs";
@@ -38,7 +39,8 @@ export function PortfolioPage({ dict, locale = "en" }) {
       </Container>
 
       {/* soft CTA */}
-      <section className="section-scrap border-t border-dashed border-border-subtle bg-bg-base">
+      <section className="section-scrap bg-bg-base">
+        <SectionDividerBleed />
         <Container className="py-16 md:py-20">
           <div className="scrap-note mx-auto max-w-2xl space-y-6 p-6 text-center md:p-8">
             <Heading level="h2">{t.closingTitle}</Heading>

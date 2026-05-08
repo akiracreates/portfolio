@@ -4,7 +4,7 @@ const variants = {
   raised:
     "scrap-card shadow-lg",
   outline:
-    "border border-dashed border-border-default bg-transparent",
+    "border border-dashed border-border-purple/70 bg-bg-inset/40",
 };
 
 export function Card({

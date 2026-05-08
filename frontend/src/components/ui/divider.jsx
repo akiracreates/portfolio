@@ -6,7 +6,7 @@ export function Divider({ variant = "subtle", className = "" }) {
 export function SectionDividerBleed({ variant = "subtle", className = "" }) {
   const cls = variant === "strong" ? "divider-strong" : "broken-divider";
   return (
-    <div className={`divider-bleed-host ${className}`.trim()} aria-hidden>
+    <div className={`section-divider divider-bleed-host ${className}`.trim()} aria-hidden>
       <hr className={`${cls} divider-bleed-line`.trim()} />
     </div>
   );

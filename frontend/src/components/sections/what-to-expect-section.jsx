@@ -12,6 +12,8 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
     <Container>
       <Section
         id="what-to-expect"
+        separator
+        separatorClassName="section-divider-mini"
         eyebrow={t.eyebrow}
         title={t.title}
         description={t.description}

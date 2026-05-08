@@ -5,11 +5,11 @@ const base =
 
 const variants = {
   /** primary CTA — uses the highlight pink. Reserve for ONE per section. */
-  primary: `${base} border-highlight bg-highlight text-text-on-highlight hover:bg-highlight-hover hover:-translate-y-[2px] hover:shadow-[0_0_0_3px_rgba(233,102,160,0.16),0_14px_28px_rgba(10,8,14,0.3)] active:translate-y-0`,
+  primary: `${base} border-highlight bg-highlight text-text-on-highlight hover:bg-highlight-hover hover:-translate-y-[2px] hover:shadow-[0_0_0_3px_rgba(233,102,160,0.2),0_0_24px_rgba(233,102,160,0.2),0_14px_28px_rgba(10,8,14,0.3)] active:translate-y-0`,
   /** secondary CTA — purple accent. Default for most actions. */
-  secondary: `${base} border-accent-2 bg-accent text-text-on-accent hover:bg-accent-hover hover:-translate-y-[2px] hover:shadow-[0_0_0_3px_rgba(149,117,222,0.15),0_14px_28px_rgba(10,8,14,0.3)] active:translate-y-0`,
+  secondary: `${base} border-accent-2 bg-accent text-text-on-accent hover:bg-accent-hover hover:-translate-y-[2px] hover:shadow-[0_0_0_3px_rgba(149,117,222,0.18),0_0_24px_rgba(149,117,222,0.16),0_14px_28px_rgba(10,8,14,0.3)] active:translate-y-0`,
   /** outline — neutral on dark surfaces. */
-  outline: `${base} border-border-strong bg-bg-inset/45 text-text-primary hover:border-highlight hover:bg-highlight-soft hover:-translate-y-[1px] hover:text-text-primary hover:shadow-[0_0_0_3px_rgba(233,102,160,0.09)] active:translate-y-0`,
+  outline: `${base} border-border-strong bg-bg-inset/45 text-text-primary hover:border-highlight hover:bg-highlight-soft hover:-translate-y-[1px] hover:text-text-primary hover:shadow-[0_0_0_3px_rgba(233,102,160,0.14),0_0_18px_rgba(149,117,222,0.11)] active:translate-y-0`,
   /** ghost — inline / tertiary actions. */
   ghost: `${base} border-transparent bg-transparent text-text-secondary shadow-none hover:border-border-default hover:bg-bg-surface hover:text-text-primary`,
 };

@@ -2,6 +2,7 @@ import { Fragment } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { Divider, SectionDividerBleed } from "@/components/ui/divider";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
 import { ImageFrame } from "@/components/ui/image-frame";
@@ -73,13 +74,7 @@ function StickyNote({ title, body, className = "" }) {
 }
 
 function ChapterDivider() {
-  return (
-    <div className="about-chapter-divider" aria-hidden>
-      <span />
-      <span />
-      <span />
-    </div>
-  );
+  return <SectionDividerBleed className="about-chapter-divider" />;
 }
 
 function AboutHero({ t, locale, heroNote }) {
@@ -91,7 +86,7 @@ function AboutHero({ t, locale, heroNote }) {
         <Heading level="h1" className="max-w-3xl">
           {t.pageTitle}
         </Heading>
-        <div className="about-underline" aria-hidden />
+        <Divider className="about-underline" />
         <p className="body-lg max-w-2xl">{t.pageDescription}</p>
       </div>
 
@@ -113,7 +108,7 @@ function OriginChapter({ chapter }) {
           <Heading level="h2" className="max-w-xl">
             {chapter.title}
           </Heading>
-          <div className="about-underline" aria-hidden />
+          <Divider className="about-underline" />
           <div className="about-origin-prose">
             <div className="about-origin-cluster" aria-label={chapter.title}>
               {chapter.images?.map((image, index) => (
@@ -197,7 +192,7 @@ function DigitalArtChapter({ chapter, locale }) {
           <Heading level="h2" className="about-board-title">
             {chapter.title}
           </Heading>
-          <div className="about-underline" aria-hidden />
+          <Divider className="about-underline" />
           {chapter.noteCard?.label ? (
             <p className="caption about-board-note-label text-highlight">
               {chapter.noteCard.label}
@@ -225,7 +220,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
         <Heading level="h2" className="about-timeline-title">
           {chapter.title}
         </Heading>
-        <div className="about-underline" aria-hidden />
+        <Divider className="about-underline" />
         {chapter.body?.map((paragraph) => (
           <p key={paragraph} className="body about-timeline-paragraph">
             {paragraph}
@@ -326,7 +321,7 @@ function UpsAndDownsChapter({ chapter, locale }) {
       <div className="about-chapter-copy about-comparison-copy">
         <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
         <Heading level="h2">{chapter.title}</Heading>
-        <div className="about-underline" aria-hidden />
+        <Divider className="about-underline" />
         {chapter.body?.map((paragraph) => (
           <p key={paragraph} className="body">
             {paragraph}
@@ -370,7 +365,7 @@ function CurrentSelfSection({ chapter, locale }) {
           <Heading level="h2" className="about-current-title">
             {chapter.title}
           </Heading>
-          <div className="about-underline" aria-hidden />
+          <Divider className="about-underline" />
         </div>
 
         <div className="about-current-prose">

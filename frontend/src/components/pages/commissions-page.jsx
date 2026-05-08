@@ -56,6 +56,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="offers"
+          separator
           eyebrow={pickLocale({ en: "pricing cards", ru: "карточки с ценами" }, locale)}
           title={pickLocale({ en: "commissions are open", ru: "коммишены открыты" }, locale)}
           size="md"
@@ -65,6 +66,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="prices"
+          separator
           title={pickLocale({ en: "detailed pricing breakdown", ru: "детальная разбивка цен" }, locale)}
           size="md"
         >
@@ -82,6 +84,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="expect"
+          separator
           title={pickLocale({ en: "clear expectations from day one", ru: "четкие ожидания с первого дня" }, locale)}
           size="md"
         >
@@ -90,6 +93,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="process"
+          separator
           title={pickLocale({ en: "how a commission flows", ru: "как проходит заказ" }, locale)}
           size="md"
         >
@@ -98,6 +102,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="delivery"
+          separator
           eyebrow={pickLocale({ en: "delivery", ru: "доставка" }, locale)}
           title={pickLocale({ en: "delivery details", ru: "детали доставки" }, locale)}
           size="md"
@@ -139,11 +144,11 @@ export function CommissionsPage({ locale = "en" }) {
           </div>
         </Section>
 
-        <Section id="terms" title={pickLocale(commissionTerms.title, locale)} size="md">
+        <Section id="terms" separator title={pickLocale(commissionTerms.title, locale)} size="md">
           <TermsPanels locale={locale} data={commissionTerms} />
         </Section>
 
-        <Section id="order" size="md">
+        <Section id="order" separator size="md">
           <OrderCta
             locale={locale}
             route={requestPath}
@@ -156,6 +161,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="faq"
+          separator
           title={pickLocale({ en: "additional information and faq", ru: "дополнительная информация и faq" }, locale)}
           size="md"
         >
@@ -164,6 +170,7 @@ export function CommissionsPage({ locale = "en" }) {
 
         <Section
           id="contact-alt"
+          separator
           eyebrow={pickLocale({ en: "or just say hi", ru: "или просто напишите" }, locale)}
           title={pickLocale({ en: "alternative contact", ru: "альтернативная связь" }, locale)}
           description={pickLocale(

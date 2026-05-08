@@ -35,8 +35,8 @@ export function Footer() {
 
   if (useCompactFooter) {
     return (
-      <footer className="site-ending mt-12">
-        <SectionDividerBleed />
+      <footer className="site-ending">
+        <SectionDividerBleed className="mt-0 mb-6 md:mb-7" />
         <Container className="py-8 md:py-9">
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="caption">
@@ -58,8 +58,8 @@ export function Footer() {
   }
 
   return (
-    <footer id="socials" className="site-ending mt-12">
-      <SectionDividerBleed />
+    <footer id="socials" className="site-ending">
+      <SectionDividerBleed className="mt-0 mb-7 md:mb-8" />
       <Container className="py-12 md:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
