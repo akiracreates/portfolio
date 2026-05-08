@@ -117,152 +117,98 @@ export function Footer() {
             </div>
 
             <div className="lg:col-span-7">
-              {isHomeRoute ? (
-                <>
-                  <div className="space-y-3 md:hidden">
-                    <ul className="grid items-stretch gap-2.5">
-                      {contactLinks.map((s) => {
-                        const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
-                        return (
-                          <li key={s.id} className="min-w-0">
-                            <a
-                              href={s.url}
-                              target={s.id === "email" ? undefined : "_blank"}
-                              rel={s.id === "email" ? undefined : "noreferrer noopener"}
-                              className={`social-pill group flex h-full min-h-[84px] items-start gap-3 p-3.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
+              <>
+                <div className="space-y-3 md:hidden">
+                  <ul className="grid items-stretch gap-2.5">
+                    {contactLinks.map((s) => {
+                      const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
+                      return (
+                        <li key={s.id} className="min-w-0">
+                          <a
+                            href={s.url}
+                            target={s.id === "email" ? undefined : "_blank"}
+                            rel={s.id === "email" ? undefined : "noreferrer noopener"}
+                            className={`social-pill group flex h-full min-h-[84px] items-start gap-3 p-3.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
+                              s.id === "telegram-personal"
+                                ? "note-surface-warm border-border-accent bg-accent-soft hover:bg-accent-strong"
+                                : "border-border-subtle hover:border-border-default hover:bg-bg-surface-raised"
+                            }`}
+                            aria-label={label}
+                            title={label}
+                          >
+                            <span
+                              className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-md ${
                                 s.id === "telegram-personal"
-                                  ? "note-surface-warm border-border-accent bg-accent-soft hover:bg-accent-strong"
-                                  : "border-border-subtle hover:border-border-default hover:bg-bg-surface-raised"
+                                  ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
+                                  : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
                               }`}
-                              aria-label={label}
-                              title={label}
+                              aria-hidden
                             >
-                              <span
-                                className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-md ${
-                                  s.id === "telegram-personal"
-                                    ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
-                                    : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
-                                }`}
-                                aria-hidden
-                              >
-                                <NavIcon id={s.id} />
-                              </span>
-                              <div className="flex min-w-0 flex-1 flex-col justify-between gap-1.5">
-                                <div className="flex items-start justify-between gap-2">
-                                  <p className="body-sm font-medium text-text-primary">{label}</p>
-                                  {s.id === "telegram-personal" && (
-                                    <span className="caption shrink-0 text-highlight">
-                                      {dict?.common?.preferred || "preferred"}
-                                    </span>
-                                  )}
-                                </div>
-                                {s.handle && <p className="caption truncate">{s.handle}</p>}
-                              </div>
-                            </a>
-                          </li>
-                        );
-                      })}
-                    </ul>
-
-                    <ul className="grid grid-cols-2 gap-2">
-                      {secondaryLinks.map((s) => {
-                        const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
-                        const shortLabel =
-                          s.id === "telegram-channel"
-                            ? "channel"
-                            : s.id === "vk"
-                              ? "vk"
-                              : s.id === "cara"
-                                ? "cara"
-                                : "patreon";
-                        return (
-                          <li key={s.id} className="min-w-0">
-                            <a
-                              href={s.url}
-                              target="_blank"
-                              rel="noreferrer noopener"
-                              className={`social-pill group flex min-h-[62px] items-center gap-2.5 rounded-[12px] border border-dashed px-3 py-2.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
-                                s.id === "cara"
-                                  ? "border-[color:var(--accent-warm-muted)] bg-[color:var(--surface-warm-paper)] hover:border-[color:var(--accent-warm)] hover:bg-[color:var(--bg-surface-warm)]"
-                                  : "border-border-subtle bg-bg-surface hover:border-border-default hover:bg-bg-surface-raised"
-                              }`}
-                              aria-label={label}
-                              title={label}
-                            >
-                              <span
-                                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-dashed ${
-                                  s.id === "cara"
-                                    ? "border-[color:var(--accent-warm-muted)] bg-[color:var(--accent-warm-faint)] text-accent-warm"
-                                    : "border-border-subtle bg-bg-inset text-text-secondary"
-                                }`}
-                                aria-hidden
-                              >
-                                <NavIcon id={s.id} />
-                              </span>
-                              <span className="body-sm truncate text-text-primary">
-                                {shortLabel}
-                              </span>
-                            </a>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-
-                  <ul className="hidden items-stretch gap-3 md:grid sm:grid-cols-2">
-                    {links.map((s) => (
-                      <li key={s.id} className="min-w-0">
-                        {(() => {
-                          const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
-                          return (
-                            <a
-                              href={s.url}
-                              target={s.id === "email" ? undefined : "_blank"}
-                              rel={
-                                s.id === "email" ? undefined : "noreferrer noopener"
-                              }
-                              className={`social-pill group flex h-full min-h-[96px] items-start gap-3 p-4 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
-                                s.id === "telegram-personal" ? "note-surface-warm " : ""
-                              }${
-                                s.primary
-                                  ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
-                                  : "hover:border-border-default hover:bg-bg-surface-raised"
-                              }`}
-                            >
-                              <span
-                                className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-md ${
-                                  s.primary
-                                    ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
-                                    : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
-                                }`}
-                                aria-hidden
-                              >
-                                <NavIcon id={s.id} />
-                              </span>
-                              <div className="flex min-w-0 flex-1 flex-col justify-between gap-1.5">
-                                <div className="flex items-start justify-between gap-2">
-                                  <p className="body-sm font-medium text-text-primary">
-                                    {label}
-                                  </p>
-                                  {s.primary && (
-                                    <span className="caption shrink-0 text-highlight">
-                                      {dict?.common?.preferred || "preferred"}
-                                    </span>
-                                  )}
-                                </div>
-                                {s.handle && (
-                                  <p className="caption truncate">{s.handle}</p>
+                              <NavIcon id={s.id} />
+                            </span>
+                            <div className="flex min-w-0 flex-1 flex-col justify-between gap-1.5">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className="body-sm font-medium text-text-primary">{label}</p>
+                                {s.id === "telegram-personal" && (
+                                  <span className="caption shrink-0 text-highlight">
+                                    {dict?.common?.preferred || "preferred"}
+                                  </span>
                                 )}
                               </div>
-                            </a>
-                          );
-                        })()}
-                      </li>
-                    ))}
+                              {s.handle && <p className="caption truncate">{s.handle}</p>}
+                            </div>
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
-                </>
-              ) : (
-                <ul className="grid items-stretch gap-3 sm:grid-cols-2">
+
+                  <ul className="grid grid-cols-2 gap-2">
+                    {secondaryLinks.map((s) => {
+                      const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
+                      const shortLabel =
+                        s.id === "telegram-channel"
+                          ? "channel"
+                          : s.id === "vk"
+                            ? "vk"
+                            : s.id === "cara"
+                              ? "cara"
+                              : "patreon";
+                      return (
+                        <li key={s.id} className="min-w-0">
+                          <a
+                            href={s.url}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className={`social-pill group flex min-h-[62px] items-center gap-2.5 rounded-[12px] border border-dashed px-3 py-2.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
+                              s.id === "cara"
+                                ? "border-[color:var(--accent-warm-muted)] bg-[color:var(--surface-warm-paper)] hover:border-[color:var(--accent-warm)] hover:bg-[color:var(--bg-surface-warm)]"
+                                : "border-border-subtle bg-bg-surface hover:border-border-default hover:bg-bg-surface-raised"
+                            }`}
+                            aria-label={label}
+                            title={label}
+                          >
+                            <span
+                              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-dashed ${
+                                s.id === "cara"
+                                  ? "border-[color:var(--accent-warm-muted)] bg-[color:var(--accent-warm-faint)] text-accent-warm"
+                                  : "border-border-subtle bg-bg-inset text-text-secondary"
+                              }`}
+                              aria-hidden
+                            >
+                              <NavIcon id={s.id} />
+                            </span>
+                            <span className="body-sm truncate text-text-primary">
+                              {shortLabel}
+                            </span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+
+                <ul className="hidden items-stretch gap-3 md:grid sm:grid-cols-2">
                 {links.map((s) => (
                   <li key={s.id} className="min-w-0">
                     {(() => {
@@ -313,7 +259,7 @@ export function Footer() {
                   </li>
                 ))}
                 </ul>
-              )}
+              </>
             </div>
           </div>
         </Container>

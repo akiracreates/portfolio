@@ -100,29 +100,39 @@ function AboutHero({ t, locale, heroNote }) {
 }
 
 function OriginChapter({ chapter }) {
-  const imageCluster = (
+  const renderOriginArtifact = (image, index) => (
+    <figure
+      key={image.id}
+      className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
+    >
+      <ArtifactImage
+        image={image}
+        alt={image.alt}
+        size="origin"
+        sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
+        className={`about-origin-frame ${index === 0 ? "deco-warm-corner" : ""}`.trim()}
+        imgClassName="object-contain p-2.5 md:p-3"
+      />
+      <figcaption className="about-attached-caption about-origin-caption note-surface-warm">
+        <p className="caption text-highlight deco-warm-label">{image.label}</p>
+        <p className="body-sm text-text-primary">{image.caption}</p>
+      </figcaption>
+    </figure>
+  );
+
+  const renderImageCluster = () => (
     <div className="about-origin-cluster" aria-label={chapter.title}>
-      {chapter.images?.map((image, index) => (
-        <figure
-          key={image.id}
-          className={`about-artifact about-origin-artifact about-origin-artifact--${index + 1}`}
-        >
-          <ArtifactImage
-            image={image}
-            alt={image.alt}
-            size="origin"
-            sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
-            className={`about-origin-frame ${index === 0 ? "deco-warm-corner" : ""}`.trim()}
-            imgClassName="object-contain p-2.5 md:p-3"
-          />
-          <figcaption className="about-attached-caption about-origin-caption note-surface-warm">
-            <p className="caption text-highlight deco-warm-label">{image.label}</p>
-            <p className="body-sm text-text-primary">{image.caption}</p>
-          </figcaption>
-        </figure>
-      ))}
+      {chapter.images?.map((image, index) => renderOriginArtifact(image, index))}
     </div>
   );
+
+  const leadArtifact = chapter.images?.[0]
+    ? renderOriginArtifact(chapter.images[0], 0)
+    : null;
+  const tailArtifact = chapter.images?.[1]
+    ? renderOriginArtifact(chapter.images[1], 1)
+    : null;
+
   return (
     <article className="about-spread about-origin">
       <div className="about-origin-story">
@@ -134,14 +144,22 @@ function OriginChapter({ chapter }) {
             {chapter.title}
           </Heading>
           <Divider className="about-underline" />
-          <div className="about-origin-cluster-mobile">{imageCluster}</div>
+          <div className="about-origin-cluster-mobile-phone about-origin-cluster-mobile-phone--lead">
+            {leadArtifact}
+          </div>
           <div className="about-origin-prose">
-            <div className="about-origin-cluster-desktop">{imageCluster}</div>
+            <div className="about-origin-cluster-desktop">{renderImageCluster()}</div>
             {chapter.body?.map((paragraph) => (
               <p key={paragraph} className="body">
                 {paragraph}
               </p>
             ))}
+          </div>
+          <div className="about-origin-cluster-mobile-phone about-origin-cluster-mobile-phone--tail">
+            {tailArtifact}
+          </div>
+          <div className="about-origin-cluster-mobile about-origin-cluster-mobile-tablet">
+            {renderImageCluster()}
           </div>
         </div>
       </div>
