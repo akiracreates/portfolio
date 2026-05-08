@@ -4,6 +4,8 @@ import { Section } from "@/components/ui/section";
 import { whatToExpect } from "@/lib/content/commissions";
 import { pickLocale } from "@/lib/i18n/config";
 
+const WARM_EXPECTATION_IDS = new Set(["communication", "payment"]);
+
 export function WhatToExpectSection({ dict, locale = "en" }) {
   const t = dict.whatToExpect;
   const homepageExpectations = whatToExpect.slice(0, 4);
@@ -32,7 +34,9 @@ export function WhatToExpectSection({ dict, locale = "en" }) {
           {homepageExpectations.map((item) => (
             <li
               key={item.id}
-              className="scrap-note expect-card process-card soft-glow-hover flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] hover:border-border-accent"
+              className={`scrap-note expect-card process-card soft-glow-hover flex flex-col gap-2 p-5 transition-colors duration-[var(--duration-base)] hover:border-border-accent ${
+                WARM_EXPECTATION_IDS.has(item.id) ? "note-surface-warm" : ""
+              }`}
             >
               <p className="heading-h3 text-[0.95rem] text-text-primary">
                 {pickLocale(item.short, locale)}

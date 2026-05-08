@@ -116,7 +116,7 @@ export function PortfolioCategoryTabs({
             }}
             aria-current={isActive ? "true" : undefined}
             className={`portfolio-tab focus-visible-ring ${
-              isActive ? "is-active" : ""
+              isActive ? "is-active note-surface-warm deco-warm-pin" : ""
             }`}
           >
             {cat}

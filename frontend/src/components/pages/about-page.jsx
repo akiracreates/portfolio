@@ -93,7 +93,7 @@ function AboutHero({ t, locale, heroNote }) {
       <StickyNote
         title={locale === "ru" ? "заметка" : "sticky note"}
         body={heroNote}
-        className="about-hero-note"
+        className="about-hero-note note-surface-warm"
       />
     </section>
   );
@@ -121,11 +121,11 @@ function OriginChapter({ chapter }) {
                     alt={image.alt}
                     size="origin"
                     sizes="(max-width: 767px) 82vw, (max-width: 1199px) 28vw, 260px"
-                    className="about-origin-frame"
+                    className={`about-origin-frame ${index === 0 ? "deco-warm-corner" : ""}`.trim()}
                     imgClassName="object-contain p-2.5 md:p-3"
                   />
-                  <figcaption className="about-attached-caption about-origin-caption">
-                    <p className="caption text-highlight">{image.label}</p>
+                  <figcaption className="about-attached-caption about-origin-caption note-surface-warm">
+                    <p className="caption text-highlight deco-warm-label">{image.label}</p>
                     <p className="body-sm text-text-primary">{image.caption}</p>
                   </figcaption>
                 </figure>
@@ -214,7 +214,7 @@ function DigitalArtChapter({ chapter, locale }) {
 
 function SelfPortraitTimeline({ chapter, locale }) {
   return (
-    <article className="about-spread about-timeline">
+    <article className="about-spread about-timeline card-surface-warm">
       <div className="about-timeline-copy">
         <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
         <Heading level="h2" className="about-timeline-title">
@@ -227,7 +227,7 @@ function SelfPortraitTimeline({ chapter, locale }) {
           </p>
         ))}
         {chapter.note?.body ? (
-          <p className="body about-timeline-reflection">{chapter.note.body}</p>
+          <p className="body about-timeline-reflection deco-warm-underline">{chapter.note.body}</p>
         ) : null}
       </div>
 
@@ -254,7 +254,9 @@ function SelfPortraitTimeline({ chapter, locale }) {
               style={{ gridColumn: index + 1 }}
             >
               <div className="about-timeline-meta">
-                <span className="about-year-chip">{item.year}</span>
+                <span className={`about-year-chip ${index === 1 || index === 3 ? "deco-warm-pin" : ""}`}>
+                  {item.year}
+                </span>
                 <span className="caption">{item.age}</span>
               </div>
               <div className="about-timeline-connector" aria-hidden />
@@ -335,7 +337,7 @@ function UpsAndDownsChapter({ chapter, locale }) {
           <StickyNote
             key={note}
             body={note}
-            className={`about-comparison-note about-comparison-note--${index + 1}`}
+            className={`about-comparison-note about-comparison-note--${index + 1} note-surface-warm`}
           />
         ))}
       </div>
@@ -346,7 +348,7 @@ function UpsAndDownsChapter({ chapter, locale }) {
 function CurrentSelfSection({ chapter, locale }) {
   const body = chapter.body ?? [];
   return (
-    <article className="about-spread about-current">
+    <article className="about-spread about-current card-surface-warm">
       <div className="about-current-flow">
         <figure className="about-artifact about-current-artifact">
           <span className="about-current-tag">{chapter.image.label}</span>

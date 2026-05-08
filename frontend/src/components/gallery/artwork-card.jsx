@@ -144,9 +144,7 @@ export function ArtworkRow({
             imgClassName="object-contain p-3 md:p-4"
           />
         </ImageFrame>
-        <div
-          className={`portfolio-note scrap-caption space-y-2 px-4 py-3 ${noteClass}`}
-        >
+        <div className={`portfolio-note scrap-caption space-y-2 px-4 py-3 ${noteClass}`}>
           <div className="flex items-baseline justify-between gap-3">
             <h3 className="heading-h2 text-[1.1rem] leading-tight text-text-primary">
               {title}

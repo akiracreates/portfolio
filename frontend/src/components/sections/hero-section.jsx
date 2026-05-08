@@ -14,7 +14,7 @@ export function HeroSection({ dict, locale = "en" }) {
       aria-labelledby="hero-heading"
     >
       <Container className="relative py-16 md:py-20 lg:py-24">
-        <div className="hero-cover overflow-hidden p-2 md:p-3">
+        <div className="hero-cover card-surface-warm overflow-hidden p-2 md:p-3">
           <div className="hero-divider grid items-center gap-6 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
             <div className="hero-copy space-y-8 md:space-y-9">
               <Eyebrow>{t.eyebrow}</Eyebrow>
@@ -50,7 +50,7 @@ export function HeroSection({ dict, locale = "en" }) {
                 <Button
                   as="link"
                   href={`/${locale}/commissions`}
-                  variant="ghost"
+                  variant="warm-outline"
                   size="lg"
                 >
                   {t.ctaSecondary}
@@ -68,7 +68,7 @@ export function HeroSection({ dict, locale = "en" }) {
               <div className="relative mx-auto max-w-[620px] lg:ml-auto">
                 <ImageFrame
                   variant="hero"
-                  className="relative w-full shadow-lg md:rotate-[0.4deg]"
+                  className="deco-warm-tape relative w-full shadow-lg md:rotate-[0.4deg]"
                   style={{ aspectRatio: "2500 / 3000" }}
                 >
                   <SmartImage
@@ -80,7 +80,7 @@ export function HeroSection({ dict, locale = "en" }) {
                     imgClassName="object-contain p-4 md:p-6"
                   />
                 </ImageFrame>
-                <p className="absolute -bottom-4 left-3 text-xs text-text-tertiary/80 sm:left-2">
+                <p className="deco-warm-dot absolute -bottom-4 left-3 text-xs text-text-tertiary/80 sm:left-2">
                   {t.badgeTitle}
                 </p>
               </div>

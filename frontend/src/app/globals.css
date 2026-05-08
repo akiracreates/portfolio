@@ -17,6 +17,9 @@
   --bg-inset: #241f2a;
   --bg-note: #332d36;
   --bg-overlay: rgba(20, 18, 24, 0.65);
+  --bg-surface-warm: #413541;
+  --bg-note-warm: #403342;
+  --border-warm-subtle: rgba(233, 102, 160, 0.4);
 
   /* ---------- text ramp ---------- */
   --text-primary: #f4f1f8;
@@ -38,6 +41,10 @@
   --highlight: #e966a0;
   --highlight-hover: #ed7aaf;
   --highlight-soft: rgba(233, 102, 160, 0.18);
+  --accent-warm: #f0af81;
+  --accent-warm-muted: rgba(240, 175, 129, 0.42);
+  --accent-warm-faint: rgba(240, 175, 129, 0.14);
+  --surface-warm-paper: rgba(58, 46, 50, 0.9);
 
   /* ---------- borders ---------- */
   --border-subtle: rgba(244, 241, 248, 0.08);
@@ -153,6 +160,9 @@
   --color-highlight: var(--highlight);
   --color-highlight-hover: var(--highlight-hover);
   --color-highlight-soft: var(--highlight-soft);
+  --color-accent-warm: var(--accent-warm);
+  --color-accent-warm-muted: var(--accent-warm-muted);
+  --color-accent-warm-faint: var(--accent-warm-faint);
 
   --color-border-subtle: var(--border-subtle);
   --color-border-default: var(--border-default);
@@ -558,6 +568,19 @@ a {
   background: rgba(233, 102, 160, 0.56);
 }
 
+.card-surface-warm {
+  background: var(--bg-surface-warm) !important;
+}
+
+.note-surface-warm {
+  background: var(--bg-note-warm) !important;
+}
+
+.card-surface-warm,
+.note-surface-warm {
+  border-color: var(--border-warm-subtle) !important;
+}
+
 .art-object-frame {
   position: relative;
   border-style: dashed;
@@ -726,6 +749,92 @@ a {
   inset: 6px -6px -6px 6px;
   border: 1px dashed rgba(149, 117, 222, 0.2);
   border-radius: inherit;
+  pointer-events: none;
+}
+
+.deco-warm-dot {
+  position: relative;
+}
+
+.deco-warm-dot::after {
+  content: "";
+  position: absolute;
+  top: -0.26rem;
+  right: -0.48rem;
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 999px;
+  background: var(--accent-warm-muted);
+  pointer-events: none;
+}
+
+.deco-warm-tape {
+  position: relative;
+}
+
+.deco-warm-tape::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 0.72rem;
+  width: 2.15rem;
+  height: 0.64rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(240, 175, 129, 0.36);
+  background: var(--accent-warm-faint);
+  pointer-events: none;
+  transform: rotate(-10deg);
+  z-index: 3;
+}
+
+.deco-warm-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-warm-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18rem;
+}
+
+.deco-warm-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(240, 175, 129, 0.42);
+  background: var(--accent-warm-faint);
+  color: var(--accent-warm);
+  padding: 0.18rem 0.48rem;
+  line-height: 1;
+}
+
+.deco-warm-pin {
+  position: relative;
+}
+
+.deco-warm-pin::before {
+  content: "";
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: var(--accent-warm-muted);
+  display: inline-block;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.deco-warm-corner {
+  position: relative;
+}
+
+.deco-warm-corner::after {
+  content: "";
+  position: absolute;
+  right: 0.65rem;
+  top: 0.65rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  border-top: 1px solid rgba(240, 175, 129, 0.44);
+  border-right: 1px solid rgba(240, 175, 129, 0.44);
+  border-radius: 2px;
   pointer-events: none;
 }
 

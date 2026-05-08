@@ -18,7 +18,11 @@ export function ProcessTimeline({ locale = "en", steps = [] }) {
                 {step.step}
               </span>
             </div>
-            <article className="scrap-note border-[color:var(--border-accent)]/28 bg-[color:var(--bg-note)] p-4 md:p-5">
+            <article
+              className={`scrap-note border-[color:var(--border-accent)]/28 bg-[color:var(--bg-note)] p-4 md:p-5 ${
+                step.step === 1 || step.step === 3 ? "note-surface-warm" : ""
+              }`}
+            >
               <h3 className="heading-h3 text-[1rem] text-text-primary">
                 {pickLocale(step.title, locale)}
               </h3>

@@ -3,7 +3,7 @@ import { pickLocale } from "@/lib/i18n/config";
 
 export function OrderCta({ locale = "en", route, text }) {
   return (
-    <div className="scrap-note mx-auto max-w-xl border-[color:var(--border-accent)]/35 bg-[color:var(--bg-note)] p-6 text-center">
+    <div className="scrap-note note-surface-warm mx-auto max-w-xl border-[color:var(--border-accent)]/35 bg-[color:var(--bg-note)] p-6 text-center">
       <p className="body-sm text-text-secondary">
         {pickLocale(text?.kicker, locale) || "ready to start?"}
       </p>

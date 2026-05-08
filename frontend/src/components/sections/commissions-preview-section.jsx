@@ -54,7 +54,7 @@ export function CommissionsPreviewSection({ dict, locale = "en" }) {
             </Button>
           }
         >
-          <div className="scrap-card flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div className="scrap-card card-surface-warm flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8">
             {/* status pill + types */}
             <div className="flex flex-col gap-3">
               <span className="inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-[0.75rem] font-medium text-success">

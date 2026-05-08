@@ -80,7 +80,7 @@ export function Footer() {
                     >
                       a
                     </span>
-                    <span className="font-display text-[1.2rem] font-medium text-text-primary">
+                    <span className="deco-warm-dot font-display text-[1.2rem] font-medium text-text-primary">
                       akira
                     </span>
                   </Link>
@@ -116,6 +116,8 @@ export function Footer() {
                         s.id === "email" ? undefined : "noreferrer noopener"
                       }
                       className={`social-pill group flex items-center gap-3 p-4 transition-colors focus-visible-ring ${
+                        s.id === "telegram-personal" ? "note-surface-warm " : ""
+                      }${
                         s.primary
                           ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
                           : "hover:border-border-default hover:bg-bg-surface-raised"

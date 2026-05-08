@@ -25,6 +25,7 @@ export function PortfolioPage({ dict, locale = "en" }) {
         eyebrow={t.pageEyebrow}
         title={t.pageTitle}
         description={t.pageDescription}
+        tone="warm"
       />
 
       <Container className="pt-8 pb-16 md:pb-24">
@@ -42,7 +43,7 @@ export function PortfolioPage({ dict, locale = "en" }) {
       <section className="section-scrap bg-bg-base">
         <SectionDividerBleed />
         <Container className="py-16 md:py-20">
-          <div className="scrap-note mx-auto max-w-2xl space-y-6 p-6 text-center md:p-8">
+          <div className="scrap-note note-surface-warm mx-auto max-w-2xl space-y-6 p-6 text-center md:p-8">
             <Heading level="h2">{t.closingTitle}</Heading>
             <p className="body-lg">{t.closingBody}</p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">

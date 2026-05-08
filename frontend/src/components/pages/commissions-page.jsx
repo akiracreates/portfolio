@@ -31,7 +31,7 @@ export function CommissionsPage({ locale = "en" }) {
     <>
       <Container>
         <Section id="commissions" size="md" className="pt-14 md:pt-16">
-          <article className="commission-flat-card scrap-card border-[color:var(--border-accent)]/40 p-6 md:p-8">
+          <article className="commission-flat-card scrap-card card-surface-warm border-[color:var(--border-accent)]/40 p-6 md:p-8">
             <span className="caption inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-success">
               <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden />
               {pickLocale(commissionStatus.label, locale)}
@@ -72,6 +72,9 @@ export function CommissionsPage({ locale = "en" }) {
         >
           <CommissionPricingTable locale={locale} rows={commissionPricingRows} />
           <p className="caption mt-3">
+            <span className="deco-warm-label mr-2">
+              {pickLocale({ en: "note", ru: "заметка" }, locale)}
+            </span>
             {pickLocale(
               {
                 en: "table's texts to be adjusted later. english shows usd only, russian shows ruble only.",
@@ -193,6 +196,8 @@ export function CommissionsPage({ locale = "en" }) {
                     target={s.id === "email" ? undefined : "_blank"}
                     rel={s.id === "email" ? undefined : "noreferrer noopener"}
                     className={`group social-pill focus-visible-ring flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors ${
+                      s.id === "telegram-personal" ? "note-surface-warm " : ""
+                    }${
                       s.primary
                         ? "border-border-accent bg-accent-soft hover:bg-accent-strong"
                         : "border-border-subtle bg-bg-surface hover:border-border-default"
