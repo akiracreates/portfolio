@@ -34,7 +34,7 @@ export function HeroSection({ dict, locale = "en" }) {
                 <Button
                   as="link"
                   href={`/${locale}/about`}
-                  variant="primary"
+                  variant="warm-outline"
                   size="lg"
                 >
                   {t.ctaAbout}
@@ -50,7 +50,7 @@ export function HeroSection({ dict, locale = "en" }) {
                 <Button
                   as="link"
                   href={`/${locale}/commissions`}
-                  variant="warm-outline"
+                  variant="primary"
                   size="lg"
                 >
                   {t.ctaSecondary}
