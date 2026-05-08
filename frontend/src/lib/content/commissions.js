@@ -122,7 +122,7 @@ export const commissionPricingRows = [
   {
     id: "extra-character",
     type: { en: "extra character", ru: "дополнительный персонаж" },
-    price: { en: "+$20+", ru: "+1 800 ₽+" },
+    price: { en: "+$20+", ru: "+1800 ₽+" },
     includes: {
       en: "additional person or animal in the same piece",
       ru: "дополнительный человек или животное в одной работе",
@@ -135,7 +135,7 @@ export const commissionPricingRows = [
   {
     id: "complex-background",
     type: { en: "complex background", ru: "сложный фон" },
-    price: { en: "+$15", ru: "+1 500 ₽" },
+    price: { en: "+$15", ru: "+1500 ₽" },
     includes: {
       en: "detailed scene, props, or environment elements",
       ru: "детальная сцена, реквизит или элементы окружения",
@@ -161,7 +161,7 @@ export const commissionPricingRows = [
   {
     id: "commercial-use",
     type: { en: "commercial use", ru: "коммерческое использование" },
-    price: { en: "+$150+", ru: "+10 000 ₽+" },
+    price: { en: "+$150+", ru: "+10000 ₽+" },
     includes: {
       en: "permission for business or commercial usage",
       ru: "разрешение на бизнес- или коммерческое использование",
