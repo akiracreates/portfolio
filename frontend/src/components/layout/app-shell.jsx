@@ -56,6 +56,7 @@ export function AppShell({ children }) {
 
   return (
     <div
+      id="top"
       className="min-h-screen bg-bg-app text-text-primary"
       style={{ "--sidebar-w": sidebarWidth }}
     >

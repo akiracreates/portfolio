@@ -1301,6 +1301,24 @@ a {
   transform: rotate(var(--chapter-tilt, -1deg));
 }
 
+.about-tab-label--pink {
+  border-color: rgba(233, 102, 160, 0.52);
+  background: rgba(233, 102, 160, 0.12);
+  color: var(--highlight);
+}
+
+.about-tab-label--purple {
+  border-color: rgba(149, 117, 222, 0.5);
+  background: rgba(149, 117, 222, 0.14);
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-secondary) 12%);
+}
+
+.about-tab-label--amber {
+  border-color: rgba(240, 175, 129, 0.42);
+  background: rgba(240, 175, 129, 0.12);
+  color: color-mix(in srgb, var(--text-primary) 86%, var(--accent-warm) 14%);
+}
+
 .about-underline {
   width: 4.9rem;
   margin: 0;
@@ -1349,8 +1367,9 @@ a {
 
 .about-origin {
   background:
-    radial-gradient(circle at 88% 18%, rgba(233, 102, 160, 0.04) 0 2px, transparent 2.7px),
-    rgba(38, 33, 44, 0.82);
+    radial-gradient(circle at 88% 18%, rgba(240, 175, 129, 0.042) 0 2px, transparent 2.7px),
+    rgba(44, 36, 39, 0.84);
+  border-color: rgba(240, 175, 129, 0.2);
 }
 
 .about-artifact {
@@ -1543,6 +1562,10 @@ a {
   display: block;
   min-width: 0;
   max-width: min(100%, 86ch);
+}
+
+.about-board-prose--continuation {
+  clear: both;
 }
 
 .about-board-paragraph {

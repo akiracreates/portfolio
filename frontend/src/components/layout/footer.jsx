@@ -45,7 +45,7 @@ export function Footer() {
               </p>
               <div className="flex items-center gap-5">
                 <a
-                  href="#hero"
+                  href="#top"
                   className="caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
                 >
                   ↑ {dict?.common?.backToTop || "back to top"}
@@ -93,7 +93,7 @@ export function Footer() {
                 </div>
                 <p className="caption max-w-sm">{bio}</p>
                 <a
-                  href="#hero"
+                  href="#top"
                   className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
                 >
                   <span aria-hidden>↑</span>
@@ -167,7 +167,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-5">
             <a
-              href="#hero"
+              href="#top"
               className="caption text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring rounded-md"
             >
               ↑ {dict?.common?.backToTop || "back to top"}

@@ -68,7 +68,7 @@ export function SocialsFooterSection({ dict, locale = "en" }) {
           <p className="body-sm mt-6 max-w-prose">{t.contactNote}</p>
           <div className="mt-6">
             <a
-              href="#hero"
+              href="#top"
               className="inline-flex items-center gap-1.5 rounded-md text-[0.8125rem] font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring"
             >
               <span aria-hidden>↑</span>

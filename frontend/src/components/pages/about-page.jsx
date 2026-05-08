@@ -56,10 +56,10 @@ function ArtifactImage({
   );
 }
 
-function ChapterLabel({ children, tilt = "-1deg" }) {
+function ChapterLabel({ children, tilt = "-1deg", tone = "pink" }) {
   return (
     <div className="about-chapter-label" style={{ "--chapter-tilt": tilt }}>
-      <span className="about-tab-label">{children}</span>
+      <span className={`about-tab-label about-tab-label--${tone}`}>{children}</span>
     </div>
   );
 }
@@ -104,7 +104,9 @@ function OriginChapter({ chapter }) {
     <article className="about-spread about-origin">
       <div className="about-origin-story">
         <div className="about-origin-copy">
-          <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+          <ChapterLabel tilt={chapter.tilt} tone="amber">
+            {chapter.label}
+          </ChapterLabel>
           <Heading level="h2" className="max-w-xl">
             {chapter.title}
           </Heading>
@@ -179,6 +181,8 @@ function BoardCluster({ items, locale, tabLabel }) {
 
 function DigitalArtChapter({ chapter, locale }) {
   const body = chapter.noteCard?.body ?? [];
+  const wrappedParagraphs = body.slice(0, 4);
+  const continuationParagraphs = body.slice(4);
   return (
     <article className="about-spread about-board">
       <div className="about-board-flow">
@@ -188,7 +192,9 @@ function DigitalArtChapter({ chapter, locale }) {
           tabLabel={chapter.noteCard?.label}
         />
         <div className="about-board-header">
-          <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+          <ChapterLabel tilt={chapter.tilt} tone="purple">
+            {chapter.label}
+          </ChapterLabel>
           <Heading level="h2" className="about-board-title">
             {chapter.title}
           </Heading>
@@ -201,7 +207,14 @@ function DigitalArtChapter({ chapter, locale }) {
         </div>
 
         <div className="about-board-prose">
-          {body.map((paragraph) => (
+          {wrappedParagraphs.map((paragraph) => (
+            <p key={paragraph} className="body about-board-paragraph">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+        <div className="about-board-prose about-board-prose--continuation">
+          {continuationParagraphs.map((paragraph) => (
             <p key={paragraph} className="body about-board-paragraph">
               {paragraph}
             </p>
@@ -216,7 +229,9 @@ function SelfPortraitTimeline({ chapter, locale }) {
   return (
     <article className="about-spread about-timeline card-surface-warm">
       <div className="about-timeline-copy">
-        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+        <ChapterLabel tilt={chapter.tilt} tone="pink">
+          {chapter.label}
+        </ChapterLabel>
         <Heading level="h2" className="about-timeline-title">
           {chapter.title}
         </Heading>
@@ -321,7 +336,9 @@ function UpsAndDownsChapter({ chapter, locale }) {
   return (
     <article className="about-spread about-comparison">
       <div className="about-chapter-copy about-comparison-copy">
-        <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+        <ChapterLabel tilt={chapter.tilt} tone="amber">
+          {chapter.label}
+        </ChapterLabel>
         <Heading level="h2">{chapter.title}</Heading>
         <Divider className="about-underline" />
         {chapter.body?.map((paragraph) => (
@@ -363,7 +380,9 @@ function CurrentSelfSection({ chapter, locale }) {
           />
         </figure>
         <div className="about-current-header">
-          <ChapterLabel tilt={chapter.tilt}>{chapter.label}</ChapterLabel>
+          <ChapterLabel tilt={chapter.tilt} tone="purple">
+            {chapter.label}
+          </ChapterLabel>
           <Heading level="h2" className="about-current-title">
             {chapter.title}
           </Heading>
