@@ -9,13 +9,13 @@ export const commissionTypes = [
       en: "digital portraits in my personal style",
       ru: "цифровые портреты в моем личном стиле",
     },
-    price: { usd: 30, rub: 2700 },
+    price: { usd: 30, rub: 2000 },
     startingPriceText: {
       en: "starting from $30",
-      ru: "от 2 700 ₽",
+      ru: "от 2 000₽",
     },
     tabLabel: { en: "portrait", ru: "портрет" },
-    revisions: "3-4",
+    revisions: "2+",
     deliveryFormats: ["png", "jpeg"],
     included: {
       en: ["high-quality png", "process updates", "at least 2 revisions"],
@@ -41,13 +41,13 @@ export const commissionTypes = [
       en: "animal illustrations in my personal style",
       ru: "иллюстрации животных в моем личном стиле",
     },
-    price: { usd: 25, rub: 2200 },
+    price: { usd: 25, rub: 1500 },
     startingPriceText: {
       en: "starting from $25",
-      ru: "от 2 200 ₽",
+      ru: "от 1 500₽",
     },
     tabLabel: { en: "animal", ru: "животное" },
-    revisions: "3-4",
+    revisions: "2+",
     deliveryFormats: ["png", "jpeg"],
     included: {
       en: ["high-quality png", "process updates", "at least 2 revisions"],
@@ -83,7 +83,7 @@ export const commissionPricingRows = [
   {
     id: "portraits",
     type: { en: "portraits", ru: "портреты" },
-    price: { en: "from $30", ru: "от 2 700 ₽" },
+    price: { en: "from $30", ru: "от 2 000 ₽" },
     includes: {
       en: "digital portrait in my personal style",
       ru: "цифровой портрет в моем личном стиле",
@@ -96,7 +96,7 @@ export const commissionPricingRows = [
   {
     id: "animals",
     type: { en: "animals", ru: "животные" },
-    price: { en: "from $25", ru: "от 2 200 ₽" },
+    price: { en: "from $25", ru: "от 1 500 ₽" },
     includes: {
       en: "pet or animal illustration in my personal style",
       ru: "иллюстрация питомца или животного в моем личном стиле",
@@ -109,7 +109,7 @@ export const commissionPricingRows = [
   {
     id: "colored-sketches",
     type: { en: "colored sketches", ru: "цветные скетчи" },
-    price: { en: "from $15", ru: "от 1 350 ₽" },
+    price: { en: "from $10", ru: "от 800 ₽" },
     includes: {
       en: "loose colored sketch with simple rendering",
       ru: "свободный цветной скетч с простой прорисовкой",
@@ -122,7 +122,7 @@ export const commissionPricingRows = [
   {
     id: "extra-character",
     type: { en: "extra character", ru: "дополнительный персонаж" },
-    price: { en: "+$20-40", ru: "+1 800-3 600 ₽" },
+    price: { en: "+$20+", ru: "+1 800 ₽+" },
     includes: {
       en: "additional person or animal in the same piece",
       ru: "дополнительный человек или животное в одной работе",
@@ -135,7 +135,7 @@ export const commissionPricingRows = [
   {
     id: "complex-background",
     type: { en: "complex background", ru: "сложный фон" },
-    price: { en: "+$15-45", ru: "+1 300-4 100 ₽" },
+    price: { en: "+$15", ru: "+1 500 ₽" },
     includes: {
       en: "detailed scene, props, or environment elements",
       ru: "детальная сцена, реквизит или элементы окружения",
@@ -148,7 +148,7 @@ export const commissionPricingRows = [
   {
     id: "rush-order",
     type: { en: "rush order", ru: "срочный заказ" },
-    price: { en: "+$20-50", ru: "+1 800-4 500 ₽" },
+    price: { en: "+$10+", ru: "+800 ₽+" },
     includes: {
       en: "faster turnaround when available",
       ru: "более быстрый срок выполнения при наличии возможности",
@@ -161,7 +161,7 @@ export const commissionPricingRows = [
   {
     id: "commercial-use",
     type: { en: "commercial use", ru: "коммерческое использование" },
-    price: { en: "+$30+", ru: "+2 700 ₽+" },
+    price: { en: "+$150+", ru: "+10 000 ₽+" },
     includes: {
       en: "permission for business or commercial usage",
       ru: "разрешение на бизнес- или коммерческое использование",
@@ -476,7 +476,16 @@ export function getCommissionPreviews(typeId) {
     return getArtworksByCategory("portraits").slice(0, 3);
   }
   if (typeId === "animal") {
-    return getArtworksByCategory("animals").slice(0, 3);
+    const preferredPaths = [
+      "images/animals/doggo_comm",
+      "images/animals/silly_birb",
+      "images/animals/layin_kitten?updatedAt=1777912292067",
+    ];
+    const animals = getArtworksByCategory("animals");
+    const previews = preferredPaths
+      .map((path) => animals.find((artwork) => artwork.path === path))
+      .filter(Boolean);
+    return previews.length > 0 ? previews : animals.slice(0, 3);
   }
   return [];
 }

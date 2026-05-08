@@ -10,6 +10,7 @@ export function PageHeader({
   action,
   id,
   tone = "default",
+  contentClassName = "",
 }) {
   const headingId = id ? `${id}-heading` : undefined;
   const warmClass = tone === "warm" ? "note-surface-warm" : "";
@@ -17,7 +18,9 @@ export function PageHeader({
     <header className="section-scrap">
       <Container className="pt-14 pb-10 md:pt-20 md:pb-14">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className={`scrap-note corner-marks max-w-3xl space-y-4 p-5 md:p-7 ${warmClass}`}>
+          <div
+            className={`scrap-note corner-marks max-w-3xl space-y-4 p-5 md:p-7 ${warmClass} ${contentClassName}`.trim()}
+          >
             {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
             <Heading level="h1" id={headingId}>
               {title}

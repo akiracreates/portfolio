@@ -26,6 +26,7 @@ export function PortfolioPage({ dict, locale = "en" }) {
         title={t.pageTitle}
         description={t.pageDescription}
         tone="warm"
+        contentClassName="w-full max-w-5xl"
       />
 
       <Container className="pt-8 pb-16 md:pb-24">

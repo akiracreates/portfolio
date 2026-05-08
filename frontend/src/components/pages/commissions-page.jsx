@@ -77,8 +77,8 @@ export function CommissionsPage({ locale = "en" }) {
             </span>
             {pickLocale(
               {
-                en: "table's texts to be adjusted later. english shows usd only, russian shows ruble only.",
-                ru: "тексты таблицы позже будут уточнены. в english версии только usd, в русской — только рубли.",
+                en: "final price depends on complexity, extra details, and intended usage. i'll confirm the total before payment.",
+                ru: "итоговая цена зависит от сложности, деталей и цели использования. я подтвержу сумму до оплаты.",
               },
               locale,
             )}
@@ -113,7 +113,7 @@ export function CommissionsPage({ locale = "en" }) {
           <div className="grid gap-4 sm:grid-cols-3">
             <Callout
               label={pickLocale({ en: "revisions", ru: "правки" }, locale)}
-              value={pickLocale({ en: "3-4 rounds", ru: "3-4 раунда" }, locale)}
+              value={pickLocale({ en: "2+ rounds", ru: "2+ раунда" }, locale)}
               detail={pickLocale(
                 {
                   en: "minor adjustments are included before final approval.",
