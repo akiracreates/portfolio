@@ -2523,6 +2523,34 @@ a {
   border: 2px solid transparent;
 }
 
+/* sidebar-specific subtle scrollbar (used by the sidebar nav scroll region) */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  background-clip: padding-box;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+
 /* =========================================================================
    skeleton / shimmer
    ========================================================================= */

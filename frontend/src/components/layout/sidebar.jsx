@@ -15,7 +15,10 @@ const ACTIVATION_OFFSET = 48;
 const CLICK_LOCK_MS = 800;
 const SIDEBAR_EASE = [0.22, 1, 0.36, 1];
 const SIDEBAR_TRANSITION = { duration: 0.26, ease: SIDEBAR_EASE };
-const SUBMENU_ROW_HEIGHT = 34;
+// Used only for vertical distribution of the collapsed-state submenu dots.
+// Expanded text rows now drive their own height via measurement, so we no
+// longer rely on a hard-coded estimate to size the open submenu.
+const SUBMENU_DOT_ROW_HEIGHT = 34;
 
 function isHomePathname(pathname, locale) {
   if (!pathname) return false;
@@ -252,9 +255,11 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
         </Link>
       </div>
 
-      {/* nav body */}
+      {/* nav body — flex-1 + min-h-0 makes this the single scroll region
+          inside the sidebar (without min-h-0 the flex child grows to fit
+          its content instead of allowing overflow-y to scroll). */}
       <nav
-        className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-4"
+        className="sidebar-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2 pb-6 pt-4"
         aria-label="primary"
       >
         <NavGroup
@@ -304,9 +309,6 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
               resolvedActiveSection || fallbackActiveAnchor;
             const showCollapsedChildren = collapsed && submenuOpenLogical;
             const showExpandedChildren = !collapsed && submenuOpenLogical;
-            const submenuReservedHeight = hasSubmenu
-              ? item.sections.length * SUBMENU_ROW_HEIGHT
-              : 0;
 
             return (
               <li key={item.id} className="space-y-1">
@@ -341,92 +343,20 @@ export function Sidebar({ collapsed = false, onNavigate, variant = "fixed" }) {
                   />
                 )}
                 {hasSubmenu && !suppressChildren ? (
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      opacity: submenuOpenLogical ? 1 : 0,
-                      maxHeight: submenuOpenLogical ? submenuReservedHeight : 0,
-                    }}
-                    transition={motionTransition}
-                    className="relative overflow-hidden"
-                    aria-hidden={!submenuOpenLogical}
-                    style={{ pointerEvents: submenuOpenLogical ? "auto" : "none" }}
-                  >
-                    <div style={{ height: submenuReservedHeight }} />
-                    <motion.ul
-                      initial={false}
-                      animate={{
-                        opacity: showExpandedChildren ? 1 : 0,
-                        y: showExpandedChildren ? 0 : -3,
-                      }}
-                      transition={{
-                        ...motionTransition,
-                        delay: showExpandedChildren && !reducedMotion ? 0.03 : 0,
-                      }}
-                      className="absolute inset-x-0 top-0 overflow-hidden pl-8"
-                      aria-hidden={!showExpandedChildren}
-                      style={{ pointerEvents: showExpandedChildren ? "auto" : "none" }}
-                    >
-                      {item.sections.map((section) => {
-                        const sectionHref = `${href}#${section.anchor}`;
-                        const sectionActive =
-                          itemPathActive && currentItemActiveSection === section.anchor;
-                        return (
-                          <li key={section.id}>
-                            <Link
-                              href={sectionHref}
-                              onClick={(e) => handleSectionClick(e, section.anchor)}
-                              className={`focus-visible-ring block rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
-                                sectionActive
-                                  ? "border-border-accent bg-highlight-soft text-text-primary"
-                                  : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
-                              }`}
-                              aria-current={sectionActive ? "location" : undefined}
-                              tabIndex={showExpandedChildren ? 0 : -1}
-                            >
-                              {t(section.labelKey)}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </motion.ul>
-                    <motion.ul
-                      initial={false}
-                      animate={{ opacity: showCollapsedChildren ? 1 : 0 }}
-                      transition={{
-                        ...motionTransition,
-                        delay: showCollapsedChildren && !reducedMotion ? 0.02 : 0,
-                      }}
-                      className="absolute inset-x-0 top-0 ml-[18px] flex h-full w-[20px] flex-col items-center justify-between overflow-hidden"
-                      aria-hidden={!showCollapsedChildren}
-                      style={{ pointerEvents: showCollapsedChildren ? "auto" : "none" }}
-                    >
-                      {item.sections.map((section) => {
-                        const sectionHref = `${href}#${section.anchor}`;
-                        const sectionActive =
-                          itemPathActive && currentItemActiveSection === section.anchor;
-                        return (
-                          <li
-                            key={`${section.id}-collapsed`}
-                            className="flex h-[34px] items-center"
-                          >
-                            <Link
-                              href={sectionHref}
-                              onClick={(e) => handleSectionClick(e, section.anchor)}
-                              className={`focus-visible-ring block h-2.5 w-2.5 rounded-full border border-dashed transition-all duration-[var(--duration-fast)] ${
-                                sectionActive
-                                  ? "border-border-accent bg-highlight shadow-[0_0_10px_rgba(233,102,160,0.35)]"
-                                  : "border-border-default/70 bg-highlight-soft hover:border-border-accent hover:bg-highlight/70"
-                              }`}
-                              aria-label={t(section.labelKey)}
-                              title={t(section.labelKey)}
-                              aria-current={sectionActive ? "location" : undefined}
-                            />
-                          </li>
-                        );
-                      })}
-                    </motion.ul>
-                  </motion.div>
+                  <SubmenuPanel
+                    item={item}
+                    href={href}
+                    collapsed={collapsed}
+                    submenuOpenLogical={submenuOpenLogical}
+                    showExpandedChildren={showExpandedChildren}
+                    showCollapsedChildren={showCollapsedChildren}
+                    motionTransition={motionTransition}
+                    reducedMotion={reducedMotion}
+                    itemPathActive={itemPathActive}
+                    currentItemActiveSection={currentItemActiveSection}
+                    handleSectionClick={handleSectionClick}
+                    t={t}
+                  />
                 ) : null}
               </li>
             );
@@ -561,6 +491,134 @@ function NavItem({
       ) : null}
       {collapsed && <span className="sr-only">{label}</span>}
     </Link>
+  );
+}
+
+function SubmenuPanel({
+  item,
+  href,
+  collapsed,
+  submenuOpenLogical,
+  showExpandedChildren,
+  showCollapsedChildren,
+  motionTransition,
+  reducedMotion,
+  itemPathActive,
+  currentItemActiveSection,
+  handleSectionClick,
+  t,
+}) {
+  // Measure the expanded list's natural height so the wrapper can animate to
+  // the real content height instead of a fixed per-row estimate. The previous
+  // fixed estimate clipped longer lists (e.g. About / Work with me).
+  const expandedListRef = useRef(null);
+  const [naturalHeight, setNaturalHeight] = useState(0);
+
+  useEffect(() => {
+    const el = expandedListRef.current;
+    if (!el) return undefined;
+    const update = () => setNaturalHeight(el.scrollHeight);
+    update();
+    if (typeof ResizeObserver === "undefined") return undefined;
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const collapsedDotsHeight =
+    item.sections.length * SUBMENU_DOT_ROW_HEIGHT;
+  const openHeight = collapsed ? collapsedDotsHeight : naturalHeight;
+
+  return (
+    <motion.div
+      initial={false}
+      animate={{
+        opacity: submenuOpenLogical ? 1 : 0,
+        height: submenuOpenLogical ? openHeight : 0,
+      }}
+      transition={motionTransition}
+      className="relative overflow-hidden"
+      aria-hidden={!submenuOpenLogical}
+      style={{ pointerEvents: submenuOpenLogical ? "auto" : "none" }}
+    >
+      <motion.ul
+        ref={expandedListRef}
+        initial={false}
+        animate={{
+          opacity: showExpandedChildren ? 1 : 0,
+          y: showExpandedChildren ? 0 : -3,
+        }}
+        transition={{
+          ...motionTransition,
+          delay: showExpandedChildren && !reducedMotion ? 0.03 : 0,
+        }}
+        className="pl-8"
+        aria-hidden={!showExpandedChildren}
+        style={{ pointerEvents: showExpandedChildren ? "auto" : "none" }}
+      >
+        {item.sections.map((section) => {
+          const sectionHref = `${href}#${section.anchor}`;
+          const sectionActive =
+            itemPathActive && currentItemActiveSection === section.anchor;
+          return (
+            <li key={section.id}>
+              <Link
+                href={sectionHref}
+                onClick={(e) => handleSectionClick(e, section.anchor)}
+                className={`focus-visible-ring block whitespace-nowrap rounded-md border border-dashed px-3 py-1.5 text-[0.8rem] transition-colors duration-[var(--duration-fast)] ${
+                  sectionActive
+                    ? "border-border-accent bg-highlight-soft text-text-primary"
+                    : "border-transparent text-text-tertiary hover:border-border-default hover:bg-bg-surface hover:text-text-primary"
+                }`}
+                aria-current={sectionActive ? "location" : undefined}
+                tabIndex={showExpandedChildren ? 0 : -1}
+              >
+                {t(section.labelKey)}
+              </Link>
+            </li>
+          );
+        })}
+      </motion.ul>
+      <motion.ul
+        initial={false}
+        animate={{ opacity: showCollapsedChildren ? 1 : 0 }}
+        transition={{
+          ...motionTransition,
+          delay: showCollapsedChildren && !reducedMotion ? 0.02 : 0,
+        }}
+        className="absolute inset-x-0 top-0 ml-[18px] flex w-[20px] flex-col items-center justify-between"
+        aria-hidden={!showCollapsedChildren}
+        style={{
+          pointerEvents: showCollapsedChildren ? "auto" : "none",
+          height: collapsedDotsHeight,
+        }}
+      >
+        {item.sections.map((section) => {
+          const sectionHref = `${href}#${section.anchor}`;
+          const sectionActive =
+            itemPathActive && currentItemActiveSection === section.anchor;
+          return (
+            <li
+              key={`${section.id}-collapsed`}
+              className="flex h-[34px] items-center"
+            >
+              <Link
+                href={sectionHref}
+                onClick={(e) => handleSectionClick(e, section.anchor)}
+                className={`focus-visible-ring block h-2.5 w-2.5 rounded-full border border-dashed transition-all duration-[var(--duration-fast)] ${
+                  sectionActive
+                    ? "border-border-accent bg-highlight shadow-[0_0_10px_rgba(233,102,160,0.35)]"
+                    : "border-border-default/70 bg-highlight-soft hover:border-border-accent hover:bg-highlight/70"
+                }`}
+                aria-label={t(section.labelKey)}
+                title={t(section.labelKey)}
+                aria-current={sectionActive ? "location" : undefined}
+              />
+            </li>
+          );
+        })}
+      </motion.ul>
+    </motion.div>
   );
 }
 
