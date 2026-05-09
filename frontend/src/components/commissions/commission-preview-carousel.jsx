@@ -1,31 +1,24 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImageFrame } from "@/components/ui/image-frame";
 import { SmartImage } from "@/components/ui/smart-image";
 import { pickLocale } from "@/lib/i18n/config";
+import { useNativeReducedMotion } from "@/lib/motion/use-native-reduced-motion";
 
 const ARROW_BIAS_LEFT = "left";
 const ARROW_BIAS_RIGHT = "right";
 const ARROW_BIAS_NONE = "none";
 
 /**
- * Infinite-loop preview carousel for commission examples.
- *
- *  - Hover on the container fades both arrows in to a base opacity.
- *  - When the cursor is in the left/right 30% of the container, the matching
- *    arrow goes to full opacity and lifts slightly — so the user feels the
- *    arrow "react" to where they're aiming.
- *  - Wraps around at both ends.
- *  - Keyboard arrows when focused. Real <button>s for accessibility.
+ * Infinite-loop preview carousel for commission examples (CSS crossfade; no Framer).
  */
 export function CommissionPreviewCarousel({
   images = [],
   locale = "en",
   randomizeInitial = false,
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useNativeReducedMotion();
   const containerRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -38,15 +31,35 @@ export function CommissionPreviewCarousel({
   }, [images.length, randomizeInitial]);
 
   useEffect(() => {
-    if (!randomizeInitial || images.length <= 1 || hasRandomizedRef.current) return;
-    const frameId = window.requestAnimationFrame(() => {
+    if (!randomizeInitial || images.length <= 1 || hasRandomizedRef.current)
+      return undefined;
+
+    let cancelled = false;
+    const run = () => {
+      if (cancelled) return;
       hasRandomizedRef.current = true;
       const nextStart = Math.floor(Math.random() * images.length);
       setStartIndex(nextStart);
       setIndex(0);
-    });
+    };
 
-    return () => window.cancelAnimationFrame(frameId);
+    let idleId;
+    let timeoutId;
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 1600 });
+    } else if (typeof window !== "undefined") {
+      timeoutId = window.setTimeout(run, 200);
+    }
+
+    return () => {
+      cancelled = true;
+      if (typeof idleId === "number" && typeof window !== "undefined") {
+        window.cancelIdleCallback(idleId);
+      }
+      if (typeof timeoutId === "number") {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [images.length, randomizeInitial]);
 
   const orderedImages = useMemo(() => {
@@ -97,6 +110,8 @@ export function CommissionPreviewCarousel({
     aspectRatio: `${current.width ?? 4} / ${current.height ?? 3}`,
   };
 
+  const fadeClass = reduced ? "" : "motion-fade-enter";
+
   return (
     <div
       ref={containerRef}
@@ -118,30 +133,18 @@ export function CommissionPreviewCarousel({
         className="relative w-full overflow-hidden border-0"
         style={aspectStyle}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={current.id}
-            className="absolute inset-0"
-            initial={reduced ? { opacity: 1 } : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduced ? { opacity: 1 } : { opacity: 0 }}
-            transition={{
-              duration: reduced ? 0 : 0.25,
-              ease: [0.2, 0, 0, 1],
-            }}
-          >
-            <SmartImage
-              src={current.imageSrc}
-              alt={pickLocale(current.alt, locale) || pickLocale(current.title, locale)}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              imgClassName="object-contain p-3"
-            />
-          </motion.div>
-        </AnimatePresence>
+        <div key={current.id} className={`absolute inset-0 ${fadeClass}`.trim()}>
+          <SmartImage
+            src={current.imageSrc}
+            alt={pickLocale(current.alt, locale) || pickLocale(current.title, locale)}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            showSkeleton={false}
+            imgClassName="object-contain p-3"
+          />
+        </div>
       </ImageFrame>
 
-      {/* arrows */}
       <CarouselArrow
         side="left"
         active={hovered}
@@ -157,7 +160,6 @@ export function CommissionPreviewCarousel({
         ariaLabel="next example"
       />
 
-      {/* dots */}
       <div className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 flex items-center gap-1.5">
         {orderedImages.map((img, i) => (
           <button

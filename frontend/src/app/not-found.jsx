@@ -6,6 +6,14 @@ import { Heading } from "@/components/ui/heading";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
+/** Soft-404 risk: explicit noindex even when status handling varies by host. */
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default async function NotFound() {
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;

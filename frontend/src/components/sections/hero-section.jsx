@@ -1,8 +1,8 @@
+import { HeroPortraitImage } from "@/components/images/hero-portrait-image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { ImageFrame } from "@/components/ui/image-frame";
-import { SmartImage } from "@/components/ui/smart-image";
 import { imagekitUrl } from "@/lib/images/imagekit";
 
 export function HeroSection({ dict, locale = "en" }) {
@@ -17,7 +17,7 @@ export function HeroSection({ dict, locale = "en" }) {
         <div className="hero-cover card-surface-warm overflow-hidden p-1 md:p-3">
           <div className="hero-cover-inner">
             <div className="hero-divider grid items-center gap-2 sm:gap-3 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
-              <div className="hero-copy space-y-5 md:space-y-9">
+              <div className="hero-copy max-lg:order-2 space-y-5 md:space-y-9 lg:order-none">
                 <Eyebrow>{t.eyebrow}</Eyebrow>
                 <h1
                   id="hero-heading"
@@ -71,21 +71,19 @@ export function HeroSection({ dict, locale = "en" }) {
                 </div>
               </div>
 
-              <div className="hero-portrait-wrap">
+              <div className="hero-portrait-wrap max-lg:order-first lg:order-none">
                 <div className="relative mx-auto max-w-[560px] lg:ml-auto">
                   <ImageFrame
                     variant="hero"
                     className="hero-portrait-frame relative w-full md:rotate-[0.4deg]"
                     style={{ aspectRatio: "2500 / 3000" }}
                   >
-                    <SmartImage
+                    <HeroPortraitImage
                       src={imagekitUrl("images/portraits/self")}
                       alt={t.imageAlt}
-                      fill
-                      priority
-                      sizes="(max-width: 1024px) 100vw, 560px"
-                      className="hero-portrait-art deco-warm-tape"
-                      imgClassName="object-contain p-2.5 md:p-6"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) min(92vw, 560px), 560px"
+                      imgClassName="hero-portrait-art deco-warm-tape object-contain p-2.5 md:p-6"
+                      quality={85}
                     />
                   </ImageFrame>
                   <p className="mt-1 px-1 text-[0.81rem] leading-snug text-text-secondary/95 sm:absolute sm:-bottom-3 sm:left-2 sm:mt-0 sm:px-0 sm:text-xs sm:text-text-secondary/86">

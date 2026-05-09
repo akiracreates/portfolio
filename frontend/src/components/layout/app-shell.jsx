@@ -1,17 +1,17 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileFab } from "@/components/layout/mobile-fab";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 import { Footer } from "@/components/layout/footer";
+import { useNativeReducedMotion } from "@/lib/motion/use-native-reduced-motion";
 
 const CLOSE_DELAY_MS = 120;
 
 export function AppShell({ children }) {
-  const reduced = useReducedMotion();
+  const reduced = useNativeReducedMotion();
   const pathname = usePathname();
   const [pointerState, setPointerState] = useState({ routeKey: "", value: false });
   const [focusState, setFocusState] = useState({ routeKey: "", value: false });
@@ -54,24 +54,20 @@ export function AppShell({ children }) {
     ? "var(--sidebar-w-collapsed)"
     : "var(--sidebar-w-expanded)";
 
+  const asideTransitionClass = reduced
+    ? ""
+    : "transition-[width] duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)]";
+
   return (
     <div
       id="top"
       className="min-h-screen bg-bg-app text-text-primary"
       style={{ "--sidebar-w": sidebarWidth }}
     >
-      {/* desktop fixed sidebar */}
-      <motion.aside
+      <aside
         ref={asideRef}
-        layout={false}
-        className="fixed inset-y-0 left-0 z-40 hidden border-r border-border-strong md:block"
-        initial={false}
-        animate={{ width: sidebarWidth }}
-        transition={
-          reduced
-            ? { duration: 0 }
-            : { duration: 0.24, ease: [0.22, 1, 0.36, 1] }
-        }
+        style={{ width: sidebarWidth }}
+        className={`sidebar-shell fixed inset-y-0 left-0 z-40 hidden overflow-hidden border-r border-border-strong md:block ${asideTransitionClass}`}
         aria-label="primary sidebar"
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
@@ -87,11 +83,8 @@ export function AppShell({ children }) {
         }}
       >
         <Sidebar collapsed={collapsed} variant="fixed" />
-      </motion.aside>
+      </aside>
 
-      {/* main column — left padding equal to the COLLAPSED width at md+,
-          so the page never reflows when the sidebar expands on hover.
-          The expanded sidebar simply overlays whatever sits to its right. */}
       <div className="min-h-screen md:pl-[var(--sidebar-w-collapsed)]">
         <div className="world-frame flex min-h-screen flex-col">
           <div className="world-inner flex flex-1 flex-col">
@@ -103,7 +96,6 @@ export function AppShell({ children }) {
         </div>
       </div>
 
-      {/* mobile floating action button (opens drawer) */}
       <MobileFab open={drawerOpen} onOpenDrawer={() => setDrawerOpen(true)} />
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

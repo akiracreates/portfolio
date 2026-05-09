@@ -3731,6 +3731,96 @@ a {
 }
 
 /* =========================================================================
+   elite motion helpers (opacity / transform only)
+   ========================================================================= */
+@keyframes motionFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.motion-fade-enter {
+  animation: motionFadeIn 0.22s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes motionCrossfadePanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.motion-crossfade-enter {
+  animation: motionCrossfadePanelIn 0.22s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.faq-panel-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s var(--ease-out);
+}
+
+.faq-panel-grid--open {
+  grid-template-rows: 1fr;
+}
+
+.faq-panel-grid-inner {
+  min-height: 0;
+}
+
+/* =========================================================================
+   route + section motion (CSS-first)
+   ========================================================================= */
+@keyframes routeTemplateFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.route-template-enter {
+  animation: routeTemplateFadeIn 0.22s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.section-motion {
+  @starting-style {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.2, 0, 0, 1),
+    transform 0.45s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.cascade-row-motion {
+  @starting-style {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.2, 0, 0, 1),
+    transform 0.45s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* =========================================================================
    skeleton / shimmer
    ========================================================================= */
 .skeleton-shimmer {

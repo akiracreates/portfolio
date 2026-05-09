@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
 import { SectionDividerBleed } from "@/components/ui/divider";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Heading } from "@/components/ui/heading";
@@ -25,7 +22,6 @@ export function Section({
   separator = false,
   separatorClassName = "",
 }) {
-  const reduced = useReducedMotion();
   const headingId = id ? `${id}-heading` : undefined;
 
   return (
@@ -35,13 +31,10 @@ export function Section({
           className={`section-divider-contained ${separatorClassName}`.trim()}
         />
       ) : null}
-      <motion.section
+      <section
         id={id}
-        className={`section-scrap scroll-mt-header ${sizes[size] ?? sizes.lg} ${className}`.trim()}
+        className={`section-scrap section-motion scroll-mt-header ${sizes[size] ?? sizes.lg} ${className}`.trim()}
         aria-labelledby={headingId}
-        initial={reduced ? false : { opacity: 0, y: 16 }}
-        animate={reduced ? false : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
       >
         {(eyebrow || title || action) && (
           <header
@@ -64,7 +57,7 @@ export function Section({
           </header>
         )}
         {children}
-      </motion.section>
+      </section>
     </>
   );
 }
