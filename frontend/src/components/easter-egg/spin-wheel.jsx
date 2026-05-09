@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { pickLocale } from "@/lib/i18n/config";
-import { pickWeightedRewardIndex } from "@/lib/content/rewards";
 import { Button } from "@/components/ui/button";
 
 const SIZE = 320;
@@ -34,6 +33,7 @@ function describeArc(cx, cy, r, startAngle, endAngle) {
  */
 export function SpinWheel({
   rewards,
+  targetIndex,
   locale,
   spinningLabel,
   spinButtonLabel,
@@ -59,8 +59,11 @@ export function SpinWheel({
   const startSpin = useCallback(() => {
     if (phase !== "ready" || segments.length === 0) return;
 
-    const { reward: winner, index: winnerIndex } =
-      pickWeightedRewardIndex(segments);
+    const winnerIndex =
+      Number.isInteger(targetIndex) && targetIndex >= 0 && targetIndex < segments.length
+        ? targetIndex
+        : 0;
+    const winner = segments[winnerIndex];
     if (!winner || winnerIndex < 0) return;
 
     pendingWinnerRef.current = winner;
@@ -81,7 +84,7 @@ export function SpinWheel({
         onResultRef.current(winner);
       }, 80);
     }
-  }, [phase, reduced, segments]);
+  }, [phase, reduced, segments, targetIndex]);
 
   useEffect(() => {
     if (phase !== "spinning" || reduced) return undefined;

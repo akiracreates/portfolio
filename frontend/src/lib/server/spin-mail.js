@@ -114,7 +114,12 @@ export async function sendSpinClaimEmails({
     console.error(
       "[spin] email not sent: set RESEND_API_KEY and EMAIL_FROM on the server (e.g. Vercel → Settings → Environment Variables) for Production and Preview.",
     );
-    return { userSent: false, adminSent: false, skipped: true };
+    return {
+      userSent: false,
+      adminSent: false,
+      skipped: true,
+      errorCode: "email_config_missing",
+    };
   }
   const rewardLine = pickLocale(reward.label, locale);
   const commissionsUrl = commissionsPageUrl(
@@ -140,7 +145,12 @@ export async function sendSpinClaimEmails({
     record,
   });
 
-  const out = { userSent: false, adminSent: false, skipped: false };
+  const out = {
+    userSent: false,
+    adminSent: false,
+    skipped: false,
+    errorCode: null,
+  };
 
   const userSend = await resendSendResult(
     resend.emails.send({
@@ -159,6 +169,7 @@ export async function sendSpinClaimEmails({
       );
     }
   } else {
+    out.errorCode = out.errorCode || "user_email_send_failed";
     console.error(
       "[spin] user email error:",
       formatResendErrorForLog(userSend.error),
@@ -185,6 +196,7 @@ export async function sendSpinClaimEmails({
       );
     }
   } else {
+    out.errorCode = out.errorCode || "admin_email_send_failed";
     console.error(
       "[spin] admin email error:",
       formatResendErrorForLog(adminSend.error),
