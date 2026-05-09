@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "predev": "node scripts/generate-image-metadata.mjs",
     "prebuild": "node scripts/generate-image-metadata.mjs",
     "image-meta": "node scripts/generate-image-metadata.mjs",
@@ -26,6 +27,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "probe-image-size": "^7.3.0",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "vitest": "^4.1.5"
   }
 }

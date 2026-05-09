@@ -9,55 +9,8 @@ import { SpinWheel } from "@/components/easter-egg/spin-wheel";
 import { getRewardsForLocale, getSpinRewardById } from "@/lib/content/rewards";
 import { pickLocale } from "@/lib/i18n/config";
 
-const SPIN_RESULTS_KEY = "spinWheelResults";
-
-/** Legacy key: not used for logic; safe remove after a successful save. */
-const LEGACY_SPIN_EMAILS_KEY = "akira.spin.emails.v1";
-
 function isRecord(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function parseSpinResultsMap() {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = window.localStorage.getItem(SPIN_RESULTS_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    if (!isRecord(parsed)) return {};
-    return parsed;
-  } catch {
-    return {};
-  }
-}
-
-function upsertSpinResultEntry(normalizedEmail, entry) {
-  if (typeof window === "undefined") return;
-  try {
-    const map = parseSpinResultsMap();
-    map[normalizedEmail] = entry;
-    window.localStorage.setItem(SPIN_RESULTS_KEY, JSON.stringify(map));
-    try {
-      window.localStorage.removeItem(LEGACY_SPIN_EMAILS_KEY);
-    } catch {
-      /* ignore */
-    }
-  } catch {
-    /* ignore */
-  }
-}
-
-/** Drop a single corrupt entry so the user can spin again (full map parse already safe). */
-function removeSpinResultEntry(normalizedEmail) {
-  if (typeof window === "undefined") return;
-  try {
-    const map = parseSpinResultsMap();
-    if (!map[normalizedEmail]) return;
-    delete map[normalizedEmail];
-    window.localStorage.setItem(SPIN_RESULTS_KEY, JSON.stringify(map));
-  } catch {
-    /* ignore */
-  }
 }
 
 function rewardFromStoredEntry(entry) {
@@ -69,14 +22,40 @@ function rewardFromStoredEntry(entry) {
   return null;
 }
 
-async function postSpin(body) {
-  const res = await fetch("/api/spin", {
+async function postSpinBegin(body) {
+  const res = await fetch("/api/spin/begin", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
   return { res, data };
+}
+
+async function postSpinCommit(body) {
+  const res = await fetch("/api/spin/commit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  return { res, data };
+}
+
+function errorMessageFor(code, t) {
+  switch (code) {
+    case "rate_limited":
+      return t.rateLimited ?? t.saveError;
+    case "storage_unavailable":
+      return t.storageUnavailable ?? t.saveError;
+    case "pending_not_found":
+    case "pending_token_mismatch":
+      return t.pendingExpired ?? t.saveError;
+    case "invalid_email":
+      return t.emailInvalid;
+    default:
+      return t.saveError;
+  }
 }
 
 export function SpinExperience({ dict, locale }) {
@@ -90,25 +69,28 @@ export function SpinExperience({ dict, locale }) {
   const [emailBusy, setEmailBusy] = useState(false);
   const [emailLookupError, setEmailLookupError] = useState("");
   const [syncError, setSyncError] = useState("");
-  const [pendingRetryReward, setPendingRetryReward] = useState(null);
+  const [pendingClaim, setPendingClaim] = useState(null);
   const [emailDeliveryNote, setEmailDeliveryNote] = useState("");
 
   const submitClaim = useCallback(
-    async (chosen) => {
+    async () => {
+      if (!pendingClaim?.token) {
+        setSyncError(errorMessageFor("pending_not_found", t));
+        setStep("sync-failed");
+        return;
+      }
       setSyncError("");
       setEmailDeliveryNote("");
       setStep("syncing");
       try {
-        const { res, data } = await postSpin({
+        const { res, data } = await postSpinCommit({
           email,
           locale,
-          rewardId: chosen.id,
-          spunAt: new Date().toISOString(),
+          pendingToken: pendingClaim.token,
         });
 
         if (!res.ok || data.ok !== true) {
-          setSyncError(t.saveError);
-          setPendingRetryReward(chosen);
+          setSyncError(errorMessageFor(data.error, t));
           setStep("sync-failed");
           return;
         }
@@ -116,16 +98,13 @@ export function SpinExperience({ dict, locale }) {
         const record = data.record;
         if (!record?.rewardId) {
           setSyncError(t.saveError);
-          setPendingRetryReward(chosen);
           setStep("sync-failed");
           return;
         }
 
-        upsertSpinResultEntry(email, record);
         const displayReward = rewardFromStoredEntry(record);
         if (!displayReward) {
           setSyncError(t.saveError);
-          setPendingRetryReward(chosen);
           setStep("sync-failed");
           return;
         }
@@ -143,22 +122,26 @@ export function SpinExperience({ dict, locale }) {
 
         setReward(displayReward);
         setResultFromStorage(Boolean(data.alreadySpun));
-        setPendingRetryReward(null);
+        setPendingClaim(null);
         setStep("result");
       } catch {
         setSyncError(t.saveError);
-        setPendingRetryReward(chosen);
         setStep("sync-failed");
       }
     },
-    [email, locale, t.emailDeliveryNote, t.saveError],
+    [email, locale, pendingClaim, t],
   );
 
   const handleResult = useCallback(
     (chosen) => {
-      void submitClaim(chosen);
+      if (pendingClaim?.rewardId && pendingClaim.rewardId !== chosen.id) {
+        setSyncError(errorMessageFor("pending_token_mismatch", t));
+        setStep("sync-failed");
+        return;
+      }
+      void submitClaim();
     },
-    [submitClaim],
+    [pendingClaim, submitClaim, t],
   );
 
   const handleEmailSubmit = useCallback(
@@ -166,29 +149,13 @@ export function SpinExperience({ dict, locale }) {
       setEmailLookupError("");
       setEmailBusy(true);
       try {
-        const map = parseSpinResultsMap();
-        const stored = map[submittedEmail];
-        const localResolved = stored ? rewardFromStoredEntry(stored) : null;
-
-        if (stored && !localResolved) {
-          removeSpinResultEntry(submittedEmail);
-        }
-
-        const { res, data } = await postSpin({
+        const { res, data } = await postSpinBegin({
           email: submittedEmail,
           locale,
         });
 
         if (!res.ok || data.ok !== true) {
-          if (localResolved) {
-            setEmail(submittedEmail);
-            setReward(localResolved);
-            setResultFromStorage(true);
-            setStep("result");
-            setEmailLookupError(t.saveError);
-            return;
-          }
-          setEmailLookupError(t.saveError);
+          setEmailLookupError(errorMessageFor(data.error, t));
           return;
         }
 
@@ -197,10 +164,10 @@ export function SpinExperience({ dict, locale }) {
             ? rewardFromStoredEntry(data.record)
             : null;
           if (serverReward) {
-            upsertSpinResultEntry(submittedEmail, data.record);
             setEmail(submittedEmail);
             setReward(serverReward);
             setResultFromStorage(true);
+            setPendingClaim(null);
             setStep("result");
             return;
           }
@@ -208,8 +175,14 @@ export function SpinExperience({ dict, locale }) {
           return;
         }
 
+        if (!data.pending?.token || typeof data.pending.rewardIndex !== "number") {
+          setEmailLookupError(t.saveError);
+          return;
+        }
+
         setEmail(submittedEmail);
         setResultFromStorage(false);
+        setPendingClaim(data.pending);
         setStep("spinning");
       } catch {
         setEmailLookupError(t.saveError);
@@ -217,12 +190,12 @@ export function SpinExperience({ dict, locale }) {
         setEmailBusy(false);
       }
     },
-    [locale, t.saveError],
+    [locale, t],
   );
 
   const handleRetryClaim = useCallback(() => {
-    if (pendingRetryReward) void submitClaim(pendingRetryReward);
-  }, [pendingRetryReward, submitClaim]);
+    if (pendingClaim) void submitClaim();
+  }, [pendingClaim, submitClaim]);
 
   return (
     <>
@@ -280,6 +253,7 @@ export function SpinExperience({ dict, locale }) {
                 </div>
                 <SpinWheel
                   rewards={rewards}
+                  targetIndex={pendingClaim?.rewardIndex}
                   locale={locale}
                   spinningLabel={t.spinning}
                   spinButtonLabel={t.spinButton}
@@ -308,7 +282,7 @@ export function SpinExperience({ dict, locale }) {
                   size="lg"
                   className="w-full"
                   onClick={handleRetryClaim}
-                  disabled={!pendingRetryReward}
+                  disabled={!pendingClaim}
                 >
                   {t.retrySave}
                 </Button>
