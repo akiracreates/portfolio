@@ -316,15 +316,16 @@ export const dictionary = {
     emailLabel: "your email",
     emailPlaceholder: "you@example.com",
     spinCta: "spin the wheel",
+    spinButton: "spin!!",
     spinning: "spinning...",
     youWon: "you unlocked",
     notedNote:
       "noted. mention this when you contact me about a commission and i'll apply it to your order.",
     backToCommissions: "go to commissions",
     alreadySpun: "this email has already spun. only one reward per email.",
-    desktopOnlyTitle: "this little secret is desktop only.",
+    desktopOnlyTitle: "this little surprise works best on desktop.",
     desktopOnlyBody:
-      "the spin wheel needs a bigger screen. come back from a desktop to try your luck.",
+      "the wheel is easier to use on a bigger screen — come back from a computer when you can.",
     invalidEmail: "please enter a valid email address.",
     failed: "could not record your spin. please try again.",
   },

@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { pickLocale } from "@/lib/i18n/config";
+import { pickWeightedReward } from "@/lib/content/rewards";
+import { Button } from "@/components/ui/button";
 
 const SIZE = 320;
 const RADIUS = SIZE / 2;
-const SPIN_DURATION_MS = 2500;
+const SPIN_DURATION_MS = 5200;
+const SPIN_EASING = "cubic-bezier(0.12, 0.85, 0.15, 1)";
 
 function polarToCartesian(cx, cy, r, angleDeg) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -26,13 +29,20 @@ function describeArc(cx, cy, r, startAngle, endAngle) {
 }
 
 /**
- * Visual spin wheel. Picks a random reward, spins to it, then calls onResult
- * once the animation completes. CSS transform handles the rotation; reduced
- * motion users get an instant resolve.
+ * Visual spin wheel. User taps "spin!!" to run a weighted spin; onResult fires
+ * when the animation completes. Reduced motion: near-instant resolve.
  */
-export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
+export function SpinWheel({
+  rewards,
+  locale,
+  spinningLabel,
+  spinButtonLabel,
+  onResult,
+}) {
   const reduced = useReducedMotion();
-  const [phase, setPhase] = useState("idle"); // 'idle' | 'spinning'
+  const onResultRef = useRef(onResult);
+  const pendingWinnerRef = useRef(null);
+  const [phase, setPhase] = useState("ready"); // 'ready' | 'spinning'
   const [rotation, setRotation] = useState(0);
   const wheelRef = useRef(null);
   const segments = rewards;
@@ -43,33 +53,65 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
   );
 
   useEffect(() => {
-    if (segments.length === 0) return undefined;
+    onResultRef.current = onResult;
+  }, [onResult]);
 
-    const winnerIndex = Math.floor(Math.random() * segments.length);
-    const winner = segments[winnerIndex];
-    const targetAngle = winnerIndex * sliceAngle + sliceAngle / 2;
+  const startSpin = useCallback(() => {
+    if (phase !== "ready" || segments.length === 0) return;
+
+    const winner = pickWeightedReward(segments);
+    pendingWinnerRef.current = winner;
+    const step = 360 / segments.length;
+    const winnerIndex = Math.max(
+      0,
+      segments.findIndex((s) => s.id === winner.id),
+    );
+    const targetAngle = winnerIndex * step + step / 2;
     const turns = 5;
-    const finalRotation = turns * 360 + (360 - targetAngle);
+    const delta = turns * 360 + (360 - targetAngle);
 
-    // Always defer state updates one frame so React 19's
-    // "no setState in effect body" lint passes and the CSS transition
-    // animates from the current rotation rather than jumping instantly.
-    const startId = requestAnimationFrame(() => {
-      setRotation(finalRotation);
-      setPhase("spinning");
-    });
+    setRotation((prev) => prev + delta);
+    setPhase("spinning");
 
-    const settleMs = reduced ? 60 : SPIN_DURATION_MS + 80;
-    const tid = window.setTimeout(() => {
-      onResult(winner);
-    }, settleMs);
+    if (reduced) {
+      window.setTimeout(() => {
+        onResultRef.current(winner);
+      }, 80);
+    }
+  }, [phase, reduced, segments]);
+
+  useEffect(() => {
+    if (phase !== "spinning" || reduced) return undefined;
+
+    const el = wheelRef.current;
+    const winner = pendingWinnerRef.current;
+    if (!el || !winner) return undefined;
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      onResultRef.current(winner);
+    };
+
+    const onTransitionEnd = (event) => {
+      if (event.propertyName !== "transform") return;
+      el.removeEventListener("transitionend", onTransitionEnd);
+      window.clearTimeout(fallbackId);
+      finish();
+    };
+
+    el.addEventListener("transitionend", onTransitionEnd);
+    const fallbackId = window.setTimeout(() => {
+      el.removeEventListener("transitionend", onTransitionEnd);
+      finish();
+    }, SPIN_DURATION_MS + 250);
 
     return () => {
-      cancelAnimationFrame(startId);
-      window.clearTimeout(tid);
+      el.removeEventListener("transitionend", onTransitionEnd);
+      window.clearTimeout(fallbackId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [phase, reduced]);
 
   return (
     <div className="flex flex-col items-center gap-6">
@@ -104,7 +146,7 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
             transform: `rotate(${rotation}deg)`,
             transition: reduced
               ? "none"
-              : `transform ${SPIN_DURATION_MS}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+              : `transform ${SPIN_DURATION_MS}ms ${SPIN_EASING}`,
           }}
           aria-label="spin wheel"
         >
@@ -138,7 +180,7 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
                   x={labelPos.x}
                   y={labelPos.y}
                   fill="var(--text-on-accent)"
-                  fontSize="13"
+                  fontSize="11"
                   fontWeight="600"
                   textAnchor="middle"
                   dominantBaseline="middle"
@@ -160,14 +202,22 @@ export function SpinWheel({ rewards, locale, spinningLabel, onResult }) {
             fill="var(--bg-surface)"
             stroke="var(--border-strong)"
           />
-          <circle
-            cx={RADIUS}
-            cy={RADIUS}
-            r={6}
-            fill="var(--highlight)"
-          />
+          <circle cx={RADIUS} cy={RADIUS} r={6} fill="var(--highlight)" />
         </svg>
       </div>
+
+      {phase === "ready" && (
+        <Button
+          type="button"
+          variant="primary"
+          size="lg"
+          onClick={startSpin}
+          className="min-w-[9rem] font-semibold tracking-wide"
+        >
+          {spinButtonLabel}
+        </Button>
+      )}
+
       {phase === "spinning" && (
         <p className="caption text-text-secondary">{spinningLabel}</p>
       )}
