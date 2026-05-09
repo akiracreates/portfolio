@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# Lighthouse full JSON dumps (regenerate locally; keep summaries in docs/*.md)
+docs/lighthouse-*.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*

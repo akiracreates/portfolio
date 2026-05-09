@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CategorySection, categoryAnchorId } from "@/components/gallery/category-section";
+import { useNativeReducedMotion } from "@/lib/motion/use-native-reduced-motion";
 
 function categoryFromHash(categories) {
   if (typeof window === "undefined") return categories[0] ?? "";
@@ -18,7 +18,7 @@ export function PortfolioCategoryShowcase({
   piecesLabel = "pieces",
   pieceLabel = "piece",
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useNativeReducedMotion();
   const [active, setActive] = useState(categories[0] ?? "");
 
   useEffect(() => {
@@ -67,25 +67,22 @@ export function PortfolioCategoryShowcase({
         onSelect={selectCategory}
       />
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={activeSection.category}
-          initial={reduced ? { opacity: 1 } : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={reduced ? { opacity: 1 } : { opacity: 0, y: -8 }}
-          transition={{ duration: reduced ? 0 : 0.22, ease: [0.2, 0, 0, 1] }}
-        >
-          <CategorySection
-            category={activeSection.category}
-            artworks={activeSection.items}
-            locale={locale}
-            piecesLabel={piecesLabel}
-            pieceLabel={pieceLabel}
-            startIndex={0}
-            enableSecretSpin
-          />
-        </motion.div>
-      </AnimatePresence>
+      <div
+        key={activeSection.category}
+        className={
+          reduced ? "" : "portfolio-category-panel motion-crossfade-enter"
+        }
+      >
+        <CategorySection
+          category={activeSection.category}
+          artworks={activeSection.items}
+          locale={locale}
+          piecesLabel={piecesLabel}
+          pieceLabel={pieceLabel}
+          startIndex={0}
+          enableSecretSpin
+        />
+      </div>
     </div>
   );
 }

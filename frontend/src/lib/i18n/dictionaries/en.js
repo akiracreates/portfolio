@@ -6,6 +6,39 @@ export const dictionary = {
     bio: "digital portrait artist. portraits, animals, landscapes, and still life. commissions are open.",
   },
 
+  metaPages: {
+    home: {
+      title: "digital portrait artist",
+      description:
+        "Portfolio of akira — digital portraits, animals, landscapes, still life, and open commissions.",
+    },
+    portfolio: {
+      title: "portfolio",
+      description:
+        "Browse portraits, animals, landscapes, and still life — curated digital paintings by akira.",
+    },
+    commissions: {
+      title: "commissions",
+      description:
+        "Commission pricing, process, delivery, and FAQ — book a portrait or illustration by akira.",
+    },
+    about: {
+      title: "about",
+      description:
+        "Story, timeline, and creative practice — how akira works as a digital portrait artist.",
+    },
+    commissionsRequest: {
+      title: "request a commission",
+      description:
+        "Submit a commission inquiry — scope, references, and timeline for working with akira.",
+    },
+    spin: {
+      title: "studio surprise",
+      description:
+        "A playful studio interaction — not indexed for search.",
+    },
+  },
+
   common: {
     backHome: "back home",
     readMore: "read more",

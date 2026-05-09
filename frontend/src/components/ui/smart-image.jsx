@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  imageKitLoader,
+  isImageKitDeliveryUrl,
+} from "@/lib/images/imagekit-loader";
 
 /**
  * SmartImage wraps next/image with a brand skeleton overlay that fades out
@@ -20,15 +24,17 @@ export function SmartImage({
   height,
   sizes,
   priority = false,
+  /** When false, skip skeleton overlay (fewer nodes + hydration work). */
+  showSkeleton = true,
   className = "",
   imgClassName = "",
   rounded = "none",
   onLoad,
   ...rest
 }) {
-  const [loaded, setLoaded] = useState(false);
-  const useImageKitDirect =
-    typeof src === "string" && src.includes("ik.imagekit.io");
+  const [loaded, setLoaded] = useState(() => !showSkeleton);
+  const skeletonActive = showSkeleton && !loaded;
+  const useIkLoader = typeof src === "string" && isImageKitDeliveryUrl(src);
 
   const handleLoad = (event) => {
     setLoaded(true);
@@ -45,19 +51,19 @@ export function SmartImage({
 
   return (
     <Wrapper className={wrapperClass} data-smart-image>
-      {!loaded && (
+      {skeletonActive ? (
         <Skeleton
           rounded={rounded}
           className="pointer-events-none absolute inset-0"
         />
-      )}
+      ) : null}
       <Image
         src={src}
         alt={alt}
         {...(fill ? { fill: true } : { width, height })}
         sizes={sizes}
         priority={priority}
-        unoptimized={useImageKitDirect}
+        loader={useIkLoader ? imageKitLoader : undefined}
         onLoad={handleLoad}
         data-smart-image-loaded={loaded ? "true" : "false"}
         className={imgClassName}

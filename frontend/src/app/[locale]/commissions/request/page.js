@@ -2,7 +2,23 @@ import { CommissionRequestForm } from "@/components/commissions/commission-reque
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { commissionRequestFormContent } from "@/lib/content/commissions";
-import { pickLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { isLocale, pickLocale } from "@/lib/i18n/config";
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const dict = await getDictionary(locale);
+  const m = dict.metaPages.commissionsRequest;
+  return buildPageMetadata({
+    locale,
+    pathSuffix: "/commissions/request",
+    title: m.title,
+    description: m.description,
+    imageAlt: dict.hero.imageAlt,
+  });
+}
 
 export default async function Page({ params }) {
   const { locale } = await params;
@@ -12,6 +28,7 @@ export default async function Page({ params }) {
         id="request"
         size="md"
         className="pt-14 md:pt-16"
+        headingLevel="h1"
         eyebrow={pickLocale({ en: "commission request", ru: "запрос на заказ" }, locale)}
         title={pickLocale(commissionRequestFormContent.title, locale)}
         description={pickLocale(commissionRequestFormContent.intro, locale)}

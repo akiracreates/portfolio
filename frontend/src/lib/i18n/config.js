@@ -1,6 +1,12 @@
 export const locales = ["en", "ru"];
 export const defaultLocale = "en";
 
+/** Middleware forwards URL locale so `<html lang>` matches the path (not only the cookie). */
+export const LOCALE_REQUEST_HEADER = "x-akira-locale";
+
+/** Middleware forwards pathname for SEO JSON-LD (WebPage, breadcrumbs) without prop drilling. */
+export const PATHNAME_REQUEST_HEADER = "x-akira-pathname";
+
 export function isLocale(value) {
   return locales.includes(value);
 }
