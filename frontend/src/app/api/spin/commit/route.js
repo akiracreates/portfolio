@@ -60,9 +60,10 @@ export async function POST(request) {
         { status: 503 },
       );
     }
-    console.error("[spin] commit error:", e?.message ?? e);
+    const safeDebug = String(e?.message ?? e ?? "").slice(0, 200);
+    console.error("[spin] commit error:", safeDebug);
     return NextResponse.json(
-      { ok: false, error: "server_error" },
+      { ok: false, error: "server_error", debugMessage: safeDebug },
       { status: 500 },
     );
   }
