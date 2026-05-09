@@ -1,0 +1,176 @@
+import { Resend } from "resend";
+import { pickLocale } from "@/lib/i18n/config";
+import { commissionsPageUrl } from "@/lib/server/spin-utils";
+
+const DEFAULT_ADMIN_SPIN_EMAIL = "akiracreates.comms@gmail.com";
+
+function adminRecipient() {
+  return process.env.ADMIN_SPIN_EMAIL?.trim() || DEFAULT_ADMIN_SPIN_EMAIL;
+}
+
+function mailFrom() {
+  return process.env.EMAIL_FROM?.trim() || "";
+}
+
+function buildEnUserBody(rewardLine, commissionsUrl) {
+  return [
+    "hi!",
+    "",
+    "you found the hidden surprise on my site.",
+    "",
+    "your reward:",
+    rewardLine,
+    "",
+    "mention this email when you contact me about a commission, and i'll apply it to your order.",
+    "",
+    commissionsUrl ? `commissions: ${commissionsUrl}` : "",
+    "",
+    "thank you for visiting my little artistic mess,",
+    "akira",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function buildRuUserBody(rewardLine, commissionsUrl) {
+  return [
+    "привет!",
+    "",
+    "ты нашёл/нашла маленький сюрприз на моём сайте.",
+    "",
+    "твой результат:",
+    rewardLine,
+    "",
+    "упомяни это письмо, когда будешь писать мне о заказе, и я применю скидку.",
+    "",
+    commissionsUrl ? `заказы: ${commissionsUrl}` : "",
+    "",
+    "спасибо, что заглянул(а) в мой творческий беспорядок,",
+    "akira",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function moneyLinesForAdmin(reward) {
+  if (reward?.type === "flat") {
+    return {
+      usd: reward.usdValue != null ? String(reward.usdValue) : "n/a",
+      rub: reward.rubValue != null ? String(reward.rubValue) : "n/a",
+    };
+  }
+  return { usd: "n/a", rub: "n/a" };
+}
+
+function buildAdminBody({ userEmail, localeAtSpin, reward, record }) {
+  const { usd, rub } = moneyLinesForAdmin(reward);
+  const userFacing = pickLocale(reward.label, localeAtSpin);
+  const pct =
+    reward?.type === "percent" && reward.value != null
+      ? String(reward.value)
+      : "n/a";
+
+  return [
+    "new spin wheel reward claimed",
+    "",
+    `user email:\n${userEmail}`,
+    "",
+    `locale at spin:\n${localeAtSpin}`,
+    "",
+    `reward:\n${userFacing}`,
+    "",
+    `admin reward:\n${reward.adminLabel ?? "n/a"}`,
+    "",
+    `reward id:\n${reward.id}`,
+    "",
+    `reward type:\n${reward.type}`,
+    "",
+    `percent value:\n${pct}`,
+    "",
+    `usd value:\n${usd}`,
+    "",
+    `rub value:\n${rub}`,
+    "",
+    `spun at:\n${record.spunAt}`,
+    "",
+    "snapshot reward id:",
+    record.rewardId,
+  ].join("\n");
+}
+
+/**
+ * @param {object} params
+ * @param {string} params.toUserEmail normalized
+ * @param {'en'|'ru'} params.locale
+ * @param {object} params.reward canonical catalog entry
+ * @param {object} params.record persisted server record
+ */
+export async function sendSpinClaimEmails({
+  toUserEmail,
+  locale,
+  reward,
+  record,
+}) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = mailFrom();
+
+  if (!apiKey || !from) {
+    console.warn(
+      "[spin] RESEND_API_KEY or EMAIL_FROM missing; skipping email send",
+    );
+    return { userSent: false, adminSent: false, skipped: true };
+  }
+
+  const resend = new Resend(apiKey);
+  const rewardLine = pickLocale(reward.label, locale);
+  const commissionsUrl = commissionsPageUrl(
+    locale,
+    process.env.NEXT_PUBLIC_APP_URL,
+  );
+
+  const userSubject =
+    locale === "ru"
+      ? "твой маленький сюрприз от akira"
+      : "your small surprise from akira";
+
+  const userText =
+    locale === "ru"
+      ? buildRuUserBody(rewardLine, commissionsUrl)
+      : buildEnUserBody(rewardLine, commissionsUrl);
+
+  const adminSubject = `spin wheel result: ${toUserEmail}`;
+  const adminText = buildAdminBody({
+    userEmail: toUserEmail,
+    localeAtSpin: record.localeAtSpin,
+    reward,
+    record,
+  });
+
+  const out = { userSent: false, adminSent: false, skipped: false };
+
+  try {
+    await resend.emails.send({
+      from,
+      to: toUserEmail,
+      subject: userSubject,
+      text: userText,
+    });
+    out.userSent = true;
+  } catch (e) {
+    console.error("[spin] user email error:", e?.message ?? e);
+  }
+
+  try {
+    await resend.emails.send({
+      from,
+      to: adminRecipient(),
+      subject: adminSubject,
+      text: adminText,
+    });
+    out.adminSent = true;
+  } catch (e) {
+    console.error("[spin] admin email error:", e?.message ?? e);
+  }
+
+  return out;
+}

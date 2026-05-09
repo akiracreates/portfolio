@@ -322,12 +322,17 @@ export const dictionary = {
     notedNote:
       "noted. mention this when you contact me about a commission and i'll apply it to your order.",
     backToCommissions: "go to commissions",
-    alreadySpun: "this email has already spun. only one reward per email.",
+    alreadySpunWithReward:
+      "this email already spun. here's the reward saved for it.",
     desktopOnlyTitle: "this little surprise works best on desktop.",
     desktopOnlyBody:
       "the wheel is easier to use on a bigger screen — come back from a computer when you can.",
-    invalidEmail: "please enter a valid email address.",
-    failed: "could not record your spin. please try again.",
+    emailRequired: "please enter your email first.",
+    emailInvalid: "please enter a valid email.",
+    savingReward: "saving your reward...",
+    saveError:
+      "something went wrong while saving your reward. please try again in a moment.",
+    retrySave: "try again",
   },
 
   footer: {

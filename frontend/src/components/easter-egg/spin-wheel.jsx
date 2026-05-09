@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { pickLocale } from "@/lib/i18n/config";
-import { pickWeightedReward } from "@/lib/content/rewards";
+import { pickWeightedRewardIndex } from "@/lib/content/rewards";
 import { Button } from "@/components/ui/button";
 
 const SIZE = 320;
@@ -59,18 +59,21 @@ export function SpinWheel({
   const startSpin = useCallback(() => {
     if (phase !== "ready" || segments.length === 0) return;
 
-    const winner = pickWeightedReward(segments);
+    const { reward: winner, index: winnerIndex } =
+      pickWeightedRewardIndex(segments);
+    if (!winner || winnerIndex < 0) return;
+
     pendingWinnerRef.current = winner;
     const step = 360 / segments.length;
-    const winnerIndex = Math.max(
-      0,
-      segments.findIndex((s) => s.id === winner.id),
-    );
     const targetAngle = winnerIndex * step + step / 2;
     const turns = 5;
-    const delta = turns * 360 + (360 - targetAngle);
 
-    setRotation((prev) => prev + delta);
+    setRotation((prev) => {
+      const m = ((targetAngle + prev) % 360 + 360) % 360;
+      const align = m === 0 ? 360 : 360 - m;
+      const delta = turns * 360 + align;
+      return prev + delta;
+    });
     setPhase("spinning");
 
     if (reduced) {
