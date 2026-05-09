@@ -28,6 +28,7 @@ export default async function Page({ params }) {
         id="request"
         size="md"
         className="pt-14 md:pt-16"
+        headingLevel="h1"
         eyebrow={pickLocale({ en: "commission request", ru: "запрос на заказ" }, locale)}
         title={pickLocale(commissionRequestFormContent.title, locale)}
         description={pickLocale(commissionRequestFormContent.intro, locale)}

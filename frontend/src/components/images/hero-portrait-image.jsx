@@ -1,9 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import { imageKitLoader } from "@/lib/images/imagekit-loader";
 
 /**
- * Server-rendered hero portrait: no client hydration for skeleton state.
- * Uses the same ImageKit loader as SmartImage for responsive `tr=w-*`.
+ * Client boundary required: `next/image` + custom `loader` cannot be passed from
+ * Server Components (functions are not serializable). Same ImageKit loader as SmartImage.
  */
 export function HeroPortraitImage({
   src,

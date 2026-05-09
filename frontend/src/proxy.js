@@ -2,8 +2,15 @@
  * Next.js App Router edge handler (`middleware`).
  * This repo keeps locale redirects/cookies in `proxy.js`, which Next links at build time.
  * Behavior: bare `/` → `/en` or negotiated locale; sync `NEXT_LOCALE` cookie.
+ * SEO: forwards `x-akira-locale` + `x-akira-pathname` on locale routes so `<html lang>`
+ * and JSON-LD match the URL on the first request (cookie may not be readable yet).
  */
 import { NextResponse } from "next/server";
+
+import {
+  LOCALE_REQUEST_HEADER,
+  PATHNAME_REQUEST_HEADER,
+} from "./lib/i18n/config.js";
 
 const LOCALES = ["en", "ru"];
 const DEFAULT_LOCALE = "en";
@@ -14,6 +21,13 @@ function pathHasLocale(pathname) {
   return LOCALES.some(
     (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
   );
+}
+
+function forwardSeoHeaders(request, pathname, locale) {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(LOCALE_REQUEST_HEADER, locale);
+  requestHeaders.set(PATHNAME_REQUEST_HEADER, pathname);
+  return requestHeaders;
 }
 
 function detectLocale(request) {
@@ -38,10 +52,15 @@ export function proxy(request) {
     const segments = pathname.split("/").filter(Boolean);
     const locale = segments[0];
     const cookie = request.cookies.get(COOKIE_NAME)?.value;
+    const requestHeaders = forwardSeoHeaders(request, pathname, locale);
     if (cookie === locale) {
-      return NextResponse.next();
+      return NextResponse.next({
+        request: { headers: requestHeaders },
+      });
     }
-    const response = NextResponse.next();
+    const response = NextResponse.next({
+      request: { headers: requestHeaders },
+    });
     response.cookies.set(COOKIE_NAME, locale, {
       maxAge: COOKIE_MAX_AGE,
       path: "/",

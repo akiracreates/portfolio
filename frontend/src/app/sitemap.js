@@ -1,3 +1,4 @@
+import { defaultLocale } from "@/lib/i18n/config";
 import { getSiteUrl } from "@/lib/seo/site-url";
 
 const ROUTES = ["", "/about", "/portfolio", "/commissions", "/commissions/request"];
@@ -13,6 +14,8 @@ export default function sitemap() {
     const languages = Object.fromEntries(
       LOCALES.map((locale) => [locale, `${base}${localePath(locale, segment)}`]),
     );
+    languages["x-default"] =
+      languages[defaultLocale] ?? `${base}${localePath("en", segment)}`;
     const priority =
       segment === ""
         ? 1

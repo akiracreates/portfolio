@@ -1,10 +1,14 @@
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { Pangolin } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/content/site-config";
-import { defaultLocale, isLocale } from "@/lib/i18n/config";
+import {
+  defaultLocale,
+  isLocale,
+  LOCALE_REQUEST_HEADER,
+} from "@/lib/i18n/config";
 import { getMetadataBaseUrl } from "@/lib/seo/site-url";
 
 const pangolin = Pangolin({
@@ -25,6 +29,10 @@ function imageKitOrigin() {
     return null;
   }
 }
+
+export const viewport = {
+  themeColor: "#6554af",
+};
 
 export const metadata = {
   metadataBase: getMetadataBaseUrl(),
@@ -50,9 +58,15 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  const headerStore = await headers();
+  const pathLocale = headerStore.get(LOCALE_REQUEST_HEADER);
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
-  const lang = isLocale(cookieLocale) ? cookieLocale : defaultLocale;
+  const lang = isLocale(pathLocale)
+    ? pathLocale
+    : isLocale(cookieLocale)
+      ? cookieLocale
+      : defaultLocale;
   const ikOrigin = imageKitOrigin();
 
   return (
