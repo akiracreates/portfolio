@@ -112,6 +112,7 @@ export function SpinExperience({ dict, locale }) {
                 rewards={rewards}
                 locale={locale}
                 spinningLabel={t.spinning}
+                spinButtonLabel={t.spinButton}
                 onResult={handleResult}
               />
             )}
