@@ -20,7 +20,10 @@ const initialForm = {
   description: "",
   agreedTerms: false,
   consent: false,
+  website: "",
 };
+
+const MIN_DESCRIPTION_LEN = 10;
 
 const inputClass =
   "w-full rounded-[var(--radius-md)] border border-dashed border-border-default bg-bg-inset px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary transition-[border-color,box-shadow,background-color] duration-[var(--duration-fast)] focus:border-highlight focus:bg-bg-surface focus:outline-none focus:ring-2 focus:ring-[color:var(--highlight-soft)]";
@@ -48,6 +51,7 @@ export function ContactForm() {
   const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setStatus("idle");
 
     if (
       !form.name ||
@@ -58,6 +62,13 @@ export function ContactForm() {
       setError(t.formMissing || "please fill all required fields.");
       return;
     }
+    if (form.description.trim().length < MIN_DESCRIPTION_LEN) {
+      setError(
+        t.formDescriptionTooShort ||
+          "please add a bit more detail (at least a short description).",
+      );
+      return;
+    }
     if (!form.agreedTerms) {
       setError(t.formNeedTerms || "please agree to terms before submitting.");
       return;
@@ -65,12 +76,31 @@ export function ContactForm() {
 
     setStatus("submitting");
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/commission-request", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          preferredContact: form.preferredContact,
+          handle: form.handle,
+          commissionType: form.commissionType,
+          budget: form.budget,
+          deadline: form.deadline,
+          references: form.references,
+          language: form.language,
+          description: form.description,
+          agreedTerms: form.agreedTerms,
+          consent: form.consent,
+          website: form.website,
+          locale,
+          formSource: "commissions-page-form",
+        }),
       });
-      if (!response.ok) throw new Error("request failed");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok !== true) {
+        throw new Error("request failed");
+      }
       setStatus("success");
       setForm({
         ...initialForm,
@@ -79,17 +109,36 @@ export function ContactForm() {
     } catch {
       setStatus("error");
       setError(
-        t.formError || "could not submit right now. please try again later.",
+        t.formError ||
+          "something went wrong while sending your request. please try again or contact me on telegram.",
       );
     }
   };
 
   return (
     <form
-      className="space-y-8"
+      className="relative space-y-8"
       onSubmit={onSubmit}
+      noValidate
       aria-label="contact and commission request form"
     >
+      <div
+        className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
+        <label htmlFor="contact-website-hp">
+          company website
+          <input
+            id="contact-website-hp"
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.website}
+            onChange={onChange}
+          />
+        </label>
+      </div>
       <Fieldset legend={t.formGroupYou || "about you"}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
@@ -250,6 +299,7 @@ export function ContactForm() {
           type="submit"
           variant="primary"
           loading={status === "submitting"}
+          disabled={status === "submitting"}
         >
           {dict?.common?.sendRequest || "send request"}
         </Button>

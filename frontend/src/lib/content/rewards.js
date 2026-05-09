@@ -85,6 +85,18 @@ export const spinRewards = [
     adminLabel: "free sketch with commission",
   },
   {
+    id: "priority-slot",
+    type: "service",
+    weight: 3,
+    color: "#5060a8",
+    short: { en: "priority slot", ru: "приоритет" },
+    label: {
+      en: "a priority slot in the commission queue",
+      ru: "приоритетное место в очереди заказов",
+    },
+    adminLabel: "priority slot in commission queue",
+  },
+  {
     id: "pct-15",
     type: "percent",
     weight: 8,
@@ -133,15 +145,49 @@ export function getRewardsForLocale(_locale) {
   return spinRewards;
 }
 
-/** Weighted random choice; returns the full reward object. */
-export function pickWeightedReward(rewards = spinRewards) {
+/**
+ * Weighted random index + reward (cumulative weights).
+ * Select before wheel animation so rotation can target this segment.
+ */
+export function pickWeightedRewardIndex(rewards = spinRewards) {
+  if (!rewards.length) {
+    return { reward: null, index: -1 };
+  }
   const total = rewards.reduce((sum, r) => sum + (r.weight ?? 0), 0);
+  if (total <= 0) {
+    const last = rewards.length - 1;
+    return { reward: rewards[last], index: last };
+  }
   let roll = Math.random() * total;
   for (let i = 0; i < rewards.length; i += 1) {
     roll -= rewards[i].weight ?? 0;
-    if (roll <= 0) return rewards[i];
+    if (roll <= 0) return { reward: rewards[i], index: i };
   }
-  return rewards[rewards.length - 1];
+  const last = rewards.length - 1;
+  return { reward: rewards[last], index: last };
+}
+
+/** Weighted random choice; returns the full reward object. */
+export function pickWeightedReward(rewards = spinRewards) {
+  return pickWeightedRewardIndex(rewards).reward;
+}
+
+/** Serializable metadata for localStorage / future backend (full locale maps + admin). */
+export function snapshotSpinReward(reward) {
+  if (!reward) return null;
+  return {
+    id: reward.id,
+    type: reward.type,
+    weight: reward.weight,
+    value: reward.value,
+    percentValue: reward.type === "percent" ? reward.value : undefined,
+    usdValue: reward.usdValue,
+    rubValue: reward.rubValue,
+    color: reward.color,
+    short: reward.short,
+    label: reward.label,
+    adminLabel: reward.adminLabel,
+  };
 }
 
 export function getSpinRewardById(id) {
