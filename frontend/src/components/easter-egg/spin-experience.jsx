@@ -79,6 +79,13 @@ async function postSpin(body) {
   return { res, data };
 }
 
+function spinErrorMessage(errorCode, t) {
+  if (errorCode === "storage_unavailable" || errorCode === "storage_error") {
+    return t.storageUnavailableError || t.saveError;
+  }
+  return t.saveError;
+}
+
 export function SpinExperience({ dict, locale }) {
   const t = dict.spin;
   const rewards = getRewardsForLocale(locale);
@@ -107,7 +114,7 @@ export function SpinExperience({ dict, locale }) {
         });
 
         if (!res.ok || data.ok !== true) {
-          setSyncError(t.saveError);
+          setSyncError(spinErrorMessage(data?.error, t));
           setPendingRetryReward(chosen);
           setStep("sync-failed");
           return;
@@ -115,7 +122,7 @@ export function SpinExperience({ dict, locale }) {
 
         const record = data.record;
         if (!record?.rewardId) {
-          setSyncError(t.saveError);
+          setSyncError(spinErrorMessage(data?.error, t));
           setPendingRetryReward(chosen);
           setStep("sync-failed");
           return;
@@ -124,7 +131,7 @@ export function SpinExperience({ dict, locale }) {
         upsertSpinResultEntry(email, record);
         const displayReward = rewardFromStoredEntry(record);
         if (!displayReward) {
-          setSyncError(t.saveError);
+          setSyncError(spinErrorMessage(data?.error, t));
           setPendingRetryReward(chosen);
           setStep("sync-failed");
           return;
@@ -185,10 +192,10 @@ export function SpinExperience({ dict, locale }) {
             setReward(localResolved);
             setResultFromStorage(true);
             setStep("result");
-            setEmailLookupError(t.saveError);
+            setEmailLookupError(spinErrorMessage(data?.error, t));
             return;
           }
-          setEmailLookupError(t.saveError);
+          setEmailLookupError(spinErrorMessage(data?.error, t));
           return;
         }
 
@@ -204,7 +211,7 @@ export function SpinExperience({ dict, locale }) {
             setStep("result");
             return;
           }
-          setEmailLookupError(t.saveError);
+          setEmailLookupError(spinErrorMessage(data?.error, t));
           return;
         }
 

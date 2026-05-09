@@ -14,6 +14,16 @@ import { isValidSpinEmail, normalizeSpinEmail } from "@/lib/server/spin-utils";
 /** Resend is a Node SDK; keep on the Node runtime on serverless hosts. */
 export const runtime = "nodejs";
 
+function isStorageConfigError(err) {
+  const msg = String(err?.message ?? "").toLowerCase();
+  return (
+    msg.includes("spin_storage_not_configured") ||
+    msg.includes("unauthorized") ||
+    msg.includes("invalid password") ||
+    msg.includes("forbidden")
+  );
+}
+
 function publicRecord(rec) {
   if (!rec) return null;
   return {
@@ -64,8 +74,11 @@ export async function POST(request) {
       });
     } catch (e) {
       console.error("[spin] lookup error:", e?.message ?? e);
+      const code = isStorageConfigError(e)
+        ? "storage_unavailable"
+        : "storage_error";
       return NextResponse.json(
-        { ok: false, error: "storage_error" },
+        { ok: false, error: code },
         { status: 503 },
       );
     }
@@ -116,12 +129,18 @@ export async function POST(request) {
       });
     }
 
-    const email = await sendSpinClaimEmails({
-      toUserEmail: normalized,
-      locale,
-      reward: canonical,
-      record: newRecord,
-    });
+    let email = { skipped: true, userSent: false, adminSent: false };
+    try {
+      email = await sendSpinClaimEmails({
+        toUserEmail: normalized,
+        locale,
+        reward: canonical,
+        record: newRecord,
+      });
+    } catch (e) {
+      // Claim already succeeded. Do not fail the API response on notification issues.
+      console.error("[spin] post-claim email error:", e?.message ?? e);
+    }
 
     return NextResponse.json({
       ok: true,
@@ -134,7 +153,7 @@ export async function POST(request) {
       },
     });
   } catch (e) {
-    if (e?.message === "spin_storage_not_configured") {
+    if (isStorageConfigError(e)) {
       return NextResponse.json(
         { ok: false, error: "storage_unavailable" },
         { status: 503 },
