@@ -1,16 +1,10 @@
-import { Resend } from "resend";
 import { pickLocale } from "@/lib/i18n/config";
+import {
+  getEmailFrom,
+  getResend,
+  getSpinAdminEmail,
+} from "@/lib/server/email";
 import { commissionsPageUrl } from "@/lib/server/spin-utils";
-
-const DEFAULT_ADMIN_SPIN_EMAIL = "akiracreates.comms@gmail.com";
-
-function adminRecipient() {
-  return process.env.ADMIN_SPIN_EMAIL?.trim() || DEFAULT_ADMIN_SPIN_EMAIL;
-}
-
-function mailFrom() {
-  return process.env.EMAIL_FROM?.trim() || "";
-}
 
 function buildEnUserBody(rewardLine, commissionsUrl) {
   return [
@@ -111,17 +105,15 @@ export async function sendSpinClaimEmails({
   reward,
   record,
 }) {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = mailFrom();
+  const resend = getResend();
+  const from = getEmailFrom();
 
-  if (!apiKey || !from) {
+  if (!resend || !from) {
     console.warn(
       "[spin] RESEND_API_KEY or EMAIL_FROM missing; skipping email send",
     );
     return { userSent: false, adminSent: false, skipped: true };
   }
-
-  const resend = new Resend(apiKey);
   const rewardLine = pickLocale(reward.label, locale);
   const commissionsUrl = commissionsPageUrl(
     locale,
@@ -163,7 +155,7 @@ export async function sendSpinClaimEmails({
   try {
     await resend.emails.send({
       from,
-      to: adminRecipient(),
+      to: getSpinAdminEmail(),
       subject: adminSubject,
       text: adminText,
     });

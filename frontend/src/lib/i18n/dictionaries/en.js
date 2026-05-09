@@ -299,10 +299,14 @@ export const dictionary = {
     formDescriptionPlaceholder: "tell me about your idea, mood, references...",
     formAgreeTerms: "i agree to the commission terms above",
     formConsent: "i consent to being contacted about this request",
-    formSuccess: "request sent. thanks for reaching out.",
-    formError: "could not submit right now. please try again later.",
+    formSuccess:
+      "thank you — your request was sent. i'll get back to you soon.",
+    formError:
+      "something went wrong while sending your request. please try again or contact me on telegram.",
     formMissing: "please fill all required fields.",
     formNeedTerms: "please agree to terms before submitting.",
+    formDescriptionTooShort:
+      "please add a bit more detail (at least a short description).",
 
     contactEyebrow: "or just say hi",
     contactTitle: "alternate ways to reach me.",

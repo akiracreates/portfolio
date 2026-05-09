@@ -444,12 +444,16 @@ export const commissionRequestFormContent = {
   },
   submit: { en: "send request", ru: "отправить заявку" },
   success: {
-    en: "your request has been sent. i'll get back to you soon.",
-    ru: "ваша заявка отправлена. скоро я свяжусь с вами.",
+    en: "thank you — your request was sent. i'll get back to you soon.",
+    ru: "спасибо — заявка отправлена. я отвечу тебе как только смогу.",
   },
   error: {
-    en: "could not submit right now. please try again later.",
-    ru: "сейчас не удалось отправить заявку. попробуйте позже.",
+    en: "something went wrong while sending your request. please try again or contact me on telegram.",
+    ru: "что-то пошло не так при отправке. попробуй ещё раз или напиши мне в telegram.",
+  },
+  descriptionTooShort: {
+    en: "please add a bit more detail (at least a short description).",
+    ru: "добавь чуть больше деталей в описание (хотя бы пару предложений).",
   },
   requiredError: {
     en: "please fill all required fields.",
