@@ -34,10 +34,10 @@ export function Footer() {
   const isHomeRoute = pathname === `/${locale}` || pathname === `/${locale}/`;
   const footerMetaTextClass = isHomeRoute
     ? "caption text-[0.875rem] text-text-secondary/95 md:text-[0.75rem]"
-    : "caption";
+    : "caption max-md:text-[0.8125rem] max-md:text-text-secondary md:text-text-tertiary";
   const footerMetaLinkClass = isHomeRoute
     ? "caption rounded-md text-[0.875rem] text-text-secondary/95 transition-colors hover:text-text-primary focus-visible-ring md:text-[0.75rem]"
-    : "caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring";
+    : "caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring max-md:text-[0.8125rem] max-md:text-text-secondary";
 
   const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
   const useCompactFooter = pathname.endsWith("/commissions");
@@ -128,7 +128,7 @@ export function Footer() {
                             href={s.url}
                             target={s.id === "email" ? undefined : "_blank"}
                             rel={s.id === "email" ? undefined : "noreferrer noopener"}
-                            className={`social-pill group flex h-full min-h-[84px] items-start gap-3 p-3.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
+                            className={`social-pill group flex h-full min-h-[76px] items-center gap-3 p-4 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
                               s.id === "telegram-personal"
                                 ? "note-surface-warm border-border-accent bg-accent-soft hover:bg-accent-strong"
                                 : "border-border-subtle hover:border-border-default hover:bg-bg-surface-raised"
@@ -137,7 +137,7 @@ export function Footer() {
                             title={label}
                           >
                             <span
-                              className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-md ${
+                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${
                                 s.id === "telegram-personal"
                                   ? "border border-dashed border-highlight bg-highlight-soft text-highlight"
                                   : "border border-dashed border-border-subtle bg-bg-inset text-text-secondary"
@@ -146,8 +146,8 @@ export function Footer() {
                             >
                               <NavIcon id={s.id} />
                             </span>
-                            <div className="flex min-w-0 flex-1 flex-col justify-between gap-1.5">
-                              <div className="flex items-start justify-between gap-2">
+                            <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                              <div className="flex items-center justify-between gap-2">
                                 <p className="body-sm font-medium text-text-primary">{label}</p>
                                 {s.id === "telegram-personal" && (
                                   <span className="caption shrink-0 text-highlight">
@@ -163,7 +163,7 @@ export function Footer() {
                     })}
                   </ul>
 
-                  <ul className="grid grid-cols-2 gap-2">
+                  <ul className="grid grid-cols-2 gap-2.5">
                     {secondaryLinks.map((s) => {
                       const label = locale === "ru" ? (s.labelRu ?? s.label) : s.label;
                       const shortLabel =
@@ -180,7 +180,7 @@ export function Footer() {
                             href={s.url}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className={`social-pill group flex min-h-[62px] items-center gap-2.5 rounded-[12px] border border-dashed px-3 py-2.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
+                            className={`social-pill group flex min-h-[64px] items-center gap-2.5 rounded-[12px] border border-dashed px-3 py-2.5 transition-[background-color,border-color,box-shadow,color] duration-[var(--duration-base)] focus-visible-ring ${
                               s.id === "cara"
                                 ? "border-[color:var(--accent-warm-muted)] bg-[color:var(--surface-warm-paper)] hover:border-[color:var(--accent-warm)] hover:bg-[color:var(--bg-surface-warm)]"
                                 : "border-border-subtle bg-bg-surface hover:border-border-default hover:bg-bg-surface-raised"

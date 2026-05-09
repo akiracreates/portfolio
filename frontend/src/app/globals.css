@@ -1175,12 +1175,45 @@ a {
   top: 0;
   z-index: 30;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0 0.8rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  padding: 0.45rem 0 0.55rem;
+  min-width: 0;
   background: linear-gradient(180deg, rgba(43, 39, 48, 0.94), rgba(43, 39, 48, 0.7) 75%, transparent);
   backdrop-filter: blur(10px);
+}
+
+.portfolio-tabs-label {
+  flex-shrink: 0;
+}
+
+.portfolio-tabs-inner {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .portfolio-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0 0.8rem;
+  }
+
+  .portfolio-tabs-label {
+    margin-right: 0.35rem;
+  }
+
+  .portfolio-tabs-inner {
+    display: contents;
+    width: auto;
+    gap: 0;
+  }
 }
 
 .portfolio-tabs::after {
@@ -1218,15 +1251,48 @@ a {
   color: var(--text-primary);
 }
 
-.portfolio-tab.is-active::after {
-  content: "";
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 7px;
-  height: 1px;
-  background:
-    linear-gradient(90deg, rgba(233, 102, 160, 0.92), rgba(149, 117, 222, 0.7));
+@media (max-width: 767.98px) {
+  .portfolio-tabs {
+    padding: 0.62rem 0 0.78rem;
+    gap: 0.5rem;
+  }
+
+  .portfolio-tabs-inner {
+    gap: 0.45rem;
+  }
+
+  .portfolio-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 2.65rem;
+    padding: 0.48rem 0.42rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    text-align: center;
+    hyphens: none;
+    border-radius: 999px;
+  }
+
+  .portfolio-tab:not(.is-active) {
+    border: 1px dashed rgba(244, 241, 248, 0.14);
+    background: rgba(36, 31, 42, 0.62);
+    color: var(--text-secondary);
+  }
+
+  .portfolio-tab:not(.is-active):hover {
+    border-color: rgba(244, 241, 248, 0.2);
+    color: var(--text-primary);
+  }
+
+  .portfolio-tab.is-active {
+    border: 1px dashed rgba(233, 102, 160, 0.35);
+  }
+
+  .category-banner::after {
+    opacity: 0.55;
+  }
 }
 
 .category-banner {
@@ -3076,7 +3142,7 @@ a {
 .portfolio-mobile-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem;
+  gap: 1.14rem;
 }
 
 .portfolio-columns {
@@ -3110,6 +3176,35 @@ a {
 .cascade-row {
   position: relative;
   min-width: 0;
+}
+
+@media (max-width: 767.98px) {
+  .cascade-row .art-object-frame {
+    border-color: rgba(244, 241, 248, 0.12);
+    box-shadow: 0 6px 16px rgba(12, 9, 15, 0.18);
+  }
+
+  .cascade-row .art-object-frame::after {
+    opacity: 0.42;
+    border-color: rgba(244, 241, 248, 0.11);
+  }
+
+  .portfolio-stage .portfolio-note.scrap-caption {
+    background: color-mix(in srgb, var(--bg-inset) 82%, var(--bg-base) 18%);
+    box-shadow:
+      0 5px 14px rgba(10, 8, 14, 0.1),
+      0 0 0 1px rgba(244, 241, 248, 0.022);
+  }
+
+  .portfolio-stage .portfolio-note.scrap-caption::before {
+    opacity: 0.38;
+    border-top-color: rgba(244, 241, 248, 0.09);
+    border-left-color: rgba(244, 241, 248, 0.07);
+  }
+
+  .portfolio-stage .portfolio-note.scrap-caption::after {
+    opacity: 0.32;
+  }
 }
 
 @media (min-width: 768px) {
@@ -3246,36 +3341,37 @@ a {
   position: relative;
   overflow: hidden;
   border-radius: 18px;
-  border: 1px dashed rgba(233, 102, 160, 0.24);
-  background:
-    linear-gradient(180deg, rgba(233, 102, 160, 0.08), transparent 26%),
-    linear-gradient(315deg, rgba(149, 117, 222, 0.1), transparent 34%),
-    rgba(49, 42, 56, 0.94);
+  border: 1px dashed rgba(233, 102, 160, 0.28);
+  background: var(--bg-note-warm);
   box-shadow:
     0 22px 44px rgba(10, 8, 14, 0.28),
-    0 0 0 1px rgba(244, 241, 248, 0.03);
+    0 0 0 1px rgba(244, 241, 248, 0.04),
+    0 0 28px rgba(233, 102, 160, 0.06);
 }
 
 .spin-celebration::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 14px;
   pointer-events: none;
-  background-image:
-    radial-gradient(circle at 12% 20%, rgba(233, 102, 160, 0.16) 0 2px, transparent 2.5px),
-    radial-gradient(circle at 30% 10%, rgba(149, 117, 222, 0.18) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 74% 16%, rgba(233, 102, 160, 0.14) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 86% 22%, rgba(149, 117, 222, 0.16) 0 2px, transparent 2.5px),
-    radial-gradient(circle at 15% 78%, rgba(149, 117, 222, 0.16) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 80% 82%, rgba(233, 102, 160, 0.14) 0 2px, transparent 2.5px);
-  opacity: 0.85;
+  border-radius: 12px;
+  opacity: 0.35;
+  background:
+    linear-gradient(var(--highlight), var(--highlight)) left top / 14px 1px no-repeat,
+    linear-gradient(var(--highlight), var(--highlight)) left top / 1px 14px no-repeat,
+    linear-gradient(var(--accent-secondary), var(--accent-secondary)) right bottom / 14px 1px
+      no-repeat,
+    linear-gradient(var(--accent-secondary), var(--accent-secondary)) right bottom / 1px 14px
+      no-repeat;
 }
 
 .spin-wheel-shell {
   position: relative;
-  background:
-    linear-gradient(180deg, rgba(244, 241, 248, 0.025), transparent 40%),
-    rgba(43, 39, 48, 0.92);
+  background: var(--bg-inset);
+  border: 1px dashed rgba(244, 241, 248, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 241, 248, 0.04),
+    0 10px 24px rgba(10, 8, 14, 0.22);
 }
 
 .spin-wheel-shell::after {

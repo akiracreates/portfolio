@@ -16,7 +16,10 @@ const initialForm = {
   description: "",
   references: "",
   agreedTerms: false,
+  website: "",
 };
+
+const MIN_DESCRIPTION_LEN = 10;
 
 export function CommissionRequestForm({ locale = "en", content }) {
   const [form, setForm] = useState(initialForm);
@@ -34,9 +37,14 @@ export function CommissionRequestForm({ locale = "en", content }) {
   const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setStatus("idle");
 
     if (!form.name || !form.email || !form.commissionType || !form.description) {
       setError(pickLocale(content.requiredError, locale));
+      return;
+    }
+    if (form.description.trim().length < MIN_DESCRIPTION_LEN) {
+      setError(pickLocale(content.descriptionTooShort, locale));
       return;
     }
     if (!form.agreedTerms) {
@@ -46,12 +54,27 @@ export function CommissionRequestForm({ locale = "en", content }) {
 
     setStatus("submitting");
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/commission-request", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          handle: form.handle,
+          preferredContact: form.preferredContact,
+          commissionType: form.commissionType,
+          description: form.description,
+          references: form.references,
+          agreedTerms: form.agreedTerms,
+          website: form.website,
+          locale,
+          formSource: "commission-request",
+        }),
       });
-      if (!response.ok) throw new Error("request failed");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok !== true) {
+        throw new Error("request failed");
+      }
       setForm(initialForm);
       setStatus("success");
     } catch {
@@ -61,7 +84,24 @@ export function CommissionRequestForm({ locale = "en", content }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="relative space-y-4" noValidate>
+      <div
+        className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
+        <label htmlFor="commission-website-hp">
+          website
+          <input
+            id="commission-website-hp"
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.website}
+            onChange={onChange}
+          />
+        </label>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label={pickLocale(content.labels.name, locale)}
@@ -161,7 +201,13 @@ export function CommissionRequestForm({ locale = "en", content }) {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="caption">{pickLocale(content.note, locale)}</p>
-        <Button type="submit" variant="primary" size="md" loading={status === "submitting"}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          loading={status === "submitting"}
+          disabled={status === "submitting"}
+        >
           {pickLocale(content.submit, locale)}
         </Button>
       </div>

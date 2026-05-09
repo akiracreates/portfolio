@@ -31,25 +31,33 @@ export function CommissionsPage({ locale = "en" }) {
     <>
       <Container>
         <Section id="commissions" size="md" className="pt-14 md:pt-16">
-          <article className="commission-flat-card scrap-card card-surface-warm border-[color:var(--border-accent)]/40 p-6 md:p-8">
-            <span className="caption inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/35 bg-[color:var(--success)]/10 px-3 py-1 text-success">
+          <article className="commission-flat-card scrap-card card-surface-warm border-[color:var(--border-accent)]/40 p-6 max-sm:px-5 max-sm:py-7 md:p-8">
+            <span className="caption inline-flex w-fit items-center gap-2 rounded-full border border-dashed border-[color:var(--success)]/40 bg-[color:var(--success)]/12 px-3 py-1 text-success max-sm:px-3.5 max-sm:py-1.5 max-sm:text-[0.8125rem] max-sm:font-medium">
               <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden />
               {pickLocale(commissionStatus.label, locale)}
             </span>
-            <h1 className="heading-h1 mt-4 text-text-primary">
+            <h1 className="heading-h1 mt-4 text-text-primary max-sm:text-[clamp(1.48rem,5.4vw,1.82rem)] max-sm:leading-[1.12]">
               {pickLocale(commissionIntro.title, locale)}
             </h1>
-            <p className="body mt-3 max-w-3xl">
+            <p className="body mt-3 max-w-3xl max-sm:leading-relaxed">
               {pickLocale(commissionIntro.body, locale)}
             </p>
-            <p className="body-sm mt-2">
+            <p className="body-sm mt-2 max-sm:leading-relaxed">
               {pickLocale(commissionIntro.bodyNote, locale)}
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Button as="link" href={requestPath} variant="primary" size="lg">
+            <div className="mt-6 flex flex-wrap items-center gap-3 max-sm:flex-col max-sm:items-stretch max-sm:gap-3.5">
+              <Button
+                as="link"
+                href={requestPath}
+                variant="primary"
+                size="lg"
+                className="max-sm:h-12 max-sm:min-h-[48px] max-sm:w-full max-sm:justify-center max-sm:px-6 max-sm:text-base sm:w-auto"
+              >
                 {pickLocale(commissionIntro.button, locale)}
               </Button>
-              <p className="caption">{pickLocale(commissionIntro.smallNote, locale)}</p>
+              <p className="caption max-sm:text-center sm:text-left">
+                {pickLocale(commissionIntro.smallNote, locale)}
+              </p>
             </div>
           </article>
         </Section>
@@ -67,12 +75,12 @@ export function CommissionsPage({ locale = "en" }) {
         <Section
           id="prices"
           separator
-          title={pickLocale({ en: "detailed pricing breakdown", ru: "детальная разбивка цен" }, locale)}
+          title={pickLocale({ en: "pricing breakdown", ru: "разбор цен" }, locale)}
           size="md"
         >
           <CommissionPricingTable locale={locale} rows={commissionPricingRows} />
-          <p className="caption mt-3">
-            <span className="deco-warm-label mr-2">
+          <p className="caption mt-4 max-md:mt-5 max-md:leading-relaxed text-text-secondary">
+            <span className="deco-warm-label mr-2 text-text-tertiary">
               {pickLocale({ en: "note", ru: "заметка" }, locale)}
             </span>
             {pickLocale(
@@ -186,7 +194,7 @@ export function CommissionsPage({ locale = "en" }) {
           size="md"
           className="pb-16 md:pb-20"
         >
-          <ul className="grid gap-3 sm:grid-cols-3">
+          <ul className="grid gap-3 max-md:gap-3.5 sm:grid-cols-3">
             {socialLinks
               .filter((s) => CONTACT_SOCIALS.includes(s.id))
               .map((s) => (
@@ -195,7 +203,7 @@ export function CommissionsPage({ locale = "en" }) {
                     href={s.url}
                     target={s.id === "email" ? undefined : "_blank"}
                     rel={s.id === "email" ? undefined : "noreferrer noopener"}
-                    className={`group social-pill focus-visible-ring flex items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors ${
+                    className={`group social-pill focus-visible-ring flex min-h-[3rem] items-center gap-3 rounded-[var(--radius-lg)] border border-dashed p-4 transition-colors max-md:min-h-[52px] ${
                       s.id === "telegram-personal" ? "note-surface-warm " : ""
                     }${
                       s.primary
@@ -234,7 +242,7 @@ function Callout({ label, value, detail }) {
     <div className="scrap-note border-[color:var(--border-accent)]/25 bg-[color:var(--bg-note)] p-5">
       <p className="caption">{label}</p>
       <p className="heading-h3 mt-1 text-text-primary">{value}</p>
-      {detail && <p className="body-sm mt-2">{detail}</p>}
+      {detail && <p className="body-sm mt-2 max-md:leading-relaxed">{detail}</p>}
     </div>
   );
 }

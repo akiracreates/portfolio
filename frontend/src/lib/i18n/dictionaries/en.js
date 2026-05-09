@@ -299,10 +299,14 @@ export const dictionary = {
     formDescriptionPlaceholder: "tell me about your idea, mood, references...",
     formAgreeTerms: "i agree to the commission terms above",
     formConsent: "i consent to being contacted about this request",
-    formSuccess: "request sent. thanks for reaching out.",
-    formError: "could not submit right now. please try again later.",
+    formSuccess:
+      "thank you — your request was sent. i'll get back to you soon.",
+    formError:
+      "something went wrong while sending your request. please try again or contact me on telegram.",
     formMissing: "please fill all required fields.",
     formNeedTerms: "please agree to terms before submitting.",
+    formDescriptionTooShort:
+      "please add a bit more detail (at least a short description).",
 
     contactEyebrow: "or just say hi",
     contactTitle: "alternate ways to reach me.",
@@ -316,17 +320,23 @@ export const dictionary = {
     emailLabel: "your email",
     emailPlaceholder: "you@example.com",
     spinCta: "spin the wheel",
+    spinButton: "spin!!",
     spinning: "spinning...",
     youWon: "you unlocked",
     notedNote:
       "noted. mention this when you contact me about a commission and i'll apply it to your order.",
     backToCommissions: "go to commissions",
-    alreadySpun: "this email has already spun. only one reward per email.",
-    desktopOnlyTitle: "this little secret is desktop only.",
+    alreadySpunWithReward:
+      "this email already spun. here's the reward saved for it.",
+    desktopOnlyTitle: "this little surprise works best on desktop.",
     desktopOnlyBody:
-      "the spin wheel needs a bigger screen. come back from a desktop to try your luck.",
-    invalidEmail: "please enter a valid email address.",
-    failed: "could not record your spin. please try again.",
+      "the wheel is easier to use on a bigger screen — come back from a computer when you can.",
+    emailRequired: "please enter your email first.",
+    emailInvalid: "please enter a valid email.",
+    savingReward: "saving your reward...",
+    saveError:
+      "something went wrong while saving your reward. please try again in a moment.",
+    retrySave: "try again",
   },
 
   footer: {
