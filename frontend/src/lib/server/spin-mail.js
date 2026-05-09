@@ -152,11 +152,20 @@ export async function sendSpinClaimEmails({
   );
   if (userSend.ok) {
     out.userSent = true;
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "[spin] user email accepted by Resend, id:",
+        userSend.data?.id ?? "—",
+      );
+    }
   } else {
     console.error(
       "[spin] user email error:",
       formatResendErrorForLog(userSend.error),
     );
+    if (process.env.NODE_ENV === "development" && userSend.error) {
+      console.error("[spin] user email Resend error detail:", userSend.error);
+    }
   }
 
   const adminSend = await resendSendResult(
@@ -169,11 +178,20 @@ export async function sendSpinClaimEmails({
   );
   if (adminSend.ok) {
     out.adminSent = true;
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "[spin] admin email accepted by Resend, id:",
+        adminSend.data?.id ?? "—",
+      );
+    }
   } else {
     console.error(
       "[spin] admin email error:",
       formatResendErrorForLog(adminSend.error),
     );
+    if (process.env.NODE_ENV === "development" && adminSend.error) {
+      console.error("[spin] admin email Resend error detail:", adminSend.error);
+    }
   }
 
   return out;
