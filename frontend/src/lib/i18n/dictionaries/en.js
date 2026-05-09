@@ -337,6 +337,8 @@ export const dictionary = {
     saveError:
       "something went wrong while saving your reward. please try again in a moment.",
     retrySave: "try again",
+    emailDeliveryNote:
+      "your reward is saved. if you don’t see a confirmation email soon, check spam — you can still use this screen when you message me about a commission.",
   },
 
   footer: {

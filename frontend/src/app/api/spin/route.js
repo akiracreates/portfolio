@@ -11,6 +11,9 @@ import {
 } from "@/lib/server/spin-storage";
 import { isValidSpinEmail, normalizeSpinEmail } from "@/lib/server/spin-utils";
 
+/** Resend is a Node SDK; keep on the Node runtime on serverless hosts. */
+export const runtime = "nodejs";
+
 function publicRecord(rec) {
   if (!rec) return null;
   return {
@@ -113,7 +116,7 @@ export async function POST(request) {
       });
     }
 
-    await sendSpinClaimEmails({
+    const email = await sendSpinClaimEmails({
       toUserEmail: normalized,
       locale,
       reward: canonical,
@@ -124,6 +127,11 @@ export async function POST(request) {
       ok: true,
       alreadySpun: false,
       record: publicRecord(newRecord),
+      email: {
+        skipped: email.skipped,
+        userSent: email.userSent,
+        adminSent: email.adminSent,
+      },
     });
   } catch (e) {
     if (e?.message === "spin_storage_not_configured") {

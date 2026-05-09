@@ -29,3 +29,29 @@ export function getCommissionAdminEmail() {
     DEFAULT_WORK_EMAIL
   );
 }
+
+/**
+ * Resend's `emails.send()` resolves to `{ data, error }` and does not throw on API errors.
+ * @param {Promise<{ data?: unknown, error?: object }>} sendPromise
+ */
+export async function resendSendResult(sendPromise) {
+  const { data, error } = await sendPromise;
+  if (error) return { ok: false, error };
+  return { ok: true, data };
+}
+
+/** @param {unknown} err */
+export function formatResendErrorForLog(err) {
+  if (err && typeof err === "object" && "message" in err) {
+    const o = /** @type {{ message?: string, name?: string, statusCode?: number }} */ (
+      err
+    );
+    const parts = [o.message, o.name, o.statusCode].filter(Boolean);
+    if (parts.length) return parts.join(" — ");
+  }
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
