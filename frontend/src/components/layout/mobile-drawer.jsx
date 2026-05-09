@@ -84,7 +84,7 @@ export function MobileDrawer({ open, onClose }) {
           />
           <motion.div
             ref={panelRef}
-            className="absolute left-0 top-0 h-[100dvh] max-h-[100dvh] w-[300px] max-w-[86vw] overflow-hidden border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg"
+            className="absolute left-0 top-0 h-[100dvh] max-h-[100dvh] w-[300px] max-w-[86vw] overflow-hidden overscroll-contain border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg touch-pan-y"
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}

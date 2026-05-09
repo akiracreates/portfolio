@@ -24,13 +24,16 @@ export function SmartImage({
   height,
   sizes,
   priority = false,
+  /** When false, skip skeleton overlay (fewer nodes + hydration work). */
+  showSkeleton = true,
   className = "",
   imgClassName = "",
   rounded = "none",
   onLoad,
   ...rest
 }) {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(() => !showSkeleton);
+  const skeletonActive = showSkeleton && !loaded;
   const useIkLoader = typeof src === "string" && isImageKitDeliveryUrl(src);
 
   const handleLoad = (event) => {
@@ -48,12 +51,12 @@ export function SmartImage({
 
   return (
     <Wrapper className={wrapperClass} data-smart-image>
-      {!loaded && (
+      {skeletonActive ? (
         <Skeleton
           rounded={rounded}
           className="pointer-events-none absolute inset-0"
         />
-      )}
+      ) : null}
       <Image
         src={src}
         alt={alt}

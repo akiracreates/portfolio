@@ -1,6 +1,19 @@
-import { CommissionPreviewCarousel } from "@/components/commissions/commission-preview-carousel";
+import dynamic from "next/dynamic";
 import { getCommissionPreviews } from "@/lib/content/commissions";
 import { pickLocale } from "@/lib/i18n/config";
+
+const CommissionPreviewCarousel = dynamic(
+  () =>
+    import("@/components/commissions/commission-preview-carousel").then((mod) => ({
+      default: mod.CommissionPreviewCarousel,
+    })),
+  {
+    loading: () => (
+      <div className="relative aspect-[4/3] w-full bg-bg-inset" aria-hidden />
+    ),
+    ssr: true,
+  },
+);
 
 const WARM_OFFER_IDS = new Set(["portrait", "animal"]);
 
@@ -17,7 +30,7 @@ export function CommissionOfferCards({ locale = "en", cards = [] }) {
           <CommissionPreviewCarousel
             images={getCommissionPreviews(card.id)}
             locale={locale}
-            randomizeInitial
+            randomizeInitial={false}
           />
           <div className="flex flex-1 flex-col gap-4 max-md:gap-3.5 p-5 md:p-6">
             <div className="flex items-center justify-between gap-3 max-md:gap-2">

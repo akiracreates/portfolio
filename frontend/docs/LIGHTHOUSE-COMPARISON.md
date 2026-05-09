@@ -50,3 +50,19 @@ Runs: Lighthouse 11, mobile preset, **before** = initial codebase session / **af
 - Removing Framer from **Section**, **route transitions**, and **featured/portfolio cards** reduces hydration work on content-heavy routes (commissions **TBT −17 ms**, performance score **+13** here).
 - **Best practices −4** is consistent with adding **Vercel Analytics / Speed Insights** (third-party scripts / cookies under strict Lighthouse rules). Accept for production telemetry or gate scripts behind environment if you need a “clean” lab score.
 - **Real-world mobile** gains depend on device tier and RTT to ImageKit/Vercel; lab deltas are directional, not guarantees.
+
+---
+
+## Elite refinement snapshot (perf-only, May 2026)
+
+Second-wave changes (CSS motion swaps, server hero image, dynamic commission carousel, sidebar CSS transition). Lighthouse 11 **performance category only**, mobile emulation, simulated throttle, **single run each** — treat as directional; repeat medians for decisions.
+
+| Route | Performance | LCP (ms) | TBT (ms) |
+| --- | --- | --- | --- |
+| `/en` | 88 | 3107 | 279 |
+| `/en/portfolio` | 93 | 3187 | 23 |
+| `/en/commissions` | 86 | 4254 | 23 |
+
+Home **TBT** can spike in isolated lab runs (CPU scheduling, cache warmth). Prefer **three-run median** on staging/production URLs before drawing conclusions.
+
+For **bundle deltas** after motion refactors, run `npm run analyze` (webpack + `@next/bundle-analyzer`) and compare `.next/analyze/client.html` against prior snapshots.
