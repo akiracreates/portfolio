@@ -1,6 +1,12 @@
 import { commissionTypes } from "@/lib/content/commissions";
 import { pickLocale } from "@/lib/i18n/config";
-import { getCommissionAdminEmail, getEmailFrom, getResend } from "@/lib/server/email";
+import {
+  formatResendErrorForLog,
+  getCommissionAdminEmail,
+  getEmailFrom,
+  getResend,
+  resendSendResult,
+} from "@/lib/server/email";
 
 const DESCRIPTION_PREVIEW_MAX = 220;
 
@@ -154,18 +160,22 @@ export async function sendCommissionRequestAdminEmail(data) {
   const subject = `new commission request from ${data.name} (${data.email})`;
   const text = buildCommissionAdminText(data);
 
-  try {
-    await resend.emails.send({
+  const sent = await resendSendResult(
+    resend.emails.send({
       from,
       to: getCommissionAdminEmail(),
       subject,
       text,
-    });
-    return { ok: true };
-  } catch (e) {
-    console.error("[commission] admin Resend error:", e?.message ?? e);
+    }),
+  );
+  if (!sent.ok) {
+    console.error(
+      "[commission] admin Resend error:",
+      formatResendErrorForLog(sent.error),
+    );
     return { ok: false };
   }
+  return { ok: true };
 }
 
 /**
@@ -195,20 +205,21 @@ export async function sendCommissionRequestUserConfirmationEmail(data) {
 
   const replyTo = getCommissionAdminEmail();
 
-  try {
-    await resend.emails.send({
+  const sent = await resendSendResult(
+    resend.emails.send({
       from,
       to: data.email,
       subject,
       text,
       replyTo: [replyTo],
-    });
-    return { ok: true };
-  } catch (e) {
+    }),
+  );
+  if (!sent.ok) {
     console.error(
       "[commission] user confirmation Resend error:",
-      e?.message ?? e,
+      formatResendErrorForLog(sent.error),
     );
     return { ok: false };
   }
+  return { ok: true };
 }
