@@ -47,7 +47,7 @@ function errorMessageFor(code, t) {
     case "rate_limited":
       return t.rateLimited ?? t.saveError;
     case "storage_unavailable":
-      return t.storageUnavailable ?? t.saveError;
+      return t.storageUnavailable ?? t.storageUnavailableError ?? t.saveError;
     case "pending_not_found":
     case "pending_token_mismatch":
       return t.pendingExpired ?? t.saveError;
@@ -90,7 +90,7 @@ export function SpinExperience({ dict, locale }) {
         });
 
         if (!res.ok || data.ok !== true) {
-          setSyncError(errorMessageFor(data.error, t));
+          setSyncError(errorMessageFor(data?.error, t));
           setStep("sync-failed");
           return;
         }
@@ -155,7 +155,7 @@ export function SpinExperience({ dict, locale }) {
         });
 
         if (!res.ok || data.ok !== true) {
-          setEmailLookupError(errorMessageFor(data.error, t));
+          setEmailLookupError(errorMessageFor(data?.error, t));
           return;
         }
 

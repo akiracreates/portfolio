@@ -14,6 +14,16 @@ import {
 /** Resend is a Node SDK; keep on the Node runtime on serverless hosts. */
 export const runtime = "nodejs";
 
+function isStorageConfigError(err) {
+  const msg = String(err?.message ?? "").toLowerCase();
+  return (
+    msg.includes("spin_storage_not_configured") ||
+    msg.includes("unauthorized") ||
+    msg.includes("invalid password") ||
+    msg.includes("forbidden")
+  );
+}
+
 function publicConfig() {
   return {
     storageConfigured: isSpinStorageConfigured(),
@@ -71,10 +81,17 @@ export async function POST(request) {
       }
       return NextResponse.json(result);
     } catch (e) {
-      console.error("[spin] begin(shim) error:", e?.message ?? e);
+      if (isStorageConfigError(e)) {
+        return NextResponse.json(
+          { ok: false, error: "storage_unavailable" },
+          { status: 503 },
+        );
+      }
+      const safeDebug = String(e?.message ?? e ?? "").slice(0, 200);
+      console.error("[spin] begin(shim) error:", safeDebug);
       return NextResponse.json(
-        { ok: false, error: "server_error" },
-        { status: 503 },
+        { ok: false, error: "server_error", debugMessage: safeDebug },
+        { status: 500 },
       );
     }
   }
@@ -103,15 +120,16 @@ export async function POST(request) {
     }
     return NextResponse.json(result);
   } catch (e) {
-    if (e?.message === "spin_storage_not_configured") {
+    if (isStorageConfigError(e)) {
       return NextResponse.json(
         { ok: false, error: "storage_unavailable" },
         { status: 503 },
       );
     }
-    console.error("[spin] commit(shim) error:", e?.message ?? e);
+    const safeDebug = String(e?.message ?? e ?? "").slice(0, 200);
+    console.error("[spin] commit(shim) error:", safeDebug);
     return NextResponse.json(
-      { ok: false, error: "server_error" },
+      { ok: false, error: "server_error", debugMessage: safeDebug },
       { status: 500 },
     );
   }
