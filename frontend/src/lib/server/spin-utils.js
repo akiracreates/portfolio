@@ -21,3 +21,11 @@ export function commissionsPageUrl(locale, baseUrl) {
   const path = `/${locale === "ru" ? "ru" : "en"}/commissions`;
   return base ? `${base}${path}` : path;
 }
+
+export function getRequestIp(request) {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    return forwarded.split(",")[0]?.trim() || "";
+  }
+  return request.headers.get("x-real-ip")?.trim() || "";
+}

@@ -338,6 +338,12 @@ export const dictionary = {
       "something went wrong while saving your reward. please try again in a moment.",
     storageUnavailableError:
       "the reward service is temporarily unavailable. please try again in a moment.",
+    storageUnavailable:
+      "spin storage is temporarily unavailable. please try again in a few minutes.",
+    rateLimited:
+      "too many attempts right now. please wait a bit and try again.",
+    pendingExpired:
+      "your spin session expired. please restart the wheel from the email step.",
     retrySave: "try again",
     emailDeliveryNote:
       "your reward is saved. if you don’t see a confirmation email soon, check spam — you can still use this screen when you message me about a commission.",

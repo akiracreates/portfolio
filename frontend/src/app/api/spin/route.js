@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
+import { beginSpinClaim, commitSpinClaim } from "@/lib/server/spin-service";
 import {
-  getSpinRewardById,
-  snapshotSpinReward,
-} from "@/lib/content/rewards";
-import { sendSpinClaimEmails } from "@/lib/server/spin-mail";
-import {
-  claimSpinRecord,
-  getSpinRecord,
+  clearPendingSpin,
+  getPendingSpin,
   isSpinStorageConfigured,
 } from "@/lib/server/spin-storage";
-import { isValidSpinEmail, normalizeSpinEmail } from "@/lib/server/spin-utils";
+import {
+  getRequestIp,
+  isValidSpinEmail,
+  normalizeSpinEmail,
+} from "@/lib/server/spin-utils";
 
 /** Resend is a Node SDK; keep on the Node runtime on serverless hosts. */
 export const runtime = "nodejs";
@@ -24,14 +24,18 @@ function isStorageConfigError(err) {
   );
 }
 
-function publicRecord(rec) {
-  if (!rec) return null;
+function publicConfig() {
   return {
-    rewardId: rec.rewardId,
-    localeAtSpin: rec.localeAtSpin,
-    spunAt: rec.spunAt,
-    rewardSnapshot: rec.rewardSnapshot,
+    storageConfigured: isSpinStorageConfigured(),
+    resendConfigured: Boolean(process.env.RESEND_API_KEY?.trim()),
+    emailFromConfigured: Boolean(process.env.EMAIL_FROM?.trim()),
+    adminSpinEmailConfigured: Boolean(process.env.ADMIN_SPIN_EMAIL?.trim()),
+    appUrlConfigured: Boolean(process.env.NEXT_PUBLIC_APP_URL?.trim()),
   };
+}
+
+export async function GET() {
+  return NextResponse.json({ ok: true, diagnostics: publicConfig() });
 }
 
 export async function POST(request) {
@@ -58,100 +62,62 @@ export async function POST(request) {
     );
   }
 
-  const rewardId =
-    typeof body.rewardId === "string" ? body.rewardId.trim() : "";
+  const pendingToken =
+    typeof body.pendingToken === "string" ? body.pendingToken.trim() : "";
+  const rewardId = typeof body.rewardId === "string" ? body.rewardId.trim() : "";
 
-  if (!rewardId) {
+  // Backward-compat shim:
+  // - old clients call with only email => begin
+  // - old clients call with rewardId => commit using server-side pending token
+  if (!pendingToken && !rewardId) {
     try {
-      const existing = await getSpinRecord(normalized);
-      if (!existing) {
-        return NextResponse.json({ ok: true, alreadySpun: false });
-      }
-      return NextResponse.json({
-        ok: true,
-        alreadySpun: true,
-        record: publicRecord(existing),
+      const result = await beginSpinClaim({
+        normalizedEmail: normalized,
+        locale,
+        ip: getRequestIp(request),
       });
+      if (!result.ok) {
+        return NextResponse.json(result, { status: result.status || 500 });
+      }
+      return NextResponse.json(result);
     } catch (e) {
-      console.error("[spin] lookup error:", e?.message ?? e);
-      const code = isStorageConfigError(e)
-        ? "storage_unavailable"
-        : "storage_error";
+      if (isStorageConfigError(e)) {
+        return NextResponse.json(
+          { ok: false, error: "storage_unavailable" },
+          { status: 503 },
+        );
+      }
+      console.error("[spin] begin(shim) error:", e?.message ?? e);
       return NextResponse.json(
-        { ok: false, error: code },
-        { status: 503 },
+        { ok: false, error: "server_error" },
+        { status: 500 },
       );
     }
   }
 
-  const canonical = getSpinRewardById(rewardId);
-  if (!canonical) {
-    return NextResponse.json(
-      { ok: false, error: "invalid_reward" },
-      { status: 400 },
-    );
-  }
-
-  const spunAt =
-    typeof body.spunAt === "string" && body.spunAt.trim()
-      ? body.spunAt.trim()
-      : new Date().toISOString();
-
-  const newRecord = {
-    normalizedEmail: normalized,
-    rewardId: canonical.id,
-    localeAtSpin: locale,
-    spunAt,
-    rewardSnapshot: snapshotSpinReward(canonical),
-  };
-
   try {
-    const { created, record } = await claimSpinRecord(normalized, newRecord);
-
-    if (!created) {
-      if (!record?.rewardId) {
-        return NextResponse.json(
-          { ok: false, error: "corrupt_record" },
-          { status: 500 },
-        );
-      }
-      const existingCanonical = getSpinRewardById(record.rewardId);
-      if (!existingCanonical) {
-        return NextResponse.json(
-          { ok: false, error: "corrupt_record" },
-          { status: 500 },
-        );
-      }
-      return NextResponse.json({
-        ok: true,
-        alreadySpun: true,
-        record: publicRecord(record),
-      });
+    const tokenToUse =
+      pendingToken || (await getPendingSpin(normalized))?.token || "";
+    if (!tokenToUse) {
+      return NextResponse.json(
+        { ok: false, error: "pending_not_found", hint: "restart_spin" },
+        { status: 409 },
+      );
     }
 
-    let email = { skipped: true, userSent: false, adminSent: false };
-    try {
-      email = await sendSpinClaimEmails({
-        toUserEmail: normalized,
-        locale,
-        reward: canonical,
-        record: newRecord,
-      });
-    } catch (e) {
-      // Claim already succeeded. Do not fail the API response on notification issues.
-      console.error("[spin] post-claim email error:", e?.message ?? e);
-    }
-
-    return NextResponse.json({
-      ok: true,
-      alreadySpun: false,
-      record: publicRecord(newRecord),
-      email: {
-        skipped: email.skipped,
-        userSent: email.userSent,
-        adminSent: email.adminSent,
-      },
+    const result = await commitSpinClaim({
+      normalizedEmail: normalized,
+      locale,
+      pendingToken: tokenToUse,
+      ip: getRequestIp(request),
     });
+    if (!result.ok) {
+      if (result.error === "pending_token_mismatch") {
+        await clearPendingSpin(normalized);
+      }
+      return NextResponse.json(result, { status: result.status || 500 });
+    }
+    return NextResponse.json(result);
   } catch (e) {
     if (isStorageConfigError(e)) {
       return NextResponse.json(
@@ -159,7 +125,7 @@ export async function POST(request) {
         { status: 503 },
       );
     }
-    console.error("[spin] claim error:", e?.message ?? e);
+    console.error("[spin] commit(shim) error:", e?.message ?? e);
     return NextResponse.json(
       { ok: false, error: "server_error" },
       { status: 500 },
