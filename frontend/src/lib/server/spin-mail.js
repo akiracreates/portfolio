@@ -152,58 +152,74 @@ export async function sendSpinClaimEmails({
     errorCode: null,
   };
 
-  const userSend = await resendSendResult(
-    resend.emails.send({
-      from,
-      to: toUserEmail,
-      subject: userSubject,
-      text: userText,
-    }),
-  );
-  if (userSend.ok) {
-    out.userSent = true;
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        "[spin] user email accepted by Resend, id:",
-        userSend.data?.id ?? "—",
-      );
-    }
-  } else {
-    out.errorCode = out.errorCode || "user_email_send_failed";
-    console.error(
-      "[spin] user email error:",
-      formatResendErrorForLog(userSend.error),
+  try {
+    const userSend = await resendSendResult(
+      resend.emails.send({
+        from,
+        to: toUserEmail,
+        subject: userSubject,
+        text: userText,
+      }),
     );
-    if (process.env.NODE_ENV === "development" && userSend.error) {
-      console.error("[spin] user email Resend error detail:", userSend.error);
+    if (userSend.ok) {
+      out.userSent = true;
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "[spin] user email accepted by Resend, id:",
+          userSend.data?.id ?? "—",
+        );
+      }
+    } else {
+      out.errorCode = out.errorCode || "user_email_send_failed";
+      console.error(
+        "[spin] user email error:",
+        formatResendErrorForLog(userSend.error),
+      );
+      if (process.env.NODE_ENV === "development" && userSend.error) {
+        console.error("[spin] user email Resend error detail:", userSend.error);
+      }
     }
+  } catch (err) {
+    out.errorCode = out.errorCode || "user_email_request_failed";
+    console.error(
+      "[spin] user email request failed before API response:",
+      formatResendErrorForLog(err),
+    );
   }
 
-  const adminSend = await resendSendResult(
-    resend.emails.send({
-      from,
-      to: getSpinAdminEmail(),
-      subject: adminSubject,
-      text: adminText,
-    }),
-  );
-  if (adminSend.ok) {
-    out.adminSent = true;
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        "[spin] admin email accepted by Resend, id:",
-        adminSend.data?.id ?? "—",
-      );
-    }
-  } else {
-    out.errorCode = out.errorCode || "admin_email_send_failed";
-    console.error(
-      "[spin] admin email error:",
-      formatResendErrorForLog(adminSend.error),
+  try {
+    const adminSend = await resendSendResult(
+      resend.emails.send({
+        from,
+        to: getSpinAdminEmail(),
+        subject: adminSubject,
+        text: adminText,
+      }),
     );
-    if (process.env.NODE_ENV === "development" && adminSend.error) {
-      console.error("[spin] admin email Resend error detail:", adminSend.error);
+    if (adminSend.ok) {
+      out.adminSent = true;
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "[spin] admin email accepted by Resend, id:",
+          adminSend.data?.id ?? "—",
+        );
+      }
+    } else {
+      out.errorCode = out.errorCode || "admin_email_send_failed";
+      console.error(
+        "[spin] admin email error:",
+        formatResendErrorForLog(adminSend.error),
+      );
+      if (process.env.NODE_ENV === "development" && adminSend.error) {
+        console.error("[spin] admin email Resend error detail:", adminSend.error);
+      }
     }
+  } catch (err) {
+    out.errorCode = out.errorCode || "admin_email_request_failed";
+    console.error(
+      "[spin] admin email request failed before API response:",
+      formatResendErrorForLog(err),
+    );
   }
 
   return out;

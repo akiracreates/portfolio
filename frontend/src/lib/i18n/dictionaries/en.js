@@ -336,6 +336,8 @@ export const dictionary = {
     savingReward: "saving your reward...",
     saveError:
       "something went wrong while saving your reward. please try again in a moment.",
+    storageUnavailableError:
+      "the reward service is temporarily unavailable. please try again in a moment.",
     storageUnavailable:
       "spin storage is temporarily unavailable. please try again in a few minutes.",
     rateLimited:

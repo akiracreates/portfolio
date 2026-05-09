@@ -166,7 +166,17 @@ export async function commitSpinClaim({
   };
 
   const claim = await claimSpinRecord(normalizedEmail, record);
-  await clearPendingSpin(normalizedEmail);
+
+  // Best-effort cleanup of pending key. The reward is already saved; never let
+  // a transient Redis hiccup here turn into a 500 for the user.
+  try {
+    await clearPendingSpin(normalizedEmail);
+  } catch (err) {
+    console.error(
+      "[spin] clearPendingSpin failed after successful claim:",
+      err?.message ?? err,
+    );
+  }
 
   if (!claim.created && claim.record) {
     return {
@@ -177,12 +187,33 @@ export async function commitSpinClaim({
     };
   }
 
-  const email = await sendSpinClaimEmails({
-    toUserEmail: normalizedEmail,
-    locale: record.localeAtSpin,
-    reward: canonical,
-    record,
-  });
+  // Notification emails are best-effort. The claim is already persisted.
+  // Any throw here must NOT surface as a 500 to the user.
+  let email = {
+    userSent: false,
+    adminSent: false,
+    skipped: false,
+    errorCode: "email_unknown_failure",
+  };
+  try {
+    email = await sendSpinClaimEmails({
+      toUserEmail: normalizedEmail,
+      locale: record.localeAtSpin,
+      reward: canonical,
+      record,
+    });
+  } catch (err) {
+    console.error(
+      "[spin] sendSpinClaimEmails threw after successful claim:",
+      err?.message ?? err,
+    );
+    email = {
+      userSent: false,
+      adminSent: false,
+      skipped: false,
+      errorCode: "email_threw",
+    };
+  }
 
   return {
     ok: true,
