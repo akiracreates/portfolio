@@ -1,4 +1,6 @@
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+import { getSiteUrl } from "@/lib/seo/site-url";
+
+const baseUrl = getSiteUrl();
 
 export default function robots() {
   return {

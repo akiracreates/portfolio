@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  imageKitLoader,
+  isImageKitDeliveryUrl,
+} from "@/lib/images/imagekit-loader";
 
 /**
  * SmartImage wraps next/image with a brand skeleton overlay that fades out
@@ -27,8 +31,7 @@ export function SmartImage({
   ...rest
 }) {
   const [loaded, setLoaded] = useState(false);
-  const useImageKitDirect =
-    typeof src === "string" && src.includes("ik.imagekit.io");
+  const useIkLoader = typeof src === "string" && isImageKitDeliveryUrl(src);
 
   const handleLoad = (event) => {
     setLoaded(true);
@@ -57,7 +60,7 @@ export function SmartImage({
         {...(fill ? { fill: true } : { width, height })}
         sizes={sizes}
         priority={priority}
-        unoptimized={useImageKitDirect}
+        loader={useIkLoader ? imageKitLoader : undefined}
         onLoad={handleLoad}
         data-smart-image-loaded={loaded ? "true" : "false"}
         className={imgClassName}

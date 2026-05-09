@@ -3731,6 +3731,49 @@ a {
 }
 
 /* =========================================================================
+   route + section motion (CSS-first)
+   ========================================================================= */
+@keyframes routeTemplateFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.route-template-enter {
+  animation: routeTemplateFadeIn 0.22s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.section-motion {
+  @starting-style {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.2, 0, 0, 1),
+    transform 0.45s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.cascade-row-motion {
+  @starting-style {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s cubic-bezier(0.2, 0, 0, 1),
+    transform 0.45s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* =========================================================================
    skeleton / shimmer
    ========================================================================= */
 .skeleton-shimmer {

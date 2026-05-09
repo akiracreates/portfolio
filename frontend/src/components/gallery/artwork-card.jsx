@@ -1,7 +1,4 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ImageFrame } from "@/components/ui/image-frame";
 import { SmartImage } from "@/components/ui/smart-image";
@@ -15,7 +12,6 @@ export function ArtworkCard({
   variant = "default",
   className = "",
 }) {
-  const reduced = useReducedMotion();
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
   const note =
@@ -29,14 +25,12 @@ export function ArtworkCard({
   const isFeaturedGalleryCard = featured;
 
   return (
-    <motion.article
-      className={`group flex h-full flex-col overflow-hidden transition-colors duration-[var(--duration-base)] ${
+    <article
+      className={`group flex h-full flex-col overflow-hidden transition-transform duration-[var(--duration-base)] hover:-translate-y-[3px] ${
         featured
           ? "rounded-[18px]"
           : "soft-glow-hover scrap-card rounded-[var(--radius-lg)] hover:border-border-accent"
       } ${className}`.trim()}
-      whileHover={reduced ? undefined : { y: -3 }}
-      transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
     >
       <ImageFrame
         variant={featured ? "featured" : "art"}
@@ -84,18 +78,13 @@ export function ArtworkCard({
           )}
         </div>
       )}
-    </motion.article>
+    </article>
   );
 }
 
 /**
  * Editorial row variant — image on one side, content on the other,
  * alternates per `index` (even = image left, odd = image right).
- *
- * Uses the artwork's natural aspect ratio (from `artwork.width`/`artwork.height`)
- * so portfolio rows never crop.
- *
- * Animates on mount (no scroll-gating) — see plan note about whileInView race.
  */
 export function ArtworkRow({
   artwork,
@@ -103,8 +92,6 @@ export function ArtworkRow({
   locale = "en",
   enableSecretSpin = false,
 }) {
-  const reduced = useReducedMotion();
-  const router = useRouter();
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
   const note =
@@ -117,33 +104,40 @@ export function ArtworkRow({
   const frameClass = FRAME_TILTS[index % FRAME_TILTS.length];
   const noteClass = getDesktopNoteClass(index);
 
-  return (
-    <motion.article
-      className="cascade-row"
-      initial={reduced ? false : { opacity: 0, y: 16 }}
-      animate={reduced ? false : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.2, 0, 0, 1] }}
+  const imageFrame = (
+    <ImageFrame
+      className={`relative z-0 w-full overflow-hidden ${frameClass}`}
+      style={aspectStyle}
     >
+      <SmartImage
+        src={artwork.imageSrc}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 55vw"
+        imgClassName="object-contain p-2 md:p-4"
+      />
+    </ImageFrame>
+  );
+
+  return (
+    <article className="cascade-row cascade-row-motion">
       <div className="portfolio-stage relative min-w-0 w-full">
-        <ImageFrame
-          className={`relative z-0 w-full overflow-hidden ${frameClass}`}
-          style={aspectStyle}
-          onClick={
-            enableSecretSpin
-              ? () => {
-                  router.push(`/${locale}/spin`);
-                }
-              : undefined
-          }
-        >
-          <SmartImage
-            src={artwork.imageSrc}
-            alt={alt}
-            fill
-            sizes="(max-width: 768px) 100vw, 55vw"
-            imgClassName="object-contain p-2 md:p-4"
-          />
-        </ImageFrame>
+        {enableSecretSpin ? (
+          <Link
+            href={`/${locale}/spin`}
+            prefetch={false}
+            className="block cursor-pointer focus-visible-ring rounded-[var(--radius-md)]"
+            aria-label={
+              locale === "ru"
+                ? "открыть скрытое колесо студии"
+                : "open secret studio wheel"
+            }
+          >
+            {imageFrame}
+          </Link>
+        ) : (
+          imageFrame
+        )}
         <div
           className={`portfolio-note scrap-caption mt-2 space-y-1.5 px-2.5 py-2 md:mt-0 md:space-y-2 md:px-4 md:py-3 ${noteClass}`}
         >
@@ -162,7 +156,7 @@ export function ArtworkRow({
           )}
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 

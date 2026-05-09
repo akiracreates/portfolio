@@ -1,3 +1,8 @@
+/**
+ * Next.js App Router edge handler (`middleware`).
+ * This repo keeps locale redirects/cookies in `proxy.js`, which Next links at build time.
+ * Behavior: bare `/` → `/en` or negotiated locale; sync `NEXT_LOCALE` cookie.
+ */
 import { NextResponse } from "next/server";
 
 const LOCALES = ["en", "ru"];
