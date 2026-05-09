@@ -91,10 +91,12 @@ export function SpinExperience({ dict, locale }) {
   const [emailLookupError, setEmailLookupError] = useState("");
   const [syncError, setSyncError] = useState("");
   const [pendingRetryReward, setPendingRetryReward] = useState(null);
+  const [emailDeliveryNote, setEmailDeliveryNote] = useState("");
 
   const submitClaim = useCallback(
     async (chosen) => {
       setSyncError("");
+      setEmailDeliveryNote("");
       setStep("syncing");
       try {
         const { res, data } = await postSpin({
@@ -128,6 +130,17 @@ export function SpinExperience({ dict, locale }) {
           return;
         }
 
+        const emailInfo = data.email;
+        if (
+          !data.alreadySpun &&
+          emailInfo &&
+          (emailInfo.skipped || !emailInfo.userSent)
+        ) {
+          setEmailDeliveryNote(t.emailDeliveryNote);
+        } else {
+          setEmailDeliveryNote("");
+        }
+
         setReward(displayReward);
         setResultFromStorage(Boolean(data.alreadySpun));
         setPendingRetryReward(null);
@@ -138,7 +151,7 @@ export function SpinExperience({ dict, locale }) {
         setStep("sync-failed");
       }
     },
-    [email, locale, t.saveError],
+    [email, locale, t.emailDeliveryNote, t.saveError],
   );
 
   const handleResult = useCallback(
@@ -310,6 +323,14 @@ export function SpinExperience({ dict, locale }) {
                     className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--warning)]/40 bg-[color:var(--warning)]/10 px-3 py-2 text-sm text-warning"
                   >
                     {t.alreadySpunWithReward}
+                  </p>
+                )}
+                {emailDeliveryNote && (
+                  <p
+                    role="status"
+                    className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--warning)]/40 bg-[color:var(--warning)]/10 px-3 py-2 text-sm text-warning"
+                  >
+                    {emailDeliveryNote}
                   </p>
                 )}
                 <p className="caption">{t.youWon}</p>

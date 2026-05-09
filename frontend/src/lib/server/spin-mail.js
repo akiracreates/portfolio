@@ -1,8 +1,10 @@
 import { pickLocale } from "@/lib/i18n/config";
 import {
+  formatResendErrorForLog,
   getEmailFrom,
   getResend,
   getSpinAdminEmail,
+  resendSendResult,
 } from "@/lib/server/email";
 import { commissionsPageUrl } from "@/lib/server/spin-utils";
 
@@ -109,8 +111,8 @@ export async function sendSpinClaimEmails({
   const from = getEmailFrom();
 
   if (!resend || !from) {
-    console.warn(
-      "[spin] RESEND_API_KEY or EMAIL_FROM missing; skipping email send",
+    console.error(
+      "[spin] email not sent: set RESEND_API_KEY and EMAIL_FROM on the server (e.g. Vercel → Settings → Environment Variables) for Production and Preview.",
     );
     return { userSent: false, adminSent: false, skipped: true };
   }
@@ -140,28 +142,38 @@ export async function sendSpinClaimEmails({
 
   const out = { userSent: false, adminSent: false, skipped: false };
 
-  try {
-    await resend.emails.send({
+  const userSend = await resendSendResult(
+    resend.emails.send({
       from,
       to: toUserEmail,
       subject: userSubject,
       text: userText,
-    });
+    }),
+  );
+  if (userSend.ok) {
     out.userSent = true;
-  } catch (e) {
-    console.error("[spin] user email error:", e?.message ?? e);
+  } else {
+    console.error(
+      "[spin] user email error:",
+      formatResendErrorForLog(userSend.error),
+    );
   }
 
-  try {
-    await resend.emails.send({
+  const adminSend = await resendSendResult(
+    resend.emails.send({
       from,
       to: getSpinAdminEmail(),
       subject: adminSubject,
       text: adminText,
-    });
+    }),
+  );
+  if (adminSend.ok) {
     out.adminSent = true;
-  } catch (e) {
-    console.error("[spin] admin email error:", e?.message ?? e);
+  } else {
+    console.error(
+      "[spin] admin email error:",
+      formatResendErrorForLog(adminSend.error),
+    );
   }
 
   return out;

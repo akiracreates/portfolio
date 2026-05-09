@@ -15,6 +15,7 @@ try {
 const nextConfig = {
   /* config options here */
   reactCompiler: true,
+  serverExternalPackages: ["resend"],
   env: {
     NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT: imagekitEndpoint,
   },
