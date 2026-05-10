@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { navStructure } from "@/lib/content/site-config";
 import { socialLinks } from "@/lib/content/socials";
 import { NavIcon } from "@/components/layout/nav-icons";
@@ -12,6 +20,8 @@ import { useT, useDictLocale } from "@/components/i18n/locale-provider";
 
 const FOOTER_SOCIALS = ["telegram-personal", "vk", "cara"];
 const ACTIVATION_OFFSET = 48;
+/** While scrollY stays below this on /en|/ru, keep #hero active (avoids geometry edge cases). */
+const HOME_HERO_SCROLL_GUARD_PX = 140;
 const CLICK_LOCK_MS = 800;
 const SIDEBAR_EASE = [0.22, 1, 0.36, 1];
 const SIDEBAR_TRANSITION = { duration: 0.26, ease: SIDEBAR_EASE };
@@ -33,10 +43,22 @@ function isPathActive(pathname, href, locale) {
 }
 
 function useSectionObserver(anchors, enabled, routeKey) {
+  const anchorsKey = anchors.join("\0");
   const [activeState, setActiveState] = useState({ routeKey: "", id: "" });
   const lastEmittedRef = useRef("");
   const active =
-    activeState.routeKey === routeKey ? activeState.id : anchors[0] || "";
+    activeState.routeKey === routeKey
+      ? activeState.id || anchors[0] || ""
+      : anchors[0] || "";
+
+  // After soft navigation the previous route's `{ routeKey, id }` must not leak.
+  // Reset synchronously before paint so the menu never briefly shows a stale chapter.
+  useLayoutEffect(() => {
+    if (!enabled || !anchors.length) return;
+    const defaultId = anchors[0] || "";
+    lastEmittedRef.current = defaultId;
+    setActiveState({ routeKey, id: defaultId });
+  }, [anchorsKey, enabled, routeKey]);
 
   useEffect(() => {
     if (!enabled) {
@@ -44,7 +66,6 @@ function useSectionObserver(anchors, enabled, routeKey) {
       return undefined;
     }
     if (!anchors.length) return undefined;
-    lastEmittedRef.current = anchors[0] || "";
 
     let raf = null;
     let hasAttachedListeners = false;
@@ -61,6 +82,9 @@ function useSectionObserver(anchors, enabled, routeKey) {
         .map((id) => ({ id, el: document.getElementById(id) }))
         .filter((item) => item.el);
 
+    const allAnchorNodesPresent = () =>
+      anchors.every((id) => Boolean(document.getElementById(id)));
+
     const selectElements = () => {
       elements = getElements();
       return elements.length > 0;
@@ -70,6 +94,18 @@ function useSectionObserver(anchors, enabled, routeKey) {
       raf = null;
       elements = getElements();
       if (!elements.length) return anchors[0] || "";
+      const scrollY =
+        window.scrollY ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+      if (
+        anchors[0] === "hero" &&
+        scrollY <= HOME_HERO_SCROLL_GUARD_PX &&
+        document.getElementById("hero")
+      ) {
+        return "hero";
+      }
       const line = ACTIVATION_OFFSET;
       let bestId = "";
       let bestScore = Number.NEGATIVE_INFINITY;
@@ -112,11 +148,16 @@ function useSectionObserver(anchors, enabled, routeKey) {
     };
 
     const trySetup = (attempt = 0) => {
-      if (selectElements()) {
+      if (allAnchorNodesPresent() && selectElements()) {
         attachListeners();
         return;
       }
-      if (attempt >= 9) return;
+      // Route template fade + concurrent paint can mount sections after a few frames.
+      // Wait for every registered anchor so we never treat a missing hero as "pick first found".
+      if (attempt >= 96) {
+        if (selectElements()) attachListeners();
+        return;
+      }
       raf = requestAnimationFrame(() => {
         trySetup(attempt + 1);
       });
@@ -131,7 +172,7 @@ function useSectionObserver(anchors, enabled, routeKey) {
         window.removeEventListener("resize", schedule);
       }
     };
-  }, [anchors, enabled, routeKey]);
+  }, [anchors, anchorsKey, enabled, routeKey]);
 
   return enabled ? active : "";
 }
@@ -202,16 +243,25 @@ export function Sidebar({
     () => (isHome ? drawerHomeSectionItems : activePage?.sections ?? []),
     [activePage?.sections, drawerHomeSectionItems, isHome],
   );
-  const activeAnchors = useMemo(
-    () =>
-      isHome
-        ? currentSectionItems.map((item) => item.anchor)
-        : activePage?.sections?.map((item) => item.anchor) ?? [],
-    [activePage?.sections, currentSectionItems, isHome],
+  /** Drawer "on this page" rows only (hero is omitted — home lives under main pages). */
+  const drawerOnPageAnchors = useMemo(
+    () => currentSectionItems.map((item) => item.anchor),
+    [currentSectionItems],
   );
+  /**
+   * Scroll-spy targets must match real DOM ids. Desktop home nav includes #hero first;
+   * drawerHomeSectionItems wrongly omitted hero, so featured was treated as the top section.
+   */
+  const scrollSpyAnchors = useMemo(() => {
+    if (!isHome) {
+      return activePage?.sections?.map((item) => item.anchor) ?? [];
+    }
+    const core = sectionItems.map((item) => item.anchor);
+    return isDrawer ? [...core, "socials"] : core;
+  }, [activePage?.sections, isDrawer, isHome, sectionItems]);
   const activeSection = useSectionObserver(
-    activeAnchors,
-    activeAnchors.length > 0,
+    scrollSpyAnchors,
+    scrollSpyAnchors.length > 0,
     pathname,
   );
   const resolvedActiveSection = clickLockedSection || activeSection;
@@ -339,7 +389,7 @@ export function Sidebar({
             </NavGroup>
             <div className="broken-divider mx-3 my-3" aria-hidden />
             <NavGroup label={t("nav.onThisPage", "on this page")} collapsed={collapsed}>
-              {activeAnchors.map((anchor) => {
+              {drawerOnPageAnchors.map((anchor) => {
                 const active = resolvedActiveSection === anchor;
                 const href = `/${locale}#${anchor}`;
                 return (
