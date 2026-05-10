@@ -67,7 +67,7 @@ export const dictionary = {
     mainPages: "основные страницы",
     more: "ещё",
     home: "главная",
-    featured: "избранные работы",
+    featured: "подборка работ",
     commissions: "заказы",
     about: "обо мне",
     portfolio: "полное портфолио",
@@ -122,8 +122,8 @@ export const dictionary = {
   },
 
   featured: {
-    eyebrow: "избранные работы",
-    title: "избранные работы",
+    eyebrow: "подборка работ",
+    title: "подборка работ",
     cta: "полное портфолио",
   },
 
@@ -230,7 +230,8 @@ export const dictionary = {
   portfolio: {
     pageEyebrow: "портфолио",
     pageTitle: "все работы по категориям.",
-    pageDescription: "заметки под работами пока в процессе и будут дополняться.",
+    pageDescription:
+      "портреты, животные, пейзажи и натюрморты. к каждой работе — короткая заметка.",
     pieces: "работ",
     piece: "работа",
     jumpTo: "перейти к",

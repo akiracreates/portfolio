@@ -30,11 +30,11 @@ const rawArtworks = [
     category: "portraits",
     path: "images/portraits/accidental_success",
     featured: true,
-    title: { en: "quiet gaze", ru: "тихий взгляд" },
+    title: { en: "sketch turned final", ru: "от скетча до финала" },
     alt: { en: "portrait with warm lighting", ru: "портрет в тёплом свете" },
     artistComment: {
-      en: "a study of pause and memory, painted between sessions.",
-      ru: "этюд паузы и памяти, написанный между сессиями.",
+      en: "accidentally worked on a sketch enough for it to be called a final piece",
+      ru: "случайно довела скетч до уровня, когда его уже можно назвать финалом",
     },
   },
   {
@@ -42,11 +42,11 @@ const rawArtworks = [
     category: "portraits",
     path: "images/portraits/owner_pet1",
     featured: false,
-    title: { en: "owner + pet", ru: "хозяйка и питомец" },
+    title: { en: "owner and pet series", ru: "серия «хозяин и питомец»" },
     alt: { en: "portrait of owner with pet", ru: "портрет хозяйки с питомцем" },
     artistComment: {
-      en: "a quiet dual portrait focusing on connection and warmth.",
-      ru: "тихий двойной портрет с акцентом на связь и тепло.",
+      en: "two of my favorite subjects in one artwork!!",
+      ru: "две мои любимые темы в одной работе!!",
     },
   },
   {
@@ -54,11 +54,11 @@ const rawArtworks = [
     category: "portraits",
     path: "images/portraits/flowers_hairstyle_lady",
     featured: false,
-    title: { en: "small thought", ru: "маленькая мысль" },
+    title: { en: "loved the hairstyle", ru: "обожаю эту причёску" },
     alt: { en: "introspective portrait", ru: "интроспективный портрет" },
     artistComment: {
-      en: "a small thought, rendered carefully and given a frame.",
-      ru: "маленькая мысль, аккуратно прорисованная и оформленная.",
+      en: "it was hard to accomplish the braids feel without overdetailizing",
+      ru: "было сложно передать ощущение кос без перегруза деталями",
     },
   },
   {
@@ -69,8 +69,8 @@ const rawArtworks = [
     title: { en: "winter portrait", ru: "зимний портрет" },
     alt: { en: "winter portrait study", ru: "зимний портретный этюд" },
     artistComment: {
-      en: "a cooler palette with soft edges and patient layering.",
-      ru: "более холодная палитра с мягкими краями и терпеливыми слоями.",
+      en: "i love the winter holidays vibes",
+      ru: "обожаю настроение зимних праздников",
     },
   },
   {
@@ -78,11 +78,11 @@ const rawArtworks = [
     category: "portraits",
     path: "images/portraits/some_dude",
     featured: true,
-    title: { en: "evening light", ru: "вечерний свет" },
+    title: { en: "men are difficult to draw", ru: "мужчин сложно рисовать" },
     alt: { en: "portrait at dusk", ru: "портрет в сумерках" },
     artistComment: {
-      en: "warm colour study at dusk — a reminder to slow down.",
-      ru: "тёплый цветовой этюд в сумерках — напоминание замедлиться.",
+      en: "but i think i succeeded",
+      ru: "но мне кажется, у меня получилось",
     },
   },
   {
@@ -90,14 +90,14 @@ const rawArtworks = [
     category: "portraits",
     path: "images/portraits/heavily_stylized?updatedAt=1777912076764",
     featured: false,
-    title: { en: "heavily stylized", ru: "heavily stylized" },
+    title: { en: "heavy hatching experiment", ru: "эксперимент с плотной штриховкой" },
     alt: {
       en: "heavily stylized portrait by akira",
       ru: "стилизованный портрет akira",
     },
     artistComment: {
-      en: "temporary note: portrait note is under construction.",
-      ru: "временная заметка: описание портрета пока в разработке.",
+      en: "a monthly challenge (from loish) style study",
+      ru: "стилевой этюд по месячному челленджу (от loish)",
     },
   },
   {
@@ -108,8 +108,8 @@ const rawArtworks = [
     title: { en: "fishtank", ru: "fishtank" },
     alt: { en: "fishtank portrait by akira", ru: "портрет fishtank от akira" },
     artistComment: {
-      en: "temporary note: portrait note is under construction.",
-      ru: "временная заметка: описание портрета пока в разработке.",
+      en: "love love love how stylized it turned out",
+      ru: "обожаю-обожаю, как стилизованно это вышло",
     },
   },
   {
@@ -117,11 +117,11 @@ const rawArtworks = [
     category: "portraits",
     path: "images/portraits/monthly",
     featured: false,
-    title: { en: "monthly", ru: "monthly" },
+    title: { en: "monthly challenge piece", ru: "работа на месячный челлендж" },
     alt: { en: "monthly portrait by akira", ru: "портрет monthly от akira" },
     artistComment: {
-      en: "temporary note: portrait note is under construction.",
-      ru: "временная заметка: описание портрета пока в разработке.",
+      en: "within angel ganev's students server",
+      ru: "внутри сервера учеников angel ganev",
     },
   },
 
@@ -134,8 +134,8 @@ const rawArtworks = [
     title: { en: "horsey", ru: "horsey" },
     alt: { en: "horsey animal artwork by akira", ru: "работа horsey от akira" },
     artistComment: {
-      en: "temporary note: animal note is under construction.",
-      ru: "временная заметка: описание работы пока в разработке.",
+      en: "rough strokes make good movement",
+      ru: "грубые мазки хорошо дают движение",
     },
   },
   {
@@ -146,8 +146,8 @@ const rawArtworks = [
     title: { en: "sooreekaat", ru: "sooreekaat" },
     alt: { en: "sooreekaat animal artwork by akira", ru: "работа sooreekaat от akira" },
     artistComment: {
-      en: "temporary note: animal note is under construction.",
-      ru: "временная заметка: описание работы пока в разработке.",
+      en: "just a cute lil curious fella",
+      ru: "просто милый маленький любопытный зверёк",
     },
   },
   {
@@ -158,8 +158,8 @@ const rawArtworks = [
     title: { en: "layin kitten", ru: "layin kitten" },
     alt: { en: "layin kitten animal artwork by akira", ru: "работа layin kitten от akira" },
     artistComment: {
-      en: "temporary note: animal note is under construction.",
-      ru: "временная заметка: описание работы пока в разработке.",
+      en: "my first time trying to apply face-layin i learned from angel ganev, on animals",
+      ru: "впервые попробовала face-layin от angel ganev на животных",
     },
   },
   {
@@ -168,14 +168,14 @@ const rawArtworks = [
     path: "images/animals/silly_kitty",
     featured: true,
     isSecret: true,
-    title: { en: "small moon cat", ru: "маленький лунный кот" },
+    title: { en: "playful cat", ru: "игривый кот" },
     alt: {
       en: "cat portrait in cool tones",
       ru: "портрет кота в холодных тонах",
     },
     artistComment: {
-      en: "playful and dreamy — a winter night sort of cat.",
-      ru: "игривый и мечтательный — кот зимней ночи.",
+      en: "GIVE IT ATTENTION, NOW!!",
+      ru: "ДАЙ ЕМУ ВНИМАНИЯ, СЕЙЧАС!!",
     },
   },
   {
@@ -189,8 +189,8 @@ const rawArtworks = [
       ru: "портрет животного в холодных тонах",
     },
     artistComment: {
-      en: "painted with gentle contrast and a lot of patience.",
-      ru: "написан мягким контрастом и большим количеством терпения.",
+      en: "he turned out to be younger looking than i intended",
+      ru: "получился моложе, чем я задумывала",
     },
   },
   {
@@ -198,11 +198,11 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/silly_birb",
     featured: false,
-    title: { en: "old dog, soft afternoon", ru: "старый пёс, мягкий день" },
-    alt: { en: "older dog napping", ru: "пожилой пёс отдыхает" },
+    title: { en: "silly birb", ru: "глупый птенец" },
+    alt: { en: "silly bird illustration", ru: "смешная птичка" },
     artistComment: {
-      en: "a slow afternoon with an old friend.",
-      ru: "медленный день со старым другом.",
+      en: "gib him treats",
+      ru: "дай ему вкусняшек",
     },
   },
   {
@@ -210,11 +210,11 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/fishies",
     featured: false,
-    title: { en: "two birds talking", ru: "две птицы разговаривают" },
-    alt: { en: "pair of small birds", ru: "пара маленьких птиц" },
+    title: { en: "harmony fish", ru: "рыбки в гармонии" },
+    alt: { en: "pair of fish swimming", ru: "две рыбки" },
     artistComment: {
-      en: "small birds in conversation — i imagined the whole story.",
-      ru: "маленькие птицы в разговоре — я придумала всю историю.",
+      en: "i like to imagine they have some music in the background and they're swimming in sync",
+      ru: "люблю представлять, что у них играет музыка на фоне, а они плывут синхронно",
     },
   },
   {
@@ -236,11 +236,11 @@ const rawArtworks = [
     category: "landscapes",
     path: "images/landscapes/oceanscape",
     featured: false,
-    title: { en: "oceanscape", ru: "морской пейзаж" },
+    title: { en: "anger", ru: "злость" },
     alt: { en: "ocean landscape", ru: "морской пейзаж" },
     artistComment: {
-      en: "quiet water rhythms and layered blues across the horizon.",
-      ru: "тихие ритмы воды и слои синего вдоль горизонта.",
+      en: "an angry oceanscape. just like me >:)",
+      ru: "злой океанский пейзаж. прямо как я >:)",
     },
   },
   {
@@ -248,11 +248,11 @@ const rawArtworks = [
     category: "landscapes",
     path: "images/landscapes/cloudscape2",
     featured: false,
-    title: { en: "cloudscope ii", ru: "облака ii" },
+    title: { en: "cloudscape", ru: "облачный пейзаж" },
     alt: { en: "cloud landscape study", ru: "этюд облачного пейзажа" },
     artistComment: {
-      en: "a broad sky study focused on shape and atmosphere.",
-      ru: "пейзажный этюд неба с фокусом на форме и атмосфере.",
+      en: "first time doing clouds after a long break",
+      ru: "первый раз рисовала облака после долгого перерыва",
     },
   },
   {
@@ -260,11 +260,11 @@ const rawArtworks = [
     category: "landscapes",
     path: "images/landscapes/cloudscape",
     featured: false,
-    title: { en: "cloudscape", ru: "облачный пейзаж" },
+    title: { en: "sharp sketch", ru: "чёткий скетч" },
     alt: { en: "cloudscape panorama", ru: "панорама облаков" },
     artistComment: {
-      en: "a calm cloud massing study with soft transitions.",
-      ru: "спокойное исследование облачных масс с мягкими переходами.",
+      en: "this one is my ipad's background hehe",
+      ru: "это обои на моём ipad хехе",
     },
   },
   {
@@ -275,8 +275,8 @@ const rawArtworks = [
     title: { en: "mountscape", ru: "горный пейзаж" },
     alt: { en: "mountain landscape", ru: "горный пейзаж" },
     artistComment: {
-      en: "a mountain composition balancing depth and stillness.",
-      ru: "горная композиция с балансом глубины и тишины.",
+      en: "mountains. the foggy water was the hardest to make",
+      ru: "горы. туманная вода далась сложнее всего",
     },
   },
   {
@@ -288,8 +288,8 @@ const rawArtworks = [
     title: { en: "planes", ru: "planes" },
     alt: { en: "planes landscape by akira", ru: "пейзаж planes от akira" },
     artistComment: {
-      en: "temporary note: landscape note is under construction.",
-      ru: "временная заметка: описание пейзажа пока в разработке.",
+      en: "i really enjoy travelling, it feels free and liberating",
+      ru: "обожаю путешествовать — ощущение свободы и лёгкости",
     },
   },
   {
@@ -298,11 +298,11 @@ const rawArtworks = [
     path: "images/landscapes/myuniverse?updatedAt=1778163056828",
     imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
-    title: { en: "myuniverse", ru: "myuniverse" },
-    alt: { en: "myuniverse landscape by akira", ru: "пейзаж myuniverse от akira" },
+    title: { en: "my universe", ru: "моя вселенная" },
+    alt: { en: "personal universe landscape by akira", ru: "личная вселенная — пейзаж от akira" },
     artistComment: {
-      en: "temporary note: landscape note is under construction.",
-      ru: "временная заметка: описание пейзажа пока в разработке.",
+      en: "a personal piece which represents my surroundings",
+      ru: "личная работа про то, что меня окружает",
     },
   },
   {
@@ -313,8 +313,8 @@ const rawArtworks = [
     title: { en: "cityscape", ru: "городской пейзаж" },
     alt: { en: "cityscape painting", ru: "живопись городского пейзажа" },
     artistComment: {
-      en: "a city scene built from soft geometry and restrained color.",
-      ru: "городская сцена из мягкой геометрии и сдержанного цвета.",
+      en: "a monthly challenge (from loish) piece on topic of wet surfaces and rain.",
+      ru: "работа на месячный челлендж (от loish) на тему мокрых поверхностей и дождя.",
     },
   },
   {
@@ -326,8 +326,8 @@ const rawArtworks = [
     title: { en: "calm", ru: "calm" },
     alt: { en: "calm landscape by akira", ru: "пейзаж calm от akira" },
     artistComment: {
-      en: "temporary note: landscape note is under construction.",
-      ru: "временная заметка: описание пейзажа пока в разработке.",
+      en: "as opposed to anger, this is a calmer state of the water.",
+      ru: "в отличие от «злости», здесь вода в более спокойном состоянии.",
     },
   },
 
@@ -341,8 +341,8 @@ const rawArtworks = [
     title: { en: "tomato", ru: "tomato" },
     alt: { en: "still life tomato study", ru: "натюрморт tomato" },
     artistComment: {
-      en: "temporary note: still life note is under construction.",
-      ru: "временная заметка: описание натюрморта пока в разработке.",
+      en: "stylizing something that is primarily only one color was hard",
+      ru: "стилизовать то, что по сути почти одного цвета, было непросто",
     },
   },
   {
@@ -354,8 +354,8 @@ const rawArtworks = [
     title: { en: "vase study", ru: "vase study" },
     alt: { en: "still life vase study", ru: "натюрморт vase study" },
     artistComment: {
-      en: "temporary note: still life note is under construction.",
-      ru: "временная заметка: описание натюрморта пока в разработке.",
+      en: "a quick sketch i did in parallel with my mom",
+      ru: "быстрый скетч параллельно с мамой",
     },
   },
   {
@@ -364,11 +364,11 @@ const rawArtworks = [
     path: "images/still life/yay",
     imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
-    title: { en: "yay", ru: "yay" },
-    alt: { en: "still life yay study", ru: "натюрморт yay" },
+    title: { en: "peony", ru: "пион" },
+    alt: { en: "still life peony flower", ru: "натюрморт с пионом" },
     artistComment: {
-      en: "temporary note: still life note is under construction.",
-      ru: "временная заметка: описание натюрморта пока в разработке.",
+      en: "a flower i revisited after some years from my first attempt at it.",
+      ru: "цветок, к которому я вернулась спустя годы после первой попытки.",
     },
   },
   {
@@ -376,11 +376,11 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/ladybugs_awaken",
     featured: false,
-    title: { en: "tea and late light", ru: "чай и поздний свет" },
+    title: { en: "ladybugs attack", ru: "атака божьих коровок" },
     alt: { en: "still life with tea", ru: "натюрморт с чаем" },
     artistComment: {
-      en: "a quiet table scene at the end of a long day.",
-      ru: "тихая сцена на столе в конце долгого дня.",
+      en: "i wonder if ladybugs like playing on flowers as a kid would play on a trampoline",
+      ru: "интересно, любят ли божьи коровки играть на цветах, как ребёнок на батуте",
     },
   },
   {
@@ -388,11 +388,11 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/bananas",
     featured: false,
-    title: { en: "letters and petals", ru: "письма и лепестки" },
-    alt: { en: "still life with petals", ru: "натюрморт с лепестками" },
+    title: { en: "stylized bananas", ru: "стилизованные бананы" },
+    alt: { en: "still life with bananas", ru: "натюрморт с бананами" },
     artistComment: {
-      en: "soft palettes layered with texture — slowly, slowly.",
-      ru: "мягкие палитры, послойно с текстурой — медленно, медленно.",
+      en: "i love how colorful they turned out. i used to find the shape of bananas to be difficult",
+      ru: "обожаю, какие они яркие получились. раньше форма бананов давалась мне сложно",
     },
   },
   {
@@ -400,11 +400,11 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/subsurface_scattering",
     featured: false,
-    title: { en: "open book", ru: "открытая книга" },
-    alt: { en: "open book on a desk", ru: "открытая книга на столе" },
+    title: { en: "subsurface scattering", ru: "subsurface scattering" },
+    alt: { en: "glowing berry still life", ru: "натюрморт со светящейся ягодой" },
     artistComment: {
-      en: "an open book and the way the spine catches afternoon light.",
-      ru: "открытая книга и то, как корешок ловит дневной свет.",
+      en: "a bright glowing berry",
+      ru: "яркая светящаяся ягода",
     },
   },
   {
@@ -412,11 +412,11 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/color_plant",
     featured: false,
-    title: { en: "cup, coin, candle", ru: "чашка, монета, свеча" },
+    title: { en: "cyberleaves", ru: "cyberleaves" },
     alt: { en: "small still life trio", ru: "маленький натюрморт-трио" },
     artistComment: {
-      en: "three small things on a table, given the same care as a portrait.",
-      ru: "три маленькие вещи на столе, с той же заботой, что и портрет.",
+      en: "stylization using irregular colors",
+      ru: "стилизация с нерегулярными цветами",
     },
   },
   {
@@ -427,8 +427,8 @@ const rawArtworks = [
     title: { en: "apple study", ru: "этюд яблока" },
     alt: { en: "still life apple study", ru: "натюрморт с яблоком" },
     artistComment: {
-      en: "a focused still life study on form, value, and edge control.",
-      ru: "сосредоточенный натюрмортный этюд формы, тона и краёв.",
+      en: "a heavily stylized apple study. i LOVE how it turned out",
+      ru: "сильно стилизованный этюд яблока. обожаю, как вышло",
     },
   },
 ];

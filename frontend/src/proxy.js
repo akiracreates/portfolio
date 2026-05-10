@@ -45,6 +45,7 @@ function detectLocale(request) {
   return DEFAULT_LOCALE;
 }
 
+/** Next.js edge entry: must be `export function proxy` or `export default` (see middleware-to-proxy). */
 export function proxy(request) {
   const { pathname, search } = request.nextUrl;
 
@@ -81,6 +82,8 @@ export function proxy(request) {
   });
   return response;
 }
+
+export default proxy;
 
 export const config = {
   matcher: [

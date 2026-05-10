@@ -14,10 +14,7 @@ export function ArtworkCard({
 }) {
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
-  const note =
-    locale === "ru"
-      ? "заметка под работой пока в разработке."
-      : "notes under art are still under construction.";
+  const note = pickLocale(artwork.artistComment, locale);
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
@@ -63,19 +60,12 @@ export function ArtworkCard({
 
       {!isFeaturedGalleryCard && (
         <div className="flex flex-1 flex-col gap-2 p-5">
-          <div className="flex items-baseline justify-between gap-3">
-            <h3 className="heading-h3 text-[1rem] leading-snug text-text-primary">
-              {title}
-            </h3>
-            <span className="art-tag caption shrink-0 text-accent-2">
-              {artwork.category}
-            </span>
-          </div>
-          {note && (
-            <p className="body-sm line-clamp-2 text-text-secondary">
-              {note}
-            </p>
-          )}
+          <h3 className="heading-h3 text-[1rem] leading-snug text-text-primary">
+            {title}
+          </h3>
+          {note ? (
+            <p className="body-sm text-text-secondary">{note}</p>
+          ) : null}
         </div>
       )}
     </article>
@@ -94,10 +84,7 @@ export function ArtworkRow({
 }) {
   const title = pickLocale(artwork.title, locale);
   const alt = pickLocale(artwork.alt, locale) || title;
-  const note =
-    locale === "ru"
-      ? "заметка под работой пока в разработке."
-      : "notes under art are still under construction.";
+  const note = pickLocale(artwork.artistComment, locale);
   const width = artwork.width ?? 4;
   const height = artwork.height ?? 5;
   const aspectStyle = { aspectRatio: `${width} / ${height}` };
@@ -141,19 +128,14 @@ export function ArtworkRow({
         <div
           className={`portfolio-note scrap-caption mt-2 space-y-1.5 px-2.5 py-2 md:mt-0 md:space-y-2 md:px-4 md:py-3 ${noteClass}`}
         >
-          <div className="flex items-baseline justify-between gap-2 md:gap-3">
-            <h3 className="heading-h2 text-[1.05rem] leading-tight text-text-primary md:text-[1.1rem]">
-              {title}
-            </h3>
-            <span className="art-tag caption hidden shrink-0 text-accent-2 md:inline-block">
-              {artwork.category}
-            </span>
-          </div>
-          {note && (
-            <p className="body-sm max-w-[24ch] max-md:text-[0.8125rem] max-md:leading-relaxed md:max-w-[22ch]">
+          <h3 className="heading-h2 text-[1.05rem] leading-tight text-text-primary md:text-[1.1rem]">
+            {title}
+          </h3>
+          {note ? (
+            <p className="body-sm min-w-0 max-w-[min(100%,42ch)] max-md:text-[0.8125rem] max-md:leading-relaxed md:max-w-[min(100%,40ch)]">
               {note}
             </p>
-          )}
+          ) : null}
         </div>
       </div>
     </article>

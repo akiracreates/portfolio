@@ -230,7 +230,8 @@ export const dictionary = {
   portfolio: {
     pageEyebrow: "portfolio",
     pageTitle: "all artwork, sorted by category.",
-    pageDescription: "notes under art are still under construction.",
+    pageDescription:
+      "portraits, animals, landscapes, and still life — short notes with each piece.",
     pieces: "pieces",
     piece: "piece",
     jumpTo: "jump to",
