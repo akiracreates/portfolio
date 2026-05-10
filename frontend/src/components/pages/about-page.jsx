@@ -212,40 +212,78 @@ function DigitalArtChapter({ chapter, locale }) {
       tabLabel={chapter.noteCard?.label}
     />
   );
+
+  const header = (
+    <div className="about-board-header">
+      <ChapterLabel tilt={chapter.tilt} tone="purple">
+        {chapter.label}
+      </ChapterLabel>
+      <Heading level="h2" className="about-board-title">
+        {chapter.title}
+      </Heading>
+      <Divider className="about-underline" />
+      {chapter.noteCard?.label ? (
+        <p className="caption about-board-note-label text-highlight">
+          {chapter.noteCard.label}
+        </p>
+      ) : null}
+    </div>
+  );
+
+  const proseBlocks = (
+    <>
+      <div className="about-board-prose">
+        {wrappedParagraphs.map((paragraph) => (
+          <p key={paragraph} className="body about-board-paragraph">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+      <div className="about-board-cluster-mobile">{boardCluster}</div>
+      <div className="about-board-prose about-board-prose--continuation">
+        {continuationParagraphs.map((paragraph) => (
+          <p key={paragraph} className="body about-board-paragraph">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </>
+  );
+
+  if (locale === "ru") {
+    return (
+      <article className="about-spread about-board">
+        <div className="about-board-flow about-board-flow--ruFloat">
+          {header}
+          <div className="chapter-2-flow">
+            <div className="about-board-cluster-desktop">{boardCluster}</div>
+            <div className="about-board-prose">
+              {wrappedParagraphs.map((paragraph) => (
+                <p key={paragraph} className="body about-board-paragraph">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <div className="about-board-cluster-mobile">{boardCluster}</div>
+            <div className="about-board-prose about-board-prose--continuation">
+              {continuationParagraphs.map((paragraph) => (
+                <p key={paragraph} className="body about-board-paragraph">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="about-spread about-board">
       <div className="about-board-flow">
         <div className="about-board-cluster-desktop">{boardCluster}</div>
-        <div className="about-board-header">
-          <ChapterLabel tilt={chapter.tilt} tone="purple">
-            {chapter.label}
-          </ChapterLabel>
-          <Heading level="h2" className="about-board-title">
-            {chapter.title}
-          </Heading>
-          <Divider className="about-underline" />
-          {chapter.noteCard?.label ? (
-            <p className="caption about-board-note-label text-highlight">
-              {chapter.noteCard.label}
-            </p>
-          ) : null}
-        </div>
-
-        <div className="about-board-prose">
-          {wrappedParagraphs.map((paragraph) => (
-            <p key={paragraph} className="body about-board-paragraph">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-        <div className="about-board-cluster-mobile">{boardCluster}</div>
-        <div className="about-board-prose about-board-prose--continuation">
-          {continuationParagraphs.map((paragraph) => (
-            <p key={paragraph} className="body about-board-paragraph">
-              {paragraph}
-            </p>
-          ))}
-        </div>
+        {header}
+        {proseBlocks}
       </div>
     </article>
   );

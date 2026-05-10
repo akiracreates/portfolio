@@ -153,8 +153,8 @@ const categoryIntroCopy = {
     ru: "мне нравится делать такие упражнения: берёшь самый скучный предмет и пробуешь сделать его интересным. вот результаты!",
   },
   default: {
-    en: "notes under art are still under construction.",
-    ru: "заметки под работами пока в разработке.",
+    en: "artwork in this category, with short notes on each piece.",
+    ru: "работы в этой категории с короткими заметками к каждой.",
   },
 };
 

@@ -83,6 +83,9 @@ export function CommissionRequestForm({ locale = "en", content }) {
     }
   };
 
+  const successLines = pickLocale(content.successLines, locale);
+  const successLineItems = Array.isArray(successLines) ? successLines : [];
+
   return (
     <form onSubmit={onSubmit} className="relative space-y-4" noValidate>
       <div
@@ -194,9 +197,11 @@ export function CommissionRequestForm({ locale = "en", content }) {
         </p>
       ) : null}
       {status === "success" ? (
-        <p className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--success)]/45 bg-[color:var(--success)]/10 px-3 py-2 text-sm text-success">
-          {pickLocale(content.success, locale)}
-        </p>
+        <div className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--success)]/45 bg-[color:var(--success)]/10 px-3 py-2 text-sm text-success space-y-0.5">
+          {successLineItems.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
       ) : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3">

@@ -415,7 +415,7 @@ export const commissionRequestFormContent = {
     },
     commissionType: { en: "commission type", ru: "тип заказа" },
     description: { en: "description", ru: "описание" },
-    references: { en: "references", ru: "референсы" },
+    references: { en: "references (links)", ru: "референсы (ссылки)" },
     terms: {
       en: "i have read and agree to the terms and conditions",
       ru: "я прочитал(а) и согласен(на) с условиями и положениями",
@@ -443,9 +443,9 @@ export const commissionRequestFormContent = {
     ],
   },
   submit: { en: "send request", ru: "отправить заявку" },
-  success: {
-    en: "thank you — your request was sent. i'll get back to you soon.",
-    ru: "спасибо — заявка отправлена. я отвечу тебе как только смогу.",
+  successLines: {
+    en: ["your request has been sent", "i'll get back to you soon"],
+    ru: ["заявка отправлена", "скоро отвечу"],
   },
   error: {
     en: "something went wrong while sending your request. please try again or contact me on telegram.",

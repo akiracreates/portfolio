@@ -3576,7 +3576,6 @@ a {
     shape-outside: inset(0 0 28% 0 round 16px);
     padding: 0;
   }
-  
 
   .about-board-header {
     max-width: 36rem;
@@ -3661,6 +3660,107 @@ a {
 
   .portfolio-note--right {
     margin-right: 0;
+  }
+}
+
+/*
+ * About chapter 2 (RU): heading full-width; `.chapter-2-flow` is one block
+ * container — desktop wrapper floats right *as the wrapper* (not a collapsed
+ * parent around a nested float), immediately before prose so the first line
+ * aligns with the cluster top. Inner `aside` stays non-floated; no inner
+ * translateY. Stack below 1050px.
+ */
+.about-board-flow--ruFloat .chapter-2-flow {
+  display: block;
+  min-width: 0;
+}
+
+.about-board-flow--ruFloat .chapter-2-flow > .about-board-prose:first-of-type {
+  margin-top: 0;
+}
+
+.about-board-flow--ruFloat .about-board-cluster-inner {
+  transform: none;
+}
+
+.about-board-flow--ruFloat .about-board-cluster-desktop .about-board-cluster {
+  float: none;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  shape-outside: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.about-board-flow--ruFloat .about-board-prose--continuation {
+  clear: none;
+}
+
+.about-board-flow--ruFloat .about-board-prose::after,
+.about-board-flow--ruFloat .about-board-prose--continuation::after {
+  content: none;
+  display: none;
+}
+
+.about-board-flow--ruFloat::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+@media (min-width: 1051px) {
+  /*
+   * RU chapter 2: header sits above `.chapter-2-flow`, so the board starts lower than EN
+   * (where the cluster is the first child). Pull `.chapter-2-flow` up as one unit; float
+   * wrapper keeps top margin 0 so the first line of body copy stays level with the cluster.
+   */
+  .about-board-flow--ruFloat .about-board-header {
+    max-width: none;
+    /* Tighten gap under heading so body can sit closer to EN cluster height. */
+    margin-bottom: 0;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow {
+    margin-top: 0;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow > .about-board-cluster-desktop {
+    float: right;
+    width: clamp(320px, 30vw, 430px);
+    max-width: 42%;
+    margin: -6.2rem -0.25rem 1.2rem clamp(1.8rem, 3vw, 3rem);
+    shape-outside: inset(0 round 18px);
+    shape-margin: 1.25rem;
+    position: relative;
+    clear: none;
+  }
+
+  .about-board-flow--ruFloat .about-board-title {
+    max-width: none;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow .about-board-prose,
+  .about-board-flow--ruFloat .chapter-2-flow .about-board-prose--continuation {
+    max-width: none;
+  }
+}
+
+@media (max-width: 1050px) {
+  .about-board-flow--ruFloat .chapter-2-flow > .about-board-cluster-desktop {
+    float: none;
+    width: min(100%, 520px);
+    max-width: 100%;
+    margin: 1rem auto 1.5rem;
+    shape-outside: none;
+    shape-margin: 0;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow .about-board-cluster-mobile .about-board-cluster {
+    max-width: min(100%, 520px);
+    margin-inline: auto;
   }
 }
 
