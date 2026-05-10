@@ -7,7 +7,6 @@ import {
   useCallback,
   useEffect,
   useId,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -43,22 +42,11 @@ function isPathActive(pathname, href, locale) {
 }
 
 function useSectionObserver(anchors, enabled, routeKey) {
-  const anchorsKey = anchors.join("\0");
-  const [activeState, setActiveState] = useState({ routeKey: "", id: "" });
+  const observerKey = `${routeKey}\0${anchors.join("\0")}`;
+  const defaultId = anchors[0] || "";
+  const [activeId, setActiveId] = useState(defaultId);
   const lastEmittedRef = useRef("");
-  const active =
-    activeState.routeKey === routeKey
-      ? activeState.id || anchors[0] || ""
-      : anchors[0] || "";
-
-  // After soft navigation the previous route's `{ routeKey, id }` must not leak.
-  // Reset synchronously before paint so the menu never briefly shows a stale chapter.
-  useLayoutEffect(() => {
-    if (!enabled || !anchors.length) return;
-    const defaultId = anchors[0] || "";
-    lastEmittedRef.current = defaultId;
-    setActiveState({ routeKey, id: defaultId });
-  }, [anchorsKey, enabled, routeKey]);
+  const active = anchors.includes(activeId) ? activeId : defaultId;
 
   useEffect(() => {
     if (!enabled) {
@@ -66,6 +54,7 @@ function useSectionObserver(anchors, enabled, routeKey) {
       return undefined;
     }
     if (!anchors.length) return undefined;
+    lastEmittedRef.current = "";
 
     let raf = null;
     let hasAttachedListeners = false;
@@ -74,7 +63,7 @@ function useSectionObserver(anchors, enabled, routeKey) {
     const emitIfChanged = (nextId) => {
       if (lastEmittedRef.current === nextId) return;
       lastEmittedRef.current = nextId;
-      setActiveState({ routeKey, id: nextId });
+      setActiveId(nextId);
     };
 
     const getElements = () =>
@@ -172,7 +161,7 @@ function useSectionObserver(anchors, enabled, routeKey) {
         window.removeEventListener("resize", schedule);
       }
     };
-  }, [anchors, anchorsKey, enabled, routeKey]);
+  }, [anchors, enabled, observerKey]);
 
   return enabled ? active : "";
 }
