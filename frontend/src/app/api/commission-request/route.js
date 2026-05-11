@@ -68,15 +68,8 @@ export async function POST(request) {
 
   const agreedTerms =
     body.agreedTerms === true || body.agreedTerms === "true";
-  const consentGiven =
-    body.consent === true || body.consent === "true";
-  const consentDeclined =
-    body.consent === false || body.consent === "false";
-  const consentLabel = consentGiven
-    ? "yes"
-    : consentDeclined
-      ? "no"
-      : "n/a";
+  const consentData =
+    body.consentData === true || body.consentData === "true";
 
   if (!name || name.length < 2) {
     return NextResponse.json(
@@ -108,6 +101,12 @@ export async function POST(request) {
       { status: 400 },
     );
   }
+  if (!consentData) {
+    return NextResponse.json(
+      { ok: false, error: "validation_failed" },
+      { status: 400 },
+    );
+  }
 
   const payload = {
     submittedAt: new Date().toISOString(),
@@ -124,7 +123,7 @@ export async function POST(request) {
     deadline: deadline || "—",
     language: language || "—",
     agreedTerms: "yes",
-    consent: consentLabel,
+    consentData: "yes",
   };
 
   const adminSent = await sendCommissionRequestAdminEmail(payload);

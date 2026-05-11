@@ -413,13 +413,18 @@ export const commissionRequestFormContent = {
       en: "preferred contact method",
       ru: "предпочтительный способ связи",
     },
-    commissionType: { en: "commission type", ru: "тип заказа" },
+    commissionType: { en: "commission type", ru: "тип коммишена" },
     description: { en: "description", ru: "описание" },
-    references: { en: "references (links)", ru: "референсы (ссылки)" },
+    references: { en: "references", ru: "референсы" },
     terms: {
       en: "i have read and agree to the terms and conditions",
-      ru: "я прочитал(а) и согласен(на) с условиями и положениями",
+      ru: "я прочитал(а) и соглашаюсь с условиями",
     },
+    consentData: {
+      en: "i consent to the processing of my personal data for the purpose of reviewing and responding to my commission request.",
+      ru: "я даю согласие на обработку моих персональных данных для рассмотрения заявки на коммишен и связи со мной.",
+    },
+    // TODO: when a privacy/personal data policy page exists, add consentDataHref: { en: "/en/privacy", ru: "/ru/privacy" } and link the checkbox text to it
   },
   placeholders: {
     description: {
@@ -428,7 +433,7 @@ export const commissionRequestFormContent = {
     },
     references: {
       en: "links to images, pinterest boards, or anything visual",
-      ru: "ссылки на изображения, доски pinterest или любые визуальные материалы",
+      ru: "ссылки на изображения, pinterest-доски или любые визуальные референсы",
     },
   },
   options: {
@@ -466,8 +471,12 @@ export const commissionRequestFormContent = {
     ru: "пожалуйста, заполните все обязательные поля.",
   },
   termsError: {
-    en: "please agree to the terms and conditions before submitting.",
-    ru: "пожалуйста, подтвердите согласие с условиями перед отправкой.",
+    en: "please agree to the terms and conditions before sending the request.",
+    ru: "пожалуйста, согласитесь с условиями перед отправкой заявки.",
+  },
+  consentDataError: {
+    en: "please consent to personal data processing before sending the request.",
+    ru: "пожалуйста, дайте согласие на обработку персональных данных перед отправкой заявки.",
   },
   note: {
     en: "if it's urgent, feel free to contact me on telegram.",

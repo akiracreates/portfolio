@@ -325,7 +325,7 @@ export const dictionary = {
     formContactEmail: "email",
     formContactDiscord: "discord",
     formHandle: "telegram или discord",
-    formCommissionType: "тип заказа",
+    formCommissionType: "тип коммишена",
     formBudget: "бюджет",
     formDeadline: "срок",
     formReferences: "ссылка на референсы",

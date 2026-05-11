@@ -16,6 +16,7 @@ const initialForm = {
   description: "",
   references: "",
   agreedTerms: false,
+  consentData: false,
   website: "",
 };
 
@@ -51,6 +52,10 @@ export function CommissionRequestForm({ locale = "en", content }) {
       setError(pickLocale(content.termsError, locale));
       return;
     }
+    if (!form.consentData) {
+      setError(pickLocale(content.consentDataError, locale));
+      return;
+    }
 
     setStatus("submitting");
     try {
@@ -66,6 +71,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
           description: form.description,
           references: form.references,
           agreedTerms: form.agreedTerms,
+          consentData: form.consentData,
           website: form.website,
           locale,
           formSource: "commission-request",
@@ -177,19 +183,35 @@ export function CommissionRequestForm({ locale = "en", content }) {
         />
       </FieldShell>
 
-      <label className="flex items-start gap-2 text-sm text-text-secondary">
-        <input
-          type="checkbox"
-          name="agreedTerms"
-          checked={form.agreedTerms}
-          onChange={onChange}
-          className="mt-1 h-4 w-4 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
-        />
-        <span>
-          {pickLocale(content.labels.terms, locale)}
-          <span className="text-highlight"> *</span>
-        </span>
-      </label>
+      <div className="space-y-3 pt-1">
+        <label className="flex items-start gap-2 text-sm text-text-secondary">
+          <input
+            type="checkbox"
+            name="agreedTerms"
+            checked={form.agreedTerms}
+            onChange={onChange}
+            className="mt-1 h-4 w-4 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
+          />
+          <span>
+            {pickLocale(content.labels.terms, locale)}
+            <span className="text-highlight"> *</span>
+          </span>
+        </label>
+
+        <label className="flex items-start gap-2 text-sm text-text-secondary">
+          <input
+            type="checkbox"
+            name="consentData"
+            checked={form.consentData}
+            onChange={onChange}
+            className="mt-1 h-4 w-4 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
+          />
+          <span>
+            {pickLocale(content.labels.consentData, locale)}
+            <span className="text-highlight"> *</span>
+          </span>
+        </label>
+      </div>
 
       {error ? (
         <p className="rounded-[var(--radius-md)] border border-dashed border-[color:var(--error)]/45 bg-[color:var(--error)]/10 px-3 py-2 text-sm text-error">

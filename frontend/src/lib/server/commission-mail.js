@@ -151,8 +151,8 @@ export function buildCommissionAdminText(data) {
     "terms agreed:",
     data.agreedTerms,
     "",
-    "contact consent:",
-    data.consent,
+    "personal data processing consent:",
+    data.consentData,
   ];
   return lines.join("\n");
 }
