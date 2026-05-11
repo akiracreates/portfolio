@@ -87,7 +87,7 @@ export function HeroSection({ dict, locale = "en" }) {
                     />
                   </ImageFrame>
                   <p className="mt-1 px-1 text-[0.81rem] leading-snug text-text-secondary/95 sm:absolute sm:-bottom-3 sm:left-2 sm:mt-0 sm:px-0 sm:text-xs sm:text-text-secondary/86">
-                    i love experimenting and being expressive in my work
+                    {t.portraitNote}
                   </p>
                 </div>
               </div>

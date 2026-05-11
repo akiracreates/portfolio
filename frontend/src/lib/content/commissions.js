@@ -444,8 +444,14 @@ export const commissionRequestFormContent = {
   },
   submit: { en: "send request", ru: "отправить заявку" },
   successLines: {
-    en: ["your request has been sent", "i'll get back to you soon"],
-    ru: ["заявка отправлена", "скоро отвечу"],
+    en: [
+      "your commission request has been sent.",
+      "i'll review it and get back to you soon. if you need to add anything urgent, telegram is the fastest way to reach me.",
+    ],
+    ru: [
+      "заявка на коммишен отправлена.",
+      "я посмотрю её и скоро свяжусь с вами. если нужно срочно что-то добавить, быстрее всего написать мне в telegram.",
+    ],
   },
   error: {
     en: "something went wrong while sending your request. please try again or contact me on telegram.",

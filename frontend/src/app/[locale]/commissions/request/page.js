@@ -1,3 +1,4 @@
+import { AlternativeContactSection } from "@/components/commissions/alternative-contact-section";
 import { CommissionRequestForm } from "@/components/commissions/commission-request-form";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -42,6 +43,7 @@ export default async function Page({ params }) {
           <CommissionRequestForm locale={locale} content={commissionRequestFormContent} />
         </article>
       </Section>
+      <AlternativeContactSection locale={locale} className="pb-16 md:pb-20" />
     </Container>
   );
 }

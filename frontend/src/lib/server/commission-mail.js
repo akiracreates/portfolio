@@ -59,14 +59,21 @@ function buildUserConfirmationEn(data) {
   return [
     "hi!",
     "",
-    "thank you for sending a commission request through my site.",
+    "thank you for sending your commission request. i received it and will review the details as soon as i can.",
     "",
-    "i received it and will look through the details before replying. this does not confirm the commission yet — i'll contact you first to discuss the idea, price, timeline, and any questions.",
+    "this does not mean the commission is accepted yet — i'll contact you first so we can confirm the idea, details, timing, and price.",
     "",
-    "if anything changes or you want to add more references, you can reply to this email or contact me on telegram.",
+    "if you want to add more references, details, or corrections, please contact me through one of these:",
+    "",
+    "email: akiracreates.comms@gmail.com",
+    "telegram: https://t.me/akiracreates",
+    "vk: https://vk.ru/akirasartisticmess",
+    "discord: @akiracreates",
+    "",
+    "telegram is usually the fastest way to reach me.",
     "",
     summary,
-    "thank you for trusting me with your idea,",
+    "thank you again,",
     "akira",
   ].join("\n");
 }
@@ -76,14 +83,21 @@ function buildUserConfirmationRu(data) {
   return [
     "привет!",
     "",
-    "спасибо, что отправил(а) заявку на заказ через мой сайт.",
+    "спасибо, что отправили заявку на коммишен. я получила её и посмотрю детали, как только смогу.",
     "",
-    "я получила её и посмотрю детали перед ответом. это ещё не подтверждение заказа — сначала я свяжусь с тобой, чтобы обсудить идею, цену, сроки и вопросы.",
+    "это ещё не значит, что коммишен принят — сначала я свяжусь с вами, чтобы уточнить идею, детали, сроки и цену.",
     "",
-    "если что-то изменится или ты хочешь добавить ещё референсы, можешь ответить на это письмо или написать мне в telegram.",
+    "если вы хотите добавить референсы, детали или что-то исправить, пожалуйста, напишите мне сюда:",
+    "",
+    "почта: akiracreates.comms@gmail.com",
+    "telegram: https://t.me/akiracreates",
+    "vk: https://vk.ru/akirasartisticmess",
+    "discord: @akiracreates",
+    "",
+    "telegram обычно самый быстрый способ связаться со мной.",
     "",
     summary,
-    "спасибо за доверие к моей работе,",
+    "спасибо ещё раз,",
     "akira",
   ].join("\n");
 }
@@ -196,14 +210,12 @@ export async function sendCommissionRequestUserConfirmationEmail(data) {
   const locale = data.siteLocale === "ru" ? "ru" : "en";
   const subject =
     locale === "ru"
-      ? "я получила твою заявку"
-      : "i got your commission request";
+      ? "заявка на коммишен получена"
+      : "commission request received";
   const text =
     locale === "ru"
       ? buildUserConfirmationRu(data)
       : buildUserConfirmationEn(data);
-
-  const replyTo = getCommissionAdminEmail();
 
   const sent = await resendSendResult(
     resend.emails.send({
@@ -211,7 +223,6 @@ export async function sendCommissionRequestUserConfirmationEmail(data) {
       to: data.email,
       subject,
       text,
-      replyTo: [replyTo],
     }),
   );
   if (!sent.ok) {

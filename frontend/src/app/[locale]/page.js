@@ -11,13 +11,15 @@ export async function generateMetadata({ params }) {
   if (!isLocale(locale)) return {};
   const dict = await getDictionary(locale);
   const m = dict.metaPages.home;
-  return buildPageMetadata({
+  const meta = buildPageMetadata({
     locale,
     pathSuffix: "",
-    title: m.title,
+    title: "akiracreates",
     description: m.description,
     imageAlt: dict.hero.imageAlt,
   });
+  meta.title = { absolute: "akiracreates" };
+  return meta;
 }
 
 export default async function HomePage({ params }) {

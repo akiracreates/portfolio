@@ -80,6 +80,15 @@ export function NavIcon({ id, className = "" }) {
           <path d="M5.5 4v16" strokeWidth="2.5" />
         </svg>
       );
+    case "discord":
+      return (
+        <svg className={cn} {...stroke}>
+          <path d="M9.5 9.5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5S11 11.8 11 11s-.7-1.5-1.5-1.5z" fill="currentColor" stroke="none" />
+          <path d="M14.5 9.5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5z" fill="currentColor" stroke="none" />
+          <path d="M8.5 4c-2 .5-3.5 1.5-3.5 1.5S3.5 8 3 12c1.5 2.5 4.5 3 4.5 3l.7-1.2M15.5 4c2 .5 3.5 1.5 3.5 1.5s1.5 2.5 2 6.5c-1.5 2.5-4.5 3-4.5 3l-.7-1.2" />
+          <path d="M8 17.5c1 .5 2.5.8 4 .8s3-.3 4-.8" />
+        </svg>
+      );
     case "email":
       return (
         <svg className={cn} {...stroke}>

@@ -18,7 +18,7 @@ export const dictionary = {
         "Портреты, животные, пейзажи и натюрморты — подборка работ akira.",
     },
     commissions: {
-      title: "комиссии",
+      title: "коммишены",
       description:
         "Цены, процесс, доставка и ответы на вопросы — заказать портрет или иллюстрацию у akira.",
     },
@@ -30,7 +30,7 @@ export const dictionary = {
     commissionsRequest: {
       title: "заявка на заказ",
       description:
-        "Форма запроса комиссии — задачи, референсы и сроки работы с akira.",
+        "Форма запроса коммишена — задачи, референсы и сроки работы с akira.",
     },
     spin: {
       title: "сюрприз студии",
@@ -93,12 +93,13 @@ export const dictionary = {
 
   hero: {
     eyebrow: "akiracreates",
-    titleLeading: "",
+    titleLeading: "hemlo, im",
     titleHighlight: "akira",
     titleTrailing: "",
     leadPrefix: "digital-художница, рисую ",
     leadEmphasis: "портреты и животных",
     supportingText: "я люблю экспериментировать и делать работы выразительными",
+    portraitNote: "последнее восприятие себя",
     ctaPrimary: "полное портфолио",
     ctaSecondary: "коммишены",
     ctaAbout: "обо мне",
@@ -334,7 +335,7 @@ export const dictionary = {
     formAgreeTerms: "согласен(на) с условиями выше",
     formConsent: "согласен(на) на связь по этому запросу",
     formSuccess:
-      "спасибо — заявка отправлена. я отвечу тебе как только смогу.",
+      "заявка на коммишен отправлена. я посмотрю её и скоро свяжусь с вами. если нужно срочно что-то добавить, быстрее всего написать мне в telegram.",
     formError:
       "что-то пошло не так при отправке. попробуй ещё раз или напиши мне в telegram.",
     formMissing: "пожалуйста, заполните обязательные поля.",

@@ -93,12 +93,13 @@ export const dictionary = {
 
   hero: {
     eyebrow: "akiracreates",
-    titleLeading: "",
+    titleLeading: "hemlo, im",
     titleHighlight: "akira",
     titleTrailing: "",
     leadPrefix: "digital artist specializing in ",
     leadEmphasis: "portraits and animals",
     supportingText: "i love experimenting and being expressive in my work",
+    portraitNote: "latest perception of myself",
     ctaPrimary: "full portfolio",
     ctaSecondary: "commissions",
     ctaAbout: "about me",
@@ -334,7 +335,7 @@ export const dictionary = {
     formAgreeTerms: "i agree to the commission terms above",
     formConsent: "i consent to being contacted about this request",
     formSuccess:
-      "thank you — your request was sent. i'll get back to you soon.",
+      "your commission request has been sent. i'll review it and get back to you soon. if you need to add anything urgent, telegram is the fastest way to reach me.",
     formError:
       "something went wrong while sending your request. please try again or contact me on telegram.",
     formMissing: "please fill all required fields.",
