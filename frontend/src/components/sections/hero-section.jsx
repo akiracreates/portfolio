@@ -16,7 +16,7 @@ export function HeroSection({ dict, locale = "en" }) {
       <Container className="relative py-10 md:py-20 lg:py-24">
         <div className="hero-cover card-surface-warm overflow-hidden p-1 md:p-3">
           <div className="hero-cover-inner">
-            <div className="hero-divider grid items-center gap-2 sm:gap-3 lg:grid-cols-[minmax(0,1.34fr)_minmax(400px,0.96fr)] lg:gap-10">
+            <div className="hero-divider grid items-center gap-2 sm:gap-3 lg:grid-cols-[minmax(0,1.34fr)_minmax(340px,0.96fr)] lg:gap-10">
               <div className="hero-copy max-lg:order-2 space-y-5 md:space-y-9 lg:order-none">
                 <Eyebrow>{t.eyebrow}</Eyebrow>
                 <h1

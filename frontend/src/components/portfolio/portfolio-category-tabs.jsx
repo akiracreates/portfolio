@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CategorySection, categoryAnchorId } from "@/components/gallery/category-section";
 import { useNativeReducedMotion } from "@/lib/motion/use-native-reduced-motion";
+import { categoryLabels } from "@/lib/content/artworks";
 
 function categoryFromHash(categories) {
   if (typeof window === "undefined") return categories[0] ?? "";
@@ -65,6 +66,7 @@ export function PortfolioCategoryShowcase({
         jumpToLabel={jumpToLabel}
         active={activeSection.category}
         onSelect={selectCategory}
+        locale={locale}
       />
 
       <div
@@ -92,6 +94,7 @@ export function PortfolioCategoryTabs({
   jumpToLabel = "jump to",
   active,
   onSelect,
+  locale = "en",
 }) {
   if (categories.length === 0) return null;
 
@@ -119,7 +122,7 @@ export function PortfolioCategoryTabs({
                 isActive ? "is-active note-surface-warm deco-warm-pin" : ""
               }`}
             >
-              {cat}
+              {categoryLabels[cat]?.[locale] ?? cat}
             </a>
           );
         })}

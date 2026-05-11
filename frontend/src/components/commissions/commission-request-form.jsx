@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { pickLocale } from "@/lib/i18n/config";
 
 const inputClass =
-  "w-full rounded-[var(--radius-md)] border border-dashed border-border-default bg-bg-inset px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary transition-[border-color,box-shadow,background-color] duration-[var(--duration-fast)] focus:border-highlight focus:bg-bg-surface focus:outline-none focus:ring-2 focus:ring-[color:var(--highlight-soft)]";
+  "w-full rounded-[var(--radius-md)] border border-dashed border-border-default bg-bg-inset px-3.5 py-2.5 text-sm max-md:min-h-[44px] text-text-primary placeholder:text-text-tertiary transition-[border-color,box-shadow,background-color] duration-[var(--duration-fast)] focus:border-highlight focus:bg-bg-surface focus:outline-none focus:ring-2 focus:ring-[color:var(--highlight-soft)]";
 
 const initialForm = {
   name: "",
@@ -122,7 +122,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
   const successLineItems = Array.isArray(successLines) ? successLines : [];
 
   return (
-    <form onSubmit={onSubmit} className="relative space-y-4" noValidate>
+    <form onSubmit={onSubmit} className="relative space-y-5 max-md:space-y-6" noValidate>
       <div
         className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
         aria-hidden="true"
@@ -142,7 +142,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
       </div>
 
       {/* --- about you --- */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 max-md:gap-5 md:grid-cols-2">
         <Field
           label={pickLocale(content.labels.name, locale)}
           name="name"
@@ -160,7 +160,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 max-md:gap-5 md:grid-cols-2">
         <Field
           label={pickLocale(content.labels.handle, locale)}
           name="handle"
@@ -180,7 +180,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
       </div>
 
       {/* --- project details --- */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 max-md:gap-5 md:grid-cols-2">
         <SelectField
           label={pickLocale(content.labels.commissionType, locale)}
           name="commissionType"
@@ -201,7 +201,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 max-md:gap-5 md:grid-cols-2">
         <SelectFieldWithHelper
           label={pickLocale(content.labels.intendedUse, locale)}
           name="intendedUse"
@@ -228,7 +228,7 @@ export function CommissionRequestForm({ locale = "en", content }) {
       </div>
 
       {/* --- deadline --- */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 max-md:gap-5 md:grid-cols-2">
         <SelectField
           label={pickLocale(content.labels.strictDeadline, locale)}
           name="strictDeadline"
@@ -250,11 +250,11 @@ export function CommissionRequestForm({ locale = "en", content }) {
             placeholder={pickLocale(content.placeholders.deadlineDetails, locale)}
           />
         ) : (
-          <div className="hidden sm:block" />
+          <div className="hidden md:block" />
         )}
       </div>
       {needsDeadlineDetails ? (
-        <p className="caption rounded-[var(--radius-md)] border border-dashed border-border-accent/40 bg-accent-soft/50 px-3 py-2 text-text-secondary">
+        <p className="caption rounded-[var(--radius-md)] border border-dashed border-border-accent/40 bg-accent-soft/50 px-3.5 py-2.5 text-text-secondary max-md:text-[0.8rem] max-md:leading-relaxed">
           {pickLocale(content.helpers.deadlineWarning, locale)}
         </p>
       ) : null}
@@ -302,8 +302,8 @@ export function CommissionRequestForm({ locale = "en", content }) {
           name="avoidances"
           value={form.avoidances}
           onChange={onChange}
-          rows={2}
-          className={inputClass}
+          rows={3}
+          className={`${inputClass} min-h-[5rem]`}
           placeholder={pickLocale(content.placeholders.avoidances, locale)}
         />
       </FieldShell>
@@ -323,14 +323,14 @@ export function CommissionRequestForm({ locale = "en", content }) {
       />
 
       {/* --- agreements --- */}
-      <div className="space-y-3 pt-1">
-        <label className="flex items-start gap-2 text-sm text-text-secondary">
+      <div className="space-y-4 max-sm:space-y-5 pt-3 max-md:pt-4 border-t border-dashed border-border-subtle">
+        <label className="flex min-h-[44px] items-start gap-2.5 text-sm text-text-secondary">
           <input
             type="checkbox"
             name="agreedTerms"
             checked={form.agreedTerms}
             onChange={onChange}
-            className="mt-1 h-4 w-4 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
+            className="mt-0.5 h-5 w-5 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
           />
           <span>
             {pickLocale(content.labels.terms, locale)}
@@ -338,13 +338,13 @@ export function CommissionRequestForm({ locale = "en", content }) {
           </span>
         </label>
 
-        <label className="flex items-start gap-2 text-sm text-text-secondary">
+        <label className="flex min-h-[44px] items-start gap-2.5 text-sm text-text-secondary">
           <input
             type="checkbox"
             name="consentData"
             checked={form.consentData}
             onChange={onChange}
-            className="mt-1 h-4 w-4 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
+            className="mt-0.5 h-5 w-5 shrink-0 rounded-[4px] border border-dashed border-border-default bg-bg-inset accent-[color:var(--highlight)]"
           />
           <span>
             {pickLocale(content.labels.consentData, locale)}
@@ -366,12 +366,13 @@ export function CommissionRequestForm({ locale = "en", content }) {
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="caption">{pickLocale(content.note, locale)}</p>
+      <div className="flex flex-wrap items-center justify-between gap-3 max-sm:flex-col max-sm:items-stretch">
+        <p className="caption max-sm:text-center">{pickLocale(content.note, locale)}</p>
         <Button
           type="submit"
           variant="primary"
           size="md"
+          className="max-sm:w-full max-sm:min-h-[48px] max-sm:justify-center max-sm:text-base"
           loading={status === "submitting"}
           disabled={status === "submitting"}
         >
@@ -384,13 +385,13 @@ export function CommissionRequestForm({ locale = "en", content }) {
 
 function Helper({ text }) {
   if (!text) return null;
-  return <p className="caption mt-1 text-text-tertiary">{text}</p>;
+  return <p className="caption mt-1.5 text-text-secondary/80 max-md:text-[0.78rem] max-md:leading-relaxed">{text}</p>;
 }
 
 function FieldShell({ label, required = false, children }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-[0.8125rem] font-medium text-text-secondary">
+    <label className="flex flex-col gap-1.5 max-md:gap-2">
+      <span className="text-[0.8125rem] font-medium text-text-secondary max-md:text-sm">
         {label}
         {required ? <span className="text-highlight"> *</span> : null}
       </span>
@@ -462,8 +463,8 @@ function SelectFieldWithHelper({
   helper,
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-[0.8125rem] font-medium text-text-secondary">
+    <div className="flex flex-col gap-1.5 max-md:gap-2">
+      <span className="text-[0.8125rem] font-medium text-text-secondary max-md:text-sm">
         {label}
         {required ? <span className="text-highlight"> *</span> : null}
       </span>

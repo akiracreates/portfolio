@@ -34,7 +34,7 @@ export default async function Page({ params }) {
         title={pickLocale(commissionRequestFormContent.title, locale)}
         description={pickLocale(commissionRequestFormContent.intro, locale)}
       >
-        <article className="commission-flat-card scrap-card border-[color:var(--border-accent)]/38 p-5 md:p-7">
+        <article className="commission-flat-card scrap-card border-[color:var(--border-accent)]/38 p-3.5 sm:p-5 md:p-7">
           <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
             <span className="caption rounded-full border border-dashed border-border-purple bg-accent-soft px-2.5 py-1 text-accent-2">
               {pickLocale(commissionRequestFormContent.fastNote, locale)}
