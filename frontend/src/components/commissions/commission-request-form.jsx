@@ -13,8 +13,16 @@ const initialForm = {
   handle: "",
   preferredContact: "email",
   commissionType: "",
+  characterCount: "",
+  intendedUse: "",
+  background: "",
+  strictDeadline: "no",
+  deadlineDetails: "",
+  budget: "",
   description: "",
   references: "",
+  avoidances: "",
+  postPermission: "",
   agreedTerms: false,
   consentData: false,
   website: "",
@@ -35,17 +43,30 @@ export function CommissionRequestForm({ locale = "en", content }) {
     }));
   };
 
+  const needsDeadlineDetails = form.strictDeadline === "yes";
+
   const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setStatus("idle");
 
-    if (!form.name || !form.email || !form.commissionType || !form.description) {
+    if (
+      !form.name ||
+      !form.email ||
+      !form.commissionType ||
+      !form.intendedUse ||
+      !form.postPermission ||
+      !form.description
+    ) {
       setError(pickLocale(content.requiredError, locale));
       return;
     }
     if (form.description.trim().length < MIN_DESCRIPTION_LEN) {
       setError(pickLocale(content.descriptionTooShort, locale));
+      return;
+    }
+    if (needsDeadlineDetails && !form.deadlineDetails.trim()) {
+      setError(pickLocale(content.deadlineDetailsError, locale));
       return;
     }
     if (!form.agreedTerms) {
@@ -68,8 +89,16 @@ export function CommissionRequestForm({ locale = "en", content }) {
           handle: form.handle,
           preferredContact: form.preferredContact,
           commissionType: form.commissionType,
+          characterCount: form.characterCount,
+          intendedUse: form.intendedUse,
+          background: form.background,
+          strictDeadline: form.strictDeadline,
+          deadlineDetails: needsDeadlineDetails ? form.deadlineDetails : "",
+          budget: form.budget,
           description: form.description,
           references: form.references,
+          avoidances: form.avoidances,
+          postPermission: form.postPermission,
           agreedTerms: form.agreedTerms,
           consentData: form.consentData,
           website: form.website,
@@ -111,6 +140,8 @@ export function CommissionRequestForm({ locale = "en", content }) {
           />
         </label>
       </div>
+
+      {/* --- about you --- */}
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label={pickLocale(content.labels.name, locale)}
@@ -141,25 +172,107 @@ export function CommissionRequestForm({ locale = "en", content }) {
           name="preferredContact"
           value={form.preferredContact}
           onChange={onChange}
-          options={content.options.preferredContact.map((item) => ({
-            value: item.value,
-            label: pickLocale(item.label, locale),
+          options={content.options.preferredContact.map((o) => ({
+            value: o.value,
+            label: pickLocale(o.label, locale),
           }))}
         />
       </div>
 
-      <SelectField
-        label={pickLocale(content.labels.commissionType, locale)}
-        name="commissionType"
-        value={form.commissionType}
-        required
-        onChange={onChange}
-        options={content.options.commissionType.map((item) => ({
-          value: item.value,
-          label: pickLocale(item.label, locale),
-        }))}
-      />
+      {/* --- project details --- */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SelectField
+          label={pickLocale(content.labels.commissionType, locale)}
+          name="commissionType"
+          value={form.commissionType}
+          required
+          onChange={onChange}
+          options={content.options.commissionType.map((o) => ({
+            value: o.value,
+            label: pickLocale(o.label, locale),
+          }))}
+        />
+        <Field
+          label={pickLocale(content.labels.characterCount, locale)}
+          name="characterCount"
+          value={form.characterCount}
+          onChange={onChange}
+          placeholder={pickLocale(content.placeholders.characterCount, locale)}
+        />
+      </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SelectFieldWithHelper
+          label={pickLocale(content.labels.intendedUse, locale)}
+          name="intendedUse"
+          value={form.intendedUse}
+          required
+          onChange={onChange}
+          options={content.options.intendedUse.map((o) => ({
+            value: o.value,
+            label: pickLocale(o.label, locale),
+          }))}
+          helper={pickLocale(content.helpers.intendedUse, locale)}
+        />
+        <SelectFieldWithHelper
+          label={pickLocale(content.labels.background, locale)}
+          name="background"
+          value={form.background}
+          onChange={onChange}
+          options={content.options.background.map((o) => ({
+            value: o.value,
+            label: pickLocale(o.label, locale),
+          }))}
+          helper={pickLocale(content.helpers.background, locale)}
+        />
+      </div>
+
+      {/* --- deadline --- */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SelectField
+          label={pickLocale(content.labels.strictDeadline, locale)}
+          name="strictDeadline"
+          value={form.strictDeadline}
+          onChange={onChange}
+          options={content.options.strictDeadline.map((o) => ({
+            value: o.value,
+            label: pickLocale(o.label, locale),
+          }))}
+          noEmpty
+        />
+        {needsDeadlineDetails ? (
+          <Field
+            label={pickLocale(content.labels.deadlineDetails, locale)}
+            name="deadlineDetails"
+            value={form.deadlineDetails}
+            required
+            onChange={onChange}
+            placeholder={pickLocale(content.placeholders.deadlineDetails, locale)}
+          />
+        ) : (
+          <div className="hidden sm:block" />
+        )}
+      </div>
+      {needsDeadlineDetails ? (
+        <p className="caption rounded-[var(--radius-md)] border border-dashed border-border-accent/40 bg-accent-soft/50 px-3 py-2 text-text-secondary">
+          {pickLocale(content.helpers.deadlineWarning, locale)}
+        </p>
+      ) : null}
+
+      {/* --- budget --- */}
+      <FieldShell label={pickLocale(content.labels.budget, locale)}>
+        <input
+          name="budget"
+          type="text"
+          value={form.budget}
+          onChange={onChange}
+          className={inputClass}
+          placeholder={pickLocale(content.placeholders.budget, locale)}
+        />
+        <Helper text={pickLocale(content.helpers.budget, locale)} />
+      </FieldShell>
+
+      {/* --- idea details --- */}
       <FieldShell label={pickLocale(content.labels.description, locale)} required>
         <textarea
           name="description"
@@ -172,17 +285,44 @@ export function CommissionRequestForm({ locale = "en", content }) {
         />
       </FieldShell>
 
-      <FieldShell label={pickLocale(content.labels.references, locale)}>
+      <FieldShell label={pickLocale(content.labels.references, locale)} required>
         <textarea
           name="references"
           value={form.references}
           onChange={onChange}
+          required
           rows={3}
           className={inputClass}
           placeholder={pickLocale(content.placeholders.references, locale)}
         />
       </FieldShell>
 
+      <FieldShell label={pickLocale(content.labels.avoidances, locale)}>
+        <textarea
+          name="avoidances"
+          value={form.avoidances}
+          onChange={onChange}
+          rows={2}
+          className={inputClass}
+          placeholder={pickLocale(content.placeholders.avoidances, locale)}
+        />
+      </FieldShell>
+
+      {/* --- post permission --- */}
+      <SelectFieldWithHelper
+        label={pickLocale(content.labels.postPermission, locale)}
+        name="postPermission"
+        value={form.postPermission}
+        required
+        onChange={onChange}
+        options={content.options.postPermission.map((o) => ({
+          value: o.value,
+          label: pickLocale(o.label, locale),
+        }))}
+        helper={pickLocale(content.helpers.postPermission, locale)}
+      />
+
+      {/* --- agreements --- */}
       <div className="space-y-3 pt-1">
         <label className="flex items-start gap-2 text-sm text-text-secondary">
           <input
@@ -242,6 +382,11 @@ export function CommissionRequestForm({ locale = "en", content }) {
   );
 }
 
+function Helper({ text }) {
+  if (!text) return null;
+  return <p className="caption mt-1 text-text-tertiary">{text}</p>;
+}
+
 function FieldShell({ label, required = false, children }) {
   return (
     <label className="flex flex-col gap-1.5">
@@ -254,7 +399,15 @@ function FieldShell({ label, required = false, children }) {
   );
 }
 
-function Field({ label, name, value, onChange, required = false, type = "text" }) {
+function Field({
+  label,
+  name,
+  value,
+  onChange,
+  required = false,
+  type = "text",
+  placeholder,
+}) {
   return (
     <FieldShell label={label} required={required}>
       <input
@@ -263,15 +416,57 @@ function Field({ label, name, value, onChange, required = false, type = "text" }
         value={value}
         onChange={onChange}
         required={required}
+        placeholder={placeholder}
         className={inputClass}
       />
     </FieldShell>
   );
 }
 
-function SelectField({ label, name, value, onChange, options = [], required = false }) {
+function SelectField({
+  label,
+  name,
+  value,
+  onChange,
+  options = [],
+  required = false,
+  noEmpty = false,
+}) {
   return (
     <FieldShell label={label} required={required}>
+      <select
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+        className={inputClass}
+      >
+        {!noEmpty && <option value="">-</option>}
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </FieldShell>
+  );
+}
+
+function SelectFieldWithHelper({
+  label,
+  name,
+  value,
+  onChange,
+  options = [],
+  required = false,
+  helper,
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="text-[0.8125rem] font-medium text-text-secondary">
+        {label}
+        {required ? <span className="text-highlight"> *</span> : null}
+      </span>
       <select
         name={name}
         value={value}
@@ -286,6 +481,7 @@ function SelectField({ label, name, value, onChange, options = [], required = fa
           </option>
         ))}
       </select>
-    </FieldShell>
+      <Helper text={helper} />
+    </div>
   );
 }

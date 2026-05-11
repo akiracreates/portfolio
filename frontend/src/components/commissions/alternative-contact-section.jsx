@@ -16,8 +16,8 @@ export function AlternativeContactSection({ locale = "en", className = "" }) {
       title={pickLocale({ en: "alternative contact", ru: "альтернативная связь" }, locale)}
       description={pickLocale(
         {
-          en: "telegram, email, and vk are always open.",
-          ru: "telegram, email и vk всегда открыты для связи.",
+          en: "telegram, email, vk, and discord are always open.",
+          ru: "telegram, почта, vk и discord всегда открыты.",
         },
         locale,
       )}
