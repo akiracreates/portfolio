@@ -68,7 +68,7 @@ export const aboutStory = {
           {
             id: "doritos",
             label: "doritos era",
-            caption: "messy, bright, and very experimental.",
+            caption: "one of my earlier works",
             alt: "early digital painting named doritos",
             ...aboutImage("doritos"),
             boardClass: "about-board-item about-board-item--one",
@@ -76,7 +76,7 @@ export const aboutStory = {
           {
             id: "apple",
             label: "apple study",
-            caption: "learning form, color, and patience.",
+            caption: "my first attempt at realism",
             alt: "digital apple study",
             ...aboutImage("apple"),
             boardClass: "about-board-item about-board-item--two",
@@ -84,7 +84,7 @@ export const aboutStory = {
           {
             id: "ket",
             label: "cat practice",
-            caption: "because i was always painting cats.",
+            caption: "a cat painting i did when i got my first stylus",
             alt: "early digital cat practice painting",
             ...aboutImage("ket"),
             boardClass: "about-board-item about-board-item--three",
@@ -219,7 +219,7 @@ export const aboutStory = {
           {
             id: "doritos",
             label: "doritos-период",
-            caption: "ярко, шумно и максимально экспериментально.",
+            caption: "одна из моих ранних работ",
             alt: "ранняя цифровая работа doritos",
             ...aboutImage("doritos"),
             boardClass: "about-board-item about-board-item--one",
@@ -227,7 +227,7 @@ export const aboutStory = {
           {
             id: "apple",
             label: "этюд яблока",
-            caption: "про форму, цвет и терпение.",
+            caption: "моя первая попытка в реализм",
             alt: "цифровой этюд яблока",
             ...aboutImage("apple"),
             boardClass: "about-board-item about-board-item--two",
@@ -235,7 +235,7 @@ export const aboutStory = {
           {
             id: "ket",
             label: "котопрактика",
-            caption: "потому что котов я рисовала постоянно.",
+            caption: "рисунок кота, который я сделала, когда у меня появился первый стилус",
             alt: "ранняя цифровая работа с котом",
             ...aboutImage("ket"),
             boardClass: "about-board-item about-board-item--three",
