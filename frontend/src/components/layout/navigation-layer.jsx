@@ -44,10 +44,15 @@ export function NavigationLayer() {
       <button
         type="button"
         onClick={() => setDrawerOpen(true)}
-        className={`mobile-menu-trigger focus-visible-ring h-12 w-12 items-center justify-center rounded-full border border-dashed border-highlight bg-bg-surface text-highlight shadow-lg transition-colors duration-[var(--duration-base)] hover:bg-highlight-soft ${
-          drawerOpen ? "hidden" : "flex"
-        }`}
-        style={{ pointerEvents: "auto" }}
+        className="mobile-menu-trigger focus-visible-ring h-12 w-12 items-center justify-center rounded-full border border-dashed border-highlight bg-bg-surface text-highlight shadow-lg transition-colors duration-[var(--duration-base)] hover:bg-highlight-soft"
+        style={{
+          position: "absolute",
+          top: "max(1rem, env(safe-area-inset-top, 0px))",
+          left: "max(1rem, env(safe-area-inset-left, 0px))",
+          zIndex: 10,
+          pointerEvents: "auto",
+          display: drawerOpen ? "none" : "flex",
+        }}
         aria-label="open navigation"
         aria-controls="site-drawer"
         aria-expanded={drawerOpen}
