@@ -89,6 +89,7 @@ export default async function RootLayout({ children }) {
           skip to content
         </a>
         {children}
+        <div id="nav-portal-root" />
         <Analytics />
         <SpeedInsights />
       </body>
