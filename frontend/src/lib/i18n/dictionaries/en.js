@@ -33,7 +33,7 @@ export const dictionary = {
         "Submit a commission inquiry — scope, references, and timeline for working with akira.",
     },
     spin: {
-      title: "studio surprise",
+      title: "bonus wheel",
       description:
         "A playful studio interaction — not indexed for search.",
     },
@@ -349,9 +349,9 @@ export const dictionary = {
   },
 
   spin: {
-    pageTitle: "a small surprise.",
+    pageTitle: "spin for a little bonus.",
     pageDescription:
-      "you found a hidden corner. enter your email and spin once for a small reward.",
+      "you found a hidden corner. enter your email and spin once for a reward.",
     emailLabel: "your email",
     emailPlaceholder: "you@example.com",
     spinCta: "spin the wheel",
@@ -363,7 +363,7 @@ export const dictionary = {
     backToCommissions: "go to commissions",
     alreadySpunWithReward:
       "this email already spun. here's the reward saved for it.",
-    desktopOnlyTitle: "this little surprise works best on desktop.",
+    desktopOnlyTitle: "this wheel works best on desktop.",
     desktopOnlyBody:
       "the wheel is easier to use on a bigger screen — come back from a computer when you can.",
     emailRequired: "please enter your email first.",

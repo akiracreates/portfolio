@@ -33,7 +33,7 @@ export const dictionary = {
         "Форма запроса коммишена — задачи, референсы и сроки работы с akira.",
     },
     spin: {
-      title: "сюрприз студии",
+      title: "бонусное колесо",
       description:
         "Игровое взаимодействие в студии — не для индексации.",
     },
@@ -349,7 +349,7 @@ export const dictionary = {
   },
 
   spin: {
-    pageTitle: "маленький сюрприз.",
+    pageTitle: "крути колесо за бонус.",
     pageDescription:
       "вы нашли скрытый уголок. введите email и крутаните колесо один раз — получите небольшой подарок.",
     emailLabel: "ваш email",
@@ -363,7 +363,7 @@ export const dictionary = {
     backToCommissions: "перейти к заказам",
     alreadySpunWithReward:
       "этот email уже крутил колесо. вот сохранённый результат.",
-    desktopOnlyTitle: "этот сюрприз лучше всего на десктопе.",
+    desktopOnlyTitle: "колесо удобнее на большом экране.",
     desktopOnlyBody:
       "колесу удобнее на большом экране — загляни с компьютера, когда будет возможность.",
     emailRequired: "сначала введи email.",

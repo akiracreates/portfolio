@@ -20,18 +20,6 @@ export const spinRewards = [
     adminLabel: "5% off (any locale)",
   },
   {
-    id: "surprise-small",
-    type: "service",
-    weight: 18,
-    color: "#a078d0",
-    short: { en: "small surprise", ru: "сюрприз" },
-    label: {
-      en: "a small surprise bonus on your next commission",
-      ru: "небольшой сюрприз-бонус к следующему заказу",
-    },
-    adminLabel: "small surprise bonus (fulfill at artist discretion)",
-  },
-  {
     id: "flat-5",
     type: "flat",
     weight: 12,
