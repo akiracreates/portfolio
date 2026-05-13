@@ -89,6 +89,19 @@ export default async function RootLayout({ children }) {
           skip to content
         </a>
         {children}
+        <div
+          id="nav-portal-root"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: 0,
+            height: 0,
+            zIndex: 2147483647,
+            pointerEvents: "none",
+            overflow: "visible",
+          }}
+        />
         <Analytics />
         <SpeedInsights />
       </body>

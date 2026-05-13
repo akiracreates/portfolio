@@ -36,6 +36,13 @@ export const socialLinks = [
     handle: "patreon.com/akiracreates",
   },
   {
+    id: "discord",
+    url: "https://discord.com",
+    label: "discord",
+    labelRu: "discord",
+    handle: "@akiracreates",
+  },
+  {
     id: "email",
     url: "mailto:akiracreates.comms@gmail.com",
     label: "email",

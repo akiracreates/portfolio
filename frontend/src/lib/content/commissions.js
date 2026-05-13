@@ -413,22 +413,88 @@ export const commissionRequestFormContent = {
       en: "preferred contact method",
       ru: "предпочтительный способ связи",
     },
-    commissionType: { en: "commission type", ru: "тип заказа" },
+    commissionType: { en: "commission type", ru: "тип коммишена" },
+    characterCount: {
+      en: "number of characters or animals",
+      ru: "количество персонажей или животных",
+    },
+    intendedUse: {
+      en: "intended use",
+      ru: "для чего будет использоваться работа?",
+    },
+    background: { en: "background", ru: "фон" },
+    strictDeadline: { en: "strict deadline?", ru: "строгий дедлайн?" },
+    deadlineDetails: { en: "deadline details", ru: "детали дедлайна" },
+    budget: {
+      en: "budget or expected price range (optional)",
+      ru: "бюджет или ожидаемый диапазон цены (необязательно)",
+    },
     description: { en: "description", ru: "описание" },
-    references: { en: "references (links)", ru: "референсы (ссылки)" },
+    references: { en: "references", ru: "референсы" },
+    avoidances: {
+      en: "anything you want me to avoid? (optional)",
+      ru: "чего лучше избежать? (необязательно)",
+    },
+    postPermission: {
+      en: "can i post the finished artwork?",
+      ru: "можно ли мне опубликовать готовую работу?",
+    },
     terms: {
       en: "i have read and agree to the terms and conditions",
-      ru: "я прочитал(а) и согласен(на) с условиями и положениями",
+      ru: "я прочитал(а) и соглашаюсь с условиями",
     },
+    consentData: {
+      en: "i consent to the processing of my personal data for the purpose of reviewing and responding to my commission request.",
+      ru: "я даю согласие на обработку моих персональных данных для рассмотрения заявки на коммишен и связи со мной.",
+    },
+    // TODO: when a privacy/personal data policy page exists, add consentDataHref: { en: "/en/privacy", ru: "/ru/privacy" } and link the checkbox text to it
   },
   placeholders: {
+    characterCount: {
+      en: "for example: 1 person, 2 people, 1 cat",
+      ru: "например: 1 человек, 2 человека, 1 кот",
+    },
+    deadlineDetails: {
+      en: "tell me the date or timeframe you need the artwork by",
+      ru: "укажите дату или срок, к которому нужна работа",
+    },
+    budget: {
+      en: "for example: around $30–50",
+      ru: "например: около 3000–5000 ₽",
+    },
     description: {
       en: "describe your idea, pose, mood, details, or anything important for the piece",
-      ru: "опишите идею, позу, настроение, детали и все важное для работы",
+      ru: "опишите идею, позу, настроение, детали или всё, что важно для работы",
     },
     references: {
       en: "links to images, pinterest boards, or anything visual",
-      ru: "ссылки на изображения, доски pinterest или любые визуальные материалы",
+      ru: "ссылки на изображения, pinterest-доски или любые визуальные референсы",
+    },
+    avoidances: {
+      en: "colors, expressions, poses, themes, details, or anything you do not want in the piece",
+      ru: "цвета, выражения, позы, темы, детали или всё, чего вы не хотите видеть в работе",
+    },
+  },
+  helpers: {
+    intendedUse: {
+      en: "commercial use must be discussed beforehand and may require an additional fee.",
+      ru: "коммерческое использование нужно обсудить заранее, оно может потребовать доплаты.",
+    },
+    background: {
+      en: "simple backgrounds are usually included. complex backgrounds may cost extra.",
+      ru: "простой фон обычно входит в цену. сложный фон может стоить дополнительно.",
+    },
+    budget: {
+      en: "this does not lock the final price — it just helps me understand your expectations.",
+      ru: "это не фиксирует итоговую цену — просто помогает мне понять ваши ожидания.",
+    },
+    postPermission: {
+      en: "this only affects whether i can show the artwork in my portfolio or socials.",
+      ru: "это касается только того, могу ли я показать работу в портфолио или соцсетях.",
+    },
+    deadlineWarning: {
+      en: "strict deadlines may require an additional rush fee and are not always possible.",
+      ru: "строгий дедлайн может потребовать доплаты за срочность и не всегда возможен.",
     },
   },
   options: {
@@ -441,11 +507,36 @@ export const commissionRequestFormContent = {
       { value: "portrait", label: { en: "portrait", ru: "портрет" } },
       { value: "animal", label: { en: "animal", ru: "животное" } },
     ],
+    intendedUse: [
+      { value: "personal", label: { en: "personal use", ru: "личное использование" } },
+      { value: "commercial", label: { en: "commercial use", ru: "коммерческое использование" } },
+      { value: "unsure", label: { en: "not sure yet", ru: "пока не уверена/уверен" } },
+    ],
+    background: [
+      { value: "simple", label: { en: "simple background", ru: "простой фон" } },
+      { value: "detailed", label: { en: "detailed background", ru: "детальный фон" } },
+      { value: "artist-choice", label: { en: "no preference / artist choice", ru: "без предпочтений / на усмотрение художницы" } },
+    ],
+    strictDeadline: [
+      { value: "no", label: { en: "no", ru: "нет" } },
+      { value: "yes", label: { en: "yes", ru: "да" } },
+    ],
+    postPermission: [
+      { value: "yes", label: { en: "yes", ru: "да" } },
+      { value: "no", label: { en: "no", ru: "нет" } },
+      { value: "ask-first", label: { en: "ask me first", ru: "сначала спросите меня" } },
+    ],
   },
   submit: { en: "send request", ru: "отправить заявку" },
   successLines: {
-    en: ["your request has been sent", "i'll get back to you soon"],
-    ru: ["заявка отправлена", "скоро отвечу"],
+    en: [
+      "your commission request has been sent.",
+      "i'll review it and get back to you soon. if you need to add anything urgent, telegram is the fastest way to reach me.",
+    ],
+    ru: [
+      "заявка на коммишен отправлена.",
+      "я посмотрю её и скоро свяжусь с вами. если нужно срочно что-то добавить, быстрее всего написать мне в telegram.",
+    ],
   },
   error: {
     en: "something went wrong while sending your request. please try again or contact me on telegram.",
@@ -460,8 +551,16 @@ export const commissionRequestFormContent = {
     ru: "пожалуйста, заполните все обязательные поля.",
   },
   termsError: {
-    en: "please agree to the terms and conditions before submitting.",
-    ru: "пожалуйста, подтвердите согласие с условиями перед отправкой.",
+    en: "please agree to the terms and conditions before sending the request.",
+    ru: "пожалуйста, согласитесь с условиями перед отправкой заявки.",
+  },
+  consentDataError: {
+    en: "please consent to personal data processing before sending the request.",
+    ru: "пожалуйста, дайте согласие на обработку персональных данных перед отправкой заявки.",
+  },
+  deadlineDetailsError: {
+    en: "please include the deadline date or timeframe.",
+    ru: "пожалуйста, укажите дату или срок дедлайна.",
   },
   note: {
     en: "if it's urgent, feel free to contact me on telegram.",

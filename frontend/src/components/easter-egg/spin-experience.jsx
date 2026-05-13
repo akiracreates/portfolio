@@ -199,7 +199,7 @@ export function SpinExperience({ dict, locale }) {
 
   return (
     <>
-      <div className="desktop-only">
+      <div className="hidden md:block">
         <Container className="py-20 md:py-28">
           <div className="spin-celebration mx-auto max-w-3xl space-y-8 px-5 py-6 text-center md:px-8 md:py-9">
             <header className="space-y-3 px-2 pt-1">
@@ -336,7 +336,7 @@ export function SpinExperience({ dict, locale }) {
         </Container>
       </div>
 
-      <div className="mobile-only">
+      <div className="md:hidden">
         <Container className="py-20">
           <div className="spin-celebration mx-auto max-w-md space-y-6 px-6 py-7 text-center">
             <Heading level="h1">{t.desktopOnlyTitle}</Heading>

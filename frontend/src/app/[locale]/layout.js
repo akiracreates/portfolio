@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { AppShell } from "@/components/layout/app-shell";
+import { NavigationLayer } from "@/components/layout/navigation-layer";
 import { LocaleProvider } from "@/components/i18n/locale-provider";
 import { JsonLdGraph } from "@/components/seo/json-ld-graph";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -21,6 +22,7 @@ export default async function LocaleLayout({ children, params }) {
   return (
     <LocaleProvider locale={locale} dict={dict}>
       <JsonLdGraph locale={locale} pathname={pathname} />
+      <NavigationLayer />
       <AppShell>{children}</AppShell>
     </LocaleProvider>
   );

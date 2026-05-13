@@ -16,6 +16,13 @@ export const artworkCategories = [
   "still life",
 ];
 
+export const categoryLabels = {
+  portraits: { en: "portraits", ru: "портреты" },
+  animals: { en: "animals", ru: "животные" },
+  landscapes: { en: "landscapes", ru: "пейзажи" },
+  "still life": { en: "still life", ru: "натюрморты" },
+};
+
 export const homepageFeaturedArtworkIds = [
   "portrait-02",
   "animal-01",
@@ -131,7 +138,7 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/horsey?updatedAt=1777912296674",
     featured: false,
-    title: { en: "horsey", ru: "horsey" },
+    title: { en: "horsey", ru: "лошадка" },
     alt: { en: "horsey animal artwork by akira", ru: "работа horsey от akira" },
     artistComment: {
       en: "rough strokes make good movement",
@@ -155,7 +162,7 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/layin_kitten?updatedAt=1777912292067",
     featured: false,
-    title: { en: "layin kitten", ru: "layin kitten" },
+    title: { en: "layin kitten", ru: "лежащий котёнок" },
     alt: { en: "layin kitten animal artwork by akira", ru: "работа layin kitten от akira" },
     artistComment: {
       en: "my first time trying to apply face-layin i learned from angel ganev, on animals",
@@ -183,7 +190,7 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/tiger",
     featured: false,
-    title: { en: "forest companion", ru: "спутник леса" },
+    title: { en: "forest companion", ru: "лесной спутник" },
     alt: {
       en: "animal portrait in cool tones",
       ru: "портрет животного в холодных тонах",
@@ -198,7 +205,7 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/silly_birb",
     featured: false,
-    title: { en: "silly birb", ru: "глупый птенец" },
+    title: { en: "silly birb", ru: "забавный бирб" },
     alt: { en: "silly bird illustration", ru: "смешная птичка" },
     artistComment: {
       en: "gib him treats",
@@ -210,7 +217,7 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/fishies",
     featured: false,
-    title: { en: "harmony fish", ru: "рыбки в гармонии" },
+    title: { en: "harmony fish", ru: "рыбы в гармонии" },
     alt: { en: "pair of fish swimming", ru: "две рыбки" },
     artistComment: {
       en: "i like to imagine they have some music in the background and they're swimming in sync",
@@ -222,7 +229,7 @@ const rawArtworks = [
     category: "animals",
     path: "images/animals/doggo_comm",
     featured: false,
-    title: { en: "doggo commission", ru: "портрет пёсика" },
+    title: { en: "doggo commission", ru: "коммишен с пёсиком" },
     alt: { en: "commissioned dog portrait", ru: "заказной портрет собаки" },
     artistComment: {
       en: "a commission piece with warm contrast and a playful expression.",
@@ -260,7 +267,7 @@ const rawArtworks = [
     category: "landscapes",
     path: "images/landscapes/cloudscape",
     featured: false,
-    title: { en: "sharp sketch", ru: "чёткий скетч" },
+    title: { en: "sharp sketch", ru: "резкий скетч" },
     alt: { en: "cloudscape panorama", ru: "панорама облаков" },
     artistComment: {
       en: "this one is my ipad's background hehe",
@@ -285,7 +292,7 @@ const rawArtworks = [
     path: "images/landscapes/planes?updatedAt=1778163055883",
     imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
-    title: { en: "planes", ru: "planes" },
+    title: { en: "planes", ru: "самолёты" },
     alt: { en: "planes landscape by akira", ru: "пейзаж planes от akira" },
     artistComment: {
       en: "i really enjoy travelling, it feels free and liberating",
@@ -323,7 +330,7 @@ const rawArtworks = [
     path: "images/landscapes/calm?updatedAt=1778163092135",
     imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
-    title: { en: "calm", ru: "calm" },
+    title: { en: "calm", ru: "спокойствие" },
     alt: { en: "calm landscape by akira", ru: "пейзаж calm от akira" },
     artistComment: {
       en: "as opposed to anger, this is a calmer state of the water.",
@@ -338,7 +345,7 @@ const rawArtworks = [
     path: "images/still life/tomato",
     imageTransforms: ["f-jpg", "q-auto"],
     featured: false,
-    title: { en: "tomato", ru: "tomato" },
+    title: { en: "tomato", ru: "помидор" },
     alt: { en: "still life tomato study", ru: "натюрморт tomato" },
     artistComment: {
       en: "stylizing something that is primarily only one color was hard",
@@ -351,7 +358,7 @@ const rawArtworks = [
     path: "images/still life/vase_study",
     imageTransforms: ["f-webp", "q-auto"],
     featured: false,
-    title: { en: "vase study", ru: "vase study" },
+    title: { en: "vase study", ru: "этюд с вазой" },
     alt: { en: "still life vase study", ru: "натюрморт vase study" },
     artistComment: {
       en: "a quick sketch i did in parallel with my mom",
@@ -400,7 +407,7 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/subsurface_scattering",
     featured: false,
-    title: { en: "subsurface scattering", ru: "subsurface scattering" },
+    title: { en: "subsurface scattering", ru: "подповерхностное рассеивание" },
     alt: { en: "glowing berry still life", ru: "натюрморт со светящейся ягодой" },
     artistComment: {
       en: "a bright glowing berry",
@@ -412,7 +419,7 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/color_plant",
     featured: false,
-    title: { en: "cyberleaves", ru: "cyberleaves" },
+    title: { en: "cyberleaves", ru: "киберлистья" },
     alt: { en: "small still life trio", ru: "маленький натюрморт-трио" },
     artistComment: {
       en: "stylization using irregular colors",
@@ -424,7 +431,7 @@ const rawArtworks = [
     category: "still life",
     path: "images/still life/apple",
     featured: false,
-    title: { en: "apple study", ru: "этюд яблока" },
+    title: { en: "apple study", ru: "этюд с яблоком" },
     alt: { en: "still life apple study", ru: "натюрморт с яблоком" },
     artistComment: {
       en: "a heavily stylized apple study. i LOVE how it turned out",

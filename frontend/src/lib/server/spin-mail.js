@@ -12,7 +12,7 @@ function buildEnUserBody(rewardLine, commissionsUrl) {
   return [
     "hi!",
     "",
-    "you found the hidden surprise on my site.",
+    "thanks for spinning the wheel on my site.",
     "",
     "your reward:",
     rewardLine,
@@ -32,7 +32,7 @@ function buildRuUserBody(rewardLine, commissionsUrl) {
   return [
     "привет!",
     "",
-    "ты нашёл/нашла маленький сюрприз на моём сайте.",
+    "спасибо, что покрутили колесо на моём сайте.",
     "",
     "твой результат:",
     rewardLine,
@@ -129,8 +129,8 @@ export async function sendSpinClaimEmails({
 
   const userSubject =
     locale === "ru"
-      ? "твой маленький сюрприз от akira"
-      : "your small surprise from akira";
+      ? "твоя награда от akira"
+      : "your spin reward from akira";
 
   const userText =
     locale === "ru"

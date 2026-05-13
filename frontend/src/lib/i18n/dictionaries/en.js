@@ -33,7 +33,7 @@ export const dictionary = {
         "Submit a commission inquiry — scope, references, and timeline for working with akira.",
     },
     spin: {
-      title: "studio surprise",
+      title: "bonus wheel",
       description:
         "A playful studio interaction — not indexed for search.",
     },
@@ -93,12 +93,13 @@ export const dictionary = {
 
   hero: {
     eyebrow: "akiracreates",
-    titleLeading: "",
+    titleLeading: "hemlo, im",
     titleHighlight: "akira",
     titleTrailing: "",
     leadPrefix: "digital artist specializing in ",
     leadEmphasis: "portraits and animals",
     supportingText: "i love experimenting and being expressive in my work",
+    portraitNote: "latest perception of myself",
     ctaPrimary: "full portfolio",
     ctaSecondary: "commissions",
     ctaAbout: "about me",
@@ -334,7 +335,7 @@ export const dictionary = {
     formAgreeTerms: "i agree to the commission terms above",
     formConsent: "i consent to being contacted about this request",
     formSuccess:
-      "thank you — your request was sent. i'll get back to you soon.",
+      "your commission request has been sent. i'll review it and get back to you soon. if you need to add anything urgent, telegram is the fastest way to reach me.",
     formError:
       "something went wrong while sending your request. please try again or contact me on telegram.",
     formMissing: "please fill all required fields.",
@@ -348,9 +349,9 @@ export const dictionary = {
   },
 
   spin: {
-    pageTitle: "a small surprise.",
+    pageTitle: "spin for a little bonus.",
     pageDescription:
-      "you found a hidden corner. enter your email and spin once for a small reward.",
+      "you found a hidden corner. enter your email and spin once for a reward.",
     emailLabel: "your email",
     emailPlaceholder: "you@example.com",
     spinCta: "spin the wheel",
@@ -362,7 +363,7 @@ export const dictionary = {
     backToCommissions: "go to commissions",
     alreadySpunWithReward:
       "this email already spun. here's the reward saved for it.",
-    desktopOnlyTitle: "this little surprise works best on desktop.",
+    desktopOnlyTitle: "this wheel works best on desktop.",
     desktopOnlyBody:
       "the wheel is easier to use on a bigger screen — come back from a computer when you can.",
     emailRequired: "please enter your email first.",

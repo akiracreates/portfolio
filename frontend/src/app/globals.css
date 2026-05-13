@@ -94,6 +94,13 @@
   --text-body-sm: 0.875rem;
   --text-caption: 0.75rem;
 
+  /* ---------- z-index layers ---------- */
+  --z-page: 1;
+  --z-footer: 2;
+  --z-nav-trigger: 1000;
+  --z-backdrop: 1100;
+  --z-drawer: 1200;
+
   /* ---------- layout ---------- */
   --sidebar-w-expanded: 240px;
   --sidebar-w-collapsed: 72px;
@@ -207,6 +214,10 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+  contain: none !important;
 }
 
 body {
@@ -219,7 +230,18 @@ body {
   text-transform: lowercase;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#top {
+  position: relative;
+  z-index: var(--z-page);
   overflow-x: clip;
+}
+
+#nav-portal-root {
+  contain: none !important;
+  transform: none !important;
+  filter: none !important;
 }
 
 a,
@@ -233,6 +255,12 @@ select {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+@media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+  .mobile-menu-trigger {
+    display: none !important;
+  }
 }
 
 ::selection {
@@ -399,6 +427,12 @@ a {
 
 .scroll-mt-header {
   scroll-margin-top: 24px;
+}
+
+@media (max-width: 767.98px) {
+  .scroll-mt-header {
+    scroll-margin-top: 140px;
+  }
 }
 
 /* focus ring helper for non-input interactive elements */
@@ -1180,7 +1214,7 @@ a {
   gap: 0.35rem;
   padding: 0.45rem 0 0.55rem;
   min-width: 0;
-  background: linear-gradient(180deg, rgba(43, 39, 48, 0.94), rgba(43, 39, 48, 0.7) 75%, transparent);
+  background: rgba(43, 39, 48, 0.97);
   backdrop-filter: blur(10px);
 }
 
@@ -1253,8 +1287,10 @@ a {
 
 @media (max-width: 767.98px) {
   .portfolio-tabs {
-    padding: 0.62rem 0 0.78rem;
+    padding: 0.62rem 0 0.9rem;
     gap: 0.5rem;
+    background: rgba(43, 39, 48, 0.98);
+    box-shadow: 0 1px 0 rgba(244, 241, 248, 0.08);
   }
 
   .portfolio-tabs-inner {
@@ -2504,15 +2540,19 @@ a {
 
   .about-comparison-grid {
     justify-items: stretch;
-    gap: 0.46rem;
+    gap: 0.52rem;
   }
 
   .about-comparison-item {
     margin-inline: 0;
-    align-items: stretch;
+    align-items: center;
     padding: 0.68rem;
     transform: none !important;
     gap: 0.5rem;
+  }
+
+  .about-comparison-media {
+    max-width: min(100%, 17rem);
   }
 
   .about-comparison-vs {
@@ -2852,9 +2892,15 @@ a {
     box-shadow: 0 6px 12px rgba(10, 8, 14, 0.14);
   }
 
-  /* chapter 2: enforce text -> board -> text story rhythm on tablet */
+  /* chapter 2: clean stacked layout on tablet — all text first, board last */
   .about-board-flow {
-    display: block;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-board-flow > .about-board-cluster-mobile {
+    order: 99;
+    margin-top: 0.48rem;
   }
 
   .about-board-prose,
@@ -2868,7 +2914,6 @@ a {
   }
 
   .about-board-prose--continuation {
-    clear: both;
     margin-top: 0.6rem;
   }
 
@@ -2888,11 +2933,9 @@ a {
   }
 
   .about-board-cluster-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas:
-      "anchor anchor"
-      "detailA detailB";
-    gap: 0.74rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas: "anchor detailA detailB";
+    gap: 0.6rem;
   }
 
   .about-board-item,
@@ -2903,10 +2946,7 @@ a {
     transform: none !important;
   }
 
-  .about-board-item--one .about-board-frame.about-artifact-display--evidenceAnchor {
-    max-width: min(100%, 22rem);
-  }
-
+  .about-board-item--one .about-board-frame.about-artifact-display--evidenceAnchor,
   .about-board-item--two .about-board-frame.about-artifact-display--evidenceSmall,
   .about-board-item--three .about-board-frame.about-artifact-display--evidenceSmall {
     max-width: 100%;
@@ -2916,13 +2956,17 @@ a {
     position: static;
     margin: 0.2rem 0 0;
     max-width: 100%;
-    padding: 0.46rem 0.6rem;
+    padding: 0.4rem 0.5rem;
     transform: none !important;
   }
 
+  .about-board-caption .caption {
+    font-size: 0.72rem;
+  }
+
   .about-board-caption .body-sm {
-    font-size: 0.86rem;
-    line-height: 1.44;
+    font-size: 0.8rem;
+    line-height: 1.38;
   }
 
   /* chapter 4: keep readable stacked comparison on tablet */
@@ -3663,6 +3707,74 @@ a {
   }
 }
 
+/* ── Chapter 2 tablet/narrow-desktop override (1024-1279px) ─────────
+ * The 1024px+ desktop block above sets .about-board-cluster to float:right.
+ * Below 1280px there isn't enough room for that float, so we re-assert
+ * tablet styling here (later in the cascade wins).
+ */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .about-board-cluster {
+    float: none;
+    width: min(100%, 38rem);
+    margin: 0.48rem auto 0.78rem;
+    shape-outside: none;
+    border-radius: 14px;
+    border: 1px dashed rgba(149, 117, 222, 0.22);
+    background: rgba(32, 27, 37, 0.46);
+    padding: 0.6rem 0.62rem 0.52rem;
+  }
+
+  .about-board-cluster-inner {
+    transform: none;
+  }
+
+  .about-board-cluster-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas: "anchor detailA detailB";
+    gap: 0.6rem;
+  }
+
+  .about-board-item,
+  .about-board-item--one,
+  .about-board-item--two,
+  .about-board-item--three {
+    width: 100%;
+    transform: none !important;
+  }
+
+  .about-board-item--two {
+    margin-top: 0;
+  }
+
+  .about-board-item--three {
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .about-board-item--one .about-board-frame.about-artifact-display--evidenceAnchor,
+  .about-board-item--two .about-board-frame.about-artifact-display--evidenceSmall,
+  .about-board-item--three .about-board-frame.about-artifact-display--evidenceSmall {
+    max-width: 100%;
+  }
+
+  .about-board-caption {
+    position: static;
+    margin: 0.2rem 0 0;
+    max-width: 100%;
+    padding: 0.4rem 0.5rem;
+    transform: none !important;
+  }
+
+  .about-board-caption .caption {
+    font-size: 0.72rem;
+  }
+
+  .about-board-caption .body-sm {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+}
+
 /*
  * About chapter 2 (RU): heading full-width; `.chapter-2-flow` is one block
  * container — desktop wrapper floats right *as the wrapper* (not a collapsed
@@ -3709,6 +3821,19 @@ a {
   content: "";
   display: block;
   clear: both;
+}
+
+/* RU tablet: override the base display:block above so flex+order works */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .about-board-flow--ruFloat .chapter-2-flow {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow > .about-board-cluster-mobile {
+    order: 99;
+    margin-top: 0.48rem;
+  }
 }
 
 @media (min-width: 1051px) {
@@ -3761,6 +3886,61 @@ a {
   .about-board-flow--ruFloat .chapter-2-flow .about-board-cluster-mobile .about-board-cluster {
     max-width: min(100%, 520px);
     margin-inline: auto;
+  }
+}
+
+/* ── Chapter 2 narrow-desktop extension (1100-1279px) ───────────────
+ * At 1100-1279px, the base visibility shows the desktop cluster and hides
+ * the mobile one. We override that so the tablet fallback (flex+order,
+ * compact board) remains active through narrow desktop.
+ */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .about-board-cluster-desktop {
+    display: none;
+  }
+
+  .about-board-cluster-mobile {
+    display: block;
+    margin-top: 0.2rem;
+    margin-bottom: 0.72rem;
+  }
+
+  .about-board-flow {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-board-flow > .about-board-cluster-mobile {
+    order: 99;
+    margin-top: 0.48rem;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-board-flow--ruFloat .chapter-2-flow > .about-board-cluster-mobile {
+    order: 99;
+    margin-top: 0.48rem;
+  }
+
+  .about-board-flow--ruFloat .about-board-header {
+    margin-bottom: 0.4rem;
+  }
+
+  .about-board-prose,
+  .about-board-prose--continuation {
+    max-width: 100%;
+  }
+
+  .about-board-paragraph {
+    margin-bottom: 0.8rem;
+    line-height: 1.68;
+  }
+
+  .about-board-prose--continuation {
+    margin-top: 0.6rem;
   }
 }
 
