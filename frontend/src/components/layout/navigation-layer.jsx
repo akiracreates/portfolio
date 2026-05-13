@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { MobileDrawer } from "@/components/layout/mobile-drawer";
 
@@ -21,20 +21,27 @@ function getDesktopServerSnapshot() {
   return false;
 }
 
+function subscribeClientHydration(onStoreChange) {
+  if (typeof window !== "undefined") {
+    queueMicrotask(onStoreChange);
+  }
+  return () => {};
+}
+
 export function NavigationLayer() {
   const isDesktop = useSyncExternalStore(
     subscribeDesktop,
     getDesktopSnapshot,
     getDesktopServerSnapshot,
   );
-  const [mounted, setMounted] = useState(false);
+  const hydrated = useSyncExternalStore(
+    subscribeClientHydration,
+    () => true,
+    () => false,
+  );
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (isDesktop || !mounted) return null;
+  if (isDesktop || !hydrated) return null;
 
   const portalRoot = document.getElementById("nav-portal-root");
   if (!portalRoot) return null;
