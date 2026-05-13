@@ -160,7 +160,7 @@ export function LocaleSwitcher({ collapsed = false, className = "" }) {
             disabled={isPending || active}
             aria-pressed={active}
             className={[
-              "h-7 min-w-[34px] rounded-[6px] px-2 text-[11px] font-semibold transition",
+              "h-9 min-w-[40px] rounded-[6px] px-2.5 text-xs font-semibold transition",
               active
                 ? "bg-highlight-soft text-highlight shadow-sm"
                 : "text-text-tertiary hover:text-text-primary",

@@ -40,7 +40,9 @@ export function Footer() {
     : "caption rounded-md text-text-tertiary transition-colors hover:text-text-primary focus-visible-ring max-md:text-[0.8125rem] max-md:text-text-secondary";
 
   const links = socialLinks.filter((s) => FOOTER_SOCIALS.includes(s.id));
-  const useCompactFooter = pathname.endsWith("/commissions");
+  const useCompactFooter =
+    pathname.endsWith("/commissions") ||
+    pathname.endsWith("/commissions/request");
 
   if (useCompactFooter) {
     return (

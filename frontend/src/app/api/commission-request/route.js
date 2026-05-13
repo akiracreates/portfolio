@@ -10,6 +10,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VALID_COMMISSION_TYPES = new Set(commissionTypes.map((c) => c.id));
 
 const PREFERRED_CONTACT = new Set(["email", "telegram", "discord"]);
+const VALID_INTENDED_USE = new Set(["personal", "commercial", "unsure"]);
+const VALID_BACKGROUND = new Set(["simple", "detailed", "artist-choice"]);
+const VALID_POST_PERMISSION = new Set(["yes", "no", "ask-first"]);
 
 const MIN_DESCRIPTION = 10;
 
@@ -43,7 +46,6 @@ export async function POST(request) {
     return NextResponse.json({ ok: false, error: "invalid_body" }, { status: 400 });
   }
 
-  // Honeypot — leave empty for humans
   if (typeof body.website === "string" && body.website.trim() !== "") {
     return NextResponse.json({ ok: true }, { status: 200 });
   }
@@ -59,24 +61,22 @@ export async function POST(request) {
   }
 
   const commissionType = sanitizeText(body.commissionType, 80);
+  const characterCount = sanitizeText(body.characterCount, 200);
+  const intendedUse = sanitizeText(body.intendedUse, 40).toLowerCase();
+  const background = sanitizeText(body.background, 40).toLowerCase();
+  const strictDeadline = sanitizeText(body.strictDeadline, 10).toLowerCase() === "yes" ? "yes" : "no";
+  const deadlineDetails = sanitizeText(body.deadlineDetails, 500);
+  const budget = sanitizeText(body.budget, 200);
   const description = sanitizeText(body.description, 8000);
   const references = sanitizeText(body.references, 4000);
-  const budget = sanitizeText(body.budget, 200);
-  const deadline = sanitizeText(body.deadline, 120);
-  const language = sanitizeText(body.language, 80);
+  const avoidances = sanitizeText(body.avoidances, 4000);
+  const postPermission = sanitizeText(body.postPermission, 40).toLowerCase();
   const formSource = sanitizeText(body.formSource, 120) || "unknown";
 
   const agreedTerms =
     body.agreedTerms === true || body.agreedTerms === "true";
-  const consentGiven =
-    body.consent === true || body.consent === "true";
-  const consentDeclined =
-    body.consent === false || body.consent === "false";
-  const consentLabel = consentGiven
-    ? "yes"
-    : consentDeclined
-      ? "no"
-      : "n/a";
+  const consentData =
+    body.consentData === true || body.consentData === "true";
 
   if (!name || name.length < 2) {
     return NextResponse.json(
@@ -96,13 +96,37 @@ export async function POST(request) {
       { status: 400 },
     );
   }
+  if (!intendedUse || !VALID_INTENDED_USE.has(intendedUse)) {
+    return NextResponse.json(
+      { ok: false, error: "validation_failed" },
+      { status: 400 },
+    );
+  }
+  if (!postPermission || !VALID_POST_PERMISSION.has(postPermission)) {
+    return NextResponse.json(
+      { ok: false, error: "validation_failed" },
+      { status: 400 },
+    );
+  }
   if (description.length < MIN_DESCRIPTION) {
     return NextResponse.json(
       { ok: false, error: "validation_failed" },
       { status: 400 },
     );
   }
+  if (strictDeadline === "yes" && !deadlineDetails) {
+    return NextResponse.json(
+      { ok: false, error: "validation_failed" },
+      { status: 400 },
+    );
+  }
   if (!agreedTerms) {
+    return NextResponse.json(
+      { ok: false, error: "validation_failed" },
+      { status: 400 },
+    );
+  }
+  if (!consentData) {
     return NextResponse.json(
       { ok: false, error: "validation_failed" },
       { status: 400 },
@@ -118,13 +142,18 @@ export async function POST(request) {
     preferredContact,
     handle: handle || "—",
     commissionType,
+    characterCount: characterCount || "—",
+    intendedUse,
+    background: background && VALID_BACKGROUND.has(background) ? background : "—",
+    strictDeadline,
+    deadlineDetails: strictDeadline === "yes" ? deadlineDetails : "—",
+    budget: budget || "—",
     description,
     references: references || "—",
-    budget: budget || "—",
-    deadline: deadline || "—",
-    language: language || "—",
+    avoidances: avoidances || "—",
+    postPermission,
     agreedTerms: "yes",
-    consent: consentLabel,
+    consentData: "yes",
   };
 
   const adminSent = await sendCommissionRequestAdminEmail(payload);

@@ -72,9 +72,15 @@ export function MobileDrawer({ open, onClose }) {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" id="mobile-drawer">
+        <div
+          className="fixed inset-0"
+          style={{ zIndex: "var(--z-drawer)", pointerEvents: "auto" }}
+          role="dialog"
+          aria-modal="true"
+          id="site-drawer"
+        >
           <motion.div
-            className="absolute inset-0 bg-[var(--bg-overlay)]"
+            className="fixed inset-0 bg-[var(--bg-overlay)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -84,7 +90,7 @@ export function MobileDrawer({ open, onClose }) {
           />
           <motion.div
             ref={panelRef}
-            className="absolute left-0 top-0 h-[100dvh] max-h-[100dvh] w-[300px] max-w-[86vw] overflow-hidden overscroll-contain border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg touch-pan-y"
+            className="fixed left-0 top-0 h-[100dvh] max-h-[100dvh] w-[min(300px,82vw)] min-[768px]:w-[min(340px,70vw)] overflow-hidden overscroll-contain border-r border-dashed border-border-strong bg-bg-sidebar shadow-lg touch-pan-y"
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}

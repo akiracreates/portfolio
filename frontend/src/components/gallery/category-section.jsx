@@ -3,6 +3,7 @@
 import { ArtworkRow } from "@/components/gallery/artwork-card";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { categoryLabels } from "@/lib/content/artworks";
 
 function categoryAnchorId(category) {
   return `category-${category.toLowerCase().replace(/\s+/g, "-")}`;
@@ -12,16 +13,19 @@ function categoryAnchorId(category) {
  * Editorial category layout: image + content rows that alternate per index.
  * Replaces the previous 3-col grid per the spec.
  */
+const eyebrowLabels = { en: "collection", ru: "подборка работ" };
+
 export function CategorySection({
   category,
   artworks,
   locale = "en",
-  eyebrow = "collection",
+  eyebrow,
   piecesLabel = "pieces",
   pieceLabel = "piece",
   startIndex = 0,
   enableSecretSpin = false,
 }) {
+  const eyebrowText = eyebrow ?? eyebrowLabels[locale] ?? eyebrowLabels.en;
   const id = categoryAnchorId(category);
   const count = artworks.length;
   const label = count === 1 ? pieceLabel : piecesLabel;
@@ -87,9 +91,9 @@ export function CategorySection({
     <section id={id} className="scroll-mt-header space-y-5 md:space-y-8">
       <header className="category-banner corner-marks relative flex flex-col items-start gap-3 border border-dashed border-border-subtle p-5 max-md:border-border-subtle/55 md:flex-row md:items-baseline md:justify-between md:border-border-subtle md:gap-4 md:p-6">
         <div className="min-w-0 w-full space-y-2 md:max-w-[68ch] md:flex-none md:space-y-1.5">
-          <Eyebrow>{eyebrow}</Eyebrow>
+          <Eyebrow>{eyebrowText}</Eyebrow>
           <h3 className="heading-h2 text-[1.9rem] leading-tight md:text-[2.15rem]">
-            {category}
+            {categoryLabels[category]?.[locale] ?? category}
           </h3>
           <p className="body-sm max-md:leading-[1.68] md:leading-normal">{introText}</p>
         </div>

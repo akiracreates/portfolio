@@ -10,6 +10,42 @@ const ARROW_BIAS_LEFT = "left";
 const ARROW_BIAS_RIGHT = "right";
 const ARROW_BIAS_NONE = "none";
 
+const SWIPE_THRESHOLD_PX = 52;
+const SWIPE_DOMINANCE_RATIO = 1.25;
+
+function carouselUiLabels(locale) {
+  if (locale === "ru") {
+    return {
+      region: "Примеры работ по заказу",
+      prev: "Предыдущее изображение",
+      next: "Следующее изображение",
+      goTo: (n) => `Перейти к изображению ${n}`,
+      hint: "Листайте, чтобы увидеть ещё",
+    };
+  }
+  return {
+    region: "Commission examples",
+    prev: "Previous image",
+    next: "Next image",
+    goTo: (n) => `Go to image ${n}`,
+    hint: "Swipe to see more",
+  };
+}
+
+function useTouchPrimaryUi() {
+  const [touchPrimary, setTouchPrimary] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: none), (pointer: coarse)");
+    const apply = () => setTouchPrimary(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  return touchPrimary;
+}
+
 /**
  * Infinite-loop preview carousel for commission examples (CSS crossfade; no Framer).
  */
@@ -19,7 +55,10 @@ export function CommissionPreviewCarousel({
   randomizeInitial = false,
 }) {
   const reduced = useNativeReducedMotion();
+  const labels = useMemo(() => carouselUiLabels(locale), [locale]);
+  const touchPrimary = useTouchPrimaryUi();
   const containerRef = useRef(null);
+  const swipePointerRef = useRef(null);
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [bias, setBias] = useState(ARROW_BIAS_NONE);
@@ -79,6 +118,43 @@ export function CommissionPreviewCarousel({
     setIndex((i) => (i - 1 + count) % count);
   }, [count]);
 
+  const onPointerSwipeStart = useCallback((event) => {
+    if (count <= 1) return;
+    if (event.button !== 0 && event.pointerType !== "touch") return;
+    swipePointerRef.current = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    };
+  }, [count]);
+
+  const onPointerSwipeEnd = useCallback(
+    (event) => {
+      const start = swipePointerRef.current;
+      if (!start || start.id !== event.pointerId) return;
+      swipePointerRef.current = null;
+      if (count <= 1) return;
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      if (
+        Math.abs(dx) < SWIPE_THRESHOLD_PX ||
+        Math.abs(dx) < Math.abs(dy) * SWIPE_DOMINANCE_RATIO
+      ) {
+        return;
+      }
+      if (dx < 0) goNext();
+      else goPrev();
+    },
+    [count, goNext, goPrev],
+  );
+
+  const onPointerSwipeCancel = useCallback((event) => {
+    if (!event) return;
+    const start = swipePointerRef.current;
+    if (!start || start.id !== event.pointerId) return;
+    swipePointerRef.current = null;
+  }, []);
+
   const onKey = (event) => {
     if (event.key === "ArrowRight") {
       event.preventDefault();
@@ -99,6 +175,8 @@ export function CommissionPreviewCarousel({
     else setBias(ARROW_BIAS_NONE);
   };
 
+  const arrowsActiveForPointer = touchPrimary || hovered;
+
   if (count === 0) {
     return (
       <div className="relative aspect-[4/3] w-full bg-bg-inset" aria-hidden />
@@ -115,10 +193,10 @@ export function CommissionPreviewCarousel({
   return (
     <div
       ref={containerRef}
-      className="group relative w-full select-none focus-visible-ring outline-none"
+      className="group relative w-full select-none outline-none focus-visible-ring"
       role="region"
       aria-roledescription="carousel"
-      aria-label="commission examples"
+      aria-label={labels.region}
       tabIndex={0}
       onKeyDown={onKey}
       onMouseEnter={() => setHovered(true)}
@@ -128,59 +206,98 @@ export function CommissionPreviewCarousel({
       }}
       onMouseMove={onMouseMove}
     >
-      <ImageFrame
-        rounded="none"
-        className="relative w-full overflow-hidden border-0"
-        style={aspectStyle}
+      <div
+        className="relative touch-pan-y"
+        onPointerDown={onPointerSwipeStart}
+        onPointerUp={onPointerSwipeEnd}
+        onPointerCancel={onPointerSwipeCancel}
+        onLostPointerCapture={onPointerSwipeCancel}
       >
-        <div key={current.id} className={`absolute inset-0 ${fadeClass}`.trim()}>
-          <SmartImage
-            src={current.imageSrc}
-            alt={pickLocale(current.alt, locale) || pickLocale(current.title, locale)}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            showSkeleton={false}
-            imgClassName="object-contain p-3"
-          />
-        </div>
-      </ImageFrame>
+        <ImageFrame
+          rounded="none"
+          className="relative w-full overflow-hidden border-0"
+          style={aspectStyle}
+        >
+          <div key={current.id} className={`absolute inset-0 ${fadeClass}`.trim()}>
+            <SmartImage
+              src={current.imageSrc}
+              alt={pickLocale(current.alt, locale) || pickLocale(current.title, locale)}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              showSkeleton={false}
+              imgClassName="pointer-events-none object-contain p-3"
+              draggable={false}
+            />
+          </div>
+        </ImageFrame>
 
-      <CarouselArrow
-        side="left"
-        active={hovered}
-        prominent={bias === ARROW_BIAS_LEFT}
-        onClick={goPrev}
-        ariaLabel="previous example"
-      />
-      <CarouselArrow
-        side="right"
-        active={hovered}
-        prominent={bias === ARROW_BIAS_RIGHT}
-        onClick={goNext}
-        ariaLabel="next example"
-      />
+        <CarouselArrow
+          side="left"
+          active={arrowsActiveForPointer}
+          touchPrimary={touchPrimary}
+          prominent={bias === ARROW_BIAS_LEFT}
+          onClick={goPrev}
+          ariaLabel={labels.prev}
+        />
+        <CarouselArrow
+          side="right"
+          active={arrowsActiveForPointer}
+          touchPrimary={touchPrimary}
+          prominent={bias === ARROW_BIAS_RIGHT}
+          onClick={goNext}
+          ariaLabel={labels.next}
+        />
 
-      <div className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 flex items-center gap-1.5">
-        {orderedImages.map((img, i) => (
-          <button
-            key={img.id}
-            type="button"
-            onClick={() => setIndex(i)}
-            className={`h-1.5 rounded-full transition-all duration-[var(--duration-base)] focus-visible-ring ${
-              i === index ? "w-5 bg-text-primary" : "w-1.5 bg-text-tertiary/70 hover:bg-text-secondary"
-            }`}
-            aria-label={`show example ${i + 1} of ${count}`}
-            aria-current={i === index ? "true" : undefined}
-          />
-        ))}
+        {!touchPrimary ? (
+          <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5">
+            {orderedImages.map((img, i) => (
+              <button
+                key={img.id}
+                type="button"
+                onClick={() => setIndex(i)}
+                className={`pointer-events-auto h-1.5 rounded-full transition-all duration-[var(--duration-base)] focus-visible-ring ${
+                  i === index ? "w-5 bg-text-primary" : "w-1.5 bg-text-tertiary/70 hover:bg-text-secondary"
+                }`}
+                aria-label={labels.goTo(i + 1)}
+                aria-current={i === index ? "true" : undefined}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
+
+      {touchPrimary && count > 1 ? (
+        <div className="border-t border-[color:var(--border-subtle)]/80 bg-bg-inset/50 px-2 py-2">
+          <p className="text-center text-[0.7rem] leading-snug text-text-tertiary">{labels.hint}</p>
+          <div className="mt-1.5 flex flex-wrap items-center justify-center gap-2">
+            {orderedImages.map((img, i) => (
+              <button
+                key={img.id}
+                type="button"
+                onClick={() => setIndex(i)}
+                aria-label={labels.goTo(i + 1)}
+                aria-current={i === index ? "true" : undefined}
+                className="inline-flex min-h-[44px] min-w-[44px] cursor-pointer touch-manipulation items-center justify-center rounded-md focus-visible-ring"
+              >
+                <span
+                  className={`block h-2 rounded-full transition-all duration-[var(--duration-base)] ${
+                    i === index ? "w-8 bg-text-primary" : "w-2 bg-text-tertiary/70 active:bg-text-secondary"
+                  }`}
+                  aria-hidden
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
 
-function CarouselArrow({ side, active, prominent, onClick, ariaLabel }) {
+function CarouselArrow({ side, active, prominent, touchPrimary, onClick, ariaLabel }) {
   const isLeft = side === "left";
-  const baseOpacity = active ? (prominent ? 1 : 0.55) : 0;
+  const baseOpacity =
+    touchPrimary ? (prominent ? 1 : 0.72) : active ? (prominent ? 1 : 0.55) : 0;
   const xOffset = prominent ? (isLeft ? -2 : 2) : 0;
 
   return (
@@ -188,9 +305,7 @@ function CarouselArrow({ side, active, prominent, onClick, ariaLabel }) {
       type="button"
       onClick={onClick}
       aria-label={ariaLabel}
-      className={`absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-dashed border-border-strong bg-bg-app/75 text-text-primary backdrop-blur transition-all duration-[var(--duration-base)] focus-visible-ring ${
-        isLeft ? "left-3" : "right-3"
-      }`}
+      className={`absolute top-1/2 z-10 flex shrink-0 -translate-y-1/2 cursor-pointer touch-manipulation items-center justify-center rounded-full border border-dashed border-border-strong bg-bg-app/80 text-text-primary backdrop-blur transition-[opacity,transform] duration-[var(--duration-base)] focus-visible-ring ${touchPrimary ? "h-11 w-11" : "h-10 w-10"} ${isLeft ? "left-2 md:left-3" : "right-2 md:right-3"}`}
       style={{
         opacity: baseOpacity,
         transform: `translate(${xOffset}px, -50%) scale(${prominent ? 1.05 : 1})`,
